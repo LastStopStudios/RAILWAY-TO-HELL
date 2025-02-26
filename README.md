@@ -1,4 +1,5 @@
 # P-Renfe
+Video Game Development Project 2 CITM 2025 by
 - Alcaraz Martínez Ana
 - González Artigas Víctor
 - Li Haosheng
@@ -16,3 +17,12 @@
 - Sanchez Carraro Felipe
 - Sarrias Basurte Martina
 - Vida Bosch Javier
+
+### *Controls:*
+- A move left
+- D move right
+- Space jump
+
+### *Implemented Features*
+- Nada
+- Hola Pedro
