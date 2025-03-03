@@ -7,6 +7,17 @@
 #include "Render.h"
 #include "Window.h"
 #include "Player.h" 
+#include "Scene.h"  // Asegúrate de incluir el archivo correcto
+
+SceneLoader::SceneLoader() {
+	currentScene = 1;
+}
+
+SceneLoader::~SceneLoader()
+{
+
+}
+
 void SceneLoader::LoadScene(int level) {
 	// Cambia el nombre de la escena según el nivel
 	SetCurrentScene(level);  
@@ -22,6 +33,7 @@ void SceneLoader::LoadScene(int level) {
 	pugi::xml_node configNode = loadFile.child("config");
 
 	/*Engine::GetInstance().entityManager->ReloadEnemies(configNode);*/
+	pugi::xml_node sceneNode = configNode.child("scene2"); 
 
 	if (!configNode) {
 		std::cout << "No se encontró el nodo <config>\n";
@@ -29,12 +41,12 @@ void SceneLoader::LoadScene(int level) {
 	else {
 		std::cout << "Nodo <config> encontrado\n";
 
-		pugi::xml_node sceneNode = configNode.child("scene2");
-		if (!sceneNode) {
-			std::cout << "No se encontró el nodo <scene2>\n";
+		pugi::xml_node playerNode = sceneNode.child("entities").child("player");
+		if (!playerNode) {
+			std::cout << "No se encontró el nodo <player>\n";
 		}
 		else {
-			std::cout << "Nodo <scene2> encontrado correctamente\n";
+			std::cout << "Nodo <player> encontrado correctamente\n";
 		}
 	}
 
@@ -44,9 +56,11 @@ void SceneLoader::LoadScene(int level) {
 		std::string mapPath = sceneNode.child("map").attribute("path").as_string();
 		std::string mapName = sceneNode.child("map").attribute("name").as_string();
 		Engine::GetInstance().map->Load(mapPath, mapName);
-		/*Vector2D playerPos(sceneNode.child("entities").child("player").attribute("x").as_int(),
-			sceneNode.child("entities").child("player").attribute("y").as_int());
-		player->SetPosition(playerPos); */
+		pugi::xml_node playerNode = sceneNode.child("entities").child("player");
+		Vector2D playerPos(playerNode.attribute("x").as_int(), 
+			playerNode.attribute("y").as_int()); 
+		Player* player = Engine::GetInstance().scene->GetPlayer();
+		player->SetPosition(playerPos);
 		    
 	}
 	else {
@@ -55,9 +69,10 @@ void SceneLoader::LoadScene(int level) {
 		std::string mapPath = sceneNode.child("map").attribute("path").as_string();
 		std::string mapName = sceneNode.child("map").attribute("name").as_string();
 		Engine::GetInstance().map->Load(mapPath, mapName);
-		/*Vector2D playerPos(sceneNode.child("entities").child("player").attribute("x").as_int(),
+		Vector2D playerPos(sceneNode.child("entities").child("player").attribute("x").as_int(),
 			sceneNode.child("entities").child("player").attribute("y").as_int());
-		player->SetPosition(playerPos);*/
+		Player* player = Engine::GetInstance().scene->GetPlayer(); 
+		player->SetPosition(playerPos); 
 	}
 }
 

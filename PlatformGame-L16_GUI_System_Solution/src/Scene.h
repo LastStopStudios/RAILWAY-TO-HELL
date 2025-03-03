@@ -52,6 +52,10 @@ public:
 		return tilePosDebug;
 
 	}
+	Player* GetPlayer() {
+		return player;
+	}
+
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
@@ -59,9 +63,10 @@ private:
 	bool once = false;
 
 	//L03: TODO 3b: Declare a Player attribute
-	Player* player;
 	std::vector<Enemy*> enemyList;
 
 	// L16: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* guiBt;
+
+	Player* player;
 };

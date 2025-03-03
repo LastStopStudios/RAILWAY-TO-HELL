@@ -78,7 +78,7 @@
 	<scene2>
 		<map path="Assets/Maps/" name="MapTemplate2.tmx" />
 		<entities>
-			<player x="250" y="520" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
+			<player x="100" y="520" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
 				<animations>
 					<idle loop="true" speed="0.5">
 						<frame x="0" y="0" w="32" h="32" />
