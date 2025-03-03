@@ -38,6 +38,7 @@ Engine::Engine() {
     // L08: TODO 2: Add Physics module
     physics = std::make_shared<Physics>();
     scene = std::make_shared<Scene>();
+    sceneLoader = std::make_shared<SceneLoader>(); 
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
     guiManager = std::make_shared<GuiManager>();
