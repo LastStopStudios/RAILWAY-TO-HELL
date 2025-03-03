@@ -55,9 +55,9 @@ void SceneLoader::LoadScene(int level) {
 		std::string mapPath = sceneNode.child("map").attribute("path").as_string();
 		std::string mapName = sceneNode.child("map").attribute("name").as_string();
 		Engine::GetInstance().map->Load(mapPath, mapName);
-		Vector2D playerPos(sceneNode.child("entities").child("player").attribute("x").as_int(),
+		/*Vector2D playerPos(sceneNode.child("entities").child("player").attribute("x").as_int(),
 			sceneNode.child("entities").child("player").attribute("y").as_int());
-		player->SetPosition(playerPos);
+		player->SetPosition(playerPos);*/
 	}
 }
 
