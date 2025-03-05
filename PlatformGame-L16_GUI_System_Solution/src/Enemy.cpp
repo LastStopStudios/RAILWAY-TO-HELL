@@ -31,6 +31,7 @@ bool Enemy::Start() {
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
+	DeathValue = parameters.attribute("death").as_int(); 
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -161,7 +162,6 @@ void Enemy::SetDeathInXML()
 		return;
 	}
 
-	// Find the node corresponding to the enemy 
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
@@ -173,17 +173,14 @@ void Enemy::SetDeathInXML()
 		return;
 	}
 
-	// Modify the isDeath attribute
-	enemyNode.attribute("death").set_value(1); // Change to 1 to indicate the enemy is dead
+	enemyNode.attribute("death").set_value(1); // 1 enemy is death
 
-	// Save the modified file
 	if (!doc.save_file("config.xml")) {
 		LOG("Error saving config.xml");
 	}
 	else {
-		LOG("isDeath status updated in the XML for enemy");
+		LOG("death status updated in the XML for enemy");
 	}
-
 	DeathValue = 1;
 }
 
@@ -196,7 +193,6 @@ void Enemy::SetAliveInXML()
 		return;
 	}
 
-	// Find the node corresponding to the enemy 
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
@@ -208,15 +204,13 @@ void Enemy::SetAliveInXML()
 		return;
 	}
 
-	// Modify the isDeath attribute
-	enemyNode.attribute("death").set_value(0); // Change to 0 to indicate the enemy is alive
+	enemyNode.attribute("death").set_value(0); // 0 enemy is alive
 
-	// Save the modified file
 	if (!doc.save_file("config.xml")) {
 		LOG("Error saving config.xml");
 	}
 	else {
-		LOG("isDeath status updated in the XML for");
+		LOG("death status updated in the XML for");
 	}
 	DeathValue = 0;
 }

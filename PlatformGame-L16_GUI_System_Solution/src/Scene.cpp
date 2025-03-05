@@ -151,7 +151,9 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
-	enemy->SetAliveInXML();
+	for (auto& enemy : enemyList) {
+		enemy->SetAliveInXML();
+	}
 
 	return true;
 }
@@ -194,7 +196,9 @@ void Scene::LoadState() {
 					enemyNode.attribute("x").as_int(),
 					enemyNode.attribute("y").as_int()
 				);
-				if (enemy->DeathValue == 0) { enemyList[i]->SetPosition(pos); }
+				if (enemyList[i]->DeathValue == 0) { 
+					enemyList[i]->SetPosition(pos); 
+				}
 
 				i++;
 			}
