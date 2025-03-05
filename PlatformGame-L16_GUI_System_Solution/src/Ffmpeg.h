@@ -15,7 +15,7 @@ extern "C" {
 #include <libavutil/avutil.h>
 #include <libswscale/swscale.h>
 #include <libswresample/swresample.h>
-//#include <libpostproc/postprocess.h>
+#include <libpostproc/postprocess.h>
 #include <libavfilter/avfilter.h>
 #include <libavdevice/avdevice.h>
 #include <libavutil/imgutils.h>
