@@ -96,6 +96,9 @@
     <ClCompile Include="src\SceneLoader.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Ffmpeg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -172,6 +175,10 @@
     </ClInclude>
     <ClInclude Include="src\SceneLoader.h">
       <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ffmpeg.h" />
+    <ClInclude Include="src\Point.h">
+      <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -170,7 +170,6 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Point.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Enemy.h" />
@@ -190,6 +189,7 @@
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Point.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\SceneLoader.h" />
