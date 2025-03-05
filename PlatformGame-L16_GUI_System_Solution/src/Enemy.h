@@ -36,10 +36,18 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	//int GetDeathInXML(){
+	//	return DeathValue;
+	//}
+
+	void SetDeathInXML();
+
+	void SetAliveInXML();
+
+
 public:
-
+	int DeathValue = 0;
 private:
-
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;

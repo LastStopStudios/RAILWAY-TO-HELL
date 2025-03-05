@@ -151,6 +151,8 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	enemy->SetAliveInXML();
+
 	return true;
 }
 
@@ -182,7 +184,22 @@ void Scene::LoadState() {
 	player->SetPosition(playerPos);
 
 	//enemies
-	// ...
+	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+	if (enemiesNode) {
+		int i = 0;
+		// for (auto& enemy : enemyList) 
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			if (i < enemyList.size()) {
+				Vector2D pos(
+					enemyNode.attribute("x").as_int(),
+					enemyNode.attribute("y").as_int()
+				);
+				if (enemy->DeathValue == 0) { enemyList[i]->SetPosition(pos); }
+
+				i++;
+			}
+		}
+	}
 
 }
 
@@ -207,7 +224,15 @@ void Scene::SaveState() {
 	sceneNode.child("entities").child("player").attribute("y").set_value(player->GetPosition().getY());
 
 	//enemies
-	// ...
+	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+
+	for (auto& enemy : enemyList) {
+		pugi::xml_node enemyNode = enemiesNode.child("enemy");
+
+		enemyNode.attribute("x").set_value(enemy->GetPosition().getX());
+		enemyNode.attribute("y").set_value(enemy->GetPosition().getY());
+
+	}
 
 	//Saves the modifications to the XML 
 	loadFile.save_file("config.xml");

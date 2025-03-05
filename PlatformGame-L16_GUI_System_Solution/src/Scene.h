@@ -60,8 +60,10 @@ private:
 
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
+	Enemy* enemy;
 	std::vector<Enemy*> enemyList;
 
 	// L16: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* guiBt;
+	
 };
