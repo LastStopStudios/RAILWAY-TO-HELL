@@ -57,7 +57,6 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
-	printf("%d", DeathValue);
 	// Pathfinding testing inputs
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		Vector2D pos = GetPosition();
@@ -215,13 +214,77 @@ void Enemy::SetAliveInXML()
 	DeathValue = 0;
 }
 
+void Enemy::SetSavedDeathToDeathInXML()
+{
+	// Load XML
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node enemyNode = doc.child("config")
+		.child("scene")
+		.child("entities")
+		.child("enemies")
+		.find_child_by_attribute("enemy", "name", "badguy");
+
+	if (!enemyNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	enemyNode.attribute("savedDeath").set_value(1); // 1 enemy is death
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for enemy");
+	}
+
+	SavedDeathValue = 1;
+}
+
+void Enemy::SetSavedDeathToAliveInXML()
+{
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node enemyNode = doc.child("config")
+		.child("scene")
+		.child("entities")
+		.child("enemies")
+		.find_child_by_attribute("enemy", "name", "badguy");
+
+	if (!enemyNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	enemyNode.attribute("savedDeath").set_value(0); // 0 enemy is alive
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for");
+	}
+
+	SavedDeathValue = 0;
+}
+
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
 		LOG("Collided with player - DESTROY");
 		SetDeathInXML();
-		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
 	}
 }

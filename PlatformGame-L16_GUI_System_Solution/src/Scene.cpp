@@ -1,4 +1,4 @@
-#include "Engine.h"
+﻿#include "Engine.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -153,6 +153,7 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 	for (auto& enemy : enemyList) {
 		enemy->SetAliveInXML();
+		enemy->SetSavedDeathToAliveInXML();
 	}
 
 	return true;
@@ -190,19 +191,35 @@ void Scene::LoadState() {
 	if (enemiesNode) {
 		int i = 0;
 		// for (auto& enemy : enemyList) 
-		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
-			if (i < enemyList.size()) {
-				Vector2D pos(
-					enemyNode.attribute("x").as_int(),
-					enemyNode.attribute("y").as_int()
-				);
-				if (enemyList[i]->DeathValue == 0) { 
-					enemyList[i]->SetPosition(pos); 
-				}
+        for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+            // Leer valores del XML
+            int xmlDeath = enemyNode.attribute("death").as_int();
+            int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
+            Vector2D pos(
+                enemyNode.attribute("x").as_int(),
+                enemyNode.attribute("y").as_int()
+            );
 
-				i++;
-			}
-		}
+            // case 1 update position if: death=0 & savedDeath=0 
+            if (xmlDeath == 0 && xmlSavedDeath == 0) {
+                if (i < enemyList.size()) {
+                    enemyList[i]->SetPosition(pos);
+                    enemyList[i]->SetAliveInXML(); 
+                    i++;
+                }
+            }
+            // case 2 create enemy if: death=0 & savedDeath=1 
+            else if (xmlDeath == 1 && xmlSavedDeath == 0) {
+                Enemy* newEnemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
+                newEnemy->SetParameters(enemyNode);
+                newEnemy->Start();
+                newEnemy->SetPosition(pos);
+                newEnemy->SetAliveInXML();
+                enemyList.push_back(newEnemy);
+                i++;
+            }
+            // case 3 do nothing if: death=1 & savedDeath=1
+        }
 	}
 
 }
@@ -229,13 +246,18 @@ void Scene::SaveState() {
 
 	//enemies
 	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
-
-	for (auto& enemy : enemyList) {
-		pugi::xml_node enemyNode = enemiesNode.child("enemy");
-
-		enemyNode.attribute("x").set_value(enemy->GetPosition().getX());
-		enemyNode.attribute("y").set_value(enemy->GetPosition().getY());
-
+	if (!enemyList.empty()) {
+		int i = 0;
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			if (i < enemyList.size()) {
+				if (enemyList[i]->DeathValue == 0) {
+					enemyNode.attribute("x").set_value(enemyList[i]->GetPosition().getX());
+					enemyNode.attribute("y").set_value(enemyList[i]->GetPosition().getY());
+				}
+				else enemyNode.attribute("savedDeath").set_value(1);
+				
+			}
+		}
 	}
 
 	//Saves the modifications to the XML 

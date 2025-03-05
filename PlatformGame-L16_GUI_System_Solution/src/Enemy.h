@@ -44,9 +44,14 @@ public:
 
 	void SetAliveInXML();
 
+	void SetSavedDeathToDeathInXML(); // at the moment its not being used
+
+	void SetSavedDeathToAliveInXML();
+
 
 public:
 	int DeathValue = 0;
+	int SavedDeathValue = 0;
 private:
 	SDL_Texture* texture;
 	const char* texturePath;
