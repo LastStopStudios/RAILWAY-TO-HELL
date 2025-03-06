@@ -56,6 +56,8 @@ private:
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
+	std::string enemyID;
+	char buffer[100];
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;

@@ -26,6 +26,7 @@ bool Enemy::Awake() {
 bool Enemy::Start() {
 
 	//initilize textures
+	enemyID = parameters.attribute("name").as_string();
 	texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 	position.setX(parameters.attribute("x").as_int());
 	position.setY(parameters.attribute("y").as_int());
@@ -57,6 +58,7 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
+	printf("%d", DeathValue);
 	// Pathfinding testing inputs
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		Vector2D pos = GetPosition();
@@ -160,13 +162,13 @@ void Enemy::SetDeathInXML()
 		LOG("Error loading config.xml");
 		return;
 	}
-
+	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", "badguy");
-
+		.find_child_by_attribute("enemy", "name", buffer);
+	
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
 		return;
@@ -191,12 +193,12 @@ void Enemy::SetAliveInXML()
 		LOG("Error loading config.xml");
 		return;
 	}
-
+	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", "badguy");
+		.find_child_by_attribute("enemy", "name", buffer);
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -223,11 +225,12 @@ void Enemy::SetSavedDeathToDeathInXML()
 		return;
 	}
 
+	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", "badguy");
+		.find_child_by_attribute("enemy", "name", buffer);
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -255,11 +258,12 @@ void Enemy::SetSavedDeathToAliveInXML()
 		return;
 	}
 
+	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", "badguy");
+		.find_child_by_attribute("enemy", "name", buffer);
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");

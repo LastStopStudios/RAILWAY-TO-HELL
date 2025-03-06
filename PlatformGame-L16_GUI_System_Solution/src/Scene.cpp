@@ -150,10 +150,23 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
-	LOG("Freeing scene");
+	//LOG("Freeing scene");
+	//pugi::xml_document loadFile;
+	//pugi::xml_node sceneNode = loadFile.child("config").child("scene");
+	//pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+	//for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+	//	int i = 0;
+	//	if (i < enemyList.size()) {
+	//		enemy->SetAliveInXML();
+	//		enemy->SetSavedDeathToAliveInXML();
+	//		i++;
+	//	}
+	//}
 	for (auto& enemy : enemyList) {
+
 		enemy->SetAliveInXML();
 		enemy->SetSavedDeathToAliveInXML();
+
 	}
 
 	return true;
@@ -250,6 +263,7 @@ void Scene::SaveState() {
 		int i = 0;
 		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
 			if (i < enemyList.size()) {
+				std::string enemyID = enemyNode.attribute("name").as_string();
 				if (enemyList[i]->DeathValue == 0) {
 					enemyNode.attribute("x").set_value(enemyList[i]->GetPosition().getX());
 					enemyNode.attribute("y").set_value(enemyList[i]->GetPosition().getY());
