@@ -11,10 +11,10 @@ class Pathfinding;
 class EntityManager;
 
 #include "Entity.h"
-#include "Scene.h"
-#include "Enemy.h"
+//#include "Scene.h"
+//#include "Enemy.h"
 #include "Engine.h"
-#include "Pathfinding.h" 
+//#include "Pathfinding.h" 
 #include "EntityManager.h" 
 
 class SceneLoader 
