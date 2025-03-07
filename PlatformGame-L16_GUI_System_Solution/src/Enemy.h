@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Pathfinding.h"
 
+
 struct SDL_Texture;
 
 class Enemy : public Entity

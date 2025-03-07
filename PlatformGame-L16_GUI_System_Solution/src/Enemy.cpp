@@ -81,8 +81,6 @@ bool Enemy::Update(float dt)
 		pathfinding->PropagateDijkstra();
 	}
 
-	// L13: TODO 3:	Add the key inputs to propagate the A* algorithm with different heuristics (Manhattan, Euclidean, Squared)
-
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_B) == KEY_DOWN) {
 		pathfinding->PropagateAStar(MANHATTAN);
 	}

@@ -1,6 +1,21 @@
 #pragma once
 #include "Module.h"
-class Player; 
+#include <vector>
+#include "pugixml.hpp"
+
+class Enemy;
+class Scene;
+class Engine;
+class Entity;
+class Pathfinding;
+class EntityManager;
+
+#include "Entity.h"
+#include "Scene.h"
+#include "Enemy.h"
+#include "Engine.h"
+#include "Pathfinding.h" 
+#include "EntityManager.h" 
 
 class SceneLoader 
 {
@@ -11,7 +26,8 @@ public:
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
 	int currentScene;
+	std::vector<Enemy*> enemysList;
 private:
-
+	void EnemiesList(pugi::xml_node sceneNode);
 };
 

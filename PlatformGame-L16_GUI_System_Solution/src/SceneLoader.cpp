@@ -7,7 +7,10 @@
 #include "Render.h"
 #include "Window.h"
 #include "Player.h" 
-#include "Scene.h"  // Asegúrate de incluir el archivo correcto
+#include "Scene.h"  
+#include "EntityManager.h"
+#include "Enemy.h"
+#include "Pathfinding.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -48,8 +51,21 @@ void SceneLoader::LoadScene(int level) {
             Vector2D(playerNode.attribute("x").as_int(),
                 playerNode.attribute("y").as_int()));
     }
+    //EnemiesList(sceneNode);
 }
 
+void SceneLoader::EnemiesList(pugi::xml_node sceneNode) {
+    pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+    if (!enemiesNode) {
+        return;
+    }
+
+    for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
+        Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
+        enemy->SetParameters(enemyNode);
+        enemysList.push_back(enemy);
+    }
+}
 
 void SceneLoader::SetCurrentScene(int level)
 {
