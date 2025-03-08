@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include <vector>
 #include "GuiControlButton.h"
+#include "SDL2/SDL_ttf.h"
 
 
 struct SDL_Texture;
@@ -70,4 +71,8 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
+
+	// Variables para manejar el texto
+	bool showText = false;
+	std::string displayText = "Tarta de queso";
 };

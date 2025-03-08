@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "SDL2/SDL_ttf.h"
 
 Scene::Scene() : Module()
 {
@@ -144,6 +145,11 @@ bool Scene::PostUpdate()
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		SaveState();
 
+	if (showText)
+	{
+		Engine::GetInstance().render.get()->DrawText(displayText.c_str(), 100, 100, 200, 100);//dibujas el texto por pantalla dandole la posicion x y y el tamaño h w
+	}
+
 	return ret;
 }
 
@@ -216,7 +222,10 @@ void Scene::SaveState() {
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 {
 	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
-	LOG("Press Gui Control: %d", control->id);
 
+	if (control->id == 1) {
+		showText = !showText; // Alternar visibilidad del texto
+		
+	}
 	return true;
 }
