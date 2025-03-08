@@ -129,6 +129,8 @@ bool Scene::Update(float dt)
 		enemyList[0]->ResetPath();
 	}*/
 
+	UpdateTextAnimation(dt); // Llama a la función que maneja la animación del texto
+
 	return true;
 }
 
@@ -147,7 +149,11 @@ bool Scene::PostUpdate()
 
 	if (showText)
 	{
-		Engine::GetInstance().render.get()->DrawText(displayText.c_str(), 100, 100, 200, 100);//dibujas el texto por pantalla dandole la posicion x y y el tamaño h w
+		//Engine::GetInstance().render.get()->DrawText(displayText.c_str(), 100, 100, 200, 100);//dibujas el texto por pantalla dandole la posicion x y y el tamaño h w
+		if (textTexture != nullptr) {
+			Engine::GetInstance().render.get()->DrawTexture(textTexture, 50, 50, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
+		}
+
 	}
 
 	return ret;
@@ -157,6 +163,12 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	if (textTexture != nullptr)
+	{
+		SDL_DestroyTexture(textTexture);
+		textTexture = nullptr;
+	}
+
 	return true;
 }
 
@@ -192,7 +204,48 @@ void Scene::LoadState() {
 
 }
 
-// L15 TODO 2: Implement the Save function
+void Scene::GenerateTextTexture()//mostrar texto por pantalla
+{
+	if (textTexture != nullptr)
+	{
+		SDL_DestroyTexture(textTexture); // Liberar textura anterior
+	}
+
+	SDL_Color color = { 255, 255, 255 }; // Decidir el color de la letra
+	SDL_Surface* surface = TTF_RenderText_Solid(Engine::GetInstance().render.get()->font, currentText.c_str(), color);
+
+	if (surface == nullptr)
+	{
+		LOG("Error al crear superficie de texto: %s", SDL_GetError());
+		return;
+	}
+
+	textTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, surface);
+	SDL_FreeSurface(surface);
+
+	if (textTexture == nullptr)
+	{
+		LOG("Error al crear textura de texto: %s", SDL_GetError());
+	}
+}
+
+void Scene::UpdateTextAnimation(float dt)
+{
+	if (!showText) return;
+
+	textTimer += dt; // Aumenta el temporizador
+
+	if (textTimer >= textSpeed && textIndex < displayText.length())
+	{
+		textTimer = 0.0f; // Reinicia el temporizador
+		textIndex++; // Avanza en el texto
+		currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
+		GenerateTextTexture(); // Genera la nueva textura con el fragmento
+	}
+}
+
+
+
 void Scene::SaveState() {
 
 	pugi::xml_document loadFile;
@@ -221,10 +274,17 @@ void Scene::SaveState() {
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 {
-	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
+
 
 	if (control->id == 1) {
 		showText = !showText; // Alternar visibilidad del texto
+
+		if (showText) {
+
+			textIndex = 0;         // Reinicia la animación
+			currentText = "";      // Vacía el texto mostrado
+			GenerateTextTexture();
+		}
 		
 	}
 	return true;

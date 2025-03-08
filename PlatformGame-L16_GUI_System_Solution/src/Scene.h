@@ -61,6 +61,7 @@ public:
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
+	SDL_Texture* textTexture = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 
@@ -72,7 +73,15 @@ private:
 
 	Player* player;
 
+	void GenerateTextTexture();
+	void UpdateTextAnimation(float dt);
+
 	// Variables para manejar el texto
 	bool showText = false;
-	std::string displayText = "Tarta de queso";
+	std::string displayText = "Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "; // texto que mostrar
+	std::string currentText = ""; // Texto que se muestra
+	int textIndex = 0;           // Índice del último carácter mostrado
+	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
+	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
+
 };
