@@ -138,7 +138,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
+	int x = 200, y = 80, shadowOffset = 3;
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -151,7 +151,8 @@ bool Scene::PostUpdate()
 	{
 		//Engine::GetInstance().render.get()->DrawText(displayText.c_str(), 100, 100, 200, 100);//dibujas el texto por pantalla dandole la posicion x y y el tamaño h w
 		if (textTexture != nullptr) {
-			Engine::GetInstance().render.get()->DrawTexture(textTexture, 50, 50, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
+			Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja sombra
+			Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
 		}
 
 	}
@@ -167,6 +168,11 @@ bool Scene::CleanUp()
 	{
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
+	}
+	if (shadowTexture != nullptr)
+	{
+		SDL_DestroyTexture(shadowTexture);
+		shadowTexture = nullptr;
 	}
 
 	return true;
@@ -209,23 +215,29 @@ void Scene::GenerateTextTexture()//mostrar texto por pantalla
 	if (textTexture != nullptr)
 	{
 		SDL_DestroyTexture(textTexture); // Liberar textura anterior
+		textTexture = nullptr;
 	}
 
 	SDL_Color color = { 255, 255, 255 }; // Decidir el color de la letra
-	SDL_Surface* surface = TTF_RenderText_Solid(Engine::GetInstance().render.get()->font, currentText.c_str(), color);
-
+	SDL_Color shadowColor = {0, 0, 0}; // Decidir el color de la sombra
+	int shadowOffset = 3; // Desplazamiento de la sombra
+	//renderizar sombra
+	SDL_Surface* shadowSurface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), shadowColor, textMaxWidth);
+	SDL_Texture* shadowTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, shadowSurface);
+	SDL_FreeSurface(shadowSurface);
+	// Renderizar el texto
+	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divide el texto en lineas automaticamente
 	if (surface == nullptr)
 	{
 		LOG("Error al crear superficie de texto: %s", SDL_GetError());
 		return;
 	}
-
 	textTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, surface);
 	SDL_FreeSurface(surface);
 
-	if (textTexture == nullptr)
+	if (textTexture == nullptr || shadowTexture == nullptr)
 	{
-		LOG("Error al crear textura de texto: %s", SDL_GetError());
+		LOG("Error al crear textura de texto/sombra: %s", SDL_GetError());
 	}
 }
 

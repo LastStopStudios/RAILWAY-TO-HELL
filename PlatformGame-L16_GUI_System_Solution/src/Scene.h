@@ -62,6 +62,7 @@ public:
 private:
 	SDL_Texture* mouseTileTex = nullptr;
 	SDL_Texture* textTexture = nullptr;
+	SDL_Texture* shadowTexture = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 
@@ -83,5 +84,6 @@ private:
 	int textIndex = 0;           // Índice del último carácter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
+	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
 
 };
