@@ -24,3 +24,6 @@ target_link_libraries(PlatformGame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2
 
 find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(PlatformGame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+
+find_package(SDL2_ttf CONFIG REQUIRED)
+target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>)

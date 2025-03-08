@@ -123,10 +123,10 @@ bool Scene::Update(float dt)
 	}
 
 	//If mouse button is pressed modify enemy position
-	if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
+	/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
 		enemyList[0]->ResetPath();
-	}
+	}*/
 
 	return true;
 }
@@ -213,7 +213,7 @@ void Scene::SaveState() {
 	loadFile.save_file("config.xml");
 }
 
-bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 {
 	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
 	LOG("Press Gui Control: %d", control->id);
