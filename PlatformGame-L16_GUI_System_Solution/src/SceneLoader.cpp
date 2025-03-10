@@ -11,6 +11,7 @@
 #include "EntityManager.h"
 #include "Enemy.h"
 #include "Pathfinding.h"
+#include "Item.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -19,6 +20,7 @@ SceneLoader::SceneLoader() {
 SceneLoader::~SceneLoader() {}
 
 void SceneLoader::LoadScene(int level) {
+    UnLoadEnemiesItems();
     SetCurrentScene(level);
 
     pugi::xml_document loadFile;
@@ -51,22 +53,69 @@ void SceneLoader::LoadScene(int level) {
             Vector2D(playerNode.attribute("x").as_int(),
                 playerNode.attribute("y").as_int()));
     }
-    //EnemiesList(sceneNode);
+    LoadEnemiesItems(sceneNode);
 }
 
-void SceneLoader::EnemiesList(pugi::xml_node sceneNode) {
+void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
+
     pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
     if (!enemiesNode) {
         return;
     }
 
+    // Create enemies
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
         Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
         enemy->SetParameters(enemyNode);
         enemysList.push_back(enemy);
     }
+
+    // Create a vector to track items
+    std::vector<Item*> itemsList;
+
+    pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+    if (itemsNode) {  // Add this check to avoid null pointer issues
+        for (pugi::xml_node itemNode = itemsNode.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+        {
+            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+            item->SetParameters(itemNode);
+            itemsList.push_back(item);  // Add the item to the list
+        }
+    }
+
+    // Initialize enemies
+    for (auto enemy : enemysList) {
+        enemy->Start();
+    }
+
+    // Initialize items
+    for (auto item : itemsList) {
+        item->Start();
+    }
 }
 
+void SceneLoader::UnLoadEnemiesItems() {
+    // Get the entity manager
+    auto entityManager = Engine::GetInstance().entityManager.get();
+
+    // Make a copy of entities to safely iterate
+    std::vector<Entity*> entitiesToRemove;
+
+    // Find all enemies and items (skip the player)
+    for (auto entity : entityManager->entities) {
+        if (entity->type == EntityType::ENEMY || entity->type == EntityType::ITEM) {
+            entitiesToRemove.push_back(entity);
+        }
+    }
+
+    // Destroy each entity separately
+    for (auto entity : entitiesToRemove) {
+        entityManager->DestroyEntity(entity);
+    }
+
+    // Clear your local tracking list
+    enemysList.clear();
+}
 void SceneLoader::SetCurrentScene(int level)
 {
 	currentScene = level;

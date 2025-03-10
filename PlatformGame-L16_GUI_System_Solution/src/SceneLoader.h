@@ -24,10 +24,11 @@ public:
 	~SceneLoader();
 	void LoadScene(int level); // Aqui dentro se tendría que hacer tanto el Load de la siguiente escena como previamente el Unload
 	void SetCurrentScene(int level);
-	int GetCurrentLevel() const { return currentScene; }
+	int GetCurrentScene() const { return currentScene; }
 	int currentScene;
 	std::vector<Enemy*> enemysList;
 private:
-	void EnemiesList(pugi::xml_node sceneNode);
+	void LoadEnemiesItems(pugi::xml_node sceneNode);
+	void UnLoadEnemiesItems();
 };
 

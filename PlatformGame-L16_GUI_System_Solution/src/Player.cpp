@@ -103,7 +103,7 @@ bool Player::Update(float dt)
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
+	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentScene();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1)
 	{
 		Engine::GetInstance().sceneLoader->LoadScene(1);
