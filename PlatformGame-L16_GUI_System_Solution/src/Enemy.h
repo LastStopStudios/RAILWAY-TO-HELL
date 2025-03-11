@@ -48,6 +48,7 @@ public:
 
 	void SetSavedDeathToAliveInXML();
 
+	std::string GetEnemyID() const { return enemyID; }
 
 public:
 	int DeathValue = 0;
@@ -57,7 +58,7 @@ private:
 	const char* texturePath;
 	int texW, texH;
 	std::string enemyID;
-	char buffer[100];
+	char* buffer = new char[255];
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;

@@ -16,6 +16,7 @@ Enemy::Enemy() : Entity(EntityType::ENEMY)
 }
 
 Enemy::~Enemy() {
+	delete[] buffer;
 	delete pathfinding;
 }
 
@@ -58,7 +59,7 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
-	printf("%d", DeathValue);
+	//printf("%d", DeathValue);
 	// Pathfinding testing inputs
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		Vector2D pos = GetPosition();
@@ -162,12 +163,12 @@ void Enemy::SetDeathInXML()
 		LOG("Error loading config.xml");
 		return;
 	}
-	strcpy_s(buffer, enemyID.c_str());
+
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", buffer);
+		.find_child_by_attribute("enemy", "name", enemyID.c_str());
 	
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -193,12 +194,12 @@ void Enemy::SetAliveInXML()
 		LOG("Error loading config.xml");
 		return;
 	}
-	strcpy_s(buffer, enemyID.c_str());
+
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", buffer);
+		.find_child_by_attribute("enemy", "name", enemyID.c_str());
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -225,12 +226,11 @@ void Enemy::SetSavedDeathToDeathInXML()
 		return;
 	}
 
-	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", buffer);
+		.find_child_by_attribute("enemy", "name", enemyID.c_str());
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -258,12 +258,11 @@ void Enemy::SetSavedDeathToAliveInXML()
 		return;
 	}
 
-	strcpy_s(buffer, enemyID.c_str());
 	pugi::xml_node enemyNode = doc.child("config")
 		.child("scene")
 		.child("entities")
 		.child("enemies")
-		.find_child_by_attribute("enemy", "name", buffer);
+		.find_child_by_attribute("enemy", "name", enemyID.c_str());
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
