@@ -6,6 +6,11 @@
     "sdl2-image",
     "sdl2-mixer",
     "sdl2-ttf",
-    "ffmpeg"
+    {
+      "name": "ffmpeg",
+      "features": ["postproc"]
+    }
   ]
 }
+
+

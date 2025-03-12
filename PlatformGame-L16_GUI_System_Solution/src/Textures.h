@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>  // Add this line
 #include "Module.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_render.h"

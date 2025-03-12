@@ -24,3 +24,11 @@ target_link_libraries(PlatformGame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_image::SDL2
 
 find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(PlatformGame PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET 
+    libavcodec libavformat libavutil libswscale libswresample)
+
+target_link_libraries(PlatformGame PRIVATE 
+    PkgConfig::FFMPEG
+)

@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "pugixml.hpp"
-
+#include "Ffmpeg.h"
 // Modules
 class Window;
 class Input;
@@ -20,6 +20,7 @@ class Map;
 //L08 TODO 2: Add Physics module
 class Physics;
 class GuiManager;
+class Ffmpeg;
 
 class Engine
 {
@@ -104,6 +105,7 @@ public:
 	// L08: TODO 2: Add Physics module
 	std::shared_ptr<Physics> physics;
 	std::shared_ptr<GuiManager> guiManager;
+	std::shared_ptr<Ffmpeg> ffmpeg; 
 
 
 private: 

@@ -58,13 +58,15 @@ public:
 
 
 private:
+	bool PlayCutscene(); // Reproduce el video, se puede llamar en el start o con un switch en el update 
+	// Ahora mismo esta en el start
+
 	SDL_Texture* mouseTileTex = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 
 	//L03: TODO 3b: Declare a Player attribute
 	std::vector<Enemy*> enemyList;
-
 	// L16: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* guiBt;
 

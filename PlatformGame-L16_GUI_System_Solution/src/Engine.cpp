@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include "Log.h"
-
+#include "Ffmpeg.h"
 #include "Window.h"
 #include "Input.h"
 #include "Render.h"
@@ -42,6 +42,7 @@ Engine::Engine() {
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
     guiManager = std::make_shared<GuiManager>();
+    ffmpeg = std::make_shared<Ffmpeg>(); 
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp

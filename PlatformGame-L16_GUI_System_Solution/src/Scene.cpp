@@ -14,6 +14,7 @@
 #include "Enemy.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "Ffmpeg.h"
 
 Scene::Scene() : Module()
 {
@@ -59,7 +60,14 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-
+	// Las siguientes 4 lineas de codigo sirven para reproducir el video
+	//
+	Engine::GetInstance().ffmpeg->Start(); // This will open the default video file
+	Engine::GetInstance().ffmpeg->ConvertPixels(
+		Engine::GetInstance().ffmpeg->streamIndex,
+		Engine::GetInstance().ffmpeg->audioStreamIndex
+	);
+	//
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
@@ -158,6 +166,15 @@ bool Scene::CleanUp()
 Vector2D Scene::GetPlayerPosition()
 {
 	return player->GetPosition();
+}
+
+bool Scene::PlayCutscene() {
+	Engine::GetInstance().ffmpeg->Start();
+	Engine::GetInstance().ffmpeg->ConvertPixels(
+		Engine::GetInstance().ffmpeg->streamIndex,
+		Engine::GetInstance().ffmpeg->audioStreamIndex
+	);
+	return true;
 }
 
 // L15 TODO 1: Implement the Load function
