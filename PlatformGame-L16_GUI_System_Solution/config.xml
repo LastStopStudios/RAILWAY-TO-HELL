@@ -74,6 +74,10 @@
 				</enemy>
 			</enemies>
 		</entities>
+		<dialogues>
+			<dialog ID="01" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "/>
+			<dialog ID="02" TEXT="Tarta de queso con champiñones"/>
+		</dialogues>
 	</scene>
 	<scene2>
 		<map path="Assets/Maps/" name="MapTemplate2.tmx" />

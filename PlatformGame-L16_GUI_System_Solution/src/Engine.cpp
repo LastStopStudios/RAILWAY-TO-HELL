@@ -179,16 +179,16 @@ void Engine::PrepareUpdate()
 // ---------------------------------------------
 void Engine::FinishUpdate()
 {
-    // L03: TODO 1: Cap the framerate of the gameloop
+    //Cap the framerate of the gameloop
     double currentDt = frameTime.ReadMs();
     if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
         int delay = (int)(maxFrameDuration - currentDt);
 
-        // L03: TODO 2: Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
+        //Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
         PerfTimer delayTimer = PerfTimer();
         SDL_Delay(delay);
-        //Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
-        //LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs()); // Uncomment this line to see the results
+        
+       
     }
 
     // Amount of frames since startup
@@ -278,7 +278,7 @@ bool Engine::LoadConfig()
 {
     bool ret = true;
 
-    // L05: TODO 2: Load config.xml file using load_file() method from the xml_document class
+    //Load config.xml file using load_file() method from the xml_document class
     // If the result is ok get the main node of the XML
     // else, log the error
     // check https://pugixml.org/docs/quickstart.html#loading

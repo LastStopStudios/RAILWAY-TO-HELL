@@ -76,11 +76,12 @@ private:
 
 	void GenerateTextTexture();
 	void UpdateTextAnimation(float dt);
-
+	void XMLToVariable(const std::string& id);
 	// Variables para manejar el texto
 	bool showText = false;
-	std::string displayText = "Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "; // texto que mostrar
+	std::string displayText = ""; // variable que recibe el texto del xml
 	std::string currentText = ""; // Texto que se muestra
+	std::string hermana1 = "01";//Variable con la id del texto a imprimir
 	int textIndex = 0;           // Índice del último carácter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)

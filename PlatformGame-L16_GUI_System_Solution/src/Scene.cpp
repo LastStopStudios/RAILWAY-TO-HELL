@@ -86,7 +86,7 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 
-	//L03 TODO 3: Make the camera movement independent of framerate
+	//Make the camera movement independent of framerate
 	float camSpeed = 1;
 
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -101,7 +101,7 @@ bool Scene::Update(float dt)
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
 
-	// L10 TODO 6: Implement a method that repositions the player in the map with a mouse click
+	//Implement a method that repositions the player in the map with a mouse click
 
 	//Get mouse position and obtain the map coordinate
 	int scale = Engine::GetInstance().window.get()->GetScale();
@@ -138,7 +138,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	int x = 200, y = 80, shadowOffset = 3;
+	int x = 200, y = 80, shadowOffset = 5;
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -149,7 +149,8 @@ bool Scene::PostUpdate()
 
 	if (showText)
 	{
-		//Engine::GetInstance().render.get()->DrawText(displayText.c_str(), 100, 100, 200, 100);//dibujas el texto por pantalla dandole la posicion x y y el tamaño h w
+		XMLToVariable(hermana1);//cargar el texto que toque a la variable
+
 		if (textTexture != nullptr) {
 			Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja sombra
 			Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
@@ -174,7 +175,8 @@ bool Scene::CleanUp()
 		SDL_DestroyTexture(shadowTexture);
 		shadowTexture = nullptr;
 	}
-
+	displayText.clear();
+	showText = false;
 	return true;
 }
 
@@ -254,6 +256,24 @@ void Scene::UpdateTextAnimation(float dt)
 		currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
 		GenerateTextTexture(); // Genera la nueva textura con el fragmento
 	}
+}
+
+void Scene::XMLToVariable(const std::string& id) {
+	if (!showText) return;
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+	if (!result) {
+		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
+		return;
+	}
+	pugi::xml_node dialogueNode = loadFile.child("config").child("scene").child("dialogues"); //modificar el scene por una variable que tenga el nombre de la escena en cuestion
+	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//recorrer todos los dialogos
+		if (std::string(dialog.attribute("ID").value()) == id) {//Mira si el id que se le da y el del dialogo es el mismo
+			displayText = dialog.attribute("TEXT").value();//darle el texto a la variable 
+			return;
+		}
+	}
+
 }
 
 
