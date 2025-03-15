@@ -21,7 +21,8 @@ SceneLoader::~SceneLoader() {}
 
 void SceneLoader::LoadScene(int level) {
 
-    Engine::GetInstance().sceneLoader->FadeOut(1.0f);    // Animation speed(FadeOut)
+    
+    Engine::GetInstance().sceneLoader->FadeIn(1.0f);   // Animation speed (FadeIn)
     UnLoadEnemiesItems();
     SetCurrentScene(level);
 
@@ -56,7 +57,10 @@ void SceneLoader::LoadScene(int level) {
                 playerNode.attribute("y").as_int()));
     }
     LoadEnemiesItems(sceneNode);
-    Engine::GetInstance().sceneLoader->FadeIn(1.0f);   // Animation speed (FadeIn)
+
+    Engine::GetInstance().sceneLoader->FadeOut(1.0f);    // Animation speed(FadeOut)
+
+
 }
 
 void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
@@ -164,4 +168,3 @@ void SceneLoader::FadeOut(float speed) {
     SDL_RenderFillRect(Engine::GetInstance().render->renderer, NULL);
     SDL_RenderPresent(Engine::GetInstance().render->renderer);
 }
-
