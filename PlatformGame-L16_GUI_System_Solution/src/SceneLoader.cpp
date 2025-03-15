@@ -20,7 +20,8 @@ SceneLoader::SceneLoader() {
 SceneLoader::~SceneLoader() {}
 
 void SceneLoader::LoadScene(int level) {
-    UnLoadEnemiesItems();
+
+    Engine::GetInstance().sceneLoader->FadeOut(50.0f);    UnLoadEnemiesItems();
     SetCurrentScene(level);
 
     pugi::xml_document loadFile;
@@ -54,6 +55,7 @@ void SceneLoader::LoadScene(int level) {
                 playerNode.attribute("y").as_int()));
     }
     LoadEnemiesItems(sceneNode);
+    Engine::GetInstance().sceneLoader->FadeIn(50.0f);
 }
 
 void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
@@ -119,5 +121,44 @@ void SceneLoader::UnLoadEnemiesItems() {
 void SceneLoader::SetCurrentScene(int level)
 {
 	currentScene = level;
+}
+
+void SceneLoader::FadeOut(float speed) {
+    float alpha = 0.0f;
+    SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
+
+    // Llenar la pantalla con un color negro que gradualmente se va volviendo más opaco
+    while (alpha < 255.0f) {
+        SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(alpha));
+        SDL_RenderFillRect(Engine::GetInstance().render->renderer, NULL);
+        SDL_RenderPresent(Engine::GetInstance().render->renderer);
+
+        alpha += speed;  // Aumentar la opacidad en función de la velocidad
+        SDL_Delay(10);   // Esperar para lograr el efecto
+    }
+
+    // Asegurarse de que el fade esté completamente negro al final
+    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(Engine::GetInstance().render->renderer, NULL);
+    SDL_RenderPresent(Engine::GetInstance().render->renderer);
+}
+void SceneLoader::FadeIn(float speed) {
+    float alpha = 255.0f;
+    SDL_SetRenderDrawBlendMode(Engine::GetInstance().render->renderer, SDL_BLENDMODE_BLEND);
+
+    // Llenar la pantalla con un color negro que gradualmente va desapareciendo
+    while (alpha > 0.0f) {
+        SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, static_cast<Uint8>(alpha));
+        SDL_RenderFillRect(Engine::GetInstance().render->renderer, NULL);
+        SDL_RenderPresent(Engine::GetInstance().render->renderer);
+
+        alpha -= speed;  // Reducir la opacidad en función de la velocidad
+        SDL_Delay(10);   // Esperar para lograr el efecto
+    }
+
+    // Asegurarse de que la pantalla sea completamente visible al final
+    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 0, 0, 0, 0);
+    SDL_RenderFillRect(Engine::GetInstance().render->renderer, NULL);
+    SDL_RenderPresent(Engine::GetInstance().render->renderer);
 }
 
