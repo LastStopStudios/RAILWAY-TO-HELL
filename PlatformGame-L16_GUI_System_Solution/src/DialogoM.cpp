@@ -10,6 +10,17 @@
 #include "SDL2/SDL_ttf.h"
 
 
+DialogoM::DialogoM() : Module()
+{
+	name = "dialogoM";
+}
+
+// Destructor
+DialogoM::~DialogoM()
+{
+	CleanUp();
+}
+
 // Called before render is available
 bool DialogoM::Awake()
 {
@@ -19,6 +30,7 @@ bool DialogoM::Awake()
 // Called before the first frame
 bool DialogoM::Start()
 {
+	Fondo = Engine::GetInstance().textures->Load("Assets/Textures/Fondo.png"); // Cargar textura para el fondo del texto
 	return true;
 }
 
@@ -38,12 +50,38 @@ bool DialogoM::Update(float dt) {
 // Called each loop iteration
 bool DialogoM::PostUpdate()
 {
+	if (showText && textTexture != nullptr) {
+		int width = 200, height = 80;
+		Engine::GetInstance().textures->GetSize(Fondo, width, height); // Obtener tamaño de la textura
+		int windowWidth, windowHeight;
+		Engine::GetInstance().window->GetWindowSize(windowWidth, windowHeight); // Obtener tamaño de la ventana
+		SDL_Rect dstRect = { 150, -100, 1000, 600 }; // Posicionar el fondo del texto
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Fondo, nullptr, &dstRect);
+		Engine::GetInstance().render->DrawTexture(textTexture, 200, 80, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
+	}
 	return true;
 }
+	
 
 void DialogoM::Texto(const std::string& Dialogo) {
+
 	showText = !showText; // Alternar visibilidad del texto
-	int x = 200, y = 80; // shadowOffset = 5; !!!!No hay sombra!!!!
+	if (showText) {
+		XMLToVariable(Dialogo); // Cargar el texto correspondiente
+		textIndex = 0; // Reiniciar el índice del texto
+		currentText = ""; // Reiniciar el texto actual
+		GenerateTextTexture(); // Generar la textura inicial
+	}
+	else {
+		textIndex = 0; // Reiniciar el índice del texto
+		currentText = ""; // Reiniciar el texto actual
+		if (textTexture != nullptr) {
+			SDL_DestroyTexture(textTexture); // Liberar la textura del texto
+			textTexture = nullptr;
+		}
+	}
+	/*showText = !showText; // Alternar visibilidad del texto
+	int x = 200, y = 80;
 	XMLToVariable(Dialogo);//cargar el texto que toque a la variable !!!!Este es el void que tendra que llamar el trigger para los dialogos, la variable es donde va la ID!!!!
 	Fondo = Engine::GetInstance().textures->Load("Assets/Textures/Fondo.png");//cargar textura para el fondo del texto
 	if (textTexture != nullptr) {
@@ -53,9 +91,8 @@ void DialogoM::Texto(const std::string& Dialogo) {
 		Engine::GetInstance().window->GetWindowSize(windowWidth, windowHeight);//miramos el tamaño de la pantalla de juego
 		SDL_Rect dstRect = { 150,-100, 1000, 600 };//posicionamos el fondo del texto en pantalla
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Fondo, nullptr, &dstRect);
-		//Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX); !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!! //dibuja sombra
 		Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
-	}
+	}*/
 }
 void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 {
@@ -63,27 +100,28 @@ void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 	{
 		SDL_DestroyTexture(textTexture); // Liberar textura anterior
 		textTexture = nullptr;
-		CleanUp();
+		//CleanUp();
 	}
 
 	SDL_Color color = { 255, 255, 255 }; // Decidir el color de la letra
-	SDL_Color shadowColor = { 0, 0, 0 }; // Decidir el color de la sombra
-	int shadowOffset = 3; // Desplazamiento de la sombra
-	//renderizar sombra !!!!No hace la sombra, cambiar por un rectangulo negro de fondo y ya!!!!
-	/*SDL_Surface* shadowSurface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), shadowColor, textMaxWidth);
-	SDL_Texture* shadowTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, shadowSurface);
-	SDL_FreeSurface(shadowSurface);*/
-	// Renderizar el texto
-	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divide el texto en lineas automaticamente
+	TTF_Font* font = Engine::GetInstance().render->font;
+
+	if (!font) {
+		LOG("Error: Fuente no cargada");
+		return;
+	}
+
+	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divide el texto en lineas automaticamente
 	if (surface == nullptr)
 	{
 		LOG("Error al crear superficie de texto: %s", SDL_GetError());
 		return;
 	}
-	textTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, surface);
+
+	textTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render->renderer, surface);
 	SDL_FreeSurface(surface);
 
-	if (textTexture == nullptr)// || shadowTexture == nullptr
+	if (!textTexture)// || shadowTexture == nullptr
 	{
 		LOG("Error al crear textura de texto/sombra: %s", SDL_GetError());
 	}
@@ -91,11 +129,11 @@ void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 
 void DialogoM::UpdateTextAnimation(float dt)
 {
-	if (!showText) return;
+	if (!showText || textIndex >= displayText.length()) return;
 
 	textTimer += dt; // Aumenta el temporizador
 
-	if (textTimer >= textSpeed && textIndex < displayText.length())
+	if (textTimer >= textSpeed )
 	{
 		textTimer = 0.0f; // Reinicia el temporizador
 		textIndex++; // Avanza en el texto
@@ -105,9 +143,11 @@ void DialogoM::UpdateTextAnimation(float dt)
 }
 
 void DialogoM::XMLToVariable(const std::string& id) {
-	if (!showText) return;
+	if (!showText || !displayText.empty()) return;
+
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+	
 	if (!result) {
 		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
 		return;
@@ -139,16 +179,13 @@ void DialogoM::XMLToVariable(const std::string& id) {
 bool DialogoM::CleanUp()
 {
 	LOG("Freeing scene");
+
 	if (textTexture != nullptr)
 	{
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
 	}
-	/*if (shadowTexture != nullptr) !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!!
-	{
-		SDL_DestroyTexture(shadowTexture);
-		shadowTexture = nullptr;
-	}*/
+	
 	if (Fondo != nullptr) {
 		Engine::GetInstance().textures->UnLoad(Fondo);//descargar fondo texto
 		Fondo = nullptr;

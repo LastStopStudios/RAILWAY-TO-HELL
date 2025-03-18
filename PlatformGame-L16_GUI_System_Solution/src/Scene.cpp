@@ -15,6 +15,7 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include "SDL2/SDL_ttf.h"
+#include "DialogoM.h"
 
 Scene::Scene() : Module()
 {
@@ -227,8 +228,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 
 
 	if (control->id == 1) {
-		Texto("01");//cargar los textos
-		
+		Engine::GetInstance().dialogoM->Texto("01"); // Llama a Texto que toque
 	}
 	return true;
 }
