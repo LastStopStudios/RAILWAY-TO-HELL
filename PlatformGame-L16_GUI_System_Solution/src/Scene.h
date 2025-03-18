@@ -82,7 +82,7 @@ private:
 	std::string scene = "";
 	std::string displayText = ""; // variable que recibe el texto del xml
 	std::string currentText = ""; // Texto que se muestra
-	std::string hermana1 = "01";//Variable con la id del texto a imprimir
+	std::string hermana1 = "01";//Variable con la id del texto a imprimir !!!!Esta variable es la que tendra que dar el trigger que llame al void!!!!
 	int textIndex = 0;           // Índice del último carácter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
