@@ -138,7 +138,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	int x = 200, y = 80; // shadowOffset = 5; !!!!No hay sombra!!!!
+	
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -148,22 +148,27 @@ bool Scene::PostUpdate()
 		SaveState();
 
 	if (showText)
-	{
-		XMLToVariable(hermana1);//cargar el texto que toque a la variable !!!!Este es el void que tendra que llamar el trigger para los dialogos, la variable es donde va la ID!!!!
-		Fondo = Engine::GetInstance().textures->Load("Assets/Textures/Fondo.png");//cargar textura para el fondo del texto
-		if (textTexture != nullptr) {
-			Engine::GetInstance().textures->GetSize(Fondo, x, y);//le damos tamaño a la textura
-			int windowWidth, windowHeight;
-			Engine::GetInstance().window->GetWindowSize(windowWidth, windowHeight);//miramos el tamaño de la pantalla de juego
-			SDL_Rect dstRect = { windowWidth - x - 10, 10, x, y };//posicionamos el fondo del texto en pantalla
-			SDL_RenderCopy(Engine::GetInstance().render->renderer, Fondo, nullptr, &dstRect);
-			//Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX); !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!! //dibuja sombra
-			Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
-		}
-
+	{ //void texto(const std::string& Dialogo){TODO lo que hay aqui abajo }!!!!Void que crear en Dialogue Manager
+		Texto(hermana1);//cargar los textos
 	}
 
 	return ret;
+}
+
+void Scene::Texto(const std::string& Dialogo){
+	int x = 200, y = 80; // shadowOffset = 5; !!!!No hay sombra!!!!
+	XMLToVariable(Dialogo);//cargar el texto que toque a la variable !!!!Este es el void que tendra que llamar el trigger para los dialogos, la variable es donde va la ID!!!!
+	Fondo = Engine::GetInstance().textures->Load("Assets/Textures/Fondo.png");//cargar textura para el fondo del texto
+	if (textTexture != nullptr) {
+		int with=200, height=80;
+		Engine::GetInstance().textures->GetSize(Fondo, with, height);//le damos tamaño a la textura
+		int windowWidth, windowHeight;
+		Engine::GetInstance().window->GetWindowSize(windowWidth, windowHeight);//miramos el tamaño de la pantalla de juego
+		SDL_Rect dstRect = { 150,-100, 1000, 600 };//posicionamos el fondo del texto en pantalla
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Fondo, nullptr, &dstRect);
+		//Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX); !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!! //dibuja sombra
+		Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
+	}
 }
 
 // Called before quitting
@@ -339,7 +344,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 			//textIndex = 0;  !!!!movido al cleanUp!!!!       // Reinicia la animación
 			//currentText = "";  !!!!movido al cleanUp!!!!     // Vacía el texto mostrado
 			GenerateTextTexture();
-		}else{ CleanUp(); }
+		}else{ CleanUp(); }//limpiar texto para cuando se vueñva a llamar
 		
 	}
 	return true;

@@ -78,6 +78,7 @@ private:
 	void GenerateTextTexture();
 	void UpdateTextAnimation(float dt);
 	void XMLToVariable(const std::string& id);
+	void Texto(const std::string& Dialogo);
 	// Variables para manejar el texto
 	bool showText = false;
 	std::string scene = "";
