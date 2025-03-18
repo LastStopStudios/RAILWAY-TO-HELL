@@ -61,8 +61,9 @@ public:
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
-	SDL_Texture* textTexture = nullptr;
-	SDL_Texture* shadowTexture = nullptr;
+	SDL_Texture* textTexture = nullptr;//textura letras
+	SDL_Texture* Fondo = nullptr;//textura fondo letras
+	SDL_Texture* shadowTexture = nullptr;//textura sombra !!!!No va!!!!
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 
