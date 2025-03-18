@@ -73,12 +73,13 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
-
+	//voids texto
 	void GenerateTextTexture();
 	void UpdateTextAnimation(float dt);
 	void XMLToVariable(const std::string& id);
 	// Variables para manejar el texto
 	bool showText = false;
+	std::string scene = "";
 	std::string displayText = ""; // variable que recibe el texto del xml
 	std::string currentText = ""; // Texto que se muestra
 	std::string hermana1 = "01";//Variable con la id del texto a imprimir

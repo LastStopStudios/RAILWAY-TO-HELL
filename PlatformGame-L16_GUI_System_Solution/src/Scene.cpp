@@ -149,10 +149,10 @@ bool Scene::PostUpdate()
 
 	if (showText)
 	{
-		XMLToVariable(hermana1);//cargar el texto que toque a la variable
+		XMLToVariable(hermana1);//cargar el texto que toque a la variable !!!!Este es el void que tendra que llamar el trigger para los dialogos, la variable es donde va la ID!!!!
 
 		if (textTexture != nullptr) {
-			Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja sombra
+			//Engine::GetInstance().render.get()->DrawTexture(shadowTexture, x + shadowOffset, y + shadowOffset, NULL, 1.0f, 0.0, INT_MAX, INT_MAX); !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!! //dibuja sombra
 			Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
 		}
 
@@ -170,11 +170,13 @@ bool Scene::CleanUp()
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
 	}
-	if (shadowTexture != nullptr)
+	/*if (shadowTexture != nullptr) !!!!No funciona las sombras del texto, cambiar por un fondo y ya!!!!
 	{
 		SDL_DestroyTexture(shadowTexture);
 		shadowTexture = nullptr;
-	}
+	}*/
+	textIndex = 0;
+	currentText = "";
 	displayText.clear();
 	showText = false;
 	return true;
@@ -223,10 +225,10 @@ void Scene::GenerateTextTexture()//mostrar texto por pantalla
 	SDL_Color color = { 255, 255, 255 }; // Decidir el color de la letra
 	SDL_Color shadowColor = {0, 0, 0}; // Decidir el color de la sombra
 	int shadowOffset = 3; // Desplazamiento de la sombra
-	//renderizar sombra
-	SDL_Surface* shadowSurface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), shadowColor, textMaxWidth);
+	//renderizar sombra !!!!No hace la sombra, cambiar por un rectangulo negro de fondo y ya!!!!
+	/*SDL_Surface* shadowSurface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), shadowColor, textMaxWidth);
 	SDL_Texture* shadowTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, shadowSurface);
-	SDL_FreeSurface(shadowSurface);
+	SDL_FreeSurface(shadowSurface);*/
 	// Renderizar el texto
 	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(Engine::GetInstance().render.get()->font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divide el texto en lineas automaticamente
 	if (surface == nullptr)
@@ -237,7 +239,7 @@ void Scene::GenerateTextTexture()//mostrar texto por pantalla
 	textTexture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, surface);
 	SDL_FreeSurface(surface);
 
-	if (textTexture == nullptr || shadowTexture == nullptr)
+	if (textTexture == nullptr)// || shadowTexture == nullptr
 	{
 		LOG("Error al crear textura de texto/sombra: %s", SDL_GetError());
 	}
@@ -266,14 +268,26 @@ void Scene::XMLToVariable(const std::string& id) {
 		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
 		return;
 	}
-	pugi::xml_node dialogueNode = loadFile.child("config").child("scene").child("dialogues"); //modificar el scene por una variable que tenga el nombre de la escena en cuestion
+	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //sacar la escena actual
+
+	switch (currentLvl) {//añadir apartado por cada escena
+	case 1:
+		scene = "scene";//pasar la primera escena
+		break;
+	case 2:
+		scene = "scene2";//pasar la segunda escena
+		break;
+	default:
+		scene = "scene";
+		break;
+	}
+	pugi::xml_node dialogueNode = loadFile.child("config").child(scene.c_str()).child("dialogues");//cargar los dialogos de la escena
 	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//recorrer todos los dialogos
 		if (std::string(dialog.attribute("ID").value()) == id) {//Mira si el id que se le da y el del dialogo es el mismo
 			displayText = dialog.attribute("TEXT").value();//darle el texto a la variable 
 			return;
 		}
 	}
-
 }
 
 
@@ -310,13 +324,13 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 
 	if (control->id == 1) {
 		showText = !showText; // Alternar visibilidad del texto
-
+		
 		if (showText) {
 
-			textIndex = 0;         // Reinicia la animación
-			currentText = "";      // Vacía el texto mostrado
+			//textIndex = 0;  !!!!movido al cleanUp!!!!       // Reinicia la animación
+			//currentText = "";  !!!!movido al cleanUp!!!!     // Vacía el texto mostrado
 			GenerateTextTexture();
-		}
+		}else{ CleanUp(); }
 		
 	}
 	return true;
