@@ -73,12 +73,7 @@ void DialogoM::Texto(const std::string& Dialogo) {
 		GenerateTextTexture(); // Generar la textura inicial
 	}
 	else {
-		textIndex = 0; // Reiniciar el índice del texto
-		currentText = ""; // Reiniciar el texto actual
-		if (textTexture != nullptr) {
-			SDL_DestroyTexture(textTexture); // Liberar la textura del texto
-			textTexture = nullptr;
-		}
+		ResetText(); // Reiniciar el texto
 	}
 	/*showText = !showText; // Alternar visibilidad del texto
 	int x = 200, y = 80;
@@ -94,6 +89,18 @@ void DialogoM::Texto(const std::string& Dialogo) {
 		Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
 	}*/
 }
+
+void DialogoM::ResetText() {
+	textIndex = 0;
+	currentText = "";
+	displayText = "";
+	if (textTexture != nullptr) {
+		SDL_DestroyTexture(textTexture);
+		textTexture = nullptr;
+	}
+	showText = false; // Reiniciar la visibilidad del texto
+}
+
 void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 {
 	if (textTexture != nullptr)
@@ -190,9 +197,5 @@ bool DialogoM::CleanUp()
 		Engine::GetInstance().textures->UnLoad(Fondo);//descargar fondo texto
 		Fondo = nullptr;
 	}
-	textIndex = 0;// Reinicia la animación 
-	currentText = "";// Vacía el texto mostrado
-	displayText.clear();
-	showText = false;
 	return true;
 }

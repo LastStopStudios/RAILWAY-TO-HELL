@@ -36,6 +36,8 @@ public:
 
 	void Texto(const std::string& Dialogo);
 
+	void ResetText();
+
 private:
 
 	SDL_Texture* textTexture = nullptr;//textura letras
