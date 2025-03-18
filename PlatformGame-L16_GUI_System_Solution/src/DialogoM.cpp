@@ -1,4 +1,4 @@
-#include "DialogueManager.h"
+#include "DialogoM.h"
 #include "Engine.h"
 #include "Input.h"
 #include "Textures.h"
@@ -10,14 +10,38 @@
 #include "SDL2/SDL_ttf.h"
 
 
+// Called before render is available
+bool DialogoM::Awake()
+{
+	return true;
+}
 
-bool DialogueManager::Update(float dt) {
+// Called before the first frame
+bool DialogoM::Start()
+{
+	return true;
+}
+
+// Called each loop iteration
+bool DialogoM::PreUpdate()
+{
+	return true;
+}
+
+// Called each loop iteration
+bool DialogoM::Update(float dt) {
 	UpdateTextAnimation(dt); // Llama a la función que maneja la animación del texto
 
 	return true;
 }
 
-void DialogueManager::Texto(const std::string& Dialogo) {
+// Called each loop iteration
+bool DialogoM::PostUpdate()
+{
+	return true;
+}
+
+void DialogoM::Texto(const std::string& Dialogo) {
 	showText = !showText; // Alternar visibilidad del texto
 	int x = 200, y = 80; // shadowOffset = 5; !!!!No hay sombra!!!!
 	XMLToVariable(Dialogo);//cargar el texto que toque a la variable !!!!Este es el void que tendra que llamar el trigger para los dialogos, la variable es donde va la ID!!!!
@@ -33,7 +57,7 @@ void DialogueManager::Texto(const std::string& Dialogo) {
 		Engine::GetInstance().render.get()->DrawTexture(textTexture, x, y, NULL, 1.0f, 0.0, INT_MAX, INT_MAX);//dibuja la letra renderizada como textura		
 	}
 }
-void DialogueManager::GenerateTextTexture()//mostrar texto por pantalla
+void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 {
 	if (textTexture != nullptr)
 	{
@@ -65,7 +89,7 @@ void DialogueManager::GenerateTextTexture()//mostrar texto por pantalla
 	}
 }
 
-void DialogueManager::UpdateTextAnimation(float dt)
+void DialogoM::UpdateTextAnimation(float dt)
 {
 	if (!showText) return;
 
@@ -80,7 +104,7 @@ void DialogueManager::UpdateTextAnimation(float dt)
 	}
 }
 
-void DialogueManager::XMLToVariable(const std::string& id) {
+void DialogoM::XMLToVariable(const std::string& id) {
 	if (!showText) return;
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -111,7 +135,8 @@ void DialogueManager::XMLToVariable(const std::string& id) {
 }
 
 // Called before quitting
-bool DialogueManager::CleanUp()
+
+bool DialogoM::CleanUp()
 {
 	LOG("Freeing scene");
 	if (textTexture != nullptr)

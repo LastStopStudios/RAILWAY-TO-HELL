@@ -99,6 +99,9 @@
     <ClCompile Include="src\Ffmpeg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\DialogoM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -178,6 +181,7 @@
     </ClInclude>
     <ClInclude Include="Point.h" />
     <ClInclude Include="src\Ffmpeg.h" />
+    <ClInclude Include="src\DialogoM.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
