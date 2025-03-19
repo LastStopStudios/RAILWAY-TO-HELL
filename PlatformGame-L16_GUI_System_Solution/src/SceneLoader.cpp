@@ -70,16 +70,13 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         enemysList.push_back(enemy);
     }
 
-    // Create a vector to track items
-    std::vector<Item*> itemsList;
-
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
-    if (itemsNode) {  // Add this check to avoid null pointer issues
+    if (itemsNode) {
         for (pugi::xml_node itemNode = itemsNode.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
         {
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(itemNode);
-            itemsList.push_back(item);  // Add the item to the list
+            itemsList.push_back(item);  // Now using the member variable
         }
     }
 
@@ -91,7 +88,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     // Initialize items
     for (auto item : itemsList) {
         item->Start();
-    }
+    } 
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
@@ -115,6 +112,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Clear your local tracking list
     enemysList.clear();
+    itemsList.clear(); 
 }
 void SceneLoader::SetCurrentScene(int level)
 {

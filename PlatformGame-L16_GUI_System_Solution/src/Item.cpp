@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include "Physics.h"
 
 Item::Item() : Entity(EntityType::ITEM)
 {
@@ -63,5 +64,12 @@ bool Item::Update(float dt)
 
 bool Item::CleanUp()
 {
+	// Explicitly destroy the physics body if it exists
+	if (pbody != nullptr)
+	{
+		// Make sure to tell the physics system to destroy this body
+		Engine::GetInstance().physics->DeletePhysBody(pbody);
+		pbody = nullptr;
+	}
 	return true;
 }
