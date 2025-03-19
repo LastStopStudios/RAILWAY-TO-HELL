@@ -6,6 +6,8 @@
 #include "Log.h"
 #include "Physics.h"
 #include <math.h>
+#include <unordered_map>
+#include <string>
 #include "SceneLoader.h"
 
 Map::Map() : Module(), mapLoaded(false)
@@ -172,6 +174,11 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.layers.push_back(mapLayer);
         }
 
+        // Define un mapa para convertir nombres de capas en enteros
+        std::unordered_map<std::string, int> layerNameToId = {
+            {"Sensores", 1}
+        };
+
         float x = 0.0f;
         float y = 0.0f;
         float width = 0.0f;
@@ -189,40 +196,25 @@ bool Map::Load(std::string path, std::string fileName)
                 width = tileNode.attribute("width").as_float();
                 height = tileNode.attribute("height").as_float();
 
-                ColliderType colliderType = ColliderType::PLATFORM; // Valor por defecto
-
-                // Assign the collision type based on the layer name
-                /*if (layerName == "spike") {
-                    colliderType = ColliderType::SPIKE;
-                }
-                else if (layerName == "ceiling") {
-                    colliderType = ColliderType::CEILING;
-                }
-                else if (layerName == "Checkpoints") {
-                    colliderType = ColliderType::CHECKPOINT;
-                }
-                else if (layerName == "SensorFinal") {
-                    colliderType = ColliderType::LVL1;
-                }*/
-
                 PhysBody* rect = nullptr;
+                auto it = layerNameToId.find(layerName);
+                int layerId = (it != layerNameToId.end()) ? it->second : 0; // Valor por defecto: 0 para plataformas
 
-                /*if (colliderType == ColliderType::CHECKPOINT) {
+
+                switch (layerId) {
+                case 1: // Checkpoint
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                }
-                else if (colliderType == ColliderType::LVL1) {
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                }*/
-                
+                    LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
+                    rect->ctype = ColliderType::SENSOR;
+                    break;
+                default: // Plataformas
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
-
-                    rect->ctype = colliderType;
-
+                    rect->ctype = ColliderType::PLATFORM;
+                    break;
+                }
+                
                     // A?ade el collider a la lista
                     colliders.push_back(rect);
-                
-
-                rect->ctype = colliderType;
             }
         }
         //Iterate the layer and create colliders
