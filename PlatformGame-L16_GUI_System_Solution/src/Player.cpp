@@ -136,6 +136,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB); // Deletes the body of the item from the physics world
 		break;
+	case ColliderType::SENSOR:
+		break;
 	case ColliderType::UNKNOWN:
 		break;
 	}
