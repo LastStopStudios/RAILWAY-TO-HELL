@@ -16,7 +16,6 @@ Enemy::Enemy() : Entity(EntityType::ENEMY)
 }
 
 Enemy::~Enemy() {
-	delete[] buffer;
 	delete pathfinding;
 }
 
@@ -59,6 +58,12 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
+	if (!IsEnabled()) return true;
+	if (pendingDisable) {
+		SetEnabled(false); 
+		pendingDisable = false; 
+		SetDeathInXML(); 
+	}
 	//printf("%d", DeathValue);
 	// Pathfinding testing inputs
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
@@ -130,7 +135,7 @@ bool Enemy::Update(float dt)
 
 bool Enemy::CleanUp()
 {
-	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+	//Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 	return true;
 }
 
@@ -281,13 +286,18 @@ void Enemy::SetSavedDeathToAliveInXML()
 	SavedDeathValue = 0;
 }
 
+void Enemy::SetEnabled(bool active) {
+	isEnabled = active;
+	pbody->body->SetEnabled(active);
+	pbody->body->SetAwake(active);
+}
+
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
 		LOG("Collided with player - DESTROY");
-		SetDeathInXML();
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		pendingDisable = true;
 		break;
 	}
 }

@@ -36,10 +36,6 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	//int GetDeathInXML(){
-	//	return DeathValue;
-	//}
-
 	void SetDeathInXML();
 
 	void SetAliveInXML();
@@ -48,17 +44,21 @@ public:
 
 	void SetSavedDeathToAliveInXML();
 
-	std::string GetEnemyID() const { return enemyID; }
+	void SetEnabled(bool active);
+
+	bool IsEnabled() const { return isEnabled; }
 
 public:
+	bool pendingDisable = false;
 	int DeathValue = 0;
 	int SavedDeathValue = 0;
 private:
+
+	bool isEnabled = true;
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
 	std::string enemyID;
-	char* buffer = new char[255];
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;

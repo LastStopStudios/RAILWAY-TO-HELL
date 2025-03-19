@@ -150,40 +150,13 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("config.xml");
 
-	if (result == NULL)
-	{
-		LOG("Could not load file. Pugi error: %s", result.description());
-		return false;
+	for (auto& enemy : enemyList) {
+
+		enemy->SetAliveInXML();
+		enemy->SetSavedDeathToAliveInXML();
+
 	}
-
-	pugi::xml_node enemiesNode = doc.child("config").child("scene").child("entities").child("enemies");
-
-	for (auto& enemy : enemyList)
-	{
-		pugi::xml_node enemyNode = enemiesNode.find_child_by_attribute("enemy", "name", enemy->GetEnemyID().c_str());
-
-		if (enemyNode)
-		{
-			enemyNode.attribute("death").set_value(0);
-			enemyNode.attribute("savedDeath").set_value(0);
-
-			enemy->DeathValue = 0;
-			enemy->SavedDeathValue = 0;
-		}
-	}
-
-	bool saved = doc.save_file("config.xml");
-
-
-	//for (auto& enemy : enemyList) {
-
-	//	enemy->SetAliveInXML();
-	//	enemy->SetSavedDeathToAliveInXML();
-
-	//}
 
 	return true;
 }
@@ -221,7 +194,7 @@ void Scene::LoadState() {
 		int i = 0;
 		// for (auto& enemy : enemyList) 
         for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
-            // Leer valores del XML
+            // read XML
             int xmlDeath = enemyNode.attribute("death").as_int();
             int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
             Vector2D pos(
@@ -234,19 +207,20 @@ void Scene::LoadState() {
                 if (i < enemyList.size()) {
                     enemyList[i]->SetPosition(pos);
                     enemyList[i]->SetAliveInXML(); 
+					enemyList[i]->SetEnabled(true);;
                     i++;
                 }
             }
             // case 2 create enemy if: death=0 & savedDeath=1 
             else if (xmlDeath == 1 && xmlSavedDeath == 0) {
-                Enemy* newEnemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-                newEnemy->SetParameters(enemyNode);
-                newEnemy->Start();
-                newEnemy->SetPosition(pos);
-                newEnemy->SetAliveInXML();
-                enemyList.push_back(newEnemy);
-                i++;
+				if (i < enemyList.size()) {
+					enemyList[i]->SetPosition(pos);
+					enemyList[i]->SetAliveInXML();
+					enemyList[i]->SetEnabled(true);;
+					i++;
+				}
             }
+				
             // case 3 do nothing if: death=1 & savedDeath=1
         }
 	}
