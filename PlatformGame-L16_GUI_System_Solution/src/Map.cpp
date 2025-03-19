@@ -279,7 +279,13 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     {
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
-        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+
+            p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+            p->sensor = propertieNode.attribute("value").as_string();
+       
+       
+        
+
 
         properties.propertyList.push_back(p);
     }
@@ -326,6 +332,8 @@ Properties::Property* Properties::GetProperty(const char* name)
     for (const auto& property : propertyList) {
         if (property->name == name) {
 			return property;
+            LOG("Propiedad encontrada: %s", property->name.c_str()); // Registrar el nombre de la propiedad
+            LOG("Propiedad encontrada: %s", property->sensor.c_str());
 		}
     }
 

@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "EntityManager.h"
 #include "SceneLoader.h"
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -138,6 +139,25 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::SENSOR:
 		LOG("!!!!TOCO EL SENSOR!!!!");
+		// Verificar manualmente el tipo de listener
+		if (physB->listener) {
+			Properties* sensorProperties = reinterpret_cast<Properties*>(physB->listener);
+			if (sensorProperties) {
+				LOG("!!!!!!!!", sensorProperties);
+				Properties::Property* sensorProp = sensorProperties->GetProperty("Sensor");
+				LOG("!!!!!!!!", sensorProp);
+				if (sensorProp) {
+					esc = sensorProp->sensor; // Acceder al valor de tipo string
+
+					if (esc == "S1S2") {
+						Engine::GetInstance().sceneLoader->LoadScene(1);
+					}
+					else if (esc == "S2S1") {
+						Engine::GetInstance().sceneLoader->LoadScene(2);
+					}
+				}
+			}
+		}
 		break;
 	case ColliderType::UNKNOWN:
 		break;

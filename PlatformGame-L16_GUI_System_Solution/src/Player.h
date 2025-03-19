@@ -42,7 +42,7 @@ public:
 	float speed = 5.0f;
 	SDL_Texture* texture = NULL;
 	int texW, texH;
-
+	std::string esc;
 	//Audio fx
 	int pickCoinFxId;
 
