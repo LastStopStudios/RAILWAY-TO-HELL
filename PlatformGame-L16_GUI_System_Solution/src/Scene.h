@@ -69,12 +69,12 @@ private:
 	bool once = false;
 
 	//L03: TODO 3b: Declare a Player attribute
-	
-
+	Player* player;
+	Enemy* enemy;
 	// L16: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* guiBt;
 
-	Player* player;
+
 	//voids texto
 	void GenerateTextTexture();
 	void UpdateTextAnimation(float dt);
@@ -86,9 +86,9 @@ private:
 	std::string displayText = ""; // variable que recibe el texto del xml
 	std::string currentText = ""; // Texto que se muestra
 	std::string hermana1 = "01";//Variable con la id del texto a imprimir !!!!Esta variable es la que tendra que dar el trigger que llame al void!!!!
-	int textIndex = 0;           // Índice del último carácter mostrado
+	int textIndex = 0;           // ï¿½ndice del ï¿½ltimo carï¿½cter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
-	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
+	int textMaxWidth = 900; // Mï¿½ximo ancho antes de saltar de lï¿½nea
 
 };
