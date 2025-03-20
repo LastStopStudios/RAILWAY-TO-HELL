@@ -14,6 +14,8 @@
 #include "Enemy.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "SDL2/SDL_ttf.h"
+#include "DialogoM.h"
 
 Scene::Scene() : Module()
 {
@@ -85,7 +87,7 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 
-	//L03 TODO 3: Make the camera movement independent of framerate
+	//Make the camera movement independent of framerate
 	float camSpeed = 1;
 
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -100,7 +102,7 @@ bool Scene::Update(float dt)
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
 
-	// L10 TODO 6: Implement a method that repositions the player in the map with a mouse click
+	//Implement a method that repositions the player in the map with a mouse click
 
 	//Get mouse position and obtain the map coordinate
 	int scale = Engine::GetInstance().window.get()->GetScale();
@@ -123,10 +125,12 @@ bool Scene::Update(float dt)
 	}
 
 	//If mouse button is pressed modify enemy position
-	if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
+	/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
 		enemyList[0]->ResetPath();
-	}
+	}*/
+
+	
 
 	return true;
 }
@@ -135,7 +139,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
+	
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -147,10 +151,12 @@ bool Scene::PostUpdate()
 	return ret;
 }
 
+
+
 // Called before quitting
 bool Scene::CleanUp()
 {
-	LOG("Freeing scene");
+	
 	return true;
 }
 
@@ -186,7 +192,11 @@ void Scene::LoadState() {
 
 }
 
-// L15 TODO 2: Implement the Save function
+
+
+
+
+
 void Scene::SaveState() {
 
 	pugi::xml_document loadFile;
@@ -213,10 +223,12 @@ void Scene::SaveState() {
 	loadFile.save_file("config.xml");
 }
 
-bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 {
-	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
-	LOG("Press Gui Control: %d", control->id);
 
+
+	if (control->id == 1) {
+		Engine::GetInstance().dialogoM->Texto("01"); // Llama a Texto que toque
+	}
 	return true;
 }

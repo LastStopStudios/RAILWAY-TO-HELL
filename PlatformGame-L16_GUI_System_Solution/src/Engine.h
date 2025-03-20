@@ -17,9 +17,9 @@ class Scene;
 class EntityManager;
 class SceneLoader;
 class Map;
-//L08 TODO 2: Add Physics module
 class Physics;
 class GuiManager;
+class DialogoM;
 
 class Engine
 {
@@ -98,12 +98,11 @@ public:
 	std::shared_ptr<Audio> audio;
 	std::shared_ptr<Scene> scene;
 	std::shared_ptr<SceneLoader> sceneLoader; 
-	// L04: TODO 1: Add the EntityManager Module to the Engine
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
-	// L08: TODO 2: Add Physics module
 	std::shared_ptr<Physics> physics;
 	std::shared_ptr<GuiManager> guiManager;
+	std::shared_ptr<DialogoM> dialogoM;
 
 
 private: 

@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "box2d",
+    "ffmpeg",
     "pugixml",
     "sdl2",
     "sdl2-image",
