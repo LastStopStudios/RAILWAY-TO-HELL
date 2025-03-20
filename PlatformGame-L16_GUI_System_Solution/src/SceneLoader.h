@@ -31,5 +31,7 @@ public:
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
+	void FadeOut(float speed); // Aparición del negro
+	void FadeIn(float speed);// Desvanecimiento del negro
 };
 
