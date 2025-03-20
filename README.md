@@ -24,5 +24,4 @@ Video Game Development Project 2 CITM 2025 by
 - Space jump
 
 ### *Implemented Features*
-- Nada
-- Hola Pedro
+
