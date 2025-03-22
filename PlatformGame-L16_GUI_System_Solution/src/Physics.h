@@ -23,12 +23,13 @@ enum bodyType {
 	KINEMATIC
 };
 
-enum class ColliderType {
+enum class ColliderType {//añadir aqui los colliders que tengan que triggear algo con algo
 	PLAYER, 
 	ITEM,
 	PLATFORM,
 	SENSOR,
 	ENEMY,
+	COLISION,
 	UNKNOWN
 	// ..
 };

@@ -143,9 +143,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (physB->listener) {
 			Properties* sensorProperties = reinterpret_cast<Properties*>(physB->listener);
 			if (sensorProperties) {
-				LOG("!!!!!!!!", sensorProperties);
+				LOG("!!!!!!!! %d", sensorProperties);
 				Properties::Property* sensorProp = sensorProperties->GetProperty("Sensor");
-				LOG("!!!!!!!!", sensorProp);
+				LOG("!!!!!!!! %d", sensorProp);
 				if (sensorProp) {
 					esc = sensorProp->sensor; // Acceder al valor de tipo string
 

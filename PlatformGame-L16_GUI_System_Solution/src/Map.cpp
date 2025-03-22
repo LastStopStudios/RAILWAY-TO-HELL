@@ -38,17 +38,31 @@ bool Map::Update(float dt)
     bool ret = true;
 
     if (mapLoaded) {
-
+        // iterate all tiles in a layer
         for (const auto& mapLayer : mapData.layers) {
             //Check if the property Draw exist get the value, if it's true draw the lawyer
             if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
+
+                Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+                if (camPos.getX() < 0) camPos.setX(0);
+                if (camPos.getY() < 0) camPos.setY(0);
+                Vector2D camPosTile = WorldToMap(camPos.getX(), camPos.getY());
+
+                Vector2D camSize = Vector2D(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
+                Vector2D camSizeTile = WorldToMap(camSize.getX(), camSize.getY());
+
+                Vector2D limits = Vector2D(camPosTile.getX() + camSizeTile.getX(), camPosTile.getY() + camSizeTile.getY());
+                if (limits.getX() > mapData.width) limits.setX(mapData.width);
+                if (limits.getY() > mapData.height) limits.setY(mapData.height);
+
+                for (int i = camPosTile.getX(); i < limits.getX(); i++) {
+                    for (int j = camPosTile.getY(); j < limits.getY(); j++) {
+
                         //Get the gid from tile
                         int gid = mapLayer->Get(i, j);
                         //Check if the gid is different from 0 - some tiles are empty
                         if (gid != 0) {
-
+                            //L09: TODO 3: Obtain the tile set using GetTilesetFromTileId
                             TileSet* tileSet = GetTilesetFromTileId(gid);
                             if (tileSet != nullptr) {
                                 //Get the Rect from the tileSetTexture;
@@ -176,7 +190,8 @@ bool Map::Load(std::string path, std::string fileName)
 
         // Define un mapa para convertir nombres de capas en enteros
         std::unordered_map<std::string, int> layerNameToId = {
-            {"Sensores", 1}
+            {"Sensores", 1},
+            {"Colisiones", 2}
         };
 
         float x = 0.0f;
@@ -187,9 +202,11 @@ bool Map::Load(std::string path, std::string fileName)
 
             // Get the name of the object group (PLATFORM, SPIKE, CHECKPOINT, etc.)
             std::string layerName = layerNode.attribute("name").as_string();
+            LOG("!!!!!!!!!layer del Mapa cargado, Nombre: %s !!!!!!!!", layerName.c_str());
 
             for (pugi::xml_node tileNode = layerNode.child("object"); tileNode != NULL; tileNode = tileNode.next_sibling("object")) {
-
+                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %d !!!!!!!!", tileNode);
+                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %d !!!!!!!!", layerName.c_str());
                 // Assign the correct values from the XML
                 x = tileNode.attribute("x").as_float();
                 y = tileNode.attribute("y").as_float();
@@ -199,19 +216,27 @@ bool Map::Load(std::string path, std::string fileName)
                 PhysBody* rect = nullptr;
                 auto it = layerNameToId.find(layerName);
                 int layerId = (it != layerNameToId.end()) ? it->second : 0; // Valor por defecto: 0 para plataformas
-
+                MapLayer* mapLayer = new MapLayer();
 
                 switch (layerId) {
-                case 1: // Checkpoint
+                case 1: // Sensor cambio de escena
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
                     rect->ctype = ColliderType::SENSOR;
+                  
+                    LoadProperties(tileNode, mapLayer->properties);
+                    break;
+                case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
+                    rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
                     break;
                 default: // Plataformas
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;
                     break;
                 }
+                //L09: TODO 6 Call Load Layer Properties
                 
                     // A?ade el collider a la lista
                     colliders.push_back(rect);
@@ -273,16 +298,29 @@ bool Map::Load(std::string path, std::string fileName)
 // L09: TODO 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
+   
     bool ret = false;
 
     for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
     {
+       
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
+        LOG("!!!!Nombre propiedad, Nombre:  %s !!!!", p->name.c_str());
 
+        if(p->name == "Draw") {
             p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+            LOG("!!!!propiedad value guardada, tipo:  %d !!!!", p->value);
+       }else if (p->name == "Sensor"){
             p->sensor = propertieNode.attribute("value").as_string();
-       
+            LOG("!!!!propiedad sensor guardada, tipo:  %s !!!!", p->sensor.c_str());
+       }
+       else if (p->name == "Navigation"){
+           p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+            LOG("!!!!propiedad value guardada (Navigation), tipo:  %d !!!!", p->value);
+       }
+          
+              
        
         
 
