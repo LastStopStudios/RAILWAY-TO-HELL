@@ -128,7 +128,7 @@ bool Player::Update(float dt)
 }
 
 void Player::UpdateMeleeAttack(float dt) {
-    // Update cooldown if player can't attack
+    // Update attack cooldown timer if player is currently unable to attack
     if (!canAttack) {
         attackCooldown -= dt;
         if (attackCooldown <= 0.0f) {
@@ -137,53 +137,57 @@ void Player::UpdateMeleeAttack(float dt) {
         }
     }
 
-    // Start attack if H key is pressed, player is not attacking and can attack
+    // Initiate attack when H key is pressed, if player is not already attacking and cooldown has expired
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_H) == KEY_DOWN && !isAttacking && canAttack) {
+        // Set attack state flags
         isAttacking = true;
         canAttack = false;
-        attackCooldown = 0.5f;
+        attackCooldown = 0.5f;  // Set cooldown duration (0.5 seconds)
 
-        // Reset animation
+        // Initialize a new attack animation
         meleeAttack = Animation();
-        meleeAttack.speed = 0.15f;
-        meleeAttack.loop = false;
+        meleeAttack.speed = 0.15f;  // Animation playback speed
+        meleeAttack.loop = false;   // Animation should not loop
 
-        // Add animation frames
+        // Load all frames for the attack animation (7 frames of 64x64 pixels each)
         for (int i = 0; i < 7; i++) {
             SDL_Rect rect = { i * 64, 0, 64, 64 };
             meleeAttack.PushBack(rect);
         }
 
-        // Calculate attack hitbox position
-        int attackX = facingRight ? position.getX() : position.getX() ;
+        // Calculate the initial position for the attack hitbox
+        int attackX = facingRight ? position.getX() : position.getX();
 
-        // Delete previous hitbox if it exists
+        // Remove any existing attack hitbox before creating a new one
         if (attackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
             attackHitbox = nullptr;
         }
 
-        // Create new hitbox
+        // Create a new physics hitbox for the attack
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-            attackX , position.getY(), 64, 64, bodyType::DYNAMIC);
-        attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
-        attackHitbox->listener = this;
+            attackX, position.getY(), 64, 64, bodyType::DYNAMIC);
+        attackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
+        attackHitbox->listener = this;  // Register collision listener
     }
 
-    // Update attack animation and hitbox
+    // Handle ongoing attack state
     if (isAttacking) {
+        // Update the attack animation
         meleeAttack.Update();
 
-        // Update hitbox position to follow player
+        // Update the position of the attack hitbox to follow the player
         if (attackHitbox) {
+            // Position the hitbox in front of the player based on facing direction
             int attackX = facingRight ? position.getX() + 30 : position.getX();
             attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(position.getY()) }, 0);
         }
 
-        // End attack when animation finishes
+        // End the attack when the animation finishes playing
         if (meleeAttack.HasFinished()) {
             isAttacking = false;
 
+            // Clean up the attack hitbox
             if (attackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
                 attackHitbox = nullptr;
@@ -193,33 +197,49 @@ void Player::UpdateMeleeAttack(float dt) {
 }
 
 void Player::DrawPlayer() {
-    // Set flip based on direction
+    // Determine the flip direction based on which way the player is facing
     SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
-    // Draw normal player sprite when not attacking
-    // Draw normal player sprite when not attacking
+    // Draw the player's normal sprite when not attacking
     if (!isAttacking) {
+        // Use the new DrawTextureWithFlip function to render the player with proper orientation
         Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            texture, (int)position.getX(), (int)position.getY(),
-            &currentAnimation->GetCurrentFrame(), 0.0, 0, INT_MAX, INT_MAX, flip);
+            texture,                                // Player texture
+            (int)position.getX(),                   // X position
+            (int)position.getY(),                   // Y position
+            &currentAnimation->GetCurrentFrame(),   // Current animation frame
+            0.0,                                    // Speed modifier (0.0 = no parallax effect)
+            0,                                      // Rotation angle (0 = no rotation)
+            INT_MAX, INT_MAX,                       // No pivot point (use default)
+            flip);                                  // Horizontal flip based on direction
+
+        // Advance the animation to the next frame
         currentAnimation->Update();
     }
-    // Draw attack animation when attacking
+    // Draw the attack animation when the player is attacking
     else {
+        // Get the current frame of the attack animation
         SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
         int attackX;
 
-        // Calculate position for attack animation
+        // Calculate the position for the attack animation based on facing direction
         if (facingRight) {
-            attackX = position.getX(); // Ajusta este valor según necesites
+            attackX = position.getX();              // Position when facing right
         }
         else {
-            attackX = position.getX() - 20; // Ajusta este valor según necesites
+            attackX = position.getX() - 20;         // Offset position when facing left
         }
 
-        // Draw attack animation with proper positioning and flip
+        // Draw the attack animation with proper positioning and orientation
         Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            attackTexture, attackX, position.getY() - 30, &currentFrame, 0.0, 0, INT_MAX, INT_MAX, flip);
+            attackTexture,                          // Attack animation texture
+            attackX,                                // X position with direction offset
+            position.getY() - 30,                   // Y position with vertical offset
+            &currentFrame,                          // Current attack animation frame
+            0.0,                                    // Speed modifier (0.0 = no parallax effect)
+            0,                                      // Rotation angle (0 = no rotation)
+            INT_MAX, INT_MAX,                       // No pivot point (use default)
+            flip);                                  // Horizontal flip based on direction
     }
 }
 

@@ -18,7 +18,6 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	// L08 TODO 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
@@ -43,7 +42,6 @@ public:
 	// Audio fx
 	int pickCoinFxId;
 
-	// L08 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 	float jumpForce = 2.5f; // The force to apply when jumping
 	bool isJumping = false; // Flag to check if the player is currently jumping
@@ -54,11 +52,11 @@ public:
 
 private:
 	// Private properties
-	Animation meleeAttack;
-	bool isAttacking = false;
-	bool canAttack = true;
-	float attackCooldown = 0.0f;
-	PhysBody* attackHitbox = nullptr;
-	SDL_Texture* attackTexture = nullptr;
-	bool facingRight = true;
+	Animation meleeAttack;       // Attack animation sequence
+	bool isAttacking = false;    // Currently attacking flag
+	bool canAttack = true;       // Attack availability flag
+	float attackCooldown = 0.0f; // Time until next attack allowed
+	PhysBody* attackHitbox = nullptr;  // Attack collision area
+	SDL_Texture* attackTexture = nullptr;  // Attack visual
+	bool facingRight = true;     // Direction facing (true=right)
 };
