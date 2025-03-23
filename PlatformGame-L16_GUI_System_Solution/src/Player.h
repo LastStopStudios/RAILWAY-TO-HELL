@@ -54,4 +54,11 @@ public:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+
+
+	bool isDashing = false;
+	float dashSpeed = 0.6f;
+	
+	
+
 };

@@ -74,6 +74,22 @@ bool Player::Update(float dt)
 		velocity.x = 0.2 * 16;
 	}
 
+		// Dash: It only works if the player is already pressing a movement key (D or A).
+	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
+		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
+		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN) {
+
+		// It boosts the movement if the player is already pressing the movement key.
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			velocity.x = dashSpeed * 100; // Extra speed to the right.
+		}
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			velocity.x = -dashSpeed * 100; // Extra speed to the left.
+		}
+	}
+
+
 	// Move Up
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 		velocity.y = -0.2 * 16;
