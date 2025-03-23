@@ -197,10 +197,11 @@ void Player::DrawPlayer() {
     SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
     // Draw normal player sprite when not attacking
+    // Draw normal player sprite when not attacking
     if (!isAttacking) {
-        Engine::GetInstance().render.get()->DrawTexture(
+        Engine::GetInstance().render.get()->DrawTextureWithFlip(
             texture, (int)position.getX(), (int)position.getY(),
-            &currentAnimation->GetCurrentFrame(), 0.0, 0.0, flip);
+            &currentAnimation->GetCurrentFrame(), 0.0, 0, INT_MAX, INT_MAX, flip);
         currentAnimation->Update();
     }
     // Draw attack animation when attacking
@@ -208,17 +209,17 @@ void Player::DrawPlayer() {
         SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
         int attackX;
 
-        // IMPORTANTE: Estos valores deben ajustarse correctamente para el flip
+        // Calculate position for attack animation
         if (facingRight) {
-            attackX = position.getX() ; // Ajustado a -20 para mejor posición
+            attackX = position.getX(); // Ajusta este valor según necesites
         }
         else {
-            attackX = position.getX() ; // Valor clave para ajustar la posición cuando mira a la izquierda
+            attackX = position.getX() - 20; // Ajusta este valor según necesites
         }
 
         // Draw attack animation with proper positioning and flip
-        Engine::GetInstance().render.get()->DrawTexture(
-            attackTexture, attackX, position.getY() - 30, &currentFrame, 0.0, 0.0, flip);
+        Engine::GetInstance().render.get()->DrawTextureWithFlip(
+            attackTexture, attackX, position.getY() - 30, &currentFrame, 0.0, 0, INT_MAX, INT_MAX, flip);
     }
 }
 
