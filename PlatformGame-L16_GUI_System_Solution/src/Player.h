@@ -10,22 +10,16 @@ struct SDL_Texture;
 class Player : public Entity
 {
 public:
-
 	Player();
-	
 	virtual ~Player();
 
 	bool Awake();
-
 	bool Start();
-
 	bool Update(float dt);
-
 	bool CleanUp();
 
 	// L08 TODO 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
-
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -33,17 +27,20 @@ public:
 	}
 
 	void SetPosition(Vector2D pos);
-
 	Vector2D GetPosition();
 
-public:
+private:
+	// Private methods
+	void DrawPlayer();
+	void UpdateMeleeAttack(float dt);
 
-	//Declare player parameters
+public:
+	// Public properties
 	float speed = 5.0f;
 	SDL_Texture* texture = NULL;
 	int texW, texH;
 
-	//Audio fx
+	// Audio fx
 	int pickCoinFxId;
 
 	// L08 TODO 5: Add physics to the player - declare a Physics body
@@ -54,4 +51,14 @@ public:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+
+private:
+	// Private properties
+	Animation meleeAttack;
+	bool isAttacking = false;
+	bool canAttack = true;
+	float attackCooldown = 0.0f;
+	PhysBody* attackHitbox = nullptr;
+	SDL_Texture* attackTexture = nullptr;
+	bool facingRight = true;
 };

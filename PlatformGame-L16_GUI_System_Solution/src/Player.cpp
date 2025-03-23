@@ -52,6 +52,19 @@ bool Player::Start() {
 	//initialize audio effect
 	pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
+	meleeAttack = Animation();
+	meleeAttack.speed = 0.15f;
+	meleeAttack.loop = false;
+
+	// Load attack texture
+	attackTexture = Engine::GetInstance().textures.get()->Load("Assets/Cuerpo_a_Cuerpo.png");
+	// Set initial state
+	isAttacking = false;
+	canAttack = true;
+	attackCooldown = 0.0f;
+	attackHitbox = nullptr;
+	facingRight = true;
+
 	return true;
 }
 
@@ -61,17 +74,19 @@ bool Player::Update(float dt)
 	b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 
 	if (!parameters.attribute("gravity").as_bool()) {
-		velocity = b2Vec2(0,0);
+		velocity = b2Vec2(0, 0);
 	}
 
 	// Move left
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		velocity.x = -0.2 * 16;
+		facingRight = false;
 	}
 
 	// Move right
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		velocity.x = 0.2 * 16;
+		facingRight = true;
 	}
 
 	// Move Up
@@ -83,7 +98,7 @@ bool Player::Update(float dt)
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
 		velocity.y = 0.2 * 16;
 	}
-	
+
 	//Jump
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isJumping == false) {
 		// Apply an initial upward force
@@ -92,7 +107,7 @@ bool Player::Update(float dt)
 	}
 
 	// If the player is jumpling, we don't want to apply gravity, we use the current velocity prduced by the jump
-	if(isJumping == true)
+	if (isJumping == true)
 	{
 		velocity.y = pbody->body->GetLinearVelocity().y;
 	}
@@ -113,9 +128,105 @@ bool Player::Update(float dt)
 		Engine::GetInstance().sceneLoader->LoadScene(2);
 	}
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
-	currentAnimation->Update();
+	UpdateMeleeAttack(dt);
+	DrawPlayer();
+
+	/*Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	currentAnimation->Update();*/
 	return true;
+}
+
+void Player::UpdateMeleeAttack(float dt) {
+	// Actualizar cooldown si no puede atacar
+	if (!canAttack) {
+		attackCooldown -= dt;
+		if (attackCooldown <= 0.0f) {
+			canAttack = true;
+			attackCooldown = 0.0f;
+		}
+	}
+
+	// Iniciar ataque si se presiona la tecla, no está atacando y puede atacar
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_H) == KEY_DOWN && !isAttacking && canAttack) {
+		LOG("Iniciando nuevo ataque");
+		isAttacking = true;
+		canAttack = false;
+		attackCooldown = 0.5f;
+
+		// Reiniciar animación
+		meleeAttack = Animation();
+		meleeAttack.speed = 0.15f;
+		meleeAttack.loop = false;
+
+		// Añadir los frames de la animación nuevamente
+		for (int i = 0; i < 7; i++) {
+			SDL_Rect rect = { i * 64, 0, 64, 64 };
+			meleeAttack.PushBack(rect);
+		}
+
+		// Offset para mover la hitbox un poco más a la derecha
+		int attackOffset = 20;
+		int attackX = facingRight ? position.getX() + texW + attackOffset : position.getX() - 64 - attackOffset;
+
+		// Eliminar hitbox anterior si existe
+		if (attackHitbox) {
+			Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+			attackHitbox = nullptr;
+		}
+
+		// Crear nueva hitbox
+		attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+			attackX, position.getY(), 64, 64, bodyType::DYNAMIC);
+		attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
+		attackHitbox->listener = this;
+	}
+
+	// Actualizar la animación si estamos atacando
+	if (isAttacking) {
+		meleeAttack.Update();
+
+		LOG("Frame de animación: %d, HasFinished: %d",
+			meleeAttack.GetCurrentFrame().x / 64, meleeAttack.HasFinished());
+
+		// Mover hitbox con el jugador
+		if (attackHitbox) {
+			int attackOffset = 20;
+			int attackX = facingRight ? position.getX() + texW + attackOffset : position.getX() - 64 - attackOffset;
+			attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(position.getY()) }, 0);
+		}
+
+		// Terminar ataque cuando acabe la animación
+		if (meleeAttack.HasFinished()) {
+			LOG("Animación finalizada, terminando ataque");
+			isAttacking = false;
+
+			if (attackHitbox) {
+				Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+				attackHitbox = nullptr;
+			}
+		}
+	}
+}
+
+void Player::DrawPlayer() {
+	if (isAttacking) {
+		SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
+		// Calcula la posición de ataque en función de la dirección
+		int attackX = facingRight ? position.getX() + texW : position.getX() - (64 + texW);
+		SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+
+		Engine::GetInstance().render.get()->DrawTexture(
+			attackTexture, attackX, position.getY() - 30, &currentFrame, 0.0, 0.0, flip);
+	}
+	else {
+		SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+
+		Engine::GetInstance().render.get()->DrawTexture(
+			texture, (int)position.getX(), (int)position.getY(),
+			&currentAnimation->GetCurrentFrame(), 0.0, 0.0, flip);
+
+		currentAnimation->Update();
+	}
 }
 
 bool Player::CleanUp()
