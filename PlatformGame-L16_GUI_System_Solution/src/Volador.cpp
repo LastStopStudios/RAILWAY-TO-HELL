@@ -245,15 +245,9 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
     Player* player = Engine::GetInstance().scene.get()->GetPlayer();
 
     switch (physB->ctype) {
-    case ColliderType::PLATFORM:
+    case ColliderType::PLAYER:
 
-        isTouchingCollision = true;
-        std::cout << "isTouchingCollision true:" << isTouchingCollision << "\n";
-        if (isAttacking) {
-            currentAnimation = &idle;
-            isAttacking = false;
-            std::cout << "Ataque finalizado, regresando a idle\n";
-        }
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
 
     
