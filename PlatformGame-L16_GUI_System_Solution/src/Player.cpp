@@ -87,9 +87,41 @@ bool Player::Update(float dt)
         facingRight = true;
     }
 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        velocity.y = -0.2f * 16;
-    }
+		
+	// Logic of dash cooldown
+	if (!canDash) {
+		dashCooldownTimer -= dt;
+		if (dashCooldownTimer <= 0) {
+			canDash = true;
+		}
+	}
+
+	// Dash with strict cooldown, it only works if the player is already pressing a movement key (D or A).
+	bool isDashKeyPressed =
+		(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
+			Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
+		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
+
+	if (isDashKeyPressed && canDash) {
+		
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			velocity.x = dashSpeed * 100; // Extra speed to the right.
+		}
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			velocity.x = -dashSpeed * 100; // Extra speed to the left.
+		}
+
+		// Start the cooldown
+		canDash = false;
+		dashCooldownTimer = dashCooldownDuration;
+	}
+
+
+	// Move Up
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+		velocity.y = -0.2 * 16;
+	}
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
         velocity.y = 0.2f * 16;
@@ -278,7 +310,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Implementación vacía pero necesaria
+    // Implementaciï¿½n vacï¿½a pero necesaria
 }
 
 void Player::SetPosition(Vector2D pos) {
