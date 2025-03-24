@@ -5,7 +5,8 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Item.h"
-#include "Enemy.h"
+#include "Terrestre.h"
+#include "Volador.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -76,8 +77,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ITEM:
 		entity = new Item();
 		break;
-	case EntityType::ENEMY:
-		entity = new Enemy();
+	case EntityType::TERRESTRE:
+		entity = new Terrestre();
+		break;
+	case EntityType::VOLADOR:
+		entity = new Volador();
 		break;
 	default:
 		break;

@@ -27,7 +27,8 @@ enum class ColliderType {
 	PLAYER, 
 	ITEM,
 	PLATFORM, 
-	ENEMY,
+	TERRESTRE,
+	VOLADOR,
 	UNKNOWN
 	// ..
 };
@@ -81,6 +82,8 @@ public:
 
 	void DeletePhysBody(PhysBody* physBody);
 	bool IsPendingToDelete(PhysBody* physBody);
+
+	bool IsDebug() const { return debug; }
 
 private:
 

@@ -84,7 +84,7 @@
     <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Enemy.cpp">
+    <ClCompile Include="src\Terrestre.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\GuiControlButton.cpp">
@@ -101,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="src\DialogoM.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Volador.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +167,7 @@
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Enemy.h">
+    <ClInclude Include="src\Terrestre.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\GuiControl.h">
@@ -182,6 +185,9 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="src\Ffmpeg.h" />
     <ClInclude Include="src\DialogoM.h" />
+    <ClInclude Include="src\Volador.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">

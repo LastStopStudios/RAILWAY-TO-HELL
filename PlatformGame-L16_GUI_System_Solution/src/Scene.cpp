@@ -11,11 +11,12 @@
 #include "Player.h"
 #include "Map.h"
 #include "Item.h"
-#include "Enemy.h"
+#include "Terrestre.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include "SDL2/SDL_ttf.h"
 #include "DialogoM.h"
+#include "Volador.h"
 
 Scene::Scene() : Module()
 {
@@ -46,9 +47,18 @@ bool Scene::Awake()
 	// Create a enemy using the entity manager 
 	for (pugi::xml_node enemyNode = configParameters.child("entities").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
-		Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-		enemy->SetParameters(enemyNode);
-		enemyList.push_back(enemy);
+		std::string type = enemyNode.attribute("type").as_string(); 
+		if (type == "rastrero") {
+			Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
+			enemy->SetParameters(enemyNode);
+			enemyList.push_back(enemy);
+		}
+		if (type == "volador") {
+			Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
+			volador->SetParameters(enemyNode);
+			voladorList.push_back(volador);  
+		}
+		
 	}
 
 	// L16: TODO 2: Instantiate a new GuiControlButton in the Scene

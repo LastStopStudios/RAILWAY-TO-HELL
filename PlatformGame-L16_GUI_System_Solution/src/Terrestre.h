@@ -8,12 +8,12 @@
 
 struct SDL_Texture;
 
-class Enemy : public Entity
+class Terrestre : public Entity
 {
 public:
 
-	Enemy();
-	virtual ~Enemy();
+	Terrestre();
+	virtual ~Terrestre();
 
 	bool Awake();
 
@@ -40,6 +40,16 @@ public:
 public:
 
 private:
+	// Update logic
+	SDL_RendererFlip flip = SDL_FLIP_NONE; 
+	bool isLookingLeft, isLookingRight = false;
+	float patrolLeftLimit;
+	float patrolRightLimit;
+	std::string spellType;
+	float moveSpeed;
+	Vector2D enemyPos;
+	bool attacking = false;
+	bool falling = false;
 
 	SDL_Texture* texture;
 	const char* texturePath;
@@ -49,4 +59,5 @@ private:
 	Animation idle;
 	PhysBody* pbody;
 	Pathfinding* pathfinding;
+
 };

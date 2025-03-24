@@ -3,7 +3,7 @@
 #include <vector>
 #include "pugixml.hpp"
 #include "Item.h"
-class Enemy;
+class Terrestre;
 class Scene;
 class Engine;
 class Entity;
@@ -27,7 +27,6 @@ public:
 	int GetCurrentLevel() const { return currentScene; }
 
 	int currentScene;
-	std::vector<Enemy*> enemysList;
 	std::vector<Item*> itemsList; 
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);

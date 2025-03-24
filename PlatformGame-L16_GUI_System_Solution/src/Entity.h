@@ -7,7 +7,8 @@ enum class EntityType
 {
 	PLAYER,
 	ITEM,
-	ENEMY,
+	TERRESTRE,
+	VOLADOR,
 	UNKNOWN
 };
 

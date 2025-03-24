@@ -25,15 +25,14 @@ public:
     void ResetPath(Vector2D pos);
     void DrawPath();
     bool IsWalkable(int x, int y);
-    void PropagateBFS();
 
     // L12: Methods for BFS + Pathfinding and cost function for Dijkstra
     int MovementCost(int x, int y);
     void ComputePath(int x, int y);
-    void PropagateDijkstra();
 
     // L13: A* Pathfinding methods
     void PropagateAStar(ASTAR_HEURISTICS heuristic);
+    bool ReachedPlayer(Vector2D goal);
 
 private:
     int Find(std::vector<Vector2D> vector, Vector2D elem);

@@ -2,11 +2,11 @@
 
 #include "Module.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Terrestre.h"
 #include <vector>
 #include "GuiControlButton.h"
 #include "SDL2/SDL_ttf.h"
-
+#include "Volador.h"
 
 struct SDL_Texture;
 
@@ -58,7 +58,12 @@ public:
 		return player;
 	}
 
-	std::vector<Enemy*> enemyList;
+	std::vector<Terrestre*> enemyList;
+	std::vector<Volador*> voladorList; 
+
+	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
+	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
+
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;

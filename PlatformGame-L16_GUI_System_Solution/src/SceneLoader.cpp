@@ -9,9 +9,10 @@
 #include "Player.h" 
 #include "Scene.h"  
 #include "EntityManager.h"
-#include "Enemy.h"
+#include "Terrestre.h"
 #include "Pathfinding.h"
 #include "Item.h"
+#include "Volador.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -70,11 +71,20 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         return;
     }
 
-    // Create enemies
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
-        Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-        enemy->SetParameters(enemyNode);
-        enemysList.push_back(enemy);
+        std::string type = enemyNode.attribute("type").as_string();
+
+        if (type == "rastrero") {
+            Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
+            enemy->SetParameters(enemyNode);
+            Engine::GetInstance().scene->GetEnemyList().push_back(enemy); 
+        }
+
+        if (type == "volador") {
+            Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
+            volador->SetParameters(enemyNode);
+            Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
+        }
     }
 
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
@@ -88,10 +98,12 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     }
 
     // Initialize enemies
-    for (auto enemy : enemysList) {
+    for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
         enemy->Start();
     }
-
+    for (auto enemy : Engine::GetInstance().scene->GetVoladorList()) { 
+        enemy->Start();
+    }
     // Initialize items
     for (auto item : itemsList) {
         item->Start();
@@ -107,7 +119,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::ENEMY || entity->type == EntityType::ITEM) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -118,8 +130,9 @@ void SceneLoader::UnLoadEnemiesItems() {
     }
 
     // Clear your local tracking list
-    enemysList.clear();
-    itemsList.clear(); 
+    Engine::GetInstance().scene->GetEnemyList().clear(); 
+    Engine::GetInstance().scene->GetVoladorList().clear(); 
+    itemsList.clear();  
 }
 void SceneLoader::SetCurrentScene(int level)
 {
