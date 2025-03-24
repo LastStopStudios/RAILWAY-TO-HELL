@@ -10,7 +10,7 @@
 #include <string>
 #include "SceneLoader.h"
 
-Map::Map() : Module(), mapLoaded(false)
+Map::Map() : Module(), mapLoaded(false), nextSensorId(1)
 {
     name = "map";
 }
@@ -118,6 +118,13 @@ bool Map::CleanUp()
     }
     mapData.layers.clear();
 
+    sensorsList.clear();
+    dsensorsList.clear();
+
+    valor = "";
+    nextSensorId = 1;
+    currentId = 0;
+
     return true;
 }
 
@@ -191,9 +198,10 @@ bool Map::Load(std::string path, std::string fileName)
         // Define un mapa para convertir nombres de capas en enteros
         std::unordered_map<std::string, int> layerNameToId = {
             {"Sensores", 1},
-            {"Colisiones", 2}
+            {"Colisiones", 2},
+            {"Dialogos", 3}
         };
-
+               
         float x = 0.0f;
         float y = 0.0f;
         float width = 0.0f;
@@ -223,22 +231,36 @@ bool Map::Load(std::string path, std::string fileName)
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
                     rect->ctype = ColliderType::SENSOR;
-                  
-                    LoadProperties(tileNode, mapLayer->properties);
+                    pasarx = x;//posicion x del sensor
+                    pasary = y;//posicion y del sensor
+                    currentId = nextSensorId++; //Obtiene ID para los sensores
+                    SensorScene newSensor;
+                    newSensor.id = currentId;
+                    newSensor.x = pasarx;
+                    newSensor.y = pasary;
+                    sensorsList.push_back(newSensor);//Lo guardamos todo en la lista
+                    LOG("!!!!!!!!!Datos Sensor, ID: %d, X: %d, Y: %d!!!!!!!!!", currentId, pasarx, pasary);
+                    LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
                     break;
                 case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
                     rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
+                    break;
+                case 3: // Sensor cambio de escena
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
+                    dpasarx = x;//posicion x del sensor de dialogos
+                    dpasary = y;//posicion y del sensor de dialogos
+                    LoadProperties(tileNode, mapLayer->properties);
                     break;
                 default: // Plataformas
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;
                     break;
                 }
-                //L09: TODO 6 Call Load Layer Properties
+                //Call Load Layer Properties
                 
-                    // A?ade el collider a la lista
+                    // Añade el collider a la lista
                     colliders.push_back(rect);
             }
         }
@@ -260,7 +282,7 @@ bool Map::Load(std::string path, std::string fileName)
 
         ret = true;
 
-        // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
+        // LOG all the data loaded iterate all tilesetsand LOG everything
         if (ret == true)
         {
             LOG("Successfully parsed map XML file :%s", fileName.c_str());
@@ -295,29 +317,42 @@ bool Map::Load(std::string path, std::string fileName)
     return ret;
 }
 
-// L09: TODO 6: Load a group of properties from a node and fill a list with it
+// Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
    
     bool ret = false;
-
     for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
     {
        
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
         LOG("!!!!Nombre propiedad, Nombre:  %s !!!!", p->name.c_str());
-
+       
         if(p->name == "Draw") {
             p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
             LOG("!!!!propiedad value guardada, tipo:  %d !!!!", p->value);
        }else if (p->name == "Sensor"){
             p->sensor = propertieNode.attribute("value").as_string();
             LOG("!!!!propiedad sensor guardada, tipo:  %s !!!!", p->sensor.c_str());
+            // añadir el ID al sensor
+            p->id = currentId;
+            LOG("!!!!ID sensor guardada, ID:  %d !!!!", p->id);
        }
        else if (p->name == "Navigation"){
            p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
             LOG("!!!!propiedad value guardada (Navigation), tipo:  %d !!!!", p->value);
+
+       }else if (p->name == "Dialogo") {
+            p->dialogo = propertieNode.attribute("value").as_int();//id para los dialogos
+           
+            SensorDialogos dnewSensor;//guardamos los datos del dialogo en una lista
+            dnewSensor.id = p->dialogo;//guardamos su Id
+            dnewSensor.x = dpasarx;//guardamos su x
+            dnewSensor.y = dpasary;//guardamos su y
+            dsensorsList.push_back(dnewSensor);//Lo guardamos todo en la lista
+            LOG("!!!!propiedad sensor Dialogos guardada, tipo:  %d !!!!", p->dialogo);
+            LOG("!!!!Id guardada en lista de dialogos, ID:  %d !!!!", dnewSensor.id);
        }
           
               
@@ -364,19 +399,45 @@ MapLayer* Map::GetNavigationLayer() {
 	return nullptr;
 }
 
-// L09: TODO 7: Implement a method to get the value of a custom property
+// Implement a method to get the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {
         if (property->name == name) {
 			return property;
-            LOG("Propiedad encontrada: %s", property->name.c_str()); // Registrar el nombre de la propiedad
-            LOG("Propiedad encontrada: %s", property->sensor.c_str());
+            LOG("Propiedad encontrada, nombre: %s", property->name.c_str()); // Motstrar el nombre de la propiedad
+            LOG("Propiedad enncontrada, propiedad: %s", property);
 		}
     }
 
     return nullptr;
 }
 
+
+int Map::GetSensorId(float px, float py) const {//Pilar la id del sensor con la posicion del player
+    const float MargenDeError = 30.0f;  // Martgen de error para la colision
+
+    for (const auto& sensor : sensorsList) {
+       /* float dx = px - sensor.x;
+        float dy = py - sensor.y;
+        float distanceSquared = dx * dx + dy * dy;*/
+        float Xposconmargen1 = px + MargenDeError;
+        float Xposconmargen2 = px - MargenDeError;
+
+        float Yposconmargen1 = py + MargenDeError;
+        float Yposconmargen2 = py - MargenDeError;
+
+        if ((sensor.x <= Xposconmargen1 && sensor.x >= Xposconmargen2)||(sensor.y <= Yposconmargen1 && sensor.y >= Yposconmargen2)) { //distanceSquared <= detectionRadius * detectionRadius
+            LOG("Sensor X: %d", sensor.x);
+            LOG("Sensor Y: %d", sensor.y);
+            LOG("Sensor encontrado, ID: %d", sensor.id);
+            return sensor.id;//devuelve la id del sensor qu esta en esa posicion 
+           
+        }
+    }
+    LOG("Sensor no encontrado");
+    return -1;  // duevuelve -1 si no encuentra al player 
+   
+}
 
 

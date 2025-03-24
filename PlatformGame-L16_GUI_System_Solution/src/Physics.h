@@ -30,6 +30,7 @@ enum class ColliderType {//añadir aqui los colliders que tengan que triggear alg
 	SENSOR,
 	ENEMY,
 	COLISION,
+	DIALOGOS,
 	UNKNOWN
 	// ..
 };
