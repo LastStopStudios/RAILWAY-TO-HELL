@@ -58,6 +58,9 @@ public:
 
 	bool isDashing = false;
 	float dashSpeed = 0.6f;
+	float dashCooldownTimer = 0.0f;
+	float dashCooldownDuration = 1000.0f; // 1000 second cooldown
+	bool canDash = true;
 	
 	
 

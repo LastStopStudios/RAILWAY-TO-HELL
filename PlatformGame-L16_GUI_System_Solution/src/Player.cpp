@@ -74,12 +74,23 @@ bool Player::Update(float dt)
 		velocity.x = 0.2 * 16;
 	}
 
-		// Dash: It only works if the player is already pressing a movement key (D or A).
-	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN) {
+		
+	// Logic of dash cooldown
+	if (!canDash) {
+		dashCooldownTimer -= dt;
+		if (dashCooldownTimer <= 0) {
+			canDash = true;
+		}
+	}
 
-		// It boosts the movement if the player is already pressing the movement key.
+	// Dash with strict cooldown, it only works if the player is already pressing a movement key (D or A).
+	bool isDashKeyPressed =
+		(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
+			Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
+		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
+
+	if (isDashKeyPressed && canDash) {
+		
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 			velocity.x = dashSpeed * 100; // Extra speed to the right.
 		}
@@ -87,6 +98,10 @@ bool Player::Update(float dt)
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			velocity.x = -dashSpeed * 100; // Extra speed to the left.
 		}
+
+		// Start the cooldown
+		canDash = false;
+		dashCooldownTimer = dashCooldownDuration;
 	}
 
 
