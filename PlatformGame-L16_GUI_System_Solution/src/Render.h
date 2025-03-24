@@ -38,6 +38,10 @@ public:
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawText(const char* text, int posX, int posY, int w, int h) const;
 
+	bool DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL,
+		float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX,
+		SDL_RendererFlip flip = SDL_FLIP_NONE) const;
+
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 

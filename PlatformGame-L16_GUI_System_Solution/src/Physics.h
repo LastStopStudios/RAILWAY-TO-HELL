@@ -29,6 +29,8 @@ enum class ColliderType {
 	PLATFORM, 
 	TERRESTRE,
 	VOLADOR,
+	ENEMY,
+	PLAYER_ATTACK,
 	UNKNOWN
 	// ..
 };
