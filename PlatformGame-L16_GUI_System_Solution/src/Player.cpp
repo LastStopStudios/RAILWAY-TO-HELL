@@ -35,7 +35,7 @@ bool Player::Start() {
     currentAnimation = &idle;
 
     // Add physics to the player - initialize physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW/2, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -53,7 +53,9 @@ bool Player::Start() {
     meleeAttack.loop = false;
 
     // Load attack texture
-    attackTexture = Engine::GetInstance().textures.get()->Load("Assets/Cuerpo_a_Cuerpo.png");
+    meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
+    pugi::xml_node attackNode = parameters.child("animations").child("attack");
+    attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
 
     // Set initial state
     isAttacking = false;
@@ -128,7 +130,7 @@ bool Player::Update(float dt)
 }
 
 void Player::UpdateMeleeAttack(float dt) {
-    // Update attack cooldown timer if player is currently unable to attack
+    // Update attack cooldown timer if the player is currently unable to attack
     if (!canAttack) {
         attackCooldown -= dt;
         if (attackCooldown <= 0.0f) {
@@ -137,7 +139,7 @@ void Player::UpdateMeleeAttack(float dt) {
         }
     }
 
-    // Initiate attack when H key is pressed, if player is not already attacking and cooldown has expired
+    // Initiate attack when the H key is pressed, if the player is not already attacking and cooldown has expired
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_H) == KEY_DOWN && !isAttacking && canAttack) {
         // Set attack state flags
         isAttacking = true;
@@ -149,14 +151,19 @@ void Player::UpdateMeleeAttack(float dt) {
         meleeAttack.speed = 0.15f;  // Animation playback speed
         meleeAttack.loop = false;   // Animation should not loop
 
-        // Load all frames for the attack animation (7 frames of 64x64 pixels each)
-        for (int i = 0; i < 7; i++) {
-            SDL_Rect rect = { i * 64, 0, 64, 64 };
-            meleeAttack.PushBack(rect);
-        }
+        // Load attack animation frames from XML
+        meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
 
-        // Calculate the initial position for the attack hitbox
-        int attackX = facingRight ? position.getX() : position.getX();
+        int attackWidth = texW * 1.1;  // Attack hitbox width (1.1 times the player's width)
+        int attackHeight = texH;       // Attack height (same as the player's height)
+
+        // Get the player's center position from the physics body
+        b2Vec2 playerCenter = pbody->body->GetPosition();
+        int centerX = METERS_TO_PIXELS(playerCenter.x);
+        int centerY = METERS_TO_PIXELS(playerCenter.y);
+
+        // Calculate the hitbox position based on facing direction
+        int attackX = facingRight ? centerX + texW / 4 : centerX - texW / 4 - attackWidth / 2;
 
         // Remove any existing attack hitbox before creating a new one
         if (attackHitbox) {
@@ -166,9 +173,9 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Create a new physics hitbox for the attack
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-            attackX, position.getY(), 64, 64, bodyType::DYNAMIC);
+            attackX, attackHeight, attackWidth, attackHeight, bodyType::DYNAMIC);
         attackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
-        attackHitbox->listener = this;  // Register collision listener
+        attackHitbox->listener = this;
     }
 
     // Handle ongoing attack state
@@ -180,7 +187,8 @@ void Player::UpdateMeleeAttack(float dt) {
         if (attackHitbox) {
             // Position the hitbox in front of the player based on facing direction
             int attackX = facingRight ? position.getX() + 30 : position.getX();
-            attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(position.getY()) }, 0);
+            int attackY = position.getY() + texH / 2;  // Use the player's vertical center
+            attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
         // End the attack when the animation finishes playing
@@ -195,6 +203,7 @@ void Player::UpdateMeleeAttack(float dt) {
         }
     }
 }
+
 
 void Player::DrawPlayer() {
     // Determine the flip direction based on which way the player is facing
@@ -227,14 +236,14 @@ void Player::DrawPlayer() {
             attackX = position.getX();              // Position when facing right
         }
         else {
-            attackX = position.getX() - 20;         // Offset position when facing left
+            attackX = position.getX();         // Offset position when facing left
         }
 
         // Draw the attack animation with proper positioning and orientation
         Engine::GetInstance().render.get()->DrawTextureWithFlip(
             attackTexture,                          // Attack animation texture
             attackX,                                // X position with direction offset
-            position.getY() - 30,                   // Y position with vertical offset
+            position.getY(),                   // Y position with vertical offset
             &currentFrame,                          // Current attack animation frame
             0.0,                                    // Speed modifier (0.0 = no parallax effect)
             0,                                      // Rotation angle (0 = no rotation)
@@ -250,6 +259,11 @@ bool Player::CleanUp() {
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
+    if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
+        LOG("Player attack hit an enemy!");
+        // Additional enemy hit logic can go here
+        return;
+    }
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isJumping = false;
