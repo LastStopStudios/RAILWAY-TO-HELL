@@ -36,6 +36,7 @@ public:
 	int SacarId();
 	std::string SacarValor(int ids);
 	Vector2D GetPosition();
+	int valorid;
 
 public:
 

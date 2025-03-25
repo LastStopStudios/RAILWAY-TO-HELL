@@ -124,6 +124,7 @@ bool Player::CleanUp()
 	LOG("Cleanup player");
 	sensorId = 0;
 	Engine::GetInstance().textures.get()->UnLoad(texture);
+	esc.clear();
 	return true;
 }
 
@@ -141,13 +142,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB); // Deletes the body of the item from the physics world
 		break;
 	case ColliderType::SENSOR:
+		esc.clear();
 		LOG("!!!!TOCO EL SENSOR!!!!");
-		esc = SacarValor(SacarId());; // Acceder al valor de tipo string
+		valorid = SacarId();
+		LOG("!!!!valorid en collider sensor despues SacarId: %d!!!!", valorid);
+		esc = SacarValor(valorid);; // Acceder al valor de tipo string
 		LOG("!!!!!!!!!!debajo del esc: %s!!!!!!!!!!!!!", esc.c_str());
 		if (esc == "S1S2") {
-			//Engine::GetInstance().sceneLoader->LoadScene(2);
+			Engine::GetInstance().sceneLoader->LoadScene(2);
 		}else if (esc == "S2S1") {
-			//Engine::GetInstance().sceneLoader->LoadScene(1);
+			Engine::GetInstance().sceneLoader->LoadScene(1);
 		}
 
 
@@ -180,8 +184,7 @@ void Player::SetPosition(Vector2D pos) {
 Vector2D Player::GetPosition() {
 	b2Vec2 bodyPos = pbody->body->GetTransform().p;
 	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
-	LOG("Posición sin convertir (px): x=%.2f, y=%.2f", bodyPos.x, bodyPos.y);
-	LOG("Posición convertida (px): x=%.2f, y=%.2f", pos.getX(), pos.getY());
+	LOG("Posición Player: x=%.2f, y=%.2f", pos.getX(), pos.getY());
 	return pos;
 }
 
@@ -189,8 +192,8 @@ Vector2D Player::GetPosition() {
 int Player :: SacarId() {
 	LOG("!!!!Entro en SacarID!!!!");
 	Vector2D posicion = GetPosition();//sacar posicion del player
-	LOG("!!!!Saco posicion player X en SacarID, %d !!!!", posicion.getX());
-	LOG("!!!!Saco posicion player Y en SacarID, %d !!!!", posicion.getY());
+	LOG("!!!!Saco posicion player X en SacarID, x=%.2f !!!!", posicion.getX());
+	LOG("!!!!Saco posicion player Y en SacarID, y=%.2f !!!!", posicion.getY());
 	sensorId = Engine::GetInstance().map->GetSensorId(posicion.getX(), posicion.getY());// ver ID del sensor que toca el player	
 	LOG("!!!!Id del sensor con la posicion del player: %d!!!!", sensorId);
 	return sensorId;

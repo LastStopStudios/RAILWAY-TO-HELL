@@ -121,10 +121,10 @@ bool Map::CleanUp()
     sensorsList.clear();
     dsensorsList.clear();
 
-    valor = "";
+    valor.clear();
     nextSensorId = 1;
     currentId = 0;
-    sensorValue = "";
+    sensorValue.clear();
 
     return true;
 }
@@ -425,9 +425,9 @@ Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {
         if (property->name == name) {
+           
 			return property;
-            LOG("Propiedad encontrada, nombre: %s", property->name.c_str()); // Motstrar el nombre de la propiedad
-            LOG("Propiedad enncontrada, propiedad: %s", property);
+            
 		}
     }
 
@@ -439,34 +439,56 @@ int Map::GetSensorId(float px, float py) const {//Pilar la id del sensor con la 
     const float MargenDeError = 30.0f;  // Martgen de error para la colision
 
     for (const auto& sensor : sensorsList) {
-       /* float dx = px - sensor.x;
-        float dy = py - sensor.y;
-        float distanceSquared = dx * dx + dy * dy;*/
         float Xposconmargen1 = px + MargenDeError;
         float Xposconmargen2 = px - MargenDeError;
 
         float Yposconmargen1 = py + MargenDeError;
         float Yposconmargen2 = py - MargenDeError;
 
-        if ((sensor.x <= Xposconmargen1 && sensor.x >= Xposconmargen2)||(sensor.y <= Yposconmargen1 && sensor.y >= Yposconmargen2)) { //distanceSquared <= detectionRadius * detectionRadius
-            LOG("Sensor X: %d", sensor.x);
-            LOG("Sensor Y: %d", sensor.y);
+        if ((sensor.x <= Xposconmargen1 && sensor.x >= Xposconmargen2)||(sensor.y <= Yposconmargen1 && sensor.y >= Yposconmargen2)) {
             LOG("Sensor encontrado, ID: %d", sensor.id);
             return sensor.id;//devuelve la id del sensor qu esta en esa posicion 
            
         }
     }
     LOG("Sensor no encontrado");
-    return -1;  // duevuelve -1 si no encuentra al player 
+    return -1;  // duevuelve -1 si no encuentra sensor en esa posicion 
    
 }
 
 std::string Map::ValorPorId(int id) {
-    LOG("!!!!!!!!!!!!Entro en ValorPorId!!!!!!!!!!!");
-    for (auto& mapLayer : mapData.layers) {
+   LOG("!!!!!!!!!!!!Entro en ValorPorId!!!!!!!!!!!");
+    /*for (auto& mapLayer : mapData.layers) {
         if (mapLayer->name == "Sensores") {
             return mapLayer->properties.GetPropertyWID(id).c_str();
         }
     }
     return ""; // Si no encuentra la capa
+    */
+    sensorValue.clear();
+  /* for (auto& layer : this->mapData.layers) {//recorre las capas del mapa
+        if (layer->name == "Sensores") {//busca la capa llamada sensores
+            // 3. Llamar a tu función
+            std::string sensorValue = layer->properties.GetPropertyWID(id);//Busca el valor de sensor con la id
+
+            if (!sensorValue.empty()) {
+                LOG("Valor del sensor (ID %d): %s", id, sensorValue.c_str());
+                return sensorValue;
+            }
+            break;
+        }
+    }
+
+    LOG("No se encontró sensor con ID %d", id);
+    return "";*/
+    for (const auto& mapLayer : mapData.layers) {
+        if (mapLayer->properties.GetProperty("Sensor") != NULL) {
+            sensorValue = mapLayer->properties.GetProperty("Sensor")->sensor;
+            LOG("!!!!!!!!!!!!Valor sensor: %d!!!!!!!!!!!", sensorValue);
+            return sensorValue;
+        }
+    }
+
+    LOG("No se encontró sensor con ID %d", id);
+    return "";
 }

@@ -100,7 +100,7 @@ bool Scene::Update(float dt)
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
 
-	// L10 TODO 6: Implement a method that repositions the player in the map with a mouse click
+	// Implement a method that repositions the player in the map with a mouse click
 
 	//Get mouse position and obtain the map coordinate
 	int scale = Engine::GetInstance().window.get()->GetScale();
