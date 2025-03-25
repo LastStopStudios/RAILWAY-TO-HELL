@@ -36,6 +36,7 @@ private:
 	void HandleSceneSwitching();
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
+	void UpdateWhipAttack(float dt);
 
 public:
 	// Public properties
@@ -63,6 +64,9 @@ private:
 	PhysBody* attackHitbox = nullptr;  // Attack collision area
 	SDL_Texture* attackTexture = nullptr;  // Attack visual
 	bool facingRight = true;     // Direction facing (true=right)
+
+	Animation whipAttack;
+	SDL_Texture* whipAttackTexture;
 
 	bool isDashing = false;
 	float dashSpeed = 0.6f;

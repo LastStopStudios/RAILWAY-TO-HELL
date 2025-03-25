@@ -57,6 +57,10 @@ bool Player::Start() {
     pugi::xml_node attackNode = parameters.child("animations").child("attack");
     attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
 
+    // Load whip attack texture
+    pugi::xml_node whipNode = parameters.child("animations").child("whip");
+    whipAttackTexture = Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string());
+
     // Set initial state
     isAttacking = false;
     canAttack = true;
@@ -81,6 +85,7 @@ bool Player::Update(float dt)
     HandleDash(velocity, dt); 
     HandleJump();
     HandleSceneSwitching();
+    UpdateWhipAttack(dt); 
 
     // If jumping, preserve the vertical velocity
     if (isJumping) {
@@ -170,6 +175,80 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {
         Engine::GetInstance().sceneLoader->LoadScene(2);
     }
+}
+
+void Player::UpdateWhipAttack(float dt) {
+    //if (!canAttack) {
+    //    attackCooldown -= dt;
+    //    if (attackCooldown <= 0.0f) {
+    //        canAttack = true;
+    //        attackCooldown = 0.0f;
+    //    }
+    //}
+
+    //// Initiate whip attack when the G key is pressed, if the player is not already attacking and cooldown has expired
+    //if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_G) == KEY_DOWN && !isAttacking && canAttack) {
+    //    // Set attack state flags
+    //    isAttacking = true;
+    //    canAttack = false;
+    //    attackCooldown = 0.7f;  // Slightly longer cooldown for whip attack
+
+    //    // Initialize a new whip attack animation
+    //    whipAttack = Animation();
+    //    whipAttack.speed = 0.15f;  // Animation playback speed
+    //    whipAttack.loop = false;   // Animation should not loop
+
+    //    // Load whip attack animation frames from XML
+    //    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
+
+    //    int attackWidth = texW * 2.5;  // Whip attack hitbox width (2.5 times the player's width)
+    //    int attackHeight = texH / 2;   // Whip attack height (half the player's height)
+
+    //    // Get the player's center position from the physics body
+    //    b2Vec2 playerCenter = pbody->body->GetPosition();
+    //    int centerX = METERS_TO_PIXELS(playerCenter.x);
+    //    int centerY = METERS_TO_PIXELS(playerCenter.y);
+
+    //    // Calculate the hitbox position based on facing direction
+    //    int attackX = facingRight ? centerX + texW : centerX - texW - attackWidth;
+
+    //    // Remove any existing attack hitbox before creating a new one
+    //    if (attackHitbox) {
+    //        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+    //        attackHitbox = nullptr;
+    //    }
+
+    //    // Create a new physics hitbox for the whip attack
+    //    attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+    //        attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
+    //    attackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
+    //    attackHitbox->listener = this;
+    //}
+
+    //// Handle ongoing whip attack state
+    //if (isAttacking) {
+    //    // Update the whip attack animation
+    //    whipAttack.Update();
+
+    //    // Update the position of the attack hitbox to follow the player
+    //    if (attackHitbox) {
+    //        // Position the hitbox in front of the player based on facing direction
+    //        int attackX = facingRight ? position.getX() + texW : position.getX() - attackHitbox->width;
+    //        int attackY = position.getY() + texH / 4;  // Slightly lower than player's center
+    //        attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
+    //    }
+
+    //    // End the attack when the animation finishes playing
+    //    if (whipAttack.HasFinished()) {
+    //        isAttacking = false;
+
+    //        // Clean up the attack hitbox
+    //        if (attackHitbox) {
+    //            Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+    //            attackHitbox = nullptr;
+    //        }
+    //    }
+    //}
 }
 
 void Player::UpdateMeleeAttack(float dt) {
@@ -298,6 +377,7 @@ void Player::DrawPlayer() {
 bool Player::CleanUp() {
     LOG("Cleanup player");
     Engine::GetInstance().textures.get()->UnLoad(texture);
+    Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
     return true;
 }
 
