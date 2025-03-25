@@ -124,6 +124,7 @@ bool Map::CleanUp()
     valor = "";
     nextSensorId = 1;
     currentId = 0;
+    sensorValue = "";
 
     return true;
 }
@@ -399,6 +400,26 @@ MapLayer* Map::GetNavigationLayer() {
 	return nullptr;
 }
 
+
+// Conseguir el valor del sensor pasandole la id
+std::string Properties::GetPropertyWID( int id)
+{
+   for (const auto& property : propertyList) { 
+        if (property->id == id) { 
+
+            LOG("Propiedad encontrada, nombre: %s", property->name.c_str()); // Motstrar el nombre de la propiedad
+            LOG("Propiedad encontrada, nombre: %s", property->sensor.c_str()); // Motstrar el valor de la propiedad
+            LOG("Propiedad enncontrada, propiedad: %s", property);
+            return property->sensor;
+          
+        }
+    }
+
+   LOG("Propiedad no encontrada - ID: %d", id);
+   return ""; // String vacío si no se encuentra
+}
+
+
 // Implement a method to get the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
 {
@@ -440,4 +461,12 @@ int Map::GetSensorId(float px, float py) const {//Pilar la id del sensor con la 
    
 }
 
-
+std::string Map::ValorPorId(int id) {
+    LOG("!!!!!!!!!!!!Entro en ValorPorId!!!!!!!!!!!");
+    for (auto& mapLayer : mapData.layers) {
+        if (mapLayer->name == "Sensores") {
+            return mapLayer->properties.GetPropertyWID(id).c_str();
+        }
+    }
+    return ""; // Si no encuentra la capa
+}

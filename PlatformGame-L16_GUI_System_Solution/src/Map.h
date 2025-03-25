@@ -37,7 +37,8 @@ struct Properties
     // Method to ask for the value of a custom property
     Property* GetProperty(const char* name);
 
-    //Sacar valor del sensor por Id
+    std::string GetPropertyWID(int id);//sacar valor por id
+
 
 };
 
@@ -152,7 +153,8 @@ public:
         return mapData.tileHeight;
     }
 
-    int GetSensorId(float x, float y) const;
+    int GetSensorId(float x, float y) const;//sacar la id del sensor
+    std::string ValorPorId(int id);//sacar el string con la id del sensor
 
     MapLayer* GetNavigationLayer();
     Vector2D WorldToMap(int x, int y);
@@ -161,13 +163,14 @@ public:
 public: 
     std::string mapFileName, valor, mapPath;
     int currentId, pasarx, pasary, dpasarx, dpasary, id;
-    std::vector<SensorScene> sensorsList;
-    std::vector<SensorDialogos> dsensorsList;
+    std::vector<SensorScene> sensorsList; //lista de sensores para cambio de escena
+    std::vector<SensorDialogos> dsensorsList; //lista de sensores para dialogos
 
 private:
     bool mapLoaded;
     //Declare a variable data of the struct MapData
     MapData mapData;
     std::vector<PhysBody*> colliders;
+    std::string sensorValue;
     int nextSensorId; // Contador para IDs únicos
 };

@@ -143,11 +143,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::SENSOR:
 		LOG("!!!!TOCO EL SENSOR!!!!");
 		esc = SacarValor(SacarId());; // Acceder al valor de tipo string
-		LOG("!!!!!!!!!!debajo del esc!!!!!!!!!!!!!");
+		LOG("!!!!!!!!!!debajo del esc: %s!!!!!!!!!!!!!", esc.c_str());
 		if (esc == "S1S2") {
-			Engine::GetInstance().sceneLoader->LoadScene(1);
+			//Engine::GetInstance().sceneLoader->LoadScene(2);
 		}else if (esc == "S2S1") {
-			Engine::GetInstance().sceneLoader->LoadScene(2);
+			//Engine::GetInstance().sceneLoader->LoadScene(1);
 		}
 
 
@@ -180,15 +180,7 @@ void Player::SetPosition(Vector2D pos) {
 Vector2D Player::GetPosition() {
 	b2Vec2 bodyPos = pbody->body->GetTransform().p;
 	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
-	LOG("Posición convertida (px): x=%.2f, y=%.2f", bodyPos.x, bodyPos.y);
-	LOG("Posición convertida (px): x=%.2f, y=%.2f", pos.getX(), pos.getY());
-	return pos;
-}
-
-Vector2D Player::GetPosNoMeters() {
-	b2Vec2 bodyPos = pbody->body->GetTransform().p;
-	Vector2D pos = Vector2D(bodyPos.x, bodyPos.y);
-	LOG("Posición convertida (px): x=%.2f, y=%.2f", bodyPos.x, bodyPos.y);
+	LOG("Posición sin convertir (px): x=%.2f, y=%.2f", bodyPos.x, bodyPos.y);
 	LOG("Posición convertida (px): x=%.2f, y=%.2f", pos.getX(), pos.getY());
 	return pos;
 }
@@ -205,7 +197,10 @@ int Player :: SacarId() {
 }
 
 std::string Player:: SacarValor(int ids) {
-	std::string valor = "TODO MAL";
+
+	LOG("!!!!Id del sensor con la posicion del player desde SacarValor: %s!!!!", ids);
+	std::string valor = Engine::GetInstance().map->ValorPorId(ids);//Buscar el valor usando la id
+	LOG("!!!!Id del sensor con la posicion del player: %d!!!!", valor);
 	return valor;
-	LOG("!!!!Id del sensor con la posicion del player: &d!!!!", valor);
+	
 }
