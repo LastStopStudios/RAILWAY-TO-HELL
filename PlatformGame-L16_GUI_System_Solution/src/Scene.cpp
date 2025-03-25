@@ -58,6 +58,11 @@ bool Scene::Awake()
 			volador->SetParameters(enemyNode);
 			voladorList.push_back(volador);  
 		}
+		if (type == "boss") {
+			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
+			boss->SetParameters(enemyNode);
+			bossList.push_back(boss);
+		}
 		
 	}
 

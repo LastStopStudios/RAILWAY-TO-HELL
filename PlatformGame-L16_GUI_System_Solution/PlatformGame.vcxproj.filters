@@ -105,6 +105,9 @@
     <ClCompile Include="src\Volador.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Boss.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -186,6 +189,9 @@
     <ClInclude Include="src\Ffmpeg.h" />
     <ClInclude Include="src\DialogoM.h" />
     <ClInclude Include="src\Volador.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Boss.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

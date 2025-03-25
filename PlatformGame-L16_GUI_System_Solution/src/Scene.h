@@ -7,6 +7,7 @@
 #include "GuiControlButton.h"
 #include "SDL2/SDL_ttf.h"
 #include "Volador.h"
+#include "Boss.h"
 
 struct SDL_Texture;
 
@@ -60,10 +61,11 @@ public:
 
 	std::vector<Terrestre*> enemyList;
 	std::vector<Volador*> voladorList; 
+	std::vector<Boss*> bossList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
-
+	std::vector<Boss*>& GetBossList() { return bossList; }
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
