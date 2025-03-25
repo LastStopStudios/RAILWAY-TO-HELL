@@ -32,6 +32,10 @@ private:
 	// Private methods
 	void DrawPlayer();
 	void UpdateMeleeAttack(float dt);
+	void HandleJump();
+	void HandleSceneSwitching();
+	void HandleDash(b2Vec2& velocity, float dt);
+	void HandleMovement(b2Vec2& velocity);
 
 public:
 	// Public properties

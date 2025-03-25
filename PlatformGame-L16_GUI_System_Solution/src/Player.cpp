@@ -76,62 +76,11 @@ bool Player::Update(float dt)
         velocity = b2Vec2(0, 0);
     }
 
-    // Movement controls
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -0.2f * 16;
-        facingRight = false;
-    }
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = 0.2f * 16;
-        facingRight = true;
-    }
-
-		
-	// Logic of dash cooldown
-	if (!canDash) {
-		dashCooldownTimer -= dt;
-		if (dashCooldownTimer <= 0) {
-			canDash = true;
-		}
-	}
-
-	// Dash with strict cooldown, it only works if the player is already pressing a movement key (D or A).
-	bool isDashKeyPressed =
-		(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
-			Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
-
-	if (isDashKeyPressed && canDash) {
-		
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			velocity.x = dashSpeed * 100; // Extra speed to the right.
-		}
-
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			velocity.x = -dashSpeed * 100; // Extra speed to the left.
-		}
-
-		// Start the cooldown
-		canDash = false;
-		dashCooldownTimer = dashCooldownDuration;
-	}
-
-
-	// Move Up
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		velocity.y = -0.2 * 16;
-	}
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-        velocity.y = 0.2f * 16;
-    }
-
-    // Jump control
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
-        isJumping = true;
-    }
+    // Call new extracted methods
+    HandleMovement(velocity);
+    HandleDash(velocity, dt); 
+    HandleJump();
+    HandleSceneSwitching();
 
     // If jumping, preserve the vertical velocity
     if (isJumping) {
@@ -146,6 +95,73 @@ bool Player::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+    UpdateMeleeAttack(dt);
+    DrawPlayer();
+
+    return true;
+}
+
+void Player::HandleMovement(b2Vec2& velocity) {
+    // Horizontal movement
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+        velocity.x = -0.2f * 16;
+        facingRight = false;
+    }
+
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+        velocity.x = 0.2f * 16;
+        facingRight = true;
+    }
+
+    // Vertical movement
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+        velocity.y = -0.2 * 16;
+    }
+
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+        velocity.y = 0.2f * 16;
+    }
+}
+
+void Player::HandleDash(b2Vec2& velocity, float dt) {
+    // Logic of dash cooldown
+    if (!canDash) {
+        dashCooldownTimer -= dt;
+        if (dashCooldownTimer <= 0) {
+            canDash = true;
+        }
+    }
+
+    // Dash with strict cooldown, it only works if the player is already pressing a movement key (D or A).
+    bool isDashKeyPressed =
+        (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
+            Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
+        Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
+
+    if (isDashKeyPressed && canDash) {
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            velocity.x = dashSpeed * 100; // Extra speed to the right.
+        }
+
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            velocity.x = -dashSpeed * 100; // Extra speed to the left.
+        }
+
+        // Start the cooldown
+        canDash = false;
+        dashCooldownTimer = dashCooldownDuration;
+    }
+}
+
+void Player::HandleJump() {
+    // Jump control
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
+        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
+        isJumping = true;
+    }
+}
+
+void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {
@@ -154,11 +170,6 @@ bool Player::Update(float dt)
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {
         Engine::GetInstance().sceneLoader->LoadScene(2);
     }
-
-    UpdateMeleeAttack(dt);
-    DrawPlayer();
-
-    return true;
 }
 
 void Player::UpdateMeleeAttack(float dt) {
