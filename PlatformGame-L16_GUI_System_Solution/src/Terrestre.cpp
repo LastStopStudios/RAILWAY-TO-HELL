@@ -47,8 +47,6 @@ bool Terrestre::Start() {
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
-
-
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 	ResetPath();
@@ -178,8 +176,12 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::PLAYER:
 		LOG("Collided with player - DESTROY");
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
+    case ColliderType::PLAYER_ATTACK:
+        LOG("Enemy hit by player attack - DESTROY");
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
 	}
 }
 

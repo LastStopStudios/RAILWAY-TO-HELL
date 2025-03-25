@@ -65,8 +65,13 @@ private:
 	SDL_Texture* attackTexture = nullptr;  // Attack visual
 	bool facingRight = true;     // Direction facing (true=right)
 
+	// Add these to the private section of the Player class
 	Animation whipAttack;
-	SDL_Texture* whipAttackTexture;
+	PhysBody* whipAttackHitbox = nullptr;
+	bool isWhipAttacking = false;
+	bool canWhipAttack = true;
+	float whipAttackCooldown = 0.0f;
+	SDL_Texture* whipAttackTexture = nullptr;
 
 	bool isDashing = false;
 	float dashSpeed = 0.6f;

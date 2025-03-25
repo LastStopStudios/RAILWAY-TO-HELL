@@ -174,82 +174,19 @@ void Volador::ResetPath() {
     pathfinding->ResetPath(tilePos);
 }
 
-void Volador::SetDeathInXML()
-{
-    // Load XML
-    pugi::xml_document doc;
-    if (!doc.load_file("config.xml")) {
-        LOG("Error loading config.xml");
-        return;
-    }
-
-    // Find the node corresponding to the enemy "Lirian"
-    pugi::xml_node lirianNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", "Lirian");
-
-    if (!lirianNode) {
-        LOG("Could not find the node for enemy 'Lirian' in the XML");
-        return;
-    }
-
-    // Modify the isDeath attribute
-    lirianNode.attribute("isDeath").set_value(1); // Change to 1 to indicate the enemy is dead
-
-    // Save the modified file
-    if (!doc.save_file("config.xml")) {
-        LOG("Error saving config.xml");
-    }
-    else {
-        LOG("isDeath status updated in the XML for 'Lirian'");
-    }
-}
-
-void Volador::SetAliveInXML()
-{
-    // Load XML file
-    pugi::xml_document doc;
-    if (!doc.load_file("config.xml")) {
-        LOG("Error loading config.xml");
-        return;
-    }
-
-    // Find the node corresponding to the enemy "Lirian"
-    pugi::xml_node lirianNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", "Lirian");
-
-    if (!lirianNode) {
-        LOG("Could not find the node for enemy 'Lirian' in the XML");
-        return;
-    }
-
-    // Modify the isDeath attribute
-    lirianNode.attribute("isDeath").set_value(0); // Change to 0 to indicate the enemy is alive
-
-    // Save the modified file
-    if (!doc.save_file("config.xml")) {
-        LOG("Error saving config.xml");
-    }
-    else {
-        LOG("isDeath status updated in the XML for 'Lirian'");
-    }
-}
-
 void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     Player* player = Engine::GetInstance().scene.get()->GetPlayer();
 
-    switch (physB->ctype) {
-    case ColliderType::PLAYER:
+    switch (physB->ctype) { 
+    case ColliderType::PLAYER: 
 
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
+    case ColliderType::PLAYER_ATTACK:
+        LOG("Enemy hit by player attack - DESTROY");
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
     
     default:
         break;

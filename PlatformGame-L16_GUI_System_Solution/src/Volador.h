@@ -40,10 +40,6 @@ public:
 
 	void ResetPath();
 
-	void SetDeathInXML();
-
-	void SetAliveInXML();
-
 	std::string GetType() const { return "volador"; }
 
 public:

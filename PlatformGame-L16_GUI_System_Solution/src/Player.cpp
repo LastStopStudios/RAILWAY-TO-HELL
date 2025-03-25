@@ -58,8 +58,12 @@ bool Player::Start() {
     attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
 
     // Load whip attack texture
+    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
     pugi::xml_node whipNode = parameters.child("animations").child("whip");
     whipAttackTexture = Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string());
+    whipAttack = Animation();
+    whipAttack.speed = 0.1f;
+    whipAttack.loop = false;
 
     // Set initial state
     isAttacking = false;
@@ -85,8 +89,7 @@ bool Player::Update(float dt)
     HandleDash(velocity, dt); 
     HandleJump();
     HandleSceneSwitching();
-    UpdateWhipAttack(dt); 
-
+    
     // If jumping, preserve the vertical velocity
     if (isJumping) {
         velocity.y = pbody->body->GetLinearVelocity().y;
@@ -100,6 +103,7 @@ bool Player::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+    UpdateWhipAttack(dt);
     UpdateMeleeAttack(dt);
     DrawPlayer();
 
@@ -178,77 +182,78 @@ void Player::HandleSceneSwitching() {
 }
 
 void Player::UpdateWhipAttack(float dt) {
-    //if (!canAttack) {
-    //    attackCooldown -= dt;
-    //    if (attackCooldown <= 0.0f) {
-    //        canAttack = true;
-    //        attackCooldown = 0.0f;
-    //    }
-    //}
+    // Whip attack cooldown timer
+    if (!canWhipAttack) {
+        whipAttackCooldown -= dt;
+        if (whipAttackCooldown <= 0.0f) {
+            canWhipAttack = true;
+            whipAttackCooldown = 0.0f;
+        }
+    }
 
-    //// Initiate whip attack when the G key is pressed, if the player is not already attacking and cooldown has expired
-    //if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_G) == KEY_DOWN && !isAttacking && canAttack) {
-    //    // Set attack state flags
-    //    isAttacking = true;
-    //    canAttack = false;
-    //    attackCooldown = 0.7f;  // Slightly longer cooldown for whip attack
+    // Initiate whip attack when the G key is pressed, if the player is not already attacking and cooldown has expired
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && !isWhipAttacking && canWhipAttack) {
+        // Set attack state flags
+        isWhipAttacking = true;
+        canWhipAttack = false;
+        whipAttackCooldown = 0.7f;  // Slightly longer cooldown for whip attack
 
-    //    // Initialize a new whip attack animation
-    //    whipAttack = Animation();
-    //    whipAttack.speed = 0.15f;  // Animation playback speed
-    //    whipAttack.loop = false;   // Animation should not loop
+        // Initialize a new whip attack animation
+        whipAttack = Animation();
+        whipAttack.speed = 0.15f;  // Animation playback speed
+        whipAttack.loop = false;   // Animation should not loop
 
-    //    // Load whip attack animation frames from XML
-    //    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
+        // Load whip attack animation frames from XML
+        whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
 
-    //    int attackWidth = texW * 2.5;  // Whip attack hitbox width (2.5 times the player's width)
-    //    int attackHeight = texH / 2;   // Whip attack height (half the player's height)
+        int attackWidth = texW * 2;  // Whip attack hitbox width (2.5 times the player's width)
+        int attackHeight = texH / 2;   // Whip attack height (half the player's height)
 
-    //    // Get the player's center position from the physics body
-    //    b2Vec2 playerCenter = pbody->body->GetPosition();
-    //    int centerX = METERS_TO_PIXELS(playerCenter.x);
-    //    int centerY = METERS_TO_PIXELS(playerCenter.y);
+        // Get the player's center position from the physics body
+        b2Vec2 playerCenter = pbody->body->GetPosition();
+        int centerX = METERS_TO_PIXELS(playerCenter.x);
+        int centerY = METERS_TO_PIXELS(playerCenter.y);
 
-    //    // Calculate the hitbox position based on facing direction
-    //    int attackX = facingRight ? centerX + texW : centerX - texW - attackWidth;
+        // Calculate the hitbox position based on facing direction
+        int attackX = facingRight ? centerX + texW : centerX - texW - attackWidth;
 
-    //    // Remove any existing attack hitbox before creating a new one
-    //    if (attackHitbox) {
-    //        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
-    //        attackHitbox = nullptr;
-    //    }
+        // Remove any existing attack hitbox before creating a new one
+        if (whipAttackHitbox) {
+            Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+            whipAttackHitbox = nullptr;
+        }
 
-    //    // Create a new physics hitbox for the whip attack
-    //    attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-    //        attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
-    //    attackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
-    //    attackHitbox->listener = this;
-    //}
+        // Create a new physics hitbox for the whip attack
+        whipAttackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+            attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
+        whipAttackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
+        whipAttackHitbox->listener = this;
+    }
 
-    //// Handle ongoing whip attack state
-    //if (isAttacking) {
-    //    // Update the whip attack animation
-    //    whipAttack.Update();
+    // Handle ongoing whip attack state
+    if (isWhipAttacking) {
+        // Update the whip attack animation
+        whipAttack.Update();
 
-    //    // Update the position of the attack hitbox to follow the player
-    //    if (attackHitbox) {
-    //        // Position the hitbox in front of the player based on facing direction
-    //        int attackX = facingRight ? position.getX() + texW : position.getX() - attackHitbox->width;
-    //        int attackY = position.getY() + texH / 4;  // Slightly lower than player's center
-    //        attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
-    //    }
+        // Update the position of the attack hitbox to follow the player
+        if (whipAttackHitbox) {
+            // Position the hitbox in front of the player based on facing direction
+            int attackX = facingRight ? position.getX() + 30 : position.getX();
+            int attackY = position.getY() + texH / 4;  // Slightly lower than player's center
+            whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
+        }
 
-    //    // End the attack when the animation finishes playing
-    //    if (whipAttack.HasFinished()) {
-    //        isAttacking = false;
+        // End the attack when the animation finishes playing
+        if (whipAttack.HasFinished()) {
+            isWhipAttacking = false;
 
-    //        // Clean up the attack hitbox
-    //        if (attackHitbox) {
-    //            Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
-    //            attackHitbox = nullptr;
-    //        }
-    //    }
-    //}
+            // Clean up the attack hitbox
+            if (whipAttackHitbox) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                whipAttackHitbox = nullptr;
+            }
+        }
+    }
 }
 
 void Player::UpdateMeleeAttack(float dt) {
@@ -262,7 +267,7 @@ void Player::UpdateMeleeAttack(float dt) {
     }
 
     // Initiate attack when the H key is pressed, if the player is not already attacking and cooldown has expired
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_H) == KEY_DOWN && !isAttacking && canAttack) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN && !isAttacking && canAttack) {
         // Set attack state flags
         isAttacking = true;
         canAttack = false;
@@ -326,13 +331,62 @@ void Player::UpdateMeleeAttack(float dt) {
     }
 }
 
-
 void Player::DrawPlayer() {
     // Determine the flip direction based on which way the player is facing
     SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
-    // Draw the player's normal sprite when not attacking
-    if (!isAttacking) {
+    // Prioritize melee attack drawing
+    if (isAttacking) {
+        // Get the current frame of the attack animation
+        SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
+        int attackX;
+
+        // Calculate the position for the attack animation based on facing direction
+        if (facingRight) {
+            attackX = position.getX();              // Position when facing right
+        }
+        else {
+            attackX = position.getX();              // Offset position when facing left
+        }
+
+        // Draw the attack animation with proper positioning and orientation
+        Engine::GetInstance().render.get()->DrawTextureWithFlip(
+            attackTexture,                          // Attack animation texture
+            attackX,                                // X position with direction offset
+            position.getY(),                        // Y position with vertical offset
+            &currentFrame,                          // Current attack animation frame
+            0.0,                                    // Speed modifier (0.0 = no parallax effect)
+            0,                                      // Rotation angle (0 = no rotation)
+            INT_MAX, INT_MAX,                       // No pivot point (use default)
+            flip);                                  // Horizontal flip based on direction
+    }
+    // Then check for whip attack drawing
+    else if (isWhipAttacking) {
+        // Get the current frame of the whip attack animation
+        SDL_Rect currentFrame = whipAttack.GetCurrentFrame();
+        int attackX;
+
+        // Calculate the position for the whip attack animation based on facing direction
+        if (facingRight) {
+            attackX = position.getX();              // Position when facing right
+        }
+        else {
+            attackX = position.getX();              // Offset position when facing left
+        }
+
+        // Draw the whip attack animation with proper positioning and orientation
+        Engine::GetInstance().render.get()->DrawTextureWithFlip(
+            whipAttackTexture,                      // Whip attack animation texture
+            attackX,                                // X position with direction offset
+            position.getY(),                        // Y position with vertical offset
+            &currentFrame,                          // Current whip attack animation frame
+            0.0,                                    // Speed modifier (0.0 = no parallax effect)
+            0,                                      // Rotation angle (0 = no rotation)
+            INT_MAX, INT_MAX,                       // No pivot point (use default)
+            flip);                                  // Horizontal flip based on direction
+    }
+    // Normal player drawing when not attacking
+    else {
         // Use the new DrawTextureWithFlip function to render the player with proper orientation
         Engine::GetInstance().render.get()->DrawTextureWithFlip(
             texture,                                // Player texture
@@ -347,36 +401,12 @@ void Player::DrawPlayer() {
         // Advance the animation to the next frame
         currentAnimation->Update();
     }
-    // Draw the attack animation when the player is attacking
-    else {
-        // Get the current frame of the attack animation
-        SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
-        int attackX;
-
-        // Calculate the position for the attack animation based on facing direction
-        if (facingRight) {
-            attackX = position.getX();              // Position when facing right
-        }
-        else {
-            attackX = position.getX();         // Offset position when facing left
-        }
-
-        // Draw the attack animation with proper positioning and orientation
-        Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            attackTexture,                          // Attack animation texture
-            attackX,                                // X position with direction offset
-            position.getY(),                   // Y position with vertical offset
-            &currentFrame,                          // Current attack animation frame
-            0.0,                                    // Speed modifier (0.0 = no parallax effect)
-            0,                                      // Rotation angle (0 = no rotation)
-            INT_MAX, INT_MAX,                       // No pivot point (use default)
-            flip);                                  // Horizontal flip based on direction
-    }
 }
 
 bool Player::CleanUp() {
     LOG("Cleanup player");
     Engine::GetInstance().textures.get()->UnLoad(texture);
+    Engine::GetInstance().textures.get()->UnLoad(attackTexture);
     Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
     return true;
 }
