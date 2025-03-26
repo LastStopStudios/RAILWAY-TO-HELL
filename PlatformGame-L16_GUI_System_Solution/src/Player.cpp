@@ -130,7 +130,7 @@ bool Player::CleanUp()
 
 // Define OnCollision function for the player. 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentScene();
+	
 	
 	switch (physB->ctype)
 	{
@@ -146,6 +146,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("!!!!TOCO EL SENSOR!!!!");
 		valorid = SacarId();
 		LOG("!!!!valorid en collider sensor despues SacarId: %d!!!!", valorid);
+		LOG("!!!!esc antes de llamar funcion: %d!!!!", esc);
 		esc = SacarValor(valorid);; // Acceder al valor de tipo string
 		LOG("!!!!!!!!!!debajo del esc: %s!!!!!!!!!!!!!", esc.c_str());
 		if (esc == "S1S2") {
@@ -201,9 +202,10 @@ int Player :: SacarId() {
 
 std::string Player:: SacarValor(int ids) {
 
-	LOG("!!!!Id del sensor con la posicion del player desde SacarValor: %s!!!!", ids);
-	std::string valor = Engine::GetInstance().map->ValorPorId(ids);//Buscar el valor usando la id
-	LOG("!!!!Id del sensor con la posicion del player: %d!!!!", valor);
+	LOG("!!!!Id del sensor con la posicion del player desde SacarValor: %d!!!!", ids);
+	//std::string valor = Engine::GetInstance().map->ValorPorId(ids);//Buscar el valor usando la id
+	std::string valor = "S1S2";
+	LOG("!!!!Valor de la propiedad del sensor: %s!!!!", valor.c_str());
 	return valor;
 	
 }

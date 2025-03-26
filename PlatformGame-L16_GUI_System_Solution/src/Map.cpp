@@ -62,7 +62,7 @@ bool Map::Update(float dt)
                         int gid = mapLayer->Get(i, j);
                         //Check if the gid is different from 0 - some tiles are empty
                         if (gid != 0) {
-                            //L09: TODO 3: Obtain the tile set using GetTilesetFromTileId
+                            //Obtain the tile set using GetTilesetFromTileId
                             TileSet* tileSet = GetTilesetFromTileId(gid);
                             if (tileSet != nullptr) {
                                 //Get the Rect from the tileSetTexture;
@@ -102,6 +102,14 @@ bool Map::CleanUp()
 {
     LOG("Unloading map");
 
+    sensorsList.clear();
+    dsensorsList.clear();
+
+    valor.clear();
+    nextSensorId = 1;
+    currentId = 0;
+    sensorValue.clear();
+
     for (PhysBody* colliders : colliders) {
         Engine::GetInstance().physics.get()->DeletePhysBody(colliders);
     }
@@ -118,13 +126,7 @@ bool Map::CleanUp()
     }
     mapData.layers.clear();
 
-    sensorsList.clear();
-    dsensorsList.clear();
-
-    valor.clear();
-    nextSensorId = 1;
-    currentId = 0;
-    sensorValue.clear();
+  
 
     return true;
 }
@@ -138,7 +140,6 @@ bool Map::Load(std::string path, std::string fileName)
     mapFileName = fileName;
     mapPath = path;
     std::string mapPathName = mapPath + mapFileName;
-
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapPathName.c_str());
 
@@ -184,7 +185,7 @@ bool Map::Load(std::string path, std::string fileName)
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
-            //L09: TODO 6 Call Load Layer Properties
+            //Call Load Layer Properties
             LoadProperties(layerNode, mapLayer->properties);
 
             //Iterate over all the tiles and assign the values in the data array
@@ -458,15 +459,16 @@ int Map::GetSensorId(float px, float py) const {//Pilar la id del sensor con la 
 
 std::string Map::ValorPorId(int id) {
    LOG("!!!!!!!!!!!!Entro en ValorPorId!!!!!!!!!!!");
-    /*for (auto& mapLayer : mapData.layers) {
+   sensorValue.clear();
+   /* for (auto& mapLayer : mapData.layers) {
         if (mapLayer->name == "Sensores") {
             return mapLayer->properties.GetPropertyWID(id).c_str();
         }
     }
     return ""; // Si no encuentra la capa
     */
-    sensorValue.clear();
-  /* for (auto& layer : this->mapData.layers) {//recorre las capas del mapa
+    
+  for (auto& layer : this->mapData.layers) {//recorre las capas del mapa
         if (layer->name == "Sensores") {//busca la capa llamada sensores
             // 3. Llamar a tu función
             std::string sensorValue = layer->properties.GetPropertyWID(id);//Busca el valor de sensor con la id
@@ -480,8 +482,8 @@ std::string Map::ValorPorId(int id) {
     }
 
     LOG("No se encontró sensor con ID %d", id);
-    return "";*/
-    for (const auto& mapLayer : mapData.layers) {
+    return "";
+   /* for (const auto& mapLayer : mapData.layers) {
         if (mapLayer->properties.GetProperty("Sensor") != NULL) {
             sensorValue = mapLayer->properties.GetProperty("Sensor")->sensor;
             LOG("!!!!!!!!!!!!Valor sensor: %d!!!!!!!!!!!", sensorValue);
@@ -490,5 +492,5 @@ std::string Map::ValorPorId(int id) {
     }
 
     LOG("No se encontró sensor con ID %d", id);
-    return "";
+    return "";*/
 }

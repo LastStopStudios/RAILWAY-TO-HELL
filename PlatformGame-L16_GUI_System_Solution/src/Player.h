@@ -36,7 +36,7 @@ public:
 	int SacarId();
 	std::string SacarValor(int ids);
 	Vector2D GetPosition();
-	int valorid;
+	
 
 public:
 
@@ -47,6 +47,7 @@ public:
 	std::string esc;
 	//Audio fx
 	int pickCoinFxId, sensorId = 0;
+	int valorid;
 
 	// L08 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;

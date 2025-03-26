@@ -3142,8 +3142,8 @@
    <tile gid="49"/>
   </data>
  </layer>
- <objectgroup id="10" name="Sensores" visible="0">
-  <object id="10" x="59.2793" y="640.216" width="77.0631" height="59.2793">
+ <objectgroup id="10" name="Sensores">
+  <object id="10" x="185.742" y="638.24" width="77.0631" height="59.2793">
    <properties>
     <property name="Sensor" value="S2S1"/>
    </properties>
