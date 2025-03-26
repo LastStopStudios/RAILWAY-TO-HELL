@@ -22,7 +22,7 @@ SceneLoader::~SceneLoader() {}
 void SceneLoader::LoadScene(int level) {
 
     
-    Engine::GetInstance().sceneLoader->FadeIn(1.0f);   // Animation speed (FadeIn)
+    FadeIn(1.0f);   // Animation speed (FadeIn)
     UnLoadEnemiesItems();
     SetCurrentScene(level);
 

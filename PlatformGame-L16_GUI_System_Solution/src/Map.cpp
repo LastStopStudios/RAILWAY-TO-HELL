@@ -10,7 +10,7 @@
 #include <string>
 #include "SceneLoader.h"
 
-Map::Map() : Module(), mapLoaded(false), nextSensorId(1)
+Map::Map() : Module(), mapLoaded(false)
 {
     name = "map";
 }
