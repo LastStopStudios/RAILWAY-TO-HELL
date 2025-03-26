@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "EntityManager.h"
 
+
 Boss::Boss() : Entity(EntityType::BOSS)
 {
 
@@ -65,7 +66,6 @@ bool Boss::Start() {
 
 bool Boss::Update(float dt)
 {
-
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
@@ -73,8 +73,10 @@ bool Boss::Update(float dt)
 
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 
+    float dx = playerTilePos.getX() - enemyTilePos.getX();
+    float dy = playerTilePos.getY() - enemyTilePos.getY();
     // Calculate the distance between the enemy and the player only on the X axis
-    float distanceToPlayer = abs(playerTilePos.getX() - enemyTilePos.getX());
+    float distanceToPlayer = abs(dx);
 
     // Limit movement towards the player only if within X tiles
     float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player
@@ -82,76 +84,109 @@ bool Boss::Update(float dt)
     pbody->body->SetFixedRotation(false);  // Do not restrict the body's rotation
     pbody->body->SetGravityScale(1.0f);  // Adjust gravity so it doesn't excessively affect the jump
 
-    if (distanceToPlayer <= patrolDistance) {
-
-        if (patroling) patroling = false;
-
-        // If we are following the path and there are at least 2 tiles
-        int maxIterations = 100; // Maximum number of iterations
-        int iterations = 0;
-
-
-        while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
-            pathfinding->PropagateAStar(SQUARED);
-            iterations++;
+    if (!canAttack) {
+        printf("%f\n", &currentAttackCooldown);
+        
+        currentAttackCooldown -= dt;
+        if (currentAttackCooldown <= 0) {
+            canAttack = true;
+            currentAttackCooldown = 0.0f;
         }
+    }
 
-        if (pathfinding->pathTiles.size() >= 2) {
-            auto it = pathfinding->pathTiles.end();
-            --it; // Last element
-            --it; // Second to last element
-            Vector2D nextTile = *it; // Dereference the iterator to get the second to last tile
-            Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
 
-            float x2 = nextPos.getX(); // Next position in X
-            float x1 = enemyPos.getX(); // Current position of the enemy in X
-            float dx = x2 - x1; // Difference in X
-            float distance = abs(dx); // Distance in X
+    if (distanceToPlayer <= attackDistance) {
+        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+    }
 
-            if (distance < 5.0f) {
-                pathfinding->pathTiles.pop_back(); // Remove the last tile
-            }
-            else {
-                float stepX = (dx / distance) * moveSpeed; // Scale by speed
-                if (dx < 0) {
-                    isLookingLeft = true; // Moving to the left
-                }
-                else {
-                    isLookingLeft = false; // Moving to the right
-                }
-                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(stepX), 3);
-                pbody->body->SetLinearVelocity(velocity); // Aplicar movimiento al enemigo
+    isLookingLeft = dx < 0;
+
+    
+
+    if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
+        isAttacking = true;
+        canAttack = false;
+        currentAttackCooldown = attackCooldown;
+        currentAnimation = &attack;
+        currentAnimation->Reset();
+
+        if (area == nullptr) {
+            area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+                (int)position.getX() + (isLookingLeft ? -10 : 50),
+                (int)position.getY() + texH / 2,
+                40,
+                40,
+                bodyType::KINEMATIC
+            );
+            area->ctype = ColliderType::BOSS_ATTACK;
+        }
+    }
+
+    if (isAttacking) {
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+
+        if (attack.HasFinished()) {
+            isAttacking = false;
+            currentAnimation = &running;
+
+            if (area != nullptr) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                area = nullptr;
             }
         }
     }
-    else { // when patroling
 
-        float currentPosX = enemyPos.getX();
+    if (!isAttacking) {
+        if (distanceToPlayer <= patrolDistance) {
+            if (!resting) {
+                resting = true;
+                currentAnimation = &running;
+                running.Reset();
+            }
 
-        if (!patroling) {
-            savedPosX = currentPosX;
-            patroling = true;
+            if (currentAnimation == &running) {
+                int maxIterations = 100;
+                int iterations = 0;
+
+                while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
+                    pathfinding->PropagateAStar(SQUARED);
+                    iterations++;
+                }
+
+                if (pathfinding->pathTiles.size() >= 2) {
+                    auto it = pathfinding->pathTiles.end();
+                    --it;
+                    --it;
+                    Vector2D nextTile = *it;
+                    Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+
+                    float x2 = nextPos.getX();
+                    float x1 = enemyPos.getX();
+                    float dx = x2 - x1;
+                    float distance = abs(dx);
+
+                    if (distance < 5.0f) {
+                        pathfinding->pathTiles.pop_back();
+                    }
+                    else {
+                        float velocityX = isLookingLeft ? -moveSpeed : moveSpeed;
+                        b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
+                        pbody->body->SetLinearVelocity(velocity);
+                    }
+                }
+            }
         }
-
-        // patrol limits (modify the values "100" as needed)
-        if (currentPosX >= savedPosX + 100) {
-            isLookingLeft = true;
-
+        else {
+            if (resting) {
+                resting = false;
+                currentAnimation = &idle;
+                idle.Reset();
+            }
+            b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+            pbody->body->SetLinearVelocity(velocity);
         }
-
-        if (currentPosX <= savedPosX - 100) {
-            isLookingLeft = false;
-        }
-
-        // enemy movement
-        float step = patrolSpeed;
-        if (isLookingLeft) {
-            step = -patrolSpeed;
-        }
-        // Apply speed on the X-axis (Y can be kept fixed if there's no movement on that axis)
-        b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(step), 3);
-        pbody->body->SetLinearVelocity(velocity);
     }
+    
 
     // change sprite direction
     if (isLookingLeft) {
