@@ -3148,7 +3148,7 @@
   </properties>
   <object id="8" x="1914.72" y="638.24" width="69.1592" height="61.2552">
    <properties>
-    <property name="Sensor" value="Prueba"/>
+    <property name="Sensor" value="S1S3"/>
    </properties>
   </object>
   <object id="10" x="630.336" y="634.288" width="79.039" height="67.1832">

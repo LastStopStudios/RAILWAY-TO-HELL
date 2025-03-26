@@ -156,15 +156,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			}
 		}
 			
-		/*	if (physB->sensorID == "S1S2") {
-				sceneToLoad = 2;
-			}
-			else if (physB->sensorID == "S2S3") {
-				sceneToLoad = 3;
-			}
-			else if (physB->sensorID == "S3S1") {
-				sceneToLoad = 1;
-			}*/
+		
 
 		break;
 
