@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
 #include "Animation.h"
+#include <vector>
 
 struct SDL_Texture;
 
@@ -34,6 +35,17 @@ public:
 
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition();
+
+	struct EscenaQueCargar {
+		std::string escena;
+		int id;
+	};
+
+	std::vector<EscenaQueCargar> escenas = {//lista de escenas con su id
+	{"S1S2", 2},
+	{"S2S3", 3},
+	{"S3S1", 1}
+	};
 	
 
 public:

@@ -114,8 +114,8 @@ bool Player::Update(float dt)
 		Engine::GetInstance().sceneLoader->LoadScene(2);
 	}
 
-	if (needSceneChange) {
-		Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad);
+	if (needSceneChange) {//cambio de escena
+		Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad);//pasarle la nueva escena al sceneLoader
 		needSceneChange = false;
 	}
 
@@ -149,11 +149,23 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::SENSOR:
 		LOG("SENSOR COLLISION DETECTED");
 		LOG("Sensor ID: %s", physB->sensorID.c_str());
-
-		if (physB->ctype == ColliderType::SENSOR) {
-			needSceneChange = true;
-			sceneToLoad = (physB->sensorID == "S1S2") ? 2 : 1;
+		needSceneChange = true;
+		for (const auto& escena : escenas) {//recorrer todas las escenas
+			if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
+				sceneToLoad = escena.id;  // Devuelve el ID para cargar ese mapa
+			}
 		}
+			
+		/*	if (physB->sensorID == "S1S2") {
+				sceneToLoad = 2;
+			}
+			else if (physB->sensorID == "S2S3") {
+				sceneToLoad = 3;
+			}
+			else if (physB->sensorID == "S3S1") {
+				sceneToLoad = 1;
+			}*/
+
 		break;
 
 	case ColliderType::DIALOGOS:

@@ -208,10 +208,8 @@ bool Map::Load(std::string path, std::string fileName)
 
             // Get the name of the object group (PLATFORM, CHECKPOINT, etc.)
             std::string layerName = layerNode.attribute("name").as_string();
-            LOG("!!!!!!!!!layer del Mapa cargado, Nombre: %s !!!!!!!!", layerName.c_str());
 
             for (pugi::xml_node tileNode = layerNode.child("object"); tileNode != NULL; tileNode = tileNode.next_sibling("object")) {
-                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %s !!!!!!!!", layerName.c_str());
                 // Assign the correct values from the XML
                 x = tileNode.attribute("x").as_float();
                 y = tileNode.attribute("y").as_float();
@@ -226,7 +224,6 @@ bool Map::Load(std::string path, std::string fileName)
                 switch (layerId) {
                 case 1: // Sensor cambio de escena
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    LOG("!!!!!!!!!Sensor Creado!!!!!!!!");
                     rect->ctype = ColliderType::SENSOR;
                     LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
                    // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
@@ -234,7 +231,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         if (propertieNode.attribute("name") = "Sensor") {
                             rect->sensorID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
                         }
                     }
                     break;
@@ -327,17 +323,9 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
        
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
-        LOG("!!!!Nombre propiedad, Nombre:  %s !!!!", p->name.c_str());
-       
-        if(p->name == "Draw") {
-            p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
-            LOG("!!!!propiedad value guardada, tipo:  %d !!!!", p->value);
-       }else if (p->name == "Navigation"){
-           p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
-            LOG("!!!!propiedad value guardada (Navigation), tipo:  %d !!!!", p->value);
-
-       }      
-
+        
+        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+     
         properties.propertyList.push_back(p);
     }
 
