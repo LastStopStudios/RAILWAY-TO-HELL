@@ -33,13 +33,12 @@ public:
 	}
 
 	void SetPosition(Vector2D pos);
-	int SacarId();
-	std::string SacarValor(int ids);
 	Vector2D GetPosition();
 	
 
 public:
-
+	bool needSceneChange = false;
+	int sceneToLoad = -1;
 	//Declare player parameters
 	float speed = 5.0f;
 	SDL_Texture* texture = NULL;

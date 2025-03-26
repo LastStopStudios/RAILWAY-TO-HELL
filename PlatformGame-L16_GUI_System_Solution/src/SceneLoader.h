@@ -27,6 +27,7 @@ public:
 	int GetCurrentScene() const { return currentScene; }
 	int currentScene;
 	std::vector<Enemy*> enemysList;
+
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();

@@ -114,6 +114,11 @@ bool Player::Update(float dt)
 		Engine::GetInstance().sceneLoader->LoadScene(2);
 	}
 
+	if (needSceneChange) {
+		Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad);
+		needSceneChange = false;
+	}
+
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
 	return true;
@@ -142,18 +147,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		Engine::GetInstance().physics.get()->DeletePhysBody(physB); // Deletes the body of the item from the physics world
 		break;
 	case ColliderType::SENSOR:
-		esc.clear();
-		LOG("!!!!TOCO EL SENSOR!!!!");
-		LOG("SendorID: %s",physB->sensorID.c_str());
-		esc = physB->sensorID.c_str();
-		if (esc == "S1S2") {
-			Engine::GetInstance().sceneLoader->LoadScene(2);
-		}else if (esc == "S2S1") {
-			Engine::GetInstance().sceneLoader->LoadScene(1);
+		LOG("SENSOR COLLISION DETECTED");
+		LOG("Sensor ID: %s", physB->sensorID.c_str());
+
+		if (physB->ctype == ColliderType::SENSOR) {
+			needSceneChange = true;
+			sceneToLoad = (physB->sensorID == "S1S2") ? 2 : 1;
 		}
+		break;
 
-
-		break; 
 	case ColliderType::DIALOGOS:
 		LOG("SendorID: %d", physB->ID);
 		valorid = physB->ID;
