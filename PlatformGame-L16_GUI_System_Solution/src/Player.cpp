@@ -144,6 +144,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::SENSOR:
 		esc.clear();
 		LOG("!!!!TOCO EL SENSOR!!!!");
+		LOG("SendorID: %s",physB->sensorID.c_str());
+
 		valorid = SacarId();
 		LOG("!!!!valorid en collider sensor despues SacarId: %d!!!!", valorid);
 		LOG("!!!!esc antes de llamar funcion: %d!!!!", esc);

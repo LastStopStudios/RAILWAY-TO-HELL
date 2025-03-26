@@ -55,6 +55,7 @@ public:
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
+	std::string sensorID;
 };
 
 // Module --------------------------------------

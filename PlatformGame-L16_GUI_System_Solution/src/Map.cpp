@@ -210,13 +210,12 @@ bool Map::Load(std::string path, std::string fileName)
         float height = 0.0f;
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup"); layerNode != NULL; layerNode = layerNode.next_sibling("objectgroup")) {
 
-            // Get the name of the object group (PLATFORM, SPIKE, CHECKPOINT, etc.)
+            // Get the name of the object group (PLATFORM, CHECKPOINT, etc.)
             std::string layerName = layerNode.attribute("name").as_string();
             LOG("!!!!!!!!!layer del Mapa cargado, Nombre: %s !!!!!!!!", layerName.c_str());
 
             for (pugi::xml_node tileNode = layerNode.child("object"); tileNode != NULL; tileNode = tileNode.next_sibling("object")) {
-                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %d !!!!!!!!", tileNode);
-                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %d !!!!!!!!", layerName.c_str());
+                LOG("!!!!!!!!!layer del TileNode cargado, Nombre: %s !!!!!!!!", layerName.c_str());
                 // Assign the correct values from the XML
                 x = tileNode.attribute("x").as_float();
                 y = tileNode.attribute("y").as_float();
@@ -243,9 +242,10 @@ bool Map::Load(std::string path, std::string fileName)
                     sensorsList.push_back(newSensor);//Lo guardamos todo en la lista
                     LOG("!!!!!!!!!Datos Sensor, ID: %d, X: %d, Y: %d!!!!!!!!!", currentId, pasarx, pasary);
                     LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
+                    rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
                     break;
                 case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
                     break;
                 case 3: // Sensor cambio de escena
@@ -460,17 +460,11 @@ int Map::GetSensorId(float px, float py) const {//Pilar la id del sensor con la 
 std::string Map::ValorPorId(int id) {
    LOG("!!!!!!!!!!!!Entro en ValorPorId!!!!!!!!!!!");
    sensorValue.clear();
-   /* for (auto& mapLayer : mapData.layers) {
-        if (mapLayer->name == "Sensores") {
-            return mapLayer->properties.GetPropertyWID(id).c_str();
-        }
-    }
-    return ""; // Si no encuentra la capa
-    */
-    
+  
+    //Conseguir ruta bien hecha
   for (auto& layer : this->mapData.layers) {//recorre las capas del mapa
+      LOG("Layer: %s", layer);
         if (layer->name == "Sensores") {//busca la capa llamada sensores
-            // 3. Llamar a tu función
             std::string sensorValue = layer->properties.GetPropertyWID(id);//Busca el valor de sensor con la id
 
             if (!sensorValue.empty()) {
@@ -479,18 +473,10 @@ std::string Map::ValorPorId(int id) {
             }
             break;
         }
+        LOG("No se encontró La capa Sensores");
     }
 
     LOG("No se encontró sensor con ID %d", id);
     return "";
-   /* for (const auto& mapLayer : mapData.layers) {
-        if (mapLayer->properties.GetProperty("Sensor") != NULL) {
-            sensorValue = mapLayer->properties.GetProperty("Sensor")->sensor;
-            LOG("!!!!!!!!!!!!Valor sensor: %d!!!!!!!!!!!", sensorValue);
-            return sensorValue;
-        }
-    }
-
-    LOG("No se encontró sensor con ID %d", id);
-    return "";*/
+  
 }
