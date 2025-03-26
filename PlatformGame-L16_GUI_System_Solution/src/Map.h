@@ -37,20 +37,6 @@ struct Properties
     // Method to ask for the value of a custom property
     Property* GetProperty(const char* name);
 
-    std::string GetPropertyWID(int id);//sacar valor por id
-
-
-};
-
-
-struct SensorScene {
-    int id;
-    float x, y;
-};
-
-struct SensorDialogos {
-    int id;
-    float x, y;
 };
 
 struct MapLayer
@@ -153,18 +139,12 @@ public:
         return mapData.tileHeight;
     }
 
-    int GetSensorId(float x, float y) const;//sacar la id del sensor
-    std::string ValorPorId(int id);//sacar el string con la id del sensor
-
     MapLayer* GetNavigationLayer();
     Vector2D WorldToMap(int x, int y);
     Vector2D MapToWorld(int x, int y) const;
 
 public: 
     std::string mapFileName, valor, mapPath;
-    int currentId, pasarx, pasary, dpasarx, dpasary, id;
-    std::vector<SensorScene> sensorsList; //lista de sensores para cambio de escena
-    std::vector<SensorDialogos> dsensorsList; //lista de sensores para dialogos
 
 private:
     bool mapLoaded;
@@ -172,5 +152,4 @@ private:
     MapData mapData;
     std::vector<PhysBody*> colliders;
     std::string sensorValue;
-    int nextSensorId; // Contador para IDs únicos
 };

@@ -145,12 +145,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		esc.clear();
 		LOG("!!!!TOCO EL SENSOR!!!!");
 		LOG("SendorID: %s",physB->sensorID.c_str());
-
-		valorid = SacarId();
-		LOG("!!!!valorid en collider sensor despues SacarId: %d!!!!", valorid);
-		LOG("!!!!esc antes de llamar funcion: %d!!!!", esc);
-		esc = SacarValor(valorid);; // Acceder al valor de tipo string
-		LOG("!!!!!!!!!!debajo del esc: %s!!!!!!!!!!!!!", esc.c_str());
+		esc = physB->sensorID.c_str();
 		if (esc == "S1S2") {
 			Engine::GetInstance().sceneLoader->LoadScene(2);
 		}else if (esc == "S2S1") {
@@ -158,6 +153,24 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		}
 
 
+		break; 
+	case ColliderType::DIALOGOS:
+		LOG("SendorID: %d", physB->ID);
+		valorid = physB->ID;
+		switch (valorid) {//Mirar el dialog manager para ver donde montar mejor, seguramente ahi se monte mejor, aqui solo hacer llamada a eso pansandole el physB->ID 
+		case 01: // Dialogo
+
+			break;
+		case 02: // Dialogo
+
+			break;
+		case 03: // Dialogo
+			
+			break;
+		default:
+			
+			break;
+		}
 		break;
 	case ColliderType::UNKNOWN:
 		break;
@@ -189,25 +202,4 @@ Vector2D Player::GetPosition() {
 	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
 	LOG("Posición Player: x=%.2f, y=%.2f", pos.getX(), pos.getY());
 	return pos;
-}
-
-
-int Player :: SacarId() {
-	LOG("!!!!Entro en SacarID!!!!");
-	Vector2D posicion = GetPosition();//sacar posicion del player
-	LOG("!!!!Saco posicion player X en SacarID, x=%.2f !!!!", posicion.getX());
-	LOG("!!!!Saco posicion player Y en SacarID, y=%.2f !!!!", posicion.getY());
-	sensorId = Engine::GetInstance().map->GetSensorId(posicion.getX(), posicion.getY());// ver ID del sensor que toca el player	
-	LOG("!!!!Id del sensor con la posicion del player: %d!!!!", sensorId);
-	return sensorId;
-}
-
-std::string Player:: SacarValor(int ids) {
-
-	LOG("!!!!Id del sensor con la posicion del player desde SacarValor: %d!!!!", ids);
-	//std::string valor = Engine::GetInstance().map->ValorPorId(ids);//Buscar el valor usando la id
-	std::string valor = "S1S2";
-	LOG("!!!!Valor de la propiedad del sensor: %s!!!!", valor.c_str());
-	return valor;
-	
 }

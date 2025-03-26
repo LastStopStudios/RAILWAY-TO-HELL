@@ -52,6 +52,7 @@ public:
 public:
 	int width = 0;
 	int height = 0;
+	int ID;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
