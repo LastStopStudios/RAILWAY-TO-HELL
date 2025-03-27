@@ -107,15 +107,15 @@ bool Player::Update(float dt)
 	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentScene();
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1)
 	{
-		Engine::GetInstance().sceneLoader->LoadScene(1);
+		//Engine::GetInstance().sceneLoader->LoadScene(1);
 	}
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2)
 	{
-		Engine::GetInstance().sceneLoader->LoadScene(2);
+		//Engine::GetInstance().sceneLoader->LoadScene(2);
 	}
 
 	if (needSceneChange) {//cambio de escena
-		Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad);//pasarle la nueva escena al sceneLoader
+		Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery);//pasarle la nueva escena al sceneLoader
 		needSceneChange = false;
 	}
 
@@ -152,7 +152,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		needSceneChange = true;
 		for (const auto& escena : escenas) {//recorrer todas las escenas
 			if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
-				sceneToLoad = escena.id;  // Devuelve el ID para cargar ese mapa
+				sceneToLoad = escena.id;
+				Playerx = escena.x;
+				Playery = escena.y;// Devuelve el ID para cargar ese mapa
+				
 			}
 		}
 			

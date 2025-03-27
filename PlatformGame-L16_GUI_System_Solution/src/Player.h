@@ -39,21 +39,24 @@ public:
 	struct EscenaQueCargar {
 		std::string escena;
 		int id;
+		int x;
+		int y;
 	};
 
 	std::vector<EscenaQueCargar> escenas = {//lista de escenas con su id
-	{"S1S2", 2},
-	{"S2S3", 3},
-	{"S3S1", 1},
-	{"S1S3", 3},
-	{"S3S2", 2},
-	{"S2S1", 1}
+	{"S1S2", 2, 20, 30},
+	{"S2S3", 3, 40, 8},
+	{"S3S1", 1, 20, 40},
+	{"S1S3", 3, 30, 45},
+	{"S3S2", 2, 30, 20},
+	{"S2S1", 1, 60, 30}
 	};
 	
 
 public:
 	bool needSceneChange = false;
 	int sceneToLoad = -1;
+	int Playerx, Playery;
 	//Declare player parameters
 	float speed = 5.0f;
 	SDL_Texture* texture = NULL;

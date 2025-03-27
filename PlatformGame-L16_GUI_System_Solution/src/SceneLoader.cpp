@@ -19,7 +19,7 @@ SceneLoader::SceneLoader() {
 
 SceneLoader::~SceneLoader() {}
 
-void SceneLoader::LoadScene(int level) {
+void SceneLoader::LoadScene(int level, int x, int y) {
 
     
     FadeIn(1.0f);   // Animation speed (FadeIn)
@@ -50,11 +50,16 @@ void SceneLoader::LoadScene(int level) {
             mapNode.attribute("name").as_string());
     }
 
-    pugi::xml_node playerNode = sceneNode.child("entities").child("player");
+   /* pugi::xml_node playerNode = sceneNode.child("entities").child("player");
     if (playerNode) {
         Engine::GetInstance().scene->GetPlayer()->SetPosition(
             Vector2D(playerNode.attribute("x").as_int(),
                 playerNode.attribute("y").as_int()));
+    }*/
+    pugi::xml_node playerNode = sceneNode.child("entities").child("player");
+    if (playerNode) {
+        Engine::GetInstance().scene->GetPlayer()->SetPosition(
+            Vector2D(x,y));
     }
     LoadEnemiesItems(sceneNode);
 
