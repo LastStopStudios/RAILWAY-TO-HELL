@@ -11,15 +11,13 @@ class PhysBody;
 class Textures;
 class SceneLoader; // Forward declaration
 
-// Add attributes to the property structure
+// L09: TODO 5: Add attributes to the property structure
 struct Properties
 {
     struct Property
     {
         std::string name;
         bool value; //We assume that we are going to work only with bool for the moment
-        std::string sensor;
-        int id, dialogo;
     };
 
     std::list<Property*> propertyList;
@@ -34,7 +32,7 @@ struct Properties
         propertyList.clear();
     }
 
-    // Method to ask for the value of a custom property
+    // L09: DONE 7: Method to ask for the value of a custom property
     Property* GetProperty(const char* name);
 
 };
@@ -140,16 +138,17 @@ public:
     }
 
     MapLayer* GetNavigationLayer();
+
     Vector2D WorldToMap(int x, int y);
     Vector2D MapToWorld(int x, int y) const;
 
 public: 
-    std::string mapFileName, valor, mapPath;
+    std::string mapFileName;
+    std::string mapPath;
 
 private:
     bool mapLoaded;
-    //Declare a variable data of the struct MapData
+    // L06: DONE 1: Declare a variable data of the struct MapData
     MapData mapData;
     std::vector<PhysBody*> colliders;
-    std::string sensorValue;
 };

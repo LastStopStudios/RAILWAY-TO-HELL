@@ -6,8 +6,6 @@
 #include "Log.h"
 #include "Physics.h"
 #include <math.h>
-#include <unordered_map>
-#include <string>
 #include "SceneLoader.h"
 
 Map::Map() : Module(), mapLoaded(false)
@@ -38,31 +36,17 @@ bool Map::Update(float dt)
     bool ret = true;
 
     if (mapLoaded) {
-        // iterate all tiles in a layer
+
         for (const auto& mapLayer : mapData.layers) {
             //Check if the property Draw exist get the value, if it's true draw the lawyer
             if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
-
-                Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
-                if (camPos.getX() < 0) camPos.setX(0);
-                if (camPos.getY() < 0) camPos.setY(0);
-                Vector2D camPosTile = WorldToMap(camPos.getX(), camPos.getY());
-
-                Vector2D camSize = Vector2D(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
-                Vector2D camSizeTile = WorldToMap(camSize.getX(), camSize.getY());
-
-                Vector2D limits = Vector2D(camPosTile.getX() + camSizeTile.getX(), camPosTile.getY() + camSizeTile.getY());
-                if (limits.getX() > mapData.width) limits.setX(mapData.width);
-                if (limits.getY() > mapData.height) limits.setY(mapData.height);
-
-                for (int i = camPosTile.getX(); i < limits.getX(); i++) {
-                    for (int j = camPosTile.getY(); j < limits.getY(); j++) {
-
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
                         //Get the gid from tile
                         int gid = mapLayer->Get(i, j);
                         //Check if the gid is different from 0 - some tiles are empty
                         if (gid != 0) {
-                            //Obtain the tile set using GetTilesetFromTileId
+
                             TileSet* tileSet = GetTilesetFromTileId(gid);
                             if (tileSet != nullptr) {
                                 //Get the Rect from the tileSetTexture;
@@ -102,10 +86,6 @@ bool Map::CleanUp()
 {
     LOG("Unloading map");
 
-    valor.clear();
-
-    sensorValue.clear();
-
     for (PhysBody* colliders : colliders) {
         Engine::GetInstance().physics.get()->DeletePhysBody(colliders);
     }
@@ -122,8 +102,6 @@ bool Map::CleanUp()
     }
     mapData.layers.clear();
 
-  
-
     return true;
 }
 
@@ -136,6 +114,7 @@ bool Map::Load(std::string path, std::string fileName)
     mapFileName = fileName;
     mapPath = path;
     std::string mapPathName = mapPath + mapFileName;
+
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapPathName.c_str());
 
@@ -181,7 +160,7 @@ bool Map::Load(std::string path, std::string fileName)
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
-            //Call Load Layer Properties
+            //L09: TODO 6 Call Load Layer Properties
             LoadProperties(layerNode, mapLayer->properties);
 
             //Iterate over all the tiles and assign the values in the data array
@@ -193,71 +172,57 @@ bool Map::Load(std::string path, std::string fileName)
             mapData.layers.push_back(mapLayer);
         }
 
-        // Define un mapa para convertir nombres de capas en enteros
-        std::unordered_map<std::string, int> layerNameToId = {
-            {"Sensores", 1},
-            {"Colisiones", 2},
-            {"Dialogos", 3}
-        };
-               
         float x = 0.0f;
         float y = 0.0f;
         float width = 0.0f;
         float height = 0.0f;
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup"); layerNode != NULL; layerNode = layerNode.next_sibling("objectgroup")) {
 
-            // Get the name of the object group (PLATFORM, CHECKPOINT, etc.)
+            // Get the name of the object group (PLATFORM, SPIKE, CHECKPOINT, etc.)
             std::string layerName = layerNode.attribute("name").as_string();
 
             for (pugi::xml_node tileNode = layerNode.child("object"); tileNode != NULL; tileNode = tileNode.next_sibling("object")) {
+
                 // Assign the correct values from the XML
                 x = tileNode.attribute("x").as_float();
                 y = tileNode.attribute("y").as_float();
                 width = tileNode.attribute("width").as_float();
                 height = tileNode.attribute("height").as_float();
 
-                PhysBody* rect = nullptr;
-                auto it = layerNameToId.find(layerName);
-                int layerId = (it != layerNameToId.end()) ? it->second : 0; // Valor por defecto: 0 para plataformas
-                MapLayer* mapLayer = new MapLayer();
+                ColliderType colliderType = ColliderType::PLATFORM; // Valor por defecto
 
-                switch (layerId) {
-                case 1: // Sensor cambio de escena
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::SENSOR;
-                    LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
-                   // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
-                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-                    {
-                        if (propertieNode.attribute("name") = "Sensor") {
-                            rect->sensorID = propertieNode.attribute("value").as_string();
-                        }
-                    }
-                    break;
-                case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
-                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
-                    break;
-                case 3: // Sensor cambio de escena
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
-                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-                    {
-                        if (propertieNode.attribute("name") = "Dialogo") {
-                            rect->ID = propertieNode.attribute("value").as_int();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->ID);
-                        }
-                    }
-                    break;
-                default: // Plataformas
-                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::PLATFORM;
-                    break;
+                // Assign the collision type based on the layer name
+                /*if (layerName == "spike") {
+                    colliderType = ColliderType::SPIKE;
                 }
-                //Call Load Layer Properties
+                else if (layerName == "ceiling") {
+                    colliderType = ColliderType::CEILING;
+                }
+                else if (layerName == "Checkpoints") {
+                    colliderType = ColliderType::CHECKPOINT;
+                }
+                else if (layerName == "SensorFinal") {
+                    colliderType = ColliderType::LVL1;
+                }*/
+
+                PhysBody* rect = nullptr;
+
+                /*if (colliderType == ColliderType::CHECKPOINT) {
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                }
+                else if (colliderType == ColliderType::LVL1) {
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                }*/
                 
-                    // Añade el collider a la lista
+                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
+
+                    rect->ctype = colliderType;
+
+                    // A?ade el collider a la lista
                     colliders.push_back(rect);
+                
+
+                rect->ctype = colliderType;
             }
         }
         //Iterate the layer and create colliders
@@ -278,7 +243,7 @@ bool Map::Load(std::string path, std::string fileName)
 
         ret = true;
 
-        // LOG all the data loaded iterate all tilesetsand LOG everything
+        // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
         if (ret == true)
         {
             LOG("Successfully parsed map XML file :%s", fileName.c_str());
@@ -313,19 +278,17 @@ bool Map::Load(std::string path, std::string fileName)
     return ret;
 }
 
-// Load a group of properties from a node and fill a list with it
+// L09: TODO 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
-   
     bool ret = false;
+
     for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
     {
-       
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
-        
         p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
-     
+
         properties.propertyList.push_back(p);
     }
 
@@ -365,16 +328,17 @@ MapLayer* Map::GetNavigationLayer() {
 	return nullptr;
 }
 
-// Implement a method to get the value of a custom property
+// L09: TODO 7: Implement a method to get the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {
         if (property->name == name) {
-           
 			return property;
-            
 		}
     }
 
     return nullptr;
 }
+
+
+

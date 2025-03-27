@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="64" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="9">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -3142,18 +3142,6 @@
    <tile gid="49"/>
   </data>
  </layer>
- <objectgroup id="10" name="Sensores">
-  <object id="10" x="1906.82" y="638.24" width="77.0631" height="59.2793">
-   <properties>
-    <property name="Sensor" value="S2S3"/>
-   </properties>
-  </object>
-  <object id="11" x="65.2068" y="644.168" width="77.0631" height="53.3513">
-   <properties>
-    <property name="Sensor" value="S2S1"/>
-   </properties>
-  </object>
- </objectgroup>
  <objectgroup id="8" name="Colisiones">
   <object id="8" x="446.667" y="544" width="62.6667" height="158.667"/>
  </objectgroup>

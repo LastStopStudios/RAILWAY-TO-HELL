@@ -33,11 +33,11 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//Instantiate the player using the entity manager
+	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("entities").child("player"));
 	
-	//Create a new item using the entity manager and set the position to (200, 672) to test
+	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
 	for(pugi::xml_node itemNode = configParameters.child("entities").child("items").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
@@ -61,7 +61,7 @@ bool Scene::Awake()
 		
 	}
 
-	// Instantiate a new GuiControlButton in the Scene
+	// L16: TODO 2: Instantiate a new GuiControlButton in the Scene
 	SDL_Rect btPos = { 520, 350, 120,20 };
 	guiBt = (GuiControlButton*) Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
 
@@ -72,7 +72,7 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 
-	//Call the function to load the map. 
+	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
 	// Texture to highligh mouse position 

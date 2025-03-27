@@ -23,7 +23,7 @@ enum bodyType {
 	KINEMATIC
 };
 
-enum class ColliderType {//a�adir aqui los colliders que tengan que triggear algo con algo
+enum class ColliderType {
 	PLAYER, 
 	ITEM,
 	PLATFORM, 
@@ -31,9 +31,6 @@ enum class ColliderType {//a�adir aqui los colliders que tengan que triggear a
 	VOLADOR,
 	ENEMY,
 	PLAYER_ATTACK,
-	SENSOR,
-	COLISION,
-	DIALOGOS,
 	UNKNOWN
 	// ..
 };
@@ -55,11 +52,9 @@ public:
 public:
 	int width = 0;
 	int height = 0;
-	int ID;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
-	std::string sensorID;
 };
 
 // Module --------------------------------------
