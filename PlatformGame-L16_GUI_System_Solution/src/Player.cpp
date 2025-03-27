@@ -154,7 +154,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
 				sceneToLoad = escena.id;
 				Playerx = escena.x;
-				Playery = escena.y;// Devuelve el ID para cargar ese mapa
+				Playery = escena.y;// Devuelve el ID para cargar ese mapaa
 				
 			}
 		}
