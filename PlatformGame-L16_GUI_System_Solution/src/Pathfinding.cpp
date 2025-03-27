@@ -263,7 +263,7 @@ void Pathfinding::PropagateDijkstra() {
 
 void Pathfinding::PropagateAStar(ASTAR_HEURISTICS heuristic) {
 
-    // L13: TODO 2: Adapt Dijkstra algorithm for AStar. Consider the different heuristics
+    // Adapt Dijkstra algorithm for AStar. Consider the different heuristics
 
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D playerPosTile = Engine::GetInstance().map.get()->WorldToMap((int)playerPos.getX(), (int)playerPos.getY());

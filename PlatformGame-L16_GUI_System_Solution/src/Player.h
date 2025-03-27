@@ -44,12 +44,12 @@ public:
 	};
 
 	std::vector<EscenaQueCargar> escenas = {//lista de escenas con su id
-	{"S1S2", 2, 20, 30},
-	{"S2S3", 3, 40, 8},
-	{"S3S1", 1, 20, 40},
-	{"S1S3", 3, 30, 45},
-	{"S3S2", 2, 30, 20},
-	{"S2S1", 1, 60, 30}
+	{"S1S2", 2, 219, 654},
+	{"S2S3", 3, 173, 648},
+	{"S3S1", 1, 351, 409},
+	{"S1S3", 3, 760, 628},
+	{"S3S2", 2, 1817, 640},
+	{"S2S1", 1, 1800, 642}
 	};
 	
 
@@ -66,7 +66,7 @@ public:
 	int pickCoinFxId, sensorId = 0;
 	int valorid;
 
-	// L08 TODO 5: Add physics to the player - declare a Physics body
+	// Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 	float jumpForce = 2.5f; // The force to apply when jumping
 	bool isJumping = false; // Flag to check if the player is currently jumping
