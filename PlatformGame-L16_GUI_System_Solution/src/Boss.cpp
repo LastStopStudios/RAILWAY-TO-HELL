@@ -43,9 +43,9 @@ bool Boss::Start() {
     currentAnimation = &idle;
 
     //initialize enemy parameters 
-    moveSpeed = 30.0f; // new
-    patrolSpeed = 30.0f; // new
-    savedPosX = 0.0f; // new
+    moveSpeed = 30.0f; 
+    patrolSpeed = 30.0f;
+    savedPosX = 0.0f;
 
     //Add a physics to an item - initialize the physics body
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
@@ -53,6 +53,9 @@ bool Boss::Start() {
     pbody->listener = this;
     //Assign collider type
     pbody->ctype = ColliderType::BOSS;
+
+    pbody->body->SetFixedRotation(false);
+    pbody->body->SetGravityScale(1.0f);
 
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(2.0f);
@@ -79,14 +82,9 @@ bool Boss::Update(float dt)
     float distanceToPlayer = abs(dx);
 
     // Limit movement towards the player only if within X tiles
-    float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player
+    float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player 
 
-    pbody->body->SetFixedRotation(false);  // Do not restrict the body's rotation
-    pbody->body->SetGravityScale(1.0f);  // Adjust gravity so it doesn't excessively affect the jump
-
-    if (!canAttack) {
-        printf("%f\n", &currentAttackCooldown);
-        
+	if (!canAttack) { // update the attack cooldown
         currentAttackCooldown -= dt;
         if (currentAttackCooldown <= 0) {
             canAttack = true;
@@ -95,26 +93,26 @@ bool Boss::Update(float dt)
     }
 
 
-    if (distanceToPlayer <= attackDistance) {
+	if ((isLookingLeft && dx <= -attackDistance) || (!isLookingLeft && dx >= attackDistance)) { // stop the enemy when it is close to the player
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
     }
 
-    isLookingLeft = dx < 0;
+	isLookingLeft = dx < 0; // Set the direction of the enemy
 
     
 
-    if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
+	if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) { // start attacking
         isAttacking = true;
         canAttack = false;
         currentAttackCooldown = attackCooldown;
         currentAnimation = &attack;
         currentAnimation->Reset();
 
-        if (area == nullptr) {
+		if (area == nullptr) { // create the attack area
             area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-                (int)position.getX() + (isLookingLeft ? -10 : 50),
+                (int)position.getX() + (isLookingLeft ? -10 : 60),
                 (int)position.getY() + texH / 2,
-                40,
+                70, //modify according to the length of the whip
                 40,
                 bodyType::KINEMATIC
             );
@@ -125,11 +123,13 @@ bool Boss::Update(float dt)
     if (isAttacking) {
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 
-        if (attack.HasFinished()) {
+		if (attack.HasFinished()) { // stop attacking
             isAttacking = false;
             currentAnimation = &running;
+			attack.Reset();
 
-            if (area != nullptr) {
+
+			if (area != nullptr) { // delete the attack area
                 Engine::GetInstance().physics.get()->DeletePhysBody(area);
                 area = nullptr;
             }
@@ -137,14 +137,14 @@ bool Boss::Update(float dt)
     }
 
     if (!isAttacking) {
-        if (distanceToPlayer <= patrolDistance) {
-            if (!resting) {
+		if (distanceToPlayer <= patrolDistance) { // if player is within patrol distance
+			if (!resting) { // start chasing player
                 resting = true;
                 currentAnimation = &running;
                 running.Reset();
             }
 
-            if (currentAnimation == &running) {
+            if (currentAnimation == &running) { // pathfinding logic
                 int maxIterations = 100;
                 int iterations = 0;
 
@@ -176,7 +176,7 @@ bool Boss::Update(float dt)
                 }
             }
         }
-        else {
+		else { // idle (not chasing player)
             if (resting) {
                 resting = false;
                 currentAnimation = &idle;
@@ -187,10 +187,13 @@ bool Boss::Update(float dt)
         }
     }
     
+    SDL_Rect frame = currentAnimation->GetCurrentFrame();
+	int offsetX = 0; // used to adjust the position of the sprite
 
     // change sprite direction
     if (isLookingLeft) {
         flip = SDL_FLIP_HORIZONTAL;
+        offsetX = (frame.w - texW); //96-48 
     }
     else {
         flip = SDL_FLIP_NONE;
@@ -200,7 +203,8 @@ bool Boss::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     currentAnimation->Update();
 
     // pathfinding drawing
