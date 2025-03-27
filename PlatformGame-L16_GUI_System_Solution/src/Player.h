@@ -65,7 +65,7 @@ private:
 	SDL_Texture* attackTexture = nullptr;  // Attack visual
 	bool facingRight = true;     // Direction facing (true=right)
 
-	// Add these to the private section of the Player class
+	// Whip attack properties
 	Animation whipAttack;
 	PhysBody* whipAttackHitbox = nullptr;
 	bool isWhipAttacking = false;
@@ -73,10 +73,11 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
+	// Dash properties
 	bool isDashing = false;
 	float dashSpeed = 0.6f;
 	float dashCooldownTimer = 0.0f;
-	float dashCooldownDuration = 1000.0f; // 1000 second cooldown
-	bool canDash = true;	
-
+	float dashCooldownDuration = 1.0f; // 1 second cooldown
+	bool canDash = true;
+	float dashDuration = 0.2f; // Duration of the dash
 };

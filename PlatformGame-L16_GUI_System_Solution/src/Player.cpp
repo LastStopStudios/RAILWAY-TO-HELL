@@ -84,12 +84,31 @@ bool Player::Update(float dt)
         velocity = b2Vec2(0, 0);
     }
 
-    // Call new extracted methods
-    HandleMovement(velocity);
-    HandleDash(velocity, dt); 
-    HandleJump();
-    HandleSceneSwitching();
-    
+    // Mutually exclusive action handling
+    if (!isAttacking && !isWhipAttacking && !isDashing) {
+        HandleMovement(velocity);
+        HandleJump();
+    }
+
+    // Handle dash only when not attacking or jumping
+    if (!isAttacking && !isWhipAttacking && !isJumping) {
+        HandleDash(velocity, dt);
+    }
+
+    // Handle attacks only when not dashing
+    if (!isDashing) {
+        UpdateWhipAttack(dt);
+        UpdateMeleeAttack(dt);
+    }
+
+    // If dashing, preserve the dash velocity
+    if (isDashing) {
+        dashDuration -= dt;
+        if (dashDuration <= 0) {
+            isDashing = false;
+        }
+    }
+
     // If jumping, preserve the vertical velocity
     if (isJumping) {
         velocity.y = pbody->body->GetLinearVelocity().y;
@@ -103,9 +122,8 @@ bool Player::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    UpdateWhipAttack(dt);
-    UpdateMeleeAttack(dt);
     DrawPlayer();
+    HandleSceneSwitching();
 
     return true;
 }
@@ -133,7 +151,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
 }
 
 void Player::HandleDash(b2Vec2& velocity, float dt) {
-    // Logic of dash cooldown
+    // Dash cooldown logic
     if (!canDash) {
         dashCooldownTimer -= dt;
         if (dashCooldownTimer <= 0) {
@@ -141,19 +159,24 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
-    // Dash with strict cooldown, it only works if the player is already pressing a movement key (D or A).
+    // Dash input with strict conditions
     bool isDashKeyPressed =
         (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
             Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
         Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
 
     if (isDashKeyPressed && canDash) {
+        isDashing = true;
+        dashDuration = 0.2f;  // Fixed dash duration
+
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = dashSpeed * 100; // Extra speed to the right.
+            velocity.x = dashSpeed * 100;  // Dash right
+            facingRight = true;
         }
 
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -dashSpeed * 100; // Extra speed to the left.
+            velocity.x = -dashSpeed * 100;  // Dash left
+            facingRight = false;
         }
 
         // Start the cooldown
@@ -182,7 +205,7 @@ void Player::HandleSceneSwitching() {
 }
 
 void Player::UpdateWhipAttack(float dt) {
-    // Whip attack cooldown timer
+    // Whip attack cooldown logic
     if (!canWhipAttack) {
         whipAttackCooldown -= dt;
         if (whipAttackCooldown <= 0.0f) {
@@ -191,63 +214,56 @@ void Player::UpdateWhipAttack(float dt) {
         }
     }
 
-    // Initiate whip attack when the G key is pressed, if the player is not already attacking and cooldown has expired
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && !isWhipAttacking && canWhipAttack) {
-        // Set attack state flags
+    // Initiate whip attack only when not dashing, melee attacking, or already whip attacking
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
+        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack) {
+        // Existing whip attack initialization code remains the same
         isWhipAttacking = true;
         canWhipAttack = false;
-        whipAttackCooldown = 0.7f;  // Slightly longer cooldown for whip attack
+        whipAttackCooldown = 0.7f;
 
-        // Initialize a new whip attack animation
+        // Reset and load whip attack animation
         whipAttack = Animation();
-        whipAttack.speed = 0.15f;  // Animation playback speed
-        whipAttack.loop = false;   // Animation should not loop
-
-        // Load whip attack animation frames from XML
+        whipAttack.speed = 0.15f;
+        whipAttack.loop = false;
         whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
 
-        int attackWidth = texW * 2;  // Whip attack hitbox width (2.5 times the player's width)
-        int attackHeight = texH / 2;   // Whip attack height (half the player's height)
-
-        // Get the player's center position from the physics body
+        // Create whip attack hitbox (existing code)
+        int attackWidth = texW * 2;
+        int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbody->body->GetPosition();
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
-        // Calculate the hitbox position based on facing direction
+        // Calculate attack position based on facing direction
         int attackX = facingRight ? centerX + texW : centerX - texW - attackWidth;
 
-        // Remove any existing attack hitbox before creating a new one
+        // Remove existing whip attack hitbox
         if (whipAttackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
             whipAttackHitbox = nullptr;
         }
 
-        // Create a new physics hitbox for the whip attack
+        // Create new whip attack hitbox
         whipAttackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
-        whipAttackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
+        whipAttackHitbox->ctype = ColliderType::PLAYER_ATTACK;
         whipAttackHitbox->listener = this;
     }
 
-    // Handle ongoing whip attack state
+    // Existing whip attack state management code remains the same
     if (isWhipAttacking) {
-        // Update the whip attack animation
         whipAttack.Update();
 
-        // Update the position of the attack hitbox to follow the player
         if (whipAttackHitbox) {
-            // Position the hitbox in front of the player based on facing direction
             int attackX = facingRight ? position.getX() + 30 : position.getX();
-            int attackY = position.getY() + texH / 4;  // Slightly lower than player's center
+            int attackY = position.getY() + texH / 4;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
-        // End the attack when the animation finishes playing
         if (whipAttack.HasFinished()) {
             isWhipAttacking = false;
 
-            // Clean up the attack hitbox
             if (whipAttackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
                 whipAttackHitbox = nullptr;
@@ -257,7 +273,7 @@ void Player::UpdateWhipAttack(float dt) {
 }
 
 void Player::UpdateMeleeAttack(float dt) {
-    // Update attack cooldown timer if the player is currently unable to attack
+    // Attack cooldown logic
     if (!canAttack) {
         attackCooldown -= dt;
         if (attackCooldown <= 0.0f) {
@@ -266,63 +282,56 @@ void Player::UpdateMeleeAttack(float dt) {
         }
     }
 
-    // Initiate attack when the H key is pressed, if the player is not already attacking and cooldown has expired
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN && !isAttacking && canAttack) {
-        // Set attack state flags
+    // Initiate melee attack only when not dashing, whip attacking, or already attacking
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
+        !isAttacking && !isWhipAttacking && !isDashing && canAttack) {
+        // Existing melee attack initialization code remains the same
         isAttacking = true;
         canAttack = false;
-        attackCooldown = 0.5f;  // Set cooldown duration (0.5 seconds)
+        attackCooldown = 0.5f;  // Set cooldown duration
 
-        // Initialize a new attack animation
+        // Reset and load attack animation
         meleeAttack = Animation();
-        meleeAttack.speed = 0.15f;  // Animation playback speed
-        meleeAttack.loop = false;   // Animation should not loop
-
-        // Load attack animation frames from XML
+        meleeAttack.speed = 0.15f;
+        meleeAttack.loop = false;
         meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
 
-        int attackWidth = texW * 1.1;  // Attack hitbox width (1.1 times the player's width)
-        int attackHeight = texH;       // Attack height (same as the player's height)
-
-        // Get the player's center position from the physics body
+        // Create attack hitbox (existing code)
+        int attackWidth = texW * 1.1;
+        int attackHeight = texH;
         b2Vec2 playerCenter = pbody->body->GetPosition();
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
-        // Calculate the hitbox position based on facing direction
+        // Calculate attack position based on facing direction
         int attackX = facingRight ? centerX + texW / 4 : centerX - texW / 4 - attackWidth / 2;
 
-        // Remove any existing attack hitbox before creating a new one
+        // Remove existing attack hitbox
         if (attackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
             attackHitbox = nullptr;
         }
 
-        // Create a new physics hitbox for the attack
+        // Create new attack hitbox
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             attackX, attackHeight, attackWidth, attackHeight, bodyType::DYNAMIC);
-        attackHitbox->ctype = ColliderType::PLAYER_ATTACK;  // Set collision type
+        attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
         attackHitbox->listener = this;
     }
 
-    // Handle ongoing attack state
+    // Existing attack state management code remains the same
     if (isAttacking) {
-        // Update the attack animation
         meleeAttack.Update();
 
-        // Update the position of the attack hitbox to follow the player
         if (attackHitbox) {
-            // Position the hitbox in front of the player based on facing direction
             int attackX = facingRight ? position.getX() + 30 : position.getX();
-            int attackY = position.getY() + texH / 2;  // Use the player's vertical center
+            int attackY = position.getY() + texH / 2;
             attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
-        // End the attack when the animation finishes playing
         if (meleeAttack.HasFinished()) {
             isAttacking = false;
 
-            // Clean up the attack hitbox
             if (attackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
                 attackHitbox = nullptr;

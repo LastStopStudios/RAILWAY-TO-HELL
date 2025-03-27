@@ -180,8 +180,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) { 
     case ColliderType::PLAYER: 
-
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK:
         LOG("Enemy hit by player attack - DESTROY");
