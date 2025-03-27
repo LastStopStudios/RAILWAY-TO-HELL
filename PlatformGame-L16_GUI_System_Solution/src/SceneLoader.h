@@ -22,16 +22,18 @@ class SceneLoader
 public:
 	SceneLoader();
 	~SceneLoader();
-	void LoadScene(int level); // Aqui dentro se tendría que hacer tanto el Load de la siguiente escena como previamente el Unload
+	void LoadScene(int level, int x, int y); // Aqui dentro se tendrï¿½a que hacer tanto el Load de la siguiente escena como previamente el Unload
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
 
 	int currentScene;
 	std::vector<Item*> itemsList; 
+	std::vector<Enemy*> enemysList;
+
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
-	void FadeOut(float speed); // Aparición del negro
+	void FadeOut(float speed); // Apariciï¿½n del negro
 	void FadeIn(float speed);// Desvanecimiento del negro
 };
 

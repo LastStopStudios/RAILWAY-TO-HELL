@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
 #include "Animation.h"
+#include <vector>
 
 struct SDL_Texture;
 
@@ -47,6 +48,37 @@ public:
 	// Audio fx
 	int pickCoinFxId;
 
+	struct EscenaQueCargar {
+		std::string escena;
+		int id;
+		int x;
+		int y;
+	};
+
+	std::vector<EscenaQueCargar> escenas = {//lista de escenas con su id
+	{"S1S2", 2, 219, 654},
+	{"S2S3", 3, 173, 648},
+	{"S3S1", 1, 351, 409},
+	{"S1S3", 3, 760, 628},
+	{"S3S2", 2, 1817, 640},
+	{"S2S1", 1, 1800, 642}
+	};
+	
+
+public:
+	bool needSceneChange = false;
+	int sceneToLoad = -1;
+	int Playerx, Playery;
+	//Declare player parameters
+	float speed = 5.0f;
+	SDL_Texture* texture = NULL;
+	int texW, texH;
+	std::string esc;
+	//Audio fx
+	int pickCoinFxId, sensorId = 0;
+	int valorid;
+
+	// Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 	float jumpForce = 2.5f; // The force to apply when jumping
 	bool isJumping = false; // Flag to check if the player is currently jumping
