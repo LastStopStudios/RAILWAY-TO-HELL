@@ -25,6 +25,10 @@ public:
 		this->parameters = parameters;
 	}
 
+	void SetItemType(const std::string& type) { itemType = type; }
+
+	const std::string& GetItemType() const { return itemType; }
+
 public:
 
 	bool isPicked = false;
@@ -40,4 +44,6 @@ private:
 
 	//L08 TODO 4: Add a physics to an item
 	PhysBody* pbody;
+
+	std::string itemType;
 };

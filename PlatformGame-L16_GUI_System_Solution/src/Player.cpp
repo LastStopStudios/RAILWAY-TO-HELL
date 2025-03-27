@@ -104,6 +104,7 @@ bool Player::Update(float dt)
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     UpdateWhipAttack(dt);
+
     UpdateMeleeAttack(dt);
     DrawPlayer();
 
@@ -147,7 +148,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
             Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
         Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
 
-    if (isDashKeyPressed && canDash) {
+    if (isDashKeyPressed && canDash && Dash) {
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
             velocity.x = dashSpeed * 100; // Extra speed to the right.
         }
@@ -192,7 +193,7 @@ void Player::UpdateWhipAttack(float dt) {
     }
 
     // Initiate whip attack when the G key is pressed, if the player is not already attacking and cooldown has expired
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && !isWhipAttacking && canWhipAttack) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN && !isWhipAttacking && canWhipAttack && WhipAttack) {
         // Set attack state flags
         isWhipAttacking = true;
         canWhipAttack = false;
@@ -408,6 +409,7 @@ bool Player::CleanUp() {
     Engine::GetInstance().textures.get()->UnLoad(texture);
     Engine::GetInstance().textures.get()->UnLoad(attackTexture);
     Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
+
     return true;
 }
 
@@ -421,10 +423,26 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         isJumping = false;
         break;
-    case ColliderType::ITEM:
-        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-        Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+    case ColliderType::ITEM:{
+        Item* item = (Item*)physB->listener;
+        if (item && item->GetItemType() == "Dash ability") {
+            Dash = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+        }
+        if (item && item->GetItemType() == "Whip") {
+            WhipAttack = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+        }
+        if (item && item->GetItemType() == "Door key") {
+            canOpenDoor = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+        }
+ 
         break;
+    }
     case ColliderType::UNKNOWN:
         break;
     }

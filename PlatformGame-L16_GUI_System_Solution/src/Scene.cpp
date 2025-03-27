@@ -42,6 +42,7 @@ bool Scene::Awake()
 	{
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 		item->SetParameters(itemNode);
+		itemList.push_back(item);
 	}
 
 	// Create a enemy using the entity manager 

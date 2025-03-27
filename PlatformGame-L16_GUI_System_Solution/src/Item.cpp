@@ -11,7 +11,7 @@
 
 Item::Item() : Entity(EntityType::ITEM)
 {
-	name = "item";
+
 }
 
 Item::~Item() {}
@@ -28,6 +28,8 @@ bool Item::Start() {
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
+	itemType = parameters.attribute("name").as_string();
+
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -35,6 +37,8 @@ bool Item::Start() {
 	
 	// L08 TODO 4: Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+
+	pbody->listener = this;
 
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::ITEM;
