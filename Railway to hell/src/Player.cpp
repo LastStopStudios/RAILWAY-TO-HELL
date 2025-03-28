@@ -77,6 +77,10 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
+    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+    {
+        return true;
+    }
     // Initialize velocity vector
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 

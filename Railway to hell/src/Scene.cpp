@@ -21,6 +21,7 @@
 Scene::Scene() : Module()
 {
 	name = "scene";
+	currentState = SceneState::INTRO_SCREEN;
 }
 
 // Destructor
@@ -71,7 +72,8 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-
+	//Cargar Texturas splash screen
+	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen.png");
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
@@ -96,50 +98,66 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	switch (currentState)
+	{
+	case SceneState::INTRO_SCREEN:
+		if (introScreenTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(introScreenTexture, 0, 0);
+		}
 
-	//Make the camera movement independent of framerate
-	float camSpeed = 1;
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			currentState = SceneState::GAMEPLAY;
+		}
+		break;
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y -= ceil(camSpeed * dt);
+	case SceneState::GAMEPLAY:
+		//Make the camera movement independent of framerate
+		float camSpeed = 1;
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y += ceil(camSpeed * dt);
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+			Engine::GetInstance().render.get()->camera.y -= ceil(camSpeed * dt);
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x -= ceil(camSpeed * dt);
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+			Engine::GetInstance().render.get()->camera.y += ceil(camSpeed * dt);
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+			Engine::GetInstance().render.get()->camera.x -= ceil(camSpeed * dt);
 
-	//Implement a method that repositions the player in the map with a mouse click
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+			Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
 
-	//Get mouse position and obtain the map coordinate
-	int scale = Engine::GetInstance().window.get()->GetScale();
-	Vector2D mousePos = Engine::GetInstance().input.get()->GetMousePosition();
-	Vector2D mouseTile = Engine::GetInstance().map.get()->WorldToMap(mousePos.getX() - Engine::GetInstance().render.get()->camera.x / scale,
-																     mousePos.getY() - Engine::GetInstance().render.get()->camera.y / scale);
+		//Implement a method that repositions the player in the map with a mouse click
 
-	//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
-	Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(),mouseTile.getY());
-	SDL_Rect rect = { 0,0,32,32 };
-	Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
-													highlightTile.getX(),
-													highlightTile.getY(),
-													&rect);
+		//Get mouse position and obtain the map coordinate
+		int scale = Engine::GetInstance().window.get()->GetScale();
+		Vector2D mousePos = Engine::GetInstance().input.get()->GetMousePosition();
+		Vector2D mouseTile = Engine::GetInstance().map.get()->WorldToMap(mousePos.getX() - Engine::GetInstance().render.get()->camera.x / scale,
+			mousePos.getY() - Engine::GetInstance().render.get()->camera.y / scale);
 
-	// saves the tile pos for debugging purposes
-	if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
-		tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
-		once = true;
-	}
+		//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
+		Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(), mouseTile.getY());
+		SDL_Rect rect = { 0,0,32,32 };
+		Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
+			highlightTile.getX(),
+			highlightTile.getY(),
+			&rect);
 
-	//If mouse button is pressed modify enemy position
-	/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
+		// saves the tile pos for debugging purposes
+		if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
+			tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
+			once = true;
+		}
+
+		//If mouse button is pressed modify enemy position
+		/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
 		enemyList[0]->ResetPath();
-	}*/
+		}*/
 
+
+		break;
+	}
 	
 
 	return true;
@@ -166,7 +184,11 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
-	
+	if (introScreenTexture != nullptr)
+	{
+		Engine::GetInstance().textures->UnLoad(introScreenTexture);
+		introScreenTexture = nullptr;
+	}
 	return true;
 }
 
@@ -241,4 +263,14 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 		Engine::GetInstance().dialogoM->Texto("01"); // Llama a Texto que toque
 	}
 	return true;
+}
+
+SceneState Scene::GetCurrentState() const
+{
+	return currentState;
+}
+
+void Scene::SetCurrentState(SceneState state)
+{
+	currentState = state;
 }

@@ -47,6 +47,10 @@ bool Item::Start() {
 
 bool Item::Update(float dt)
 {
+	if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+	{
+		return true;
+	}
 	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	if (pbody == nullptr) {
 		LOG("Enemy pbody is null!");

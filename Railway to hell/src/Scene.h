@@ -9,7 +9,11 @@
 #include "Volador.h"
 
 struct SDL_Texture;
-
+enum class SceneState
+{
+	INTRO_SCREEN,
+	GAMEPLAY
+};
 class Scene : public Module
 {
 public:
@@ -64,6 +68,13 @@ public:
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 
+	//Mirar escena
+	SceneState GetCurrentState() const;
+
+	void SetCurrentState(SceneState state);
+
+	//Carga de texturas
+	SDL_Texture* introScreenTexture = nullptr;
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
@@ -73,8 +84,9 @@ private:
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 
-	//L03: TODO 3b: Declare a Player attribute
 	
+	//cambio escenas
+	SceneState currentState;
 
 	// L16: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* guiBt;

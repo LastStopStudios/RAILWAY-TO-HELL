@@ -56,6 +56,10 @@ bool Terrestre::Start() {
 
 bool Terrestre::Update(float dt)
 {
+    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+    {
+        return true;
+    }
     // Get the enemy's current position
     enemyPos = GetPosition();
 

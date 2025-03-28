@@ -62,6 +62,10 @@ bool Volador::Start() {
 }
 
 bool Volador::Update(float dt) {
+    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+    {
+        return true;
+    }
 
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
