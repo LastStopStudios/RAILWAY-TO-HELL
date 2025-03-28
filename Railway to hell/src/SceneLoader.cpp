@@ -20,10 +20,13 @@ SceneLoader::SceneLoader() {
 
 SceneLoader::~SceneLoader() {}
 
-void SceneLoader::LoadScene(int level, int x, int y) {
+void SceneLoader::LoadScene(int level, int x, int y,bool fade) {
 
-    
-    Engine::GetInstance().sceneLoader->FadeIn(1.0f);   // Animation speed (FadeIn)
+    if(fade== true)
+    { 
+        FadeIn(1.0f);// Animation speed (FadeIn)
+    }
+       
     UnLoadEnemiesItems();
     SetCurrentScene(level);
 
@@ -58,7 +61,7 @@ void SceneLoader::LoadScene(int level, int x, int y) {
     }
     LoadEnemiesItems(sceneNode);
 
-    Engine::GetInstance().sceneLoader->FadeOut(1.0f);    // Animation speed(FadeOut)
+   // Engine::GetInstance().sceneLoader->FadeOut(1.0f);    // Animation speed(FadeOut)
 
 
 }

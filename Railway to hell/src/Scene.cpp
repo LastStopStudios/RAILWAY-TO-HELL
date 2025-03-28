@@ -108,6 +108,7 @@ bool Scene::Update(float dt)
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			currentState = SceneState::GAMEPLAY;
+			skipFirstInput = true;
 		}
 		break;
 

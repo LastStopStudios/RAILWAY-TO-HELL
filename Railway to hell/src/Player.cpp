@@ -81,6 +81,11 @@ bool Player::Update(float dt)
     {
         return true;
     }
+
+    if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
+        Engine::GetInstance().scene->ResetSkipInput();  
+        return true;
+    }
     // Initialize velocity vector
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 
@@ -415,7 +420,7 @@ void Player::DrawPlayer() {
         currentAnimation->Update();
     }
     if (needSceneChange) {//cambio de escena
-        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery);//pasarle la nueva escena al sceneLoader
+        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery,Fade);//pasarle la nueva escena al sceneLoader
         needSceneChange = false;
     }
 }
@@ -451,13 +456,33 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 sceneToLoad = escena.id;
                 Playerx = escena.x;
                 Playery = escena.y;// Devuelve el ID para cargar ese mapaa
-
+				Fade = escena.fade;
             }
         }
+        break;
+    case ColliderType::ASCENSORES:
+        LOG("SENSOR COLLISION DETECTED");
+        LOG("Sensor ID: %s", physB->sensorID.c_str());
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN )
+        {
+            needSceneChange = true;
+            for (const auto& escena : escenas) {//recorrer todas las escenas
+                if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
+                    sceneToLoad = escena.id;
+                    Playerx = escena.x;
+                    Playery = escena.y;// Devuelve el ID para cargar ese mapaa
+                    Fade = escena.fade;
+                }
+            }
+        }
+
+        
 
 
 
         break;
+
+
     case ColliderType::UNKNOWN:
         break;
     }

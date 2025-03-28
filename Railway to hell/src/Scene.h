@@ -68,6 +68,10 @@ public:
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 
+	//Evitar salto player
+	bool IsSkippingFirstInput() const { return skipFirstInput; }
+	void ResetSkipInput() { skipFirstInput = false; }
+
 	//Mirar escena
 	SceneState GetCurrentState() const;
 
@@ -83,7 +87,7 @@ private:
 	SDL_Texture* shadowTexture = nullptr;//textura sombra !!!!No va!!!!
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
-
+	bool skipFirstInput = false;
 	
 	//cambio escenas
 	SceneState currentState;
@@ -92,20 +96,4 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
-	//voids texto
-	void GenerateTextTexture();
-	void UpdateTextAnimation(float dt);
-	void XMLToVariable(const std::string& id);
-	void Texto(const std::string& Dialogo);
-	// Variables para manejar el texto
-	bool showText = false;
-	std::string scene = "";
-	std::string displayText = ""; // variable que recibe el texto del xml
-	std::string currentText = ""; // Texto que se muestra
-	std::string hermana1 = "01";//Variable con la id del texto a imprimir !!!!Esta variable es la que tendra que dar el trigger que llame al void!!!!
-	int textIndex = 0;           // Índice del último carácter mostrado
-	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
-	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
-	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
-
 };

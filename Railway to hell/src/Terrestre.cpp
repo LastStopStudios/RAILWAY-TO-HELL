@@ -60,6 +60,11 @@ bool Terrestre::Update(float dt)
     {
         return true;
     }
+
+    if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
+        Engine::GetInstance().scene->ResetSkipInput();  
+        return true;
+    }
     // Get the enemy's current position
     enemyPos = GetPosition();
 

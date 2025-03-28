@@ -33,6 +33,7 @@ enum class ColliderType {
 	PLAYER_ATTACK,
 	DIALOGOS,
 	SENSOR,
+	ASCENSORES,
 	UNKNOWN
 	// ..
 };

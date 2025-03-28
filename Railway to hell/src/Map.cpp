@@ -175,7 +175,8 @@ bool Map::Load(std::string path, std::string fileName)
         std::unordered_map<std::string, int> layerNameToId = {
            {"Sensores", 1},
            {"Colisiones", 2},
-           {"Dialogos", 3}
+		   {"Dialogos", 3},
+		   {"Ascensores", 4}
         };
 
         float x = 0.0f;
@@ -229,6 +230,20 @@ bool Map::Load(std::string path, std::string fileName)
                         }
                     }
                     break;
+                case 4: // Sensor ascensores
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::ASCENSORES;
+                    // LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
+                     // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
+                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+                    {
+                        if (propertieNode.attribute("name") = "Sensor") {
+                            rect->sensorID = propertieNode.attribute("value").as_string();
+                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
+                        }
+                    }
+                    break;
+                
                 default: // Plataformas
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;
