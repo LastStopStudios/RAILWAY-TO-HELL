@@ -1,5 +1,5 @@
-# P-Renfe
-Video Game Development Project 2 CITM 2025 by
+# RAILWAY TO HELL
+Video Game Development Project 2 CITM 2024/2025 by
 - Alcaraz Martínez Ana
 - Benejam Goñalons Jaume
 - Cabeza Pérez Noa
@@ -22,6 +22,13 @@ Video Game Development Project 2 CITM 2025 by
 - A move left
 - D move right
 - Space jump
+- Shift Dash
+- J Melee Atack
+- K Use Whip
+- L Throw Balls
+- TAB Alternate Type Balls
+- E Use Key (Doors and Interactions)
+- M Map
 
 ### *Implemented Features*
 
