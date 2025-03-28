@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "Physics.h"
 #include <math.h>
+#include <unordered_map>
 #include "SceneLoader.h"
 
 Map::Map() : Module(), mapLoaded(false)
@@ -171,6 +172,11 @@ bool Map::Load(std::string path, std::string fileName)
             //add the layer to the map
             mapData.layers.push_back(mapLayer);
         }
+        std::unordered_map<std::string, int> layerNameToId = {
+           {"Sensores", 1},
+           {"Colisiones", 2},
+           {"Dialogos", 3}
+        };
 
         float x = 0.0f;
         float y = 0.0f;
@@ -189,41 +195,51 @@ bool Map::Load(std::string path, std::string fileName)
                 width = tileNode.attribute("width").as_float();
                 height = tileNode.attribute("height").as_float();
 
-                ColliderType colliderType = ColliderType::PLATFORM; // Valor por defecto
-
-                // Assign the collision type based on the layer name
-                /*if (layerName == "spike") {
-                    colliderType = ColliderType::SPIKE;
-                }
-                else if (layerName == "ceiling") {
-                    colliderType = ColliderType::CEILING;
-                }
-                else if (layerName == "Checkpoints") {
-                    colliderType = ColliderType::CHECKPOINT;
-                }
-                else if (layerName == "SensorFinal") {
-                    colliderType = ColliderType::LVL1;
-                }*/
-
                 PhysBody* rect = nullptr;
+                auto it = layerNameToId.find(layerName);
+                int layerId = (it != layerNameToId.end()) ? it->second : 0; // Valor por defecto: 0 para plataformas
+                MapLayer* mapLayer = new MapLayer();
 
-                /*if (colliderType == ColliderType::CHECKPOINT) {
+                switch (layerId) {
+                case 1: // Sensor cambio de escena
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                }
-                else if (colliderType == ColliderType::LVL1) {
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                }*/
-                
+                    rect->ctype = ColliderType::SENSOR;
+                   // LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
+                    // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
+                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+                    {
+                        if (propertieNode.attribute("name") = "Sensor") {
+                            rect->sensorID = propertieNode.attribute("value").as_string();
+                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
+                        }
+                    }
+                    break;
+                case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
+                    break;
+                case 3: // Sensor cambio de escena
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
+                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+                    {
+                        if (propertieNode.attribute("name") = "Dialogo") {
+                            rect->ID = propertieNode.attribute("value").as_int();
+                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->ID);
+                        }
+                    }
+                    break;
+                default: // Plataformas
+                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::PLATFORM;
+                    break;
+                }
+                //Call Load Layer Properties
 
-                    rect->ctype = colliderType;
-
-                    // A?ade el collider a la lista
-                    colliders.push_back(rect);
-                
-
-                rect->ctype = colliderType;
+                    // Añade el collider a la lista
+                colliders.push_back(rect);
             }
+
         }
         //Iterate the layer and create colliders
         for (const auto& mapLayer : mapData.layers) {

@@ -18,6 +18,8 @@ struct Properties
     {
         std::string name;
         bool value; //We assume that we are going to work only with bool for the moment
+        std::string sensor;
+        int dialogo;
     };
 
     std::list<Property*> propertyList;

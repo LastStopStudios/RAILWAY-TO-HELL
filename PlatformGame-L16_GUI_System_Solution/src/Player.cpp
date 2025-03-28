@@ -197,10 +197,10 @@ void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {
-        Engine::GetInstance().sceneLoader->LoadScene(1);
+       // Engine::GetInstance().sceneLoader->LoadScene(1);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {
-        Engine::GetInstance().sceneLoader->LoadScene(2);
+       // Engine::GetInstance().sceneLoader->LoadScene(2);
     }
 }
 
@@ -410,6 +410,10 @@ void Player::DrawPlayer() {
         // Advance the animation to the next frame
         currentAnimation->Update();
     }
+    if (needSceneChange) {//cambio de escena
+        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery);//pasarle la nueva escena al sceneLoader
+        needSceneChange = false;
+    }
 }
 
 bool Player::CleanUp() {
@@ -433,6 +437,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ITEM:
         Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+        break;
+    case ColliderType::SENSOR:
+        LOG("SENSOR COLLISION DETECTED");
+        LOG("Sensor ID: %s", physB->sensorID.c_str());
+        needSceneChange = true;
+        for (const auto& escena : escenas) {//recorrer todas las escenas
+            if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
+                sceneToLoad = escena.id;
+                Playerx = escena.x;
+                Playery = escena.y;// Devuelve el ID para cargar ese mapaa
+
+            }
+        }
+
+
+
         break;
     case ColliderType::UNKNOWN:
         break;

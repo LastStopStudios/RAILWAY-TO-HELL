@@ -31,6 +31,8 @@ enum class ColliderType {
 	VOLADOR,
 	ENEMY,
 	PLAYER_ATTACK,
+	DIALOGOS,
+	SENSOR,
 	UNKNOWN
 	// ..
 };
@@ -52,9 +54,12 @@ public:
 public:
 	int width = 0;
 	int height = 0;
+	int ID;
+	std::string sensorID;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
+	
 };
 
 // Module --------------------------------------

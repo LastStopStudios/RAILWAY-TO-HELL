@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Box2D/Box2D.h"
 #include "Animation.h"
+#include <vector>
 
 struct SDL_Texture;
 
@@ -28,6 +29,22 @@ public:
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition();
 
+	struct EscenaQueCargar {
+		std::string escena;
+		int id;
+		int x;
+		int y;
+	};
+	//lista de escenas con su id
+	std::vector<EscenaQueCargar> escenas = {
+	{"S1S2", 2, 219, 654},
+	{"S2S3", 3, 173, 648},
+	{"S3S1", 1, 351, 409},
+	{"S1S3", 3, 760, 628},
+	{"S3S2", 2, 1817, 640},
+	{"S2S1", 1, 1800, 642}
+	};
+
 private:
 	// Private methods
 	void DrawPlayer();
@@ -43,6 +60,11 @@ public:
 	float speed = 5.0f;
 	SDL_Texture* texture = NULL;
 	int texW, texH;
+
+	//Scene change
+	bool needSceneChange = false;
+	int sceneToLoad = -1;
+	int Playerx, Playery;
 
 	// Audio fx
 	int pickCoinFxId;
