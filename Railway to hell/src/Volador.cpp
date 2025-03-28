@@ -24,14 +24,23 @@ bool Volador::Awake() {
 
 bool Volador::Start() {
 
-    //initilize textures
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+
+    // Obtener dimensiones reales de la textura
+    int textureWidth, textureHeight;
+    SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
+
+    // Usar las dimensiones de la textura o los valores originales como respaldo
+    texW = textureWidth > 0 ? textureWidth : parameters.attribute("w").as_int();
+    texH = textureHeight > 0 ? textureHeight : parameters.attribute("h").as_int();
+
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
-    texW = parameters.attribute("w").as_int();
-    texH = parameters.attribute("h").as_int();
     texIsDeath = parameters.attribute("isDeath").as_int();
-    texRadius = parameters.attribute("radius").as_int();
+
+    // Calcular radio de colisión basado en el tamaño de la textura
+    int collisionRadius = std::min(texW, texH) / 2;
+    texRadius = collisionRadius;
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -44,10 +53,15 @@ bool Volador::Start() {
     chasingPlayer = false; // Initially not chasing the player
 
     //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle(
+        (int)position.getX() + texH / 2,
+        (int)position.getY() + texH / 2,
+        collisionRadius,
+        bodyType::DYNAMIC
+    );
 
     //Assign collider type
-    pbody->ctype = ColliderType::VOLADOR; 
+    pbody->ctype = ColliderType::VOLADOR;
 
     pbody->listener = this;
 
@@ -143,7 +157,7 @@ bool Volador::Update(float dt) {
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 7, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 3, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX);
 
     currentAnimation->Update();
 
