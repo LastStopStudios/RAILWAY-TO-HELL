@@ -46,6 +46,7 @@ public:
 	{"S2S1", 1, 1800, 642,false}
 	};
 
+
 private:
 	// Private methods
 	void DrawPlayer();
@@ -63,9 +64,14 @@ public:
 	int texW, texH;
 
 	//Scene change
-	bool needSceneChange = false,Fade;
+	bool NeedSceneChange = false;
+	bool Fade;
 	int sceneToLoad = -1;
 	int Playerx, Playery;
+
+	//Dialogues
+	bool NeedDialogue = false;
+	std::string Id;
 
 	// Audio fx
 	int pickCoinFxId;

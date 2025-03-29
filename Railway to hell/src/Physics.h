@@ -55,7 +55,7 @@ public:
 public:
 	int width = 0;
 	int height = 0;
-	int ID;
+	int ID = 0;
 	std::string sensorID;
 	b2Body* body;
 	Entity* listener;

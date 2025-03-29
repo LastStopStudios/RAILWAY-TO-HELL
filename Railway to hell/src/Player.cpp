@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "EntityManager.h"
 #include "SceneLoader.h"
+#include "dialogoM.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -419,10 +420,16 @@ void Player::DrawPlayer() {
         // Advance the animation to the next frame
         currentAnimation->Update();
     }
-    if (needSceneChange) {//cambio de escena
+    if (NeedSceneChange) {//cambio de escena
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery,Fade);//pasarle la nueva escena al sceneLoader
-        needSceneChange = false;
+        NeedSceneChange = false;
     }
+
+    if (NeedDialogue) {//Dialogo
+        Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque
+        NeedDialogue = false;
+    }
+
 }
 
 bool Player::CleanUp() {
@@ -450,7 +457,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
-        needSceneChange = true;
+        NeedSceneChange = true;
         for (const auto& escena : escenas) {//recorrer todas las escenas
             if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
                 sceneToLoad = escena.id;
@@ -461,11 +468,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::ASCENSORES:
-        LOG("SENSOR COLLISION DETECTED");
+        LOG("ASCENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN )
         {
-            needSceneChange = true;
+            NeedSceneChange = true;
             for (const auto& escena : escenas) {//recorrer todas las escenas
                 if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
                     sceneToLoad = escena.id;
@@ -475,13 +482,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 }
             }
         }
-
-        
-
-
-
         break;
-
+    case ColliderType::DIALOGOS:
+        LOG("DIALOGOS COLLISION DETECTED");
+        LOG("Sensor ID: %s", physB->ID);
+        NeedDialogue = true;
+        Id = physB->ID;
+        break;
 
     case ColliderType::UNKNOWN:
         break;
