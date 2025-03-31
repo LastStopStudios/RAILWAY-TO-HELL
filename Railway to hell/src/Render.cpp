@@ -53,7 +53,7 @@ bool Render::Awake()
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/arial/arial.ttf", 25);
+	font = TTF_OpenFont("Assets/Fonts/arial/Inter_28pt-Regular.ttf", 25);
 
 	return ret;
 }
