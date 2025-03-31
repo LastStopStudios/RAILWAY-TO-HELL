@@ -30,7 +30,6 @@ bool DialogoM::Awake()
 // Called before the first frame
 bool DialogoM::Start()
 {
-	Fondo = Engine::GetInstance().textures->Load("Assets/Textures/Fondo.png"); // Cargar textura para el fondo del texto
 	return true;
 }
 
@@ -43,7 +42,6 @@ bool DialogoM::PreUpdate()
 // Called each loop iteration
 bool DialogoM::Update(float dt) {
 	UpdateTextAnimation(dt); // Llama a la función que maneja la animación del texto
-
 	return true;
 }
 
@@ -51,20 +49,17 @@ bool DialogoM::Update(float dt) {
 bool DialogoM::PostUpdate()
 {
 	if (showText && textTexture != nullptr) {
-		int width = 200, height = 80;
-		Engine::GetInstance().textures->GetSize(Fondo, width, height); // Obtener tamaño de la textura
-		int windowWidth, windowHeight;
-		Engine::GetInstance().window->GetWindowSize(windowWidth, windowHeight); // Obtener tamaño de la ventana
-		SDL_Rect dstRect = { 150, -100, 1000, 600 }; // Posicionar el fondo del texto
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Fondo, nullptr, &dstRect);
-		Engine::GetInstance().render->DrawTexture(textTexture, 200, 80, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
+		int width = 1200, height = 600, posx = 40, posy = -100;
+			
+		SDL_Rect dstRect = { posx, posy, width, height }; // Posicionar y escalar el fondo del texto
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
+		Engine::GetInstance().render->DrawTexture(textTexture, 310, 80, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
 	}
 	return true;
 }
 	
 
 void DialogoM::Texto(const std::string& Dialogo) {
-
 	showText = !showText; // Alternar visibilidad del texto
 	if (showText) {
 		XMLToVariable(Dialogo); // Cargar el texto correspondiente
@@ -73,6 +68,7 @@ void DialogoM::Texto(const std::string& Dialogo) {
 		ResetText(); // Reiniciar el texto
 	}
 }
+
 
 void DialogoM::ResetText() {
 	textIndex = 0;
@@ -151,6 +147,7 @@ void DialogoM::XMLToVariable(const std::string& id) {
 
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
 	
 	if (!result) {
 		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
@@ -162,6 +159,7 @@ void DialogoM::XMLToVariable(const std::string& id) {
 
 	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//recorrer todos los dialogos
 		if (std::string(dialog.attribute("ID").value()) == id) {//Mira si el id que se le da y el del dialogo es el mismo
+			fondo = Engine::GetInstance().textures->Load(dialog.attribute("Img").value()); // Cargar textura para el fondo del texto
 			displayText = dialog.attribute("TEXT").value();//darle el texto a la variable 
 			return;
 		}
@@ -180,9 +178,9 @@ bool DialogoM::CleanUp()
 		textTexture = nullptr;
 	}
 	
-	if (Fondo != nullptr) {
-		Engine::GetInstance().textures->UnLoad(Fondo);//descargar fondo texto
-		Fondo = nullptr;
+	if (fondo != nullptr) {
+		Engine::GetInstance().textures->UnLoad(fondo);//descargar fondo texto
+		fondo = nullptr;
 	}
 	return true;
 }

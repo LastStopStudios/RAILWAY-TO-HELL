@@ -41,12 +41,12 @@ public:
 private:
 
 	SDL_Texture* textTexture = nullptr;//textura letras
-	SDL_Texture* Fondo = nullptr;//textura fondo letras
+	SDL_Texture* fondo = nullptr;//textura fondo letras
 
 	//voids texto
-	void GenerateTextTexture();
-	void UpdateTextAnimation(float dt);
-	void XMLToVariable(const std::string& id);
+	void GenerateTextTexture(); // mostrar texto por pantalla
+	void UpdateTextAnimation(float dt);// Llama a la función que maneja la animación del texto
+	void XMLToVariable(const std::string& id);//sacar datos del xml
 
 	// Variables para manejar el texto
 	bool showText = false;
