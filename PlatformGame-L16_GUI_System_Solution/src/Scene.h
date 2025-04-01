@@ -8,6 +8,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "Volador.h"
 #include "Item.h"
+#include "Boss.h"
 
 struct SDL_Texture;
 
@@ -62,10 +63,13 @@ public:
 	std::vector<Terrestre*> enemyList;
 	std::vector<Volador*> voladorList; 
 	std::vector<Item*> itemList;
+	std::vector<Boss*> bossList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Item*>& GetItemList() { return itemList; }
+	std::vector<Boss*>& GetBossList() { return bossList; }
+
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
@@ -93,9 +97,9 @@ private:
 	std::string displayText = ""; // variable que recibe el texto del xml
 	std::string currentText = ""; // Texto que se muestra
 	std::string hermana1 = "01";//Variable con la id del texto a imprimir !!!!Esta variable es la que tendra que dar el trigger que llame al void!!!!
-	int textIndex = 0;           // Índice del último carácter mostrado
+	int textIndex = 0;           // ï¿½ndice del ï¿½ltimo carï¿½cter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
-	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
+	int textMaxWidth = 900; // Mï¿½ximo ancho antes de saltar de lï¿½nea
 
 };
