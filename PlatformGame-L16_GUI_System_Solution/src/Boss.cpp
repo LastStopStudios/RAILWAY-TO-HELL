@@ -92,8 +92,7 @@ bool Boss::Update(float dt)
         }
     }
 
-
-	if ((isLookingLeft && dx <= -attackDistance) || (!isLookingLeft && dx >= attackDistance)) { // stop the enemy when it is close to the player
+	if ((isLookingLeft && dx <= -attackDistance)) { 
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
     }
 
