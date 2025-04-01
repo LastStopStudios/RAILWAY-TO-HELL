@@ -134,7 +134,6 @@ bool Terrestre::Update(float dt)
     // Update position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw the enemy texture and animation

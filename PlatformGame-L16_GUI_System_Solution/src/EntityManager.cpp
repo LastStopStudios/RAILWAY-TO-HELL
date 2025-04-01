@@ -7,7 +7,6 @@
 #include "Item.h"
 #include "Terrestre.h"
 #include "Volador.h"
-#include "Boss.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -83,9 +82,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::VOLADOR:
 		entity = new Volador();
-		break;
-	case EntityType::BOSS:
-		entity = new Boss();
 		break;
 	default:
 		break;

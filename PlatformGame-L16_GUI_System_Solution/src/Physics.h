@@ -31,8 +31,6 @@ enum class ColliderType {
 	VOLADOR,
 	ENEMY,
 	PLAYER_ATTACK,
-	BOSS,
-	BOSS_ATTACK,
 	UNKNOWN
 	// ..
 };

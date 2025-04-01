@@ -9,7 +9,6 @@ enum class EntityType
 	ITEM,
 	TERRESTRE,
 	VOLADOR,
-	BOSS,
 	UNKNOWN
 };
 
