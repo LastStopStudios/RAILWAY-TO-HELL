@@ -77,13 +77,13 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLAYER: {
 		if (GetItemType() == "Dash ability") {
-		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Whip") {
-		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Door key") {
-		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 
 		break;
