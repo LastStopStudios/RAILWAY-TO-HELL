@@ -66,14 +66,42 @@ bool Item::Update(float dt)
 	return true;
 }
 
+void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
+	if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
+		LOG("Player attack hit an enemy!");
+		// Additional enemy hit logic can go here
+		return;
+	}
+	switch (physB->ctype) {
+	case ColliderType::PLATFORM:
+		break;
+	case ColliderType::PLAYER: {
+		if (GetItemType() == "Dash ability") {
+		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+		}
+		if (GetItemType() == "Whip") {
+		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+		}
+		if (GetItemType() == "Door key") {
+		    Engine::GetInstance().physics.get()->DeletePhysBody(physA);
+		}
+
+		break;
+	}
+	case ColliderType::UNKNOWN:
+		break;
+	}
+}
+
+void Item::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+
+}
+
 bool Item::CleanUp()
 {
-	// Explicitly destroy the physics body if it exists
-	if (pbody != nullptr)
-	{
-		// Make sure to tell the physics system to destroy this body
-		Engine::GetInstance().physics->DeletePhysBody(pbody);
-		pbody = nullptr;
-	}
+
+
+	Engine::GetInstance().physics->DeletePhysBody(pbody);
+
 	return true;
 }

@@ -428,18 +428,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (item && item->GetItemType() == "Dash ability") {
             Dash = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
         }
         if (item && item->GetItemType() == "Whip") {
             WhipAttack = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
         }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
-            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-            Engine::GetInstance().physics.get()->DeletePhysBody(physB);
-        }
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);        }
  
         break;
     }
