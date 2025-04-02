@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "SDL2/SDL_ttf.h"
+#include "Player.h"
 
 
 DialogoM::DialogoM() : Module()
@@ -36,12 +37,14 @@ bool DialogoM::Start()
 // Called each loop iteration
 bool DialogoM::PreUpdate()
 {
+	
 	return true;
 }
 
 // Called each loop iteration
 bool DialogoM::Update(float dt) {
 	UpdateTextAnimation(dt); // Llama a la función que maneja la animación del texto
+	
 	return true;
 }
 
@@ -49,20 +52,30 @@ bool DialogoM::Update(float dt) {
 bool DialogoM::PostUpdate()
 {
 	if (showText && textTexture != nullptr) {
-		int h, w;// variables para el tamaño de la pantalla
+		// variables para el tamaño de la pantalla
+		//h = Engine::GetInstance().render.get()->camera.y;
+		//w = Engine::GetInstance().render.get()->camera.x;
 		Engine::GetInstance().window.get()->GetWindowSize(w, h);//Tamaño pantalla
 		//tamaño fondo
-		int width = 1200, height = 600;
+		width = 1200;
+		height = 600;
 		//Posicion fondo
-		int posx = w - 1250, posy = h - 870;
+		posx = w - 1250;//posicion del fondo con tamaño pantalla
+		posy = h - 870; //posicion del fondo con tamaño pantalla
+		//posx = (w - width) / 2 + 513;//posicion del fondo con posicion de la camara
+		//posy = h - 80;//posicion del fondo con posicion de la camara
 		//posicion texto
-		int texty = h - 645, textx = w - 1225;
-		
+		texty = posy + 180 ;//posicion del texto con tamaño pantalla
+		textx = posx + 275 ;//posicion del texto con tamaño pantalla
+		//texty = posy + 240;//posicion del texto con posicion de la camara
+		//textx = posx + 12;//posicion del texto con posicion de la camara
+
 
 		SDL_Rect dstRect = { posx, posy, width, height }; // Posicionar y escalar el fondo del texto
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
-		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
+		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 0.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
 	}
+	
 	return true;
 }
 
@@ -70,6 +83,7 @@ bool DialogoM::PostUpdate()
 void DialogoM::Texto(const std::string& Dialogo) {
 	showText = !showText; // Alternar visibilidad del texto
 	if (showText) {
+		Engine::GetInstance().scene->DialogoOn();//parar player
 		XMLToVariable(Dialogo); // Cargar el texto correspondiente
 		GenerateTextTexture(); // Generar la textura inicial
 	}
@@ -177,6 +191,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 		GenerateTextTexture();
 	}else*/ if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Cerrar textos Tecla suprimir No pilla el enter ni por Execute.
 		showText = !showText;
+		Engine::GetInstance().scene->DialogoOff();//devolver control al player
 		ResetText(); // Reiniciar el texto
 	}
 

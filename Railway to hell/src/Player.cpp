@@ -87,59 +87,62 @@ bool Player::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();  
         return true;
     }
-    // Initialize velocity vector
-    b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+    if (dialogo == false)//Dejar al player quieto cuando hay dialogos por pantalla
+    {
+        // Initialize velocity vector
+        b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 
-    if (!parameters.attribute("gravity").as_bool()) {
-        velocity = b2Vec2(0, 0);
-    }
-
-    // Mutually exclusive action handling
-    if (!isAttacking && !isWhipAttacking && !isDashing) {
-        HandleMovement(velocity);
-        HandleJump();
-    }
-
-    // Handle dash only when not attacking or jumping
-    if (!isAttacking && !isWhipAttacking && !isJumping) {
-        HandleDash(velocity, dt);
-    }
-
-    // Handle attacks only when not dashing
-    if (!isDashing) {
-        UpdateWhipAttack(dt);
-        UpdateMeleeAttack(dt);
-    }
-
-    // If dashing, preserve the dash velocity
-    if (isDashing) {
-        dashDuration -= dt;
-        if (dashDuration <= 0) {
-            isDashing = false;
+        if (!parameters.attribute("gravity").as_bool()) {
+            velocity = b2Vec2(0, 0);
         }
-    }
 
-    // If jumping, preserve the vertical velocity
-    if (isJumping) {
-        velocity.y = pbody->body->GetLinearVelocity().y;
-    }
-    if (NeedSceneChange) {//cambio de escena 
-        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade);//pasarle la nueva escena al sceneLoader
-        NeedSceneChange = false;
-    }
+        // Mutually exclusive action handling
+        if (!isAttacking && !isWhipAttacking && !isDashing) {
+            HandleMovement(velocity);
+            HandleJump();
+        }
 
-    if (NeedDialogue) {//Dialogo 
-        Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque 
-        NeedDialogue = false;
+        // Handle dash only when not attacking or jumping
+        if (!isAttacking && !isWhipAttacking && !isJumping) {
+            HandleDash(velocity, dt);
+        }
+
+        // Handle attacks only when not dashing
+        if (!isDashing) {
+            UpdateWhipAttack(dt);
+            UpdateMeleeAttack(dt);
+        }
+
+        // If dashing, preserve the dash velocity
+        if (isDashing) {
+            dashDuration -= dt;
+            if (dashDuration <= 0) {
+                isDashing = false;
+            }
+        }
+
+        // If jumping, preserve the vertical velocity
+        if (isJumping) {
+            velocity.y = pbody->body->GetLinearVelocity().y;
+        }
+        if (NeedSceneChange) {//cambio de escena 
+            Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade);//pasarle la nueva escena al sceneLoader
+            NeedSceneChange = false;
+        }
+
+        if (NeedDialogue) {//Dialogo 
+            Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque 
+            NeedDialogue = false;
+        }
+
+        // Apply the velocity to the player
+        pbody->body->SetLinearVelocity(velocity);
+
+        // Update position from physics body
+        b2Transform pbodyPos = pbody->body->GetTransform();
+        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
-    // Apply the velocity to the player
-    pbody->body->SetLinearVelocity(velocity);
-
-    // Update position from physics body
-    b2Transform pbodyPos = pbody->body->GetTransform();
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
     DrawPlayer();
     currentAnimation->Update(); 
     HandleSceneSwitching();
@@ -148,6 +151,7 @@ bool Player::Update(float dt)
 }
 
 void Player::HandleMovement(b2Vec2& velocity) {
+   
     // Horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         velocity.x = -0.2f * 16;
