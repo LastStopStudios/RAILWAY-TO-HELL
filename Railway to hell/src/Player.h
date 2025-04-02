@@ -81,7 +81,6 @@ public:
 	bool isJumping = false; // Flag to check if the player is currently jumping
 
 	pugi::xml_node parameters;
-	Animation* currentAnimation = nullptr;
 	Animation idle;
 
 private:
@@ -101,6 +100,8 @@ private:
 	bool canWhipAttack = true;
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
+
+	Animation* currentAnimation = nullptr; 
 
 	// Dash properties
 	bool isDashing = false;

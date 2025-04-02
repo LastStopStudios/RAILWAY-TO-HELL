@@ -123,7 +123,15 @@ bool Player::Update(float dt)
     if (isJumping) {
         velocity.y = pbody->body->GetLinearVelocity().y;
     }
+    if (NeedSceneChange) {//cambio de escena 
+        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade);//pasarle la nueva escena al sceneLoader
+        NeedSceneChange = false;
+    }
 
+    if (NeedDialogue) {//Dialogo 
+        Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque 
+        NeedDialogue = false;
+    }
     // Apply the velocity to the player
     pbody->body->SetLinearVelocity(velocity);
 
@@ -133,6 +141,7 @@ bool Player::Update(float dt)
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     DrawPlayer();
+    currentAnimation->Update(); 
     HandleSceneSwitching();
 
     return true;
@@ -236,7 +245,6 @@ void Player::UpdateWhipAttack(float dt) {
         whipAttack = Animation();
         whipAttack.speed = 0.15f;
         whipAttack.loop = false;
-        whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
 
         // Create whip attack hitbox (existing code)
         int attackWidth = texW * 2;
@@ -304,7 +312,7 @@ void Player::UpdateMeleeAttack(float dt) {
         meleeAttack = Animation();
         meleeAttack.speed = 0.15f;
         meleeAttack.loop = false;
-        meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
+        
 
         // Create attack hitbox (existing code)
         int attackWidth = texW * 1.1;
@@ -351,85 +359,44 @@ void Player::UpdateMeleeAttack(float dt) {
 }
 
 void Player::DrawPlayer() {
+    // Set the appropriate animation based on player state
+    if (isAttacking) {
+        currentAnimation = &meleeAttack;
+        // Use attack texture when attacking
+        texture = attackTexture;
+    }
+    else if (isWhipAttacking) {
+        currentAnimation = &whipAttack;
+        // Use whip texture when whip attacking
+        texture = whipAttackTexture;
+    }
+    else {
+        currentAnimation = &idle;
+        // Default texture is already set
+    }
+
     // Determine the flip direction based on which way the player is facing
     SDL_RendererFlip flip = facingRight ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
-    // Prioritize melee attack drawing
-    if (isAttacking) {
-        // Get the current frame of the attack animation
-        SDL_Rect currentFrame = meleeAttack.GetCurrentFrame();
-        int attackX;
+    // Get the current frame
+    SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
-        // Calculate the position for the attack animation based on facing direction
-        if (facingRight) {
-            attackX = position.getX();              // Position when facing right
-        }
-        else {
-            attackX = position.getX();              // Offset position when facing left
-        }
-
-        // Draw the attack animation with proper positioning and orientation
-        Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            attackTexture,                          // Attack animation texture
-            attackX,                                // X position with direction offset
-            position.getY(),                        // Y position with vertical offset
-            &currentFrame,                          // Current attack animation frame
-            0.0,                                    // Speed modifier (0.0 = no parallax effect)
-            0,                                      // Rotation angle (0 = no rotation)
-            INT_MAX, INT_MAX,                       // No pivot point (use default)
-            flip);                                  // Horizontal flip based on direction
-    }
-    // Then check for whip attack drawing
-    else if (isWhipAttacking) {
-        // Get the current frame of the whip attack animation
-        SDL_Rect currentFrame = whipAttack.GetCurrentFrame();
-        int attackX;
-
-        // Calculate the position for the whip attack animation based on facing direction
-        if (facingRight) {
-            attackX = position.getX();              // Position when facing right
-        }
-        else {
-            attackX = position.getX();              // Offset position when facing left
-        }
-
-        // Draw the whip attack animation with proper positioning and orientation
-        Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            whipAttackTexture,                      // Whip attack animation texture
-            attackX,                                // X position with direction offset
-            position.getY(),                        // Y position with vertical offset
-            &currentFrame,                          // Current whip attack animation frame
-            0.0,                                    // Speed modifier (0.0 = no parallax effect)
-            0,                                      // Rotation angle (0 = no rotation)
-            INT_MAX, INT_MAX,                       // No pivot point (use default)
-            flip);                                  // Horizontal flip based on direction
-    }
-    // Normal player drawing when not attacking
-    else {
-        // Use the new DrawTextureWithFlip function to render the player with proper orientation
-        Engine::GetInstance().render.get()->DrawTextureWithFlip(
-            texture,                                // Player texture
-            (int)position.getX(),                   // X position
-            (int)position.getY(),                   // Y position
-            &currentAnimation->GetCurrentFrame(),   // Current animation frame
-            0.0,                                    // Speed modifier (0.0 = no parallax effect)
-            0,                                      // Rotation angle (0 = no rotation)
-            INT_MAX, INT_MAX,                       // No pivot point (use default)
-            flip);                                  // Horizontal flip based on direction
-
-        // Advance the animation to the next frame
-        currentAnimation->Update();
-    }
-    if (NeedSceneChange) {//cambio de escena
-        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery,Fade);//pasarle la nueva escena al sceneLoader
-        NeedSceneChange = false;
+    // Calculate offset for flipping (similar to Boss class)
+    int offsetX = 0;
+    if (!facingRight) {
+        offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
     }
 
-    if (NeedDialogue) {//Dialogo
-        Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque
-        NeedDialogue = false;
-    }
-
+    // Draw the player with the current animation and appropriate texture
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,                    // Current texture based on state
+        position.getX() - offsetX,  // X position with offset for flipping
+        position.getY(),            // Y position
+        &frame,                     // Current animation frame
+        1.0f,                       // Scale factor
+        0.0,                        // No rotation
+        INT_MAX, INT_MAX,           // No pivot
+        flip);                      // Flip based on direction
 }
 
 bool Player::CleanUp() {
