@@ -36,7 +36,7 @@ bool Player::Start() {
     currentAnimation = &idle;
 
     // Add physics to the player - initialize physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW/2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -48,29 +48,53 @@ bool Player::Start() {
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
-    // Setup melee attack
+    // Setup melee attack - ensure proper initialization
     meleeAttack = Animation();
-    meleeAttack.speed = 0.15f;
-    meleeAttack.loop = false;
 
-    // Load attack texture
-    meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
+    // Load attack animations carefully and check for errors
     pugi::xml_node attackNode = parameters.child("animations").child("attack");
-    attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
 
-    // Load whip attack texture
-    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
-    pugi::xml_node whipNode = parameters.child("animations").child("whip");
-    whipAttackTexture = Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string());
+    if (!attackNode) {
+        LOG("ERROR: Attack animation node not found in parameters!");
+    }
+    else {
+        meleeAttack.LoadAnimations(attackNode);
+        attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
+        // Modified line - use a different approach to log animation frames
+        LOG("Attack animation loaded");
+    }
+    pugi::xml_node idleNode = parameters.child("animations").child("idle");
+    // Inicializar whipAttack igual que meleeAttack (fuera del bloque condicional)
     whipAttack = Animation();
-    whipAttack.speed = 0.1f;
-    whipAttack.loop = false;
+
+    // Load whip attack animations carefully and check for errors
+    pugi::xml_node whipNode = parameters.child("animations").child("whip");
+    if (!whipNode) {
+        LOG("ERROR: Whip animation node not found in parameters!");
+    }
+    else {
+        whipAttack.LoadAnimations(whipNode);
+        whipAttackTexture = Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string());
+        // Modified line - use a different approach to log animation frames
+        LOG("Whip animation loaded");
+    }
 
     // Set initial state
     isAttacking = false;
     canAttack = true;
     attackCooldown = 0.0f;
     attackHitbox = nullptr;
+
+    // Initialize whip attack state variables explicitly
+    isWhipAttacking = false;
+    canWhipAttack = true;
+    whipAttackCooldown = 0.0f;
+    whipAttackHitbox = nullptr;
+
+    // Para pruebas, habilitar temporalmente el ataque whip
+    // Elimina esta línea cuando quieras que el jugador tenga que recoger el item primero
+    WhipAttack = true;
+
     facingRight = true;
 
     return true;
@@ -140,10 +164,10 @@ bool Player::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    DrawPlayer();
+
     currentAnimation->Update(); 
     HandleSceneSwitching();
-
+    DrawPlayer();
     return true;
 }
 
@@ -226,6 +250,7 @@ void Player::HandleSceneSwitching() {
     }*/
 }
 
+// Corregir UpdateWhipAttack() para reiniciar correctamente la animación
 void Player::UpdateWhipAttack(float dt) {
     // Whip attack cooldown logic
     if (!canWhipAttack) {
@@ -239,17 +264,16 @@ void Player::UpdateWhipAttack(float dt) {
     // Initiate whip attack only when not dashing, melee attacking, or already whip attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
         !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack) {
-        // Existing whip attack initialization code remains the same
+        // Start whip attack
         isWhipAttacking = true;
+        LOG("Whip Attack started");
         canWhipAttack = false;
         whipAttackCooldown = 0.7f;
 
-        // Reset and load whip attack animation
-        whipAttack = Animation();
-        whipAttack.speed = 0.15f;
-        whipAttack.loop = false;
+        // Reset the animation instead of recreating it
+        whipAttack.Reset();
 
-        // Create whip attack hitbox (existing code)
+        // Create whip attack hitbox
         int attackWidth = texW * 2;
         int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbody->body->GetPosition();
@@ -257,7 +281,7 @@ void Player::UpdateWhipAttack(float dt) {
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
         // Calculate attack position based on facing direction
-        int attackX = facingRight ? centerX + texW : centerX - texW - attackWidth;
+        int attackX = facingRight ? centerX + texW / 4 : centerX - texW / 4 - attackWidth / 2;
 
         // Remove existing whip attack hitbox
         if (whipAttackHitbox) {
@@ -272,18 +296,23 @@ void Player::UpdateWhipAttack(float dt) {
         whipAttackHitbox->listener = this;
     }
 
-    // Existing whip attack state management code remains the same
+    // Whip attack state management
     if (isWhipAttacking) {
+        // Update animation
         whipAttack.Update();
 
+        // Update hitbox position
         if (whipAttackHitbox) {
             int attackX = facingRight ? position.getX() + 30 : position.getX();
-            int attackY = position.getY() + texH / 4;
+            int attackY = position.getY() + texH / 2;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
+        // Check if animation finished
         if (whipAttack.HasFinished()) {
+            LOG("Whip Attack finished");
             isWhipAttacking = false;
+            currentAnimation = &idle;  // Explicitly switch back to idle animation
 
             if (whipAttackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
@@ -292,7 +321,6 @@ void Player::UpdateWhipAttack(float dt) {
         }
     }
 }
-
 void Player::UpdateMeleeAttack(float dt) {
     // Attack cooldown logic
     if (!canAttack) {
@@ -306,18 +334,16 @@ void Player::UpdateMeleeAttack(float dt) {
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
         !isAttacking && !isWhipAttacking && !isDashing && canAttack) {
-        // Existing melee attack initialization code remains the same
+        // Start attack
         isAttacking = true;
+        LOG("Attack started");
         canAttack = false;
         attackCooldown = 0.5f;  // Set cooldown duration
 
-        // Reset and load attack animation
-        meleeAttack = Animation();
-        meleeAttack.speed = 0.15f;
-        meleeAttack.loop = false;
-        
+        // Reset the animation instead of recreating it
+        meleeAttack.Reset();
 
-        // Create attack hitbox (existing code)
+        // Create attack hitbox
         int attackWidth = texW * 1.1;
         int attackHeight = texH;
         b2Vec2 playerCenter = pbody->body->GetPosition();
@@ -335,23 +361,31 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Create new attack hitbox
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-            attackX, attackHeight, attackWidth, attackHeight, bodyType::DYNAMIC);
+            attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
         attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
         attackHitbox->listener = this;
     }
 
-    // Existing attack state management code remains the same
+    // Attack state management
     if (isAttacking) {
+        // Update animation
         meleeAttack.Update();
 
+        // Update hitbox position
         if (attackHitbox) {
             int attackX = facingRight ? position.getX() + 30 : position.getX();
             int attackY = position.getY() + texH / 2;
             attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
+        // Check if animation finished
         if (meleeAttack.HasFinished()) {
+            LOG("Attack finished");
             isAttacking = false;
+
+            // Reset back to default animation and texture
+            currentAnimation = &idle;
+            idle.Reset();  // Explicitly reset the idle animation
 
             if (attackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
@@ -362,7 +396,9 @@ void Player::UpdateMeleeAttack(float dt) {
 }
 
 void Player::DrawPlayer() {
-    // Set the appropriate animation based on player state
+    // Store the original texture so we can properly reset it
+    SDL_Texture* originalTexture = texture;
+
     if (isAttacking) {
         currentAnimation = &meleeAttack;
         // Use attack texture when attacking
@@ -374,8 +410,14 @@ void Player::DrawPlayer() {
         texture = whipAttackTexture;
     }
     else {
-        currentAnimation = &idle;
-        // Default texture is already set
+        // Only change back to idle if we weren't already in idle
+        // This avoids resetting the animation constantly
+
+        if (currentAnimation != &idle) {
+            currentAnimation = &idle;
+            // Reset texture to the original one loaded in Start()
+            texture = originalTexture;
+        }
     }
 
     // Determine the flip direction based on which way the player is facing

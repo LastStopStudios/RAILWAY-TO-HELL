@@ -56,6 +56,7 @@ private:
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
+	void InitializeAnimations(); 
 
 public:
 	// Public properties
@@ -101,7 +102,8 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
-	Animation* currentAnimation = nullptr; 
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* idleTexture = nullptr;  // Attack visual
 
 	// Dash properties
 	bool isDashing = false;
