@@ -75,11 +75,6 @@ bool Boss::Update(float dt)
         return true;
     }
 
-    if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
-        Engine::GetInstance().scene->ResetSkipInput();
-        return true;
-    }
-
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();

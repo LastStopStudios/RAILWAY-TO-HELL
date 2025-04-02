@@ -109,4 +109,8 @@ private:
 	float dashCooldownDuration = 1.0f; // 1 second cooldown
 	bool canDash = true;
 	float dashDuration = 0.2f; // Duration of the dash
+	
+	bool Dash = false;
+	bool WhipAttack = false;
+	bool canOpenDoor = false;
 };

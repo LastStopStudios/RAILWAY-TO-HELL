@@ -175,7 +175,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
             Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
         Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
 
-    if (isDashKeyPressed && canDash) {
+    if (isDashKeyPressed && canDash && Dash) {
         isDashing = true;
         dashDuration = 0.2f;  // Fixed dash duration
 
@@ -229,7 +229,7 @@ void Player::UpdateWhipAttack(float dt) {
 
     // Initiate whip attack only when not dashing, melee attacking, or already whip attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
-        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack) {
+        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack) {
         // Existing whip attack initialization code remains the same
         isWhipAttacking = true;
         canWhipAttack = false;
@@ -440,6 +440,7 @@ bool Player::CleanUp() {
     Engine::GetInstance().textures.get()->UnLoad(texture);
     Engine::GetInstance().textures.get()->UnLoad(attackTexture);
     Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
+
     return true;
 }
 
@@ -453,9 +454,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         isJumping = false;
         break;
-    case ColliderType::ITEM:
-        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-        Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+    case ColliderType::ITEM: {
+        Item* item = (Item*)physB->listener;
+        if (item && item->GetItemType() == "Dash ability") {
+            Dash = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        if (item && item->GetItemType() == "Whip") {
+            WhipAttack = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        if (item && item->GetItemType() == "Door key") {
+            canOpenDoor = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+    }
+
         break;
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
@@ -466,14 +480,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 sceneToLoad = escena.id;
                 Playerx = escena.x;
                 Playery = escena.y;// Devuelve el ID para cargar ese mapaa
-				Fade = escena.fade;
+                Fade = escena.fade;
             }
         }
         break;
     case ColliderType::ASCENSORES:
         LOG("ASCENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN )
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
         {
             NeedSceneChange = true;
             for (const auto& escena : escenas) {//recorrer todas las escenas
