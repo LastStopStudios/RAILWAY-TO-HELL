@@ -50,14 +50,19 @@ private:
 
 	// Variables para manejar el texto
 	bool showText = false;
+	//boleanos de control de errores
+	bool Tim = true;//pasa de cargar la otra parte del texto
+	bool Siguiente = true;///activar el temporizador del dibujado del texto
 	std::string scene = "";
 	std::string displayText = ""; // variable que recibe el texto entero del xml
+	std::string alltext = "";//variable de control de texto
 	std::string currentText = ""; // Texto que se muestra y se va actualizando
 	int textIndex = 0;           // Índice del último carácter mostrado
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
 	float Skip = true; //Skipear textos 
 	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
+	int textMaxheigth = 448;
 
 };
 

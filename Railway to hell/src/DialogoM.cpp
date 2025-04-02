@@ -73,8 +73,11 @@ void DialogoM::Texto(const std::string& Dialogo) {
 void DialogoM::ResetText() {
 	textIndex = 0;
 	currentText = "";
+	alltext = "";
 	displayText = "";//texto entero
 	Skip = true;
+	Tim = true;
+	Siguiente = true;
 	if (textTexture != nullptr) {
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
@@ -120,24 +123,52 @@ void DialogoM::UpdateTextAnimation(float dt)
 
 	textTimer += dt; // Aumenta el temporizador
 
-	if (textTimer >= textSpeed && currentText.length() != displayText.length())
+	if (textTimer >= textSpeed && alltext.length() != displayText.length())
 	{
 		textTimer = 0.0f; // Reinicia el temporizador
-		textIndex++; // Avanza en el texto
-		LOG("TextIndex: %d", textIndex);//timer
-		currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
-		LOG("displayText: %s", displayText.c_str());//texto entero
-		LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
-		GenerateTextTexture(); // Genera la nueva textura con el fragmento
+		if (Tim == true) {
+			textIndex++;
+			LOG("textIndex: %d", textIndex);
+		}// Avanza en el texto
+		alltext = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
+		if(textIndex < textMaxheigth){
+			LOG("TextIndex: %d", textIndex);//timer
+			currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
+			LOG("displayText: %s", displayText.c_str());//texto entero
+			LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
+			GenerateTextTexture(); // Genera la nueva textura con el fragmento
+		}else if (textIndex == textMaxheigth) { 
+			Tim = false; 
+			LOG("Entro Tim : % d", Tim);
+		}
+		if(textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Tim == false){
+			
+			int finaltexto = textIndex - textMaxheigth;
+			currentText.clear();
+			currentText = displayText.substr(textMaxheigth, finaltexto); // Obtiene el nuevo fragmento
+			LOG("displayText: %s", displayText.c_str());//texto entero
+			LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
+			GenerateTextTexture(); // Genera la nueva textura con el fragmento
+			Siguiente = false;//pasa de cargar la otra parte del texto
+			Tim = true;//activar el temporizador del dibujado del texto
+		}else if(textIndex >= textMaxheigth && Siguiente == false){
+			//Tim = true;
+			int finaltexto = textIndex - textMaxheigth;
+			currentText = displayText.substr(textMaxheigth-1, finaltexto); // Obtiene el nuevo fragmento
+			GenerateTextTexture(); // Genera la nueva textura con el fragmento
+		}
+		
+		
 	}
-	if (currentText.length() != displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) {//Skipear textos Tecla suprimir No pilla el enter ni por Execute.
+	if (alltext.length() == displayText.length()) { Skip = false; }//el texto ya se ha skipeado, sirve de control para que no haga el skip y el cerrar a la vez
+	/*if (alltext.length() != displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) {//Skipear textos Tecla suprimir No pilla el enter ni por Execute.
 		currentText = displayText;
 		GenerateTextTexture();
-	}else if (currentText.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Cerrar textos Tecla suprimir No pilla el enter ni por Execute.
+	}else*/ if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Cerrar textos Tecla suprimir No pilla el enter ni por Execute.
 		showText = !showText;
 		ResetText(); // Reiniciar el texto
 	}
-	if (currentText.length() == displayText.length()) { Skip = false; }//el texto ya se ha skipeado, sirve de control para que no haga el skip y el cerrar a la vez
+	
 
 	
 }
