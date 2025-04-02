@@ -68,7 +68,7 @@
 						</idle>
 					</animations>
 				</enemy>
-				<enemy name="badguy2" x="800" y="680" w="32" h="32" texture="Assets/Textures/enemy/Idle_HellBat.png" gravity="true" type="volador">
+				<enemy name="badguy2" x="800" y="280" w="32" h="32" texture="Assets/Textures/enemy/Idle_HellBat.png" gravity="true" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -79,11 +79,31 @@
 						</idle>
 					</animations>
 				</enemy>
+				<enemy name="Anger" x="848" y="672" w="48" h="48" texture="Assets/Textures/bosses/latigo.png" gravity="true" type="boss">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="96" w="48" h="48" />
+							<frame x="48" y="96" w="48" h="48" />
+						</idle>
+						<walking loop="true" speed="0.1">
+							<frame x="0" y="0" w="48" h="48" />
+							<frame x="48" y="0" w="48" h="48" />
+							<frame x="96" y="0" w="48" h="48" />
+							<frame x="144" y="0" w="48" h="48" />
+						</walking>
+						<whipAttack loop="false" speed="0.05">
+							<frame x="0" y="48" w="96" h="48" />
+							<frame x="96" y="48" w="96" h="48" />
+							<frame x="192" y="48" w="96" h="48" />
+							<frame x="288" y="48" w="96" h="48" />
+						</whipAttack>
+					</animations>
+				</enemy>
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="01" Img="Assets/Textures/Fondo.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law."/>
-			<dialog ID="02" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms"/>
+			<dialog ID="01" Img="Assets/Textures/Fondo.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
+			<dialog ID="02" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 		</dialogues>
 	</scene>
 	<scene2>
@@ -172,8 +192,8 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="02" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "/>
-			<dialog ID="01" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms"/>
+			<dialog ID="02" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
+			<dialog ID="01" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 		</dialogues>
 	</scene2>
 </config>
