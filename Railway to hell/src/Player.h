@@ -45,6 +45,9 @@ public:
 	{"S3S2", 2, 1817, 640,false},
 	{"S2S1", 1, 1800, 642,false}
 	};
+	//Control de dialogos
+	void DialogoOn() { dialogo = true;}//parar player
+	void DialogoOff() { dialogo = false;}//devolver control player
 
 
 private:
@@ -73,6 +76,7 @@ public:
 	//Dialogues
 	bool NeedDialogue = false;
 	std::string Id;
+	bool dialogo = false;
 
 	// Audio fx
 	int pickCoinFxId;

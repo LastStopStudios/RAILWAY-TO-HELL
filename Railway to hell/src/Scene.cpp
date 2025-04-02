@@ -217,12 +217,21 @@ void Scene::LoadState() {
 								  sceneNode.child("entities").child("player").attribute("y").as_int());
 	player->SetPosition(playerPos);
 
+	
+	
+
 	//enemies
 	// ...
 
 }
 
+void Scene::DialogoOn() {
+	player->DialogoOn();
+}
 
+void Scene::DialogoOff() {
+	player->DialogoOff();
+}
 
 
 

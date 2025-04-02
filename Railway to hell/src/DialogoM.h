@@ -63,9 +63,13 @@ private:
 	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
 	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
 	float Skip = true; //Skipear textos | Ahora solo cierra los textos
-	//Margenes
+	//Margenes y posicion dialogos y fondo
 	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
 	int textMaxheigth = 448; //Maximo largo antes del salto de dialogo
+	int h, w;
+	int width, height;
+	int posx, posy;
+	int texty, textx;
 
 
 };

@@ -46,10 +46,15 @@ public:
 	// Return the player position
 	Vector2D GetPlayerPosition();
 
-	//L15 TODO 1: Implement the Load function
+	//Implement the Load function
 	void LoadState();
-	//L15 TODO 2: Implement the Save function
+	//Implement the Save function
 	void SaveState();
+
+
+	//parar al player cuando sale un dialogo
+	void DialogoOn();
+	void DialogoOff();
 
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
