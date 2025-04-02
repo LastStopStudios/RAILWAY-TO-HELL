@@ -44,10 +44,24 @@
 				</animations>
 			</player>
 			<items>
-				<item name="coin" x="200" y="672" w="32" h="32" texture="Assets/Textures/goldCoin.png" gravity="true">
+				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
+							<frame x="0" y="0" w="16" h="16" />
+						</idle>
+					</animations>
+				</item>
+				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.5">
+							<frame x="16" y="0" w="16" h="16" />
+						</idle>
+					</animations>
+				</item>
+				<item name="Dash ability" x="200" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.5">
+							<frame x="0" y="16" w="16" h="16" />
 						</idle>
 					</animations>
 				</item>

@@ -38,7 +38,7 @@ bool Volador::Start() {
     position.setY(parameters.attribute("y").as_int());
     texIsDeath = parameters.attribute("isDeath").as_int();
 
-    // Calcular radio de colisión basado en el tamaño de la textura
+    // Calcular radio de colisiï¿½n basado en el tamaï¿½o de la textura
     int collisionRadius = std::min(texW, texH) / 2;
     texRadius = collisionRadius;
 

@@ -19,11 +19,18 @@ public:
 
 	bool Update(float dt);
 
+	void OnCollision(PhysBody* physA, PhysBody* physB);
+	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
+
+	void SetItemType(const std::string& type) { itemType = type; }
+
+	const std::string& GetItemType() const { return itemType; }
 
 public:
 
@@ -40,4 +47,6 @@ private:
 
 	//L08 TODO 4: Add a physics to an item
 	PhysBody* pbody;
+
+	std::string itemType;
 };

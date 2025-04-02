@@ -8,6 +8,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "Volador.h"
 #include "Boss.h"
+#include "Item.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -66,10 +67,12 @@ public:
 	std::vector<Terrestre*> enemyList;
 	std::vector<Volador*> voladorList; 
 	std::vector<Boss*> bossList;
+	std::vector<Item*> itemList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Boss*>& GetBossList() { return bossList; }
+	std::vector<Item*>& GetItemList() { return itemList; }
 	//Evitar salto player
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
 	void ResetSkipInput() { skipFirstInput = false; }
