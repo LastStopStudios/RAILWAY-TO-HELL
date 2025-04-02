@@ -105,6 +105,8 @@ public:
     // Called before render is available
     bool Awake();
 
+    bool PostUpdate();
+
     // Called before the first frame
     bool Start();
 

@@ -458,7 +458,7 @@ bool Player::CleanUp() {
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
+    if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::TERRESTRE) {
         LOG("Player attack hit an enemy!");
         // Additional enemy hit logic can go here
         return;
