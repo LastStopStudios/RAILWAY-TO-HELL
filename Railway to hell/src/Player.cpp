@@ -215,12 +215,15 @@ void Player::HandleJump() {
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {
-       // Engine::GetInstance().sceneLoader->LoadScene(1);
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//pasar escena 1
+        Engine::GetInstance().sceneLoader->LoadScene(1, 257, 527, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {
-       // Engine::GetInstance().sceneLoader->LoadScene(2);
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 2
+        Engine::GetInstance().sceneLoader->LoadScene(2, 100, 520, false);
     }
+   /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
+        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
+    }*/
 }
 
 void Player::UpdateWhipAttack(float dt) {
