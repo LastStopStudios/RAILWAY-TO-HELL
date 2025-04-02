@@ -24,9 +24,9 @@ enum bodyType {
 };
 
 enum class ColliderType {
-	PLAYER, 
+	PLAYER,
 	ITEM,
-	PLATFORM, 
+	PLATFORM,
 	TERRESTRE,
 	VOLADOR,
 	ENEMY,
@@ -34,6 +34,7 @@ enum class ColliderType {
 	DIALOGOS,
 	SENSOR,
 	ASCENSORES,
+	GIRO,
 	BOSS,
 	BOSS_ATTACK,
 	UNKNOWN
@@ -57,7 +58,7 @@ public:
 public:
 	int width = 0;
 	int height = 0;
-	int ID = 0;
+	std::string ID;
 	std::string sensorID;
 	b2Body* body;
 	Entity* listener;

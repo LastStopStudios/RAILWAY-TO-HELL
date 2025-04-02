@@ -49,22 +49,31 @@ bool DialogoM::Update(float dt) {
 bool DialogoM::PostUpdate()
 {
 	if (showText && textTexture != nullptr) {
-		int width = 1200, height = 600, posx = 40, posy = -100;
-			
+		int h, w;// variables para el tamaño de la pantalla
+		Engine::GetInstance().window.get()->GetWindowSize(w, h);//Tamaño pantalla
+		//tamaño fondo
+		int width = 1200, height = 600;
+		//Posicion fondo
+		int posx = w - 1250, posy = h - 870;
+		//posicion texto
+		int texty = h - 645, textx = w - 1225;
+		
+
 		SDL_Rect dstRect = { posx, posy, width, height }; // Posicionar y escalar el fondo del texto
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
-		Engine::GetInstance().render->DrawTexture(textTexture, 310, 80, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
+		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 1.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
 	}
 	return true;
 }
-	
+
 
 void DialogoM::Texto(const std::string& Dialogo) {
 	showText = !showText; // Alternar visibilidad del texto
 	if (showText) {
 		XMLToVariable(Dialogo); // Cargar el texto correspondiente
 		GenerateTextTexture(); // Generar la textura inicial
-	}else{
+	}
+	else {
 		ResetText(); // Reiniciar el texto
 	}
 }
@@ -131,18 +140,19 @@ void DialogoM::UpdateTextAnimation(float dt)
 			LOG("textIndex: %d", textIndex);
 		}// Avanza en el texto
 		alltext = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
-		if(textIndex < textMaxheigth){
+		if (textIndex < textMaxheigth) {
 			LOG("TextIndex: %d", textIndex);//timer
 			currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
 			LOG("displayText: %s", displayText.c_str());//texto entero
 			LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
 			GenerateTextTexture(); // Genera la nueva textura con el fragmento
-		}else if (textIndex == textMaxheigth) { 
-			Tim = false; 
+		}
+		else if (textIndex == textMaxheigth) {
+			Tim = false;
 			LOG("Entro Tim : % d", Tim);
 		}
-		if(textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Tim == false){
-			
+		if (textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Tim == false) {
+
 			int finaltexto = textIndex - textMaxheigth;
 			currentText.clear();
 			currentText = displayText.substr(textMaxheigth, finaltexto); // Obtiene el nuevo fragmento
@@ -151,14 +161,15 @@ void DialogoM::UpdateTextAnimation(float dt)
 			GenerateTextTexture(); // Genera la nueva textura con el fragmento
 			Siguiente = false;//pasa de cargar la otra parte del texto
 			Tim = true;//activar el temporizador del dibujado del texto
-		}else if(textIndex >= textMaxheigth && Siguiente == false){
+		}
+		else if (textIndex >= textMaxheigth && Siguiente == false) {
 			//Tim = true;
 			int finaltexto = textIndex - textMaxheigth;
-			currentText = displayText.substr(textMaxheigth-1, finaltexto); // Obtiene el nuevo fragmento
+			currentText = displayText.substr(textMaxheigth - 1, finaltexto); // Obtiene el nuevo fragmento
 			GenerateTextTexture(); // Genera la nueva textura con el fragmento
 		}
-		
-		
+
+
 	}
 	if (alltext.length() == displayText.length()) { Skip = false; }//el texto ya se ha skipeado, sirve de control para que no haga el skip y el cerrar a la vez
 	/*if (alltext.length() != displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN) {//Skipear textos Tecla suprimir No pilla el enter ni por Execute.
@@ -168,9 +179,9 @@ void DialogoM::UpdateTextAnimation(float dt)
 		showText = !showText;
 		ResetText(); // Reiniciar el texto
 	}
-	
 
-	
+
+
 }
 
 void DialogoM::XMLToVariable(const std::string& id) {
@@ -179,7 +190,7 @@ void DialogoM::XMLToVariable(const std::string& id) {
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
-	
+
 	if (!result) {
 		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
 		return;
@@ -208,7 +219,7 @@ bool DialogoM::CleanUp()
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
 	}
-	
+
 	if (fondo != nullptr) {
 		Engine::GetInstance().textures->UnLoad(fondo);//descargar fondo texto
 		fondo = nullptr;

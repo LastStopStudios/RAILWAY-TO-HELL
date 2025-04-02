@@ -176,7 +176,8 @@ bool Map::Load(std::string path, std::string fileName)
            {"Sensores", 1},
            {"Colisiones", 2},
 		   {"Dialogos", 3},
-		   {"Ascensores", 4}
+		   {"Ascensores", 4},
+           {"Giro", 5}
         };
 
         float x = 0.0f;
@@ -205,8 +206,6 @@ bool Map::Load(std::string path, std::string fileName)
                 case 1: // Sensor cambio de escena
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::SENSOR;
-                   // LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
-                    // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
                     {
                         if (propertieNode.attribute("name") = "Sensor") {
@@ -224,8 +223,8 @@ bool Map::Load(std::string path, std::string fileName)
                     rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
                     {
-                        if (propertieNode.attribute("name") = "Dialogo") {
-                            rect->ID = propertieNode.attribute("value").as_int();
+                        if (propertieNode.attribute("name") = "ID") {
+                            rect->ID = propertieNode.attribute("value").as_string();
                             LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->ID);
                         }
                     }
@@ -233,8 +232,6 @@ bool Map::Load(std::string path, std::string fileName)
                 case 4: // Sensor ascensores
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::ASCENSORES;
-                    // LoadProperties(tileNode, mapLayer->properties);//guardar propiedades de los sensores cambio de escena
-                     // rect->sensorID = "S1S2";//modificar ID con properties, se guarda en el rect Physick body
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
                     {
                         if (propertieNode.attribute("name") = "Sensor") {
@@ -242,6 +239,11 @@ bool Map::Load(std::string path, std::string fileName)
                             LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
                         }
                     }
+                    break;
+
+                case 5: // Sensor para patrullaje enemigos
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::GIRO;
                     break;
                 
                 default: // Plataformas
