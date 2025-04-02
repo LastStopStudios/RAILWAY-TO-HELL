@@ -451,7 +451,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         isJumping = false;
         break;
-    case ColliderType::ITEM:{
+    case ColliderType::ITEM: {
         Item* item = (Item*)physB->listener;
         if (item && item->GetItemType() == "Dash ability") {
             Dash = true;
@@ -463,8 +463,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
-            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);        }
- 
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+    }
+
         break;
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
@@ -475,14 +477,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 sceneToLoad = escena.id;
                 Playerx = escena.x;
                 Playery = escena.y;// Devuelve el ID para cargar ese mapaa
-				Fade = escena.fade;
+                Fade = escena.fade;
             }
         }
         break;
     case ColliderType::ASCENSORES:
         LOG("ASCENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN )
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
         {
             NeedSceneChange = true;
             for (const auto& escena : escenas) {//recorrer todas las escenas
