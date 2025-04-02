@@ -122,7 +122,7 @@ bool Scene::Update(float dt)
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		/*if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 			Engine::GetInstance().render.get()->camera.y -= ceil(camSpeed * dt);
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -132,10 +132,11 @@ bool Scene::Update(float dt)
 			Engine::GetInstance().render.get()->camera.x -= ceil(camSpeed * dt);
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-			Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
+			Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);*/
 
 		/*Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
 		Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;*/
+		Engine::GetInstance().render.get()->camera.x = (Engine::GetInstance().window->width / 2 - player->position.getX() * 0.5);
 
 		//Implement a method that repositions the player in the map with a mouse click
 
