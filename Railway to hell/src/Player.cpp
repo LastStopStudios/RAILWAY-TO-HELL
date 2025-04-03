@@ -36,9 +36,11 @@ bool Player::Start() {
     currentAnimation = &idle;
 
     // Add physics to the player - initialize physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    //pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY(), texW / 2, texH - 10, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
+    pbody->body->SetFixedRotation(true);
 
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) {
@@ -377,7 +379,7 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Update hitbox position
         if (attackHitbox) {
-            int attackX = facingRight ? position.getX() + 30 : position.getX();
+            int attackX = facingRight ? position.getX() + 30 : position.getX() + 30;
             int attackY = position.getY() + texH / 2;
             attackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
