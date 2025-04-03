@@ -135,7 +135,7 @@ bool Terrestre::Update(float dt)
     else {
         // If the player is out of range, patrol
         const float patrolSpeed = 20.0f;
-        if (giro ==true) {
+        if (giro == true) {
             b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), pbody->body->GetLinearVelocity().y);
             pbody->body->SetLinearVelocity(velocity);
             isLookingLeft = true;
