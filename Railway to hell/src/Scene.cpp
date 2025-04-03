@@ -121,8 +121,8 @@ bool Scene::Update(float dt)
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 
-		Engine::GetInstance().render.get()->camera.y = (Engine::GetInstance().window->height - 570 - player->position.getY() * 0.5);
-		Engine::GetInstance().render.get()->camera.x = (Engine::GetInstance().window->width - 900 - player->position.getX() * 0.5);
+		Engine::GetInstance().render.get()->camera.y = (Engine::GetInstance().window->height - 550 - player->position.getY() * 0.5);
+		Engine::GetInstance().render.get()->camera.x = (Engine::GetInstance().window->width - 1150 - player->position.getX() * 0.5);
 
 		//Implement a method that repositions the player in the map with a mouse click
 
