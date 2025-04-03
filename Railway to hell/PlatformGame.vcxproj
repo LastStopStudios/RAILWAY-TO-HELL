@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Boss.cpp" />
+    <ClCompile Include="src\Caronte.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Boss.h" />
+    <ClInclude Include="src\Caronte.h" />
     <ClInclude Include="src\DialogoM.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />
