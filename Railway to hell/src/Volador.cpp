@@ -92,11 +92,7 @@ bool Volador::Update(float dt) {
     // Convertir posici?n del enemigo a coordenadas de la c?mara
     Vector2D enemyScreenPos = enemyPos - camPos;
 
-    // Verificar si el enemigo est? dentro de la c?mara
-    if (enemyScreenPos.getX() < 0 || enemyScreenPos.getX() > camSize.getX() ||
-        enemyScreenPos.getY() < 0 || enemyScreenPos.getY() > camSize.getY()) {
-        return true; // Si est? fuera de la c?mara, no procesamos m?s l?gica
-    }
+   
     Vector2D enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();

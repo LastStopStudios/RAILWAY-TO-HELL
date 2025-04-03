@@ -267,7 +267,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
 
 
 	if (control->id == 1) {
-		Engine::GetInstance().dialogoM->Texto("3"); // Llama a Texto que toque
+		Engine::GetInstance().dialogoM->Texto("1"); // Llama a Texto que toque
 	}
 	return true;
 }
