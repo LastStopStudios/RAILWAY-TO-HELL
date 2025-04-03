@@ -53,7 +53,7 @@ private:
 	Vector2D enemyPos;
 
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
-	bool isLookingLeft, isLookingRight = false;
+	bool isLookingLeft, isLookingRight = false, giro = true;;
 	bool isAttacking;
 	bool isTouchingCollision = false;
 	float moveSpeed;          // Enemy movement speed

@@ -42,7 +42,7 @@ public:
 private:
 	// Update logic
 	SDL_RendererFlip flip = SDL_FLIP_NONE; 
-	bool isLookingLeft, isLookingRight = false;
+	bool isLookingLeft, isLookingRight = false, giro = true;
 	float patrolLeftLimit;
 	float patrolRightLimit;
 	std::string spellType;

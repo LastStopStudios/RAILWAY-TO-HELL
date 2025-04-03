@@ -79,7 +79,7 @@ bool Terrestre::Update(float dt)
     float distanceToPlayer = abs(playerPos.getX() - enemyPos.getX());
 
     // Player detection distance (in pixels)
-    float detectionDistance = 200.0f;
+    float detectionDistance = 10.0f;
     float moveSpeed = 30.0f;
 
     // If the player is within detection range
@@ -133,8 +133,20 @@ bool Terrestre::Update(float dt)
         }
     }
     else {
-        // If the player is out of range, stop the enemy
-        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+        // If the player is out of range, patrol
+        const float patrolSpeed = 20.0f;
+        if (giro ==true) {
+            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), pbody->body->GetLinearVelocity().y);
+            pbody->body->SetLinearVelocity(velocity);
+            isLookingLeft = true;
+        }
+        else if (giro == false) {
+            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), pbody->body->GetLinearVelocity().y);
+            pbody->body->SetLinearVelocity(velocity);
+            isLookingLeft = false;
+        }
+       
+       
     }
 
     // Set sprite flip based on direction
@@ -191,6 +203,10 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_ATTACK:
         LOG("Enemy hit by player attack - DESTROY");
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
+    case ColliderType::GIRO:
+       giro = !giro;
+        LOG("Toco");
         break;
 	}
 }

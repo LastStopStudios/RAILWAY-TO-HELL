@@ -139,18 +139,19 @@ bool Volador::Update(float dt) {
         }
     }
     else {
-        // Patrol logic
-        const float patrolLeftLimit = 750.0f;
-        const float patrolRightLimit = 950.0f;
-        const float patrolSpeed = 30.0f;
-
-        float currentPosX = enemyPos.getX();
-        movingRight = (currentPosX >= patrolRightLimit) ? false : (currentPosX <= patrolLeftLimit) ? true : movingRight;
-
-        float stepX = movingRight ? patrolSpeed : -patrolSpeed;
-        isLookingLeft = !movingRight;
-        b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(stepX), 0.0f);
-        pbody->body->SetLinearVelocity(velocity);
+           
+        const float patrolSpeed = 20.0f;
+        if (giro == true) {
+            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
+            pbody->body->SetLinearVelocity(velocity);
+            isLookingLeft = true;
+        }
+        else if (giro == false) {
+            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
+            pbody->body->SetLinearVelocity(velocity);
+            isLookingLeft = false;
+        }
+        
     }
 
     // Flip sprite configuration
@@ -208,6 +209,9 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_ATTACK:
         LOG("Enemy hit by player attack - DESTROY");
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
+    case ColliderType::GIRO:
+        giro = !giro;
         break;
     
     default:
