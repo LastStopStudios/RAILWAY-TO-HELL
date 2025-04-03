@@ -232,30 +232,14 @@ bool Map::Load(std::string path, std::string fileName)
 
                 switch (layerId) {
                 case 1: // Sensor cambio de escena
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::SENSOR;
-                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-                    {
-                        if (propertieNode.attribute("name") = "Sensor") {
-                            rect->sensorID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
-                        }
-                    }
+                    
                     break;
                 case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
                     break;
                 case 3: // Sensor Dialogos
-                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
-                    for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
-                    {
-                        if (propertieNode.attribute("name") = "ID") {
-                            rect->ID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->ID);
-                        }
-                    }
+                    
                     break;
                 case 4: // Sensor ascensores
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
