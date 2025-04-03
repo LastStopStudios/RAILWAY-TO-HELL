@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="MapTemplate.tmx" />
 		<entities>
-			<player x="257" y="527" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="257" y="495" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<death loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
 						<frame x="0" y="3" w="64" h="96" />
