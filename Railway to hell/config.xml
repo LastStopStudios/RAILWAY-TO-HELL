@@ -15,9 +15,9 @@
 		<fullscreen_window value="false" />
 	</window>
 	<scene>
-		<map path="Assets/Maps/" name="MapTemplate.tmx" />
+		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="257" y="495" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<death loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
 						<frame x="0" y="3" w="64" h="96" />
@@ -45,17 +45,16 @@
 						<frame x="256" y="194" w="64" h="96" />
 					</idle>
 					<idleW loop="true" speed="0.1" texture="Assets/Textures/player/Characters.png">
-						>
-						<frame x="0"   y="290" w="64" h="96" />
-						<frame x="64"  y="290" w="64" h="96" />
+						&gt;
+						<frame x="0" y="290" w="64" h="96" />
+						<frame x="64" y="290" w="64" h="96" />
 						<frame x="128" y="290" w="64" h="96" />
 						<frame x="192" y="290" w="64" h="96" />
 						<frame x="256" y="290" w="64" h="96" />
 					</idleW>
 					<jump loop="false" speed="0.1" texture="Assets/Textures/player/Characters.png">
-
-						<frame x="0"   y="403" w="64"  h="128" />
-						<frame x="64"  y="403" w="64" h="128" />
+						<frame x="0" y="403" w="64" h="128" />
+						<frame x="64" y="403" w="64" h="128" />
 						<frame x="128" y="403" w="64" h="128" />
 						<frame x="192" y="403" w="64" h="128" />
 						<frame x="256" y="403" w="64" h="128" />
@@ -66,9 +65,8 @@
 						<frame x="576" y="403" w="64" h="128" />
 					</jump>
 					<jumpW loop="false" speed="0.1" texture="Assets/Textures/player/Characters.png">
-
-						<frame x="0"   y="530" w="64"  h="128" />
-						<frame x="64"  y="530" w="64" h="128" />
+						<frame x="0" y="530" w="64" h="128" />
+						<frame x="64" y="530" w="64" h="128" />
 						<frame x="128" y="530" w="64" h="128" />
 						<frame x="192" y="530" w="64" h="128" />
 						<frame x="256" y="530" w="64" h="128" />
@@ -79,8 +77,8 @@
 						<frame x="576" y="530" w="64" h="128" />
 					</jumpW>
 					<pickup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="643" w="64" h="96" />
-						<frame x="64"  y="643" w="64" h="96" />
+						<frame x="0" y="643" w="64" h="96" />
+						<frame x="64" y="643" w="64" h="96" />
 						<frame x="128" y="643" w="64" h="96" />
 						<frame x="192" y="643" w="64" h="96" />
 						<frame x="256" y="643" w="64" h="96" />
@@ -90,8 +88,8 @@
 						<frame x="512" y="643" w="64" h="96" />
 					</pickup>
 					<pickupW loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="739" w="64" h="96" />
-						<frame x="64"  y="739" w="64" h="96" />
+						<frame x="0" y="739" w="64" h="96" />
+						<frame x="64" y="739" w="64" h="96" />
 						<frame x="128" y="739" w="64" h="96" />
 						<frame x="192" y="739" w="64" h="96" />
 						<frame x="256" y="739" w="64" h="96" />
@@ -101,8 +99,8 @@
 						<frame x="512" y="739" w="64" h="96" />
 					</pickupW>
 					<attack loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="834" w="64" h="96" />
-						<frame x="64"  y="834" w="64" h="96" />
+						<frame x="0" y="834" w="64" h="96" />
+						<frame x="64" y="834" w="64" h="96" />
 						<frame x="128" y="834" w="64" h="96" />
 						<frame x="192" y="834" w="64" h="96" />
 						<frame x="256" y="834" w="64" h="96" />
@@ -112,8 +110,8 @@
 						<frame x="512" y="834" w="64" h="96" />
 					</attack>
 					<attackW loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="934" w="64" h="96" />
-						<frame x="64"  y="934" w="64" h="96" />
+						<frame x="0" y="934" w="64" h="96" />
+						<frame x="64" y="934" w="64" h="96" />
 						<frame x="128" y="934" w="64" h="96" />
 						<frame x="192" y="934" w="64" h="96" />
 						<frame x="256" y="934" w="64" h="96" />
@@ -123,8 +121,8 @@
 						<frame x="512" y="934" w="64" h="96" />
 					</attackW>
 					<wakeup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="1029" w="64" h="96" />
-						<frame x="64"  y="1029" w="64" h="96" />
+						<frame x="0" y="1029" w="64" h="96" />
+						<frame x="64" y="1029" w="64" h="96" />
 						<frame x="128" y="1029" w="64" h="96" />
 						<frame x="192" y="1029" w="64" h="96" />
 						<frame x="256" y="1029" w="64" h="96" />
@@ -132,8 +130,8 @@
 						<frame x="384" y="1029" w="64" h="96" />
 					</wakeup>
 					<wakeupW loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="1125" w="64" h="96" />
-						<frame x="64"  y="1125" w="64" h="96" />
+						<frame x="0" y="1125" w="64" h="96" />
+						<frame x="64" y="1125" w="64" h="96" />
 						<frame x="128" y="1125" w="64" h="96" />
 						<frame x="192" y="1125" w="64" h="96" />
 						<frame x="256" y="1125" w="64" h="96" />
@@ -170,8 +168,8 @@
 						<frame x="526" y="1409" w="64" h="96" />
 					</hurt>
 					<hurtW loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="1505" w="64" h="96" />
-						<frame x="64"  y="1505" w="64" h="96" />
+						<frame x="0" y="1505" w="64" h="96" />
+						<frame x="64" y="1505" w="64" h="96" />
 						<frame x="128" y="1505" w="64" h="96" />
 						<frame x="192" y="1505" w="64" h="96" />
 						<frame x="256" y="1505" w="64" h="96" />
@@ -181,8 +179,8 @@
 						<frame x="512" y="1505" w="64" h="96" />
 					</hurtW>
 					<walk loop="true" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="1600" w="64" h="96" />
-						<frame x="64"  y="1600" w="64" h="96" />
+						<frame x="0" y="1600" w="64" h="96" />
+						<frame x="64" y="1600" w="64" h="96" />
 						<frame x="128" y="1600" w="64" h="96" />
 						<frame x="192" y="1600" w="64" h="96" />
 						<frame x="256" y="1600" w="64" h="96" />
@@ -191,8 +189,8 @@
 						<frame x="448" y="1600" w="64" h="96" />
 					</walk>
 					<walkW loop="true" speed="0.15" texture="Assets/Textures/player/Characters.png">
-						<frame x="0"   y="1696" w="64" h="96" />
-						<frame x="64"  y="1696" w="64" h="96" />
+						<frame x="0" y="1696" w="64" h="96" />
+						<frame x="64" y="1696" w="64" h="96" />
 						<frame x="128" y="1696" w="64" h="96" />
 						<frame x="192" y="1696" w="64" h="96" />
 						<frame x="256" y="1696" w="64" h="96" />

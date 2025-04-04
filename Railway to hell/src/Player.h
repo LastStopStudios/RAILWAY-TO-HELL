@@ -108,7 +108,7 @@ private:
 
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
-
+	bool godMode;
 	// Dash properties
 	bool isDashing = false;
 	float dashSpeed = 0.6f;

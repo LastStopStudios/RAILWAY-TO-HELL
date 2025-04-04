@@ -14,6 +14,7 @@
 Player::Player() : Entity(EntityType::PLAYER)
 {
     name = "Player";
+    godMode = false;
 }
 
 Player::~Player() {
@@ -37,10 +38,9 @@ bool Player::Start() {
 
     // Add physics to the player - initialize physics body
     //pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() , (int)position.getY(), texW / 2, texH - 10, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() , (int)position.getY(), texW / 2, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
-    pbody->body->SetFixedRotation(true);
 
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) {
@@ -188,12 +188,18 @@ void Player::HandleMovement(b2Vec2& velocity) {
         velocity.x = 0.2f * 16;
         facingRight = true;
     }
-
-    // Vertical movement
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        velocity.y = -0.2 * 16;
+    // Toggle god mode when F5 is pressed
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_REPEAT) {
+        godMode = !godMode; // This properly toggles between true and false
+        // Vertical movement
     }
 
+    // Vertical movement when W is pressed and god mode is active
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+        if (godMode == true) { // Use == for comparison, not =
+            velocity.y = -0.2 * 16;
+        }
+    }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
         velocity.y = 0.2f * 16;
     }
