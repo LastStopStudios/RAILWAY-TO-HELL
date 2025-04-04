@@ -72,6 +72,11 @@ bool Player::Start() {
     isPreparingJump = false;
     isJumping = false;
     jumpFrameThreshold = 3; // This is 4th frame (0-indexed)
+
+    pugi::xml_node walkNode = parameters.child("animations").child("walk");
+    walk.LoadAnimations(walkNode);
+    isWalking = false;
+
     // Inicializar whipAttack igual que meleeAttack (fuera del bloque condicional)
     whipAttack = Animation();
 
@@ -185,14 +190,19 @@ bool Player::Update(float dt)
 void Player::HandleMovement(b2Vec2& velocity) {
    
     // Horizontal movement
+    isWalking = false;
+
+    // Horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         velocity.x = -0.2f * 16;
         facingRight = false;
+        isWalking = true;
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         velocity.x = 0.2f * 16;
         facingRight = true;
+        isWalking = true;
     }
     // Toggle god mode when F5 is pressed
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_REPEAT) {
@@ -206,9 +216,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
             velocity.y = -0.2 * 16;
         }
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-        velocity.y = 0.2f * 16;
-    }
+    
 }
 
 void Player::HandleDash(b2Vec2& velocity, float dt) {
@@ -446,6 +454,11 @@ void Player::DrawPlayer() {
         // Set the jump animation when jumping or preparing to jump
         currentAnimation = &jump;
         texture = jumpTexture;
+    }
+    else if (isWalking) {
+        // Set walking animation when moving horizontally
+        currentAnimation = &walk;
+
     }
     else {
         // Only change back to idle if we weren't already in idle

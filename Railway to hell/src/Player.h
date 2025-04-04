@@ -111,6 +111,9 @@ private:
 	bool isPreparingJump;
 	int jumpFrameThreshold;
 
+	Animation walk;
+	bool isWalking;
+
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
 	bool godMode;
