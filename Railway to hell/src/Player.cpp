@@ -66,6 +66,9 @@ bool Player::Start() {
         LOG("Attack animation loaded");
     }
     pugi::xml_node idleNode = parameters.child("animations").child("idle");
+    pugi::xml_node jumpNode = parameters.child("animations").child("jump"); 
+    jump.LoadAnimations(jumpNode);
+    jumpTexture = Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()); 
     // Inicializar whipAttack igual que meleeAttack (fuera del bloque condicional)
     whipAttack = Animation();
 
@@ -243,8 +246,14 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
 void Player::HandleJump() {
     // Jump control
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
+        // Increase jump force to make player jump higher (adjust this value as needed)
+        float jumpForce = 5.0f; // Increase this value for higher jumps
         pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
         isJumping = true;
+
+        // Reset jump animation
+        jump.Reset();
+        currentAnimation = &jump;
     }
 }
 
@@ -420,6 +429,11 @@ void Player::DrawPlayer() {
         currentAnimation = &whipAttack;
         // Use whip texture when whip attacking
         texture = whipAttackTexture;
+    }
+    else if (isJumping) {
+        // Set the jump animation when jumping
+        currentAnimation = &jump;
+        texture = jumpTexture;
     }
     else {
         // Only change back to idle if we weren't already in idle

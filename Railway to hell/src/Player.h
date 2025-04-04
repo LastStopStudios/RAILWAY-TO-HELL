@@ -106,6 +106,9 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
+	Animation jump; 
+	SDL_Texture* jumpTexture = nullptr;
+
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
 	bool godMode;
