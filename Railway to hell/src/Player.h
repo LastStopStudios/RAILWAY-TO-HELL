@@ -108,6 +108,8 @@ private:
 
 	Animation jump; 
 	SDL_Texture* jumpTexture = nullptr;
+	bool isPreparingJump;
+	int jumpFrameThreshold;
 
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual

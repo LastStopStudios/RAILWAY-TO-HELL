@@ -66,4 +66,7 @@ public:
 		}
 
 	}
+	int GetCurrentFrameIndex() const {
+		return currentFrame;
+	}
 };

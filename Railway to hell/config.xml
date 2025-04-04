@@ -35,7 +35,7 @@
 						<frame x="192" y="194" w="64" h="96" />
 						<frame x="256" y="194" w="64" h="96" />
 					</idle>
-					<jump loop="false" speed="0.23" texture="Assets/Textures/player/Characters.png">
+					<jump loop="false" speed="0.2" texture="Assets/Textures/player/Characters.png">
 						<frame x="0" y="416" w="64" h="128" />
 						<frame x="64" y="416" w="64" h="128" />
 						<frame x="128" y="416" w="64" h="128" />
