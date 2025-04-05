@@ -207,7 +207,6 @@ bool Map::Load(std::string path, std::string fileName)
 		   {"Ascensores", 4},
            {"Giro", 5}
         };
-
         float x = 0.0f;
         float y = 0.0f;
         float width = 0.0f;
