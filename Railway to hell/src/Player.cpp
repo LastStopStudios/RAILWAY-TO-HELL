@@ -126,7 +126,7 @@ bool Player::Update(float dt)
         }
 
         // Handle dash only when not attacking or jumping
-        if (!isAttacking && !isWhipAttacking && !isJumping) {
+        if (!isAttacking && !isWhipAttacking) {
             HandleDash(velocity, dt);
         }
 
