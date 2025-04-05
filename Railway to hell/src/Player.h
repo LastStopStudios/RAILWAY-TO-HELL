@@ -44,6 +44,9 @@ public:
 	{"DE1L1T2", 1, 864, 2149,false},
 	{"DE2L1BOSS", 3, 1840, 1784,true}
 	};
+	//control ascensor
+	TocandoAs = false;
+	void Ascensor();
 	//Control de dialogos
 	void DialogoOn() { dialogo = true;}//parar player
 	void DialogoOff() { dialogo = false;}//devolver control player

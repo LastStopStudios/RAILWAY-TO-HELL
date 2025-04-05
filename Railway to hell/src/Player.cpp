@@ -143,12 +143,15 @@ bool Player::Update(float dt)
         if (NeedSceneChange) { // Scene change
             Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade); // Pass the new scene to the sceneLoader
             NeedSceneChange = false;
+            TocandoAs = false;
         }
 
         if (NeedDialogue) { // Dialogue
             Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Call the corresponding dialogue line
             NeedDialogue = false;
         }
+
+        Ascensor();
 
         // Apply the velocity to the player
         pbody->body->SetLinearVelocity(velocity);
@@ -524,7 +527,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
     }
-
         break;
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
@@ -542,9 +544,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ASCENSORES:
         LOG("ASCENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-        {
-            NeedSceneChange = true;
+        TocandoAs = true;
             for (const auto& escena : escenas) { // Iterate through all scenes
                 if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
@@ -553,7 +553,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Fade = escena.fade;
                 }
             }
-        }
         break;
     case ColliderType::DIALOGOS:
         LOG("DIALOGOS COLLISION DETECTED");
@@ -561,14 +560,24 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         NeedDialogue = true;
         Id = physB->ID;
         break;
-
     case ColliderType::UNKNOWN:
         break;
     }
 }
 
+void Player::Ascensor(){
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
+    {
+        NeedSceneChange = true;
+    }
+}
+
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Empty but necessary implementation
+    switch (physB->ctype) {
+    case ColliderType::ASCENSORES:
+        TocandoAs = false;  
+        break;
+    }
 }
 
 void Player::SetPosition(Vector2D pos) {
