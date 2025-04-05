@@ -42,7 +42,7 @@ public:
 	{"DT2L1E2", 3, 825, 815,false},
 	{"DT2L1E1", 2, 3050, 860,false},
 	{"DE1L1T2", 1, 864, 2149,false},
-	{"DE2L1BOSS", 3, 1840, 1784,true}
+	{"DE2L1BOSS1", 3, 1840, 1784,true}
 	};
 	//control ascensor
 	bool TocandoAs = false;

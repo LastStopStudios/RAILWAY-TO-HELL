@@ -21681,7 +21681,7 @@
  <objectgroup id="17" name="Ascensores">
   <object id="186" x="1764" y="818" width="104" height="108">
    <properties>
-    <property name="Sensor" value="DE2L1BOSS"/>
+    <property name="Sensor" value="DE2L1BOSS1"/>
    </properties>
   </object>
  </objectgroup>
