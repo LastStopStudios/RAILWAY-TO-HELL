@@ -40,7 +40,7 @@ bool Player::Start() {
 
     // Add physics to the player - initialize physics body
     //pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() , (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
 
@@ -56,24 +56,27 @@ bool Player::Start() {
     meleeAttack = Animation();
 
     // Load attack animations carefully and check for errors
-    
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
     attackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("attack").attribute("texture").as_string());
-    
+
     jump.LoadAnimations(parameters.child("animations").child("jump"));
     jumpTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("jump").attribute("texture").as_string());
     isPreparingJump = false;
     isJumping = false;
-    jumpFrameThreshold = 3; // This is 4th frame (0-indexed)
+    jumpFrameThreshold = 3; 
 
     walk.LoadAnimations(parameters.child("animations").child("walk"));
     isWalking = false;
 
-    // Inicializar whipAttack igual que meleeAttack (fuera del bloque condicional)
+    // Initialize whipAttack just like meleeAttack (outside of conditional block)
     whipAttack = Animation();
 
     whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
     whipAttackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("whip").attribute("texture").as_string());
+
+    dash = Animation();
+    dash.LoadAnimations(parameters.child("animations").child("dash"));
+    dashTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("dash").attribute("texture").as_string());
 
     // Set initial state
     isAttacking = false;
@@ -81,14 +84,14 @@ bool Player::Start() {
     attackCooldown = 0.0f;
     attackHitbox = nullptr;
 
-    // Initialize whip attack state variables explicitly
+    // Explicitly initialize whip attack state variables
     isWhipAttacking = false;
     canWhipAttack = true;
     whipAttackCooldown = 0.0f;
     whipAttackHitbox = nullptr;
 
-    // Para pruebas, habilitar temporalmente el ataque whip
-    // Elimina esta línea cuando quieras que el jugador tenga que recoger el item primero
+    // For testing, temporarily enable whip attack
+    // Remove this line when you want the player to collect the item first
     WhipAttack = true;
 
     facingRight = true;
@@ -107,7 +110,7 @@ bool Player::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();  
         return true;
     }
-    if (dialogo == false)//Dejar al player quieto cuando hay dialogos por pantalla
+    if (dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector
         b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
@@ -133,25 +136,17 @@ bool Player::Update(float dt)
             UpdateMeleeAttack(dt);
         }
 
-        // If dashing, preserve the dash velocity
-        if (isDashing) {
-            dashDuration -= dt;
-            if (dashDuration <= 0) {
-                isDashing = false;
-            }
-        }
-
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbody->body->GetLinearVelocity().y;
         }
-        if (NeedSceneChange) {//cambio de escena 
-            Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade);//pasarle la nueva escena al sceneLoader
+        if (NeedSceneChange) { // Scene change
+            Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade); // Pass the new scene to the sceneLoader
             NeedSceneChange = false;
         }
 
-        if (NeedDialogue) {//Dialogo 
-            Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Llama a Texto que toque 
+        if (NeedDialogue) { // Dialogue
+            Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Call the corresponding dialogue line
             NeedDialogue = false;
         }
 
@@ -199,44 +194,53 @@ void Player::HandleMovement(b2Vec2& velocity) {
             velocity.y = -0.2 * 16;
         }
     }
-    
 }
 
 void Player::HandleDash(b2Vec2& velocity, float dt) {
-    // Dash cooldown logic
+    // Update dash cooldown if it's active
     if (!canDash) {
-        dashCooldownTimer -= dt;
-        if (dashCooldownTimer <= 0) {
+        dashCooldown -= dt;
+        if (dashCooldown <= 0.0f) {
             canDash = true;
+            dashCooldown = 0.0f;
         }
     }
 
-    // Dash input with strict conditions
-    bool isDashKeyPressed =
-        (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT ||
-            Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) &&
-        Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN;
+    // Check if we should start a new dash
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
+        canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
+        // Reset the animation to the beginning
+        dash.Reset();
+        currentAnimation = &dash;
 
-    if (isDashKeyPressed && canDash && Dash) {
+        // Start dash
         isDashing = true;
-        dashDuration = 0.2f;  // Fixed dash duration
-
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-            velocity.x = dashSpeed * 100;  // Dash right
-            facingRight = true;
-        }
-
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-            velocity.x = -dashSpeed * 100;  // Dash left
-            facingRight = false;
-        }
-
-        // Start the cooldown
+        LOG("Dash started");
         canDash = false;
-        dashCooldownTimer = dashCooldownDuration;
+        dashCooldown = 1.5f;
+
+        // Set a specific number of frames for the dash
+        dashFrameCount = 20;  // Adjust this value as needed
+
+        // Configurable dash parameters
+        dashSpeed = 12.0f;      // Dash speed
+        dashDirection = facingRight ? 1.0f : -1.0f;
+    }
+
+    // Update frame counter and maintain velocity while dashing
+    if (isDashing) {
+        // Set constant velocity during the dash
+        velocity.x = dashDirection * dashSpeed;
+
+        dashFrameCount--;  // Decrease frame counter
+
+        // End the dash when the counter reaches zero
+        if (dashFrameCount <= 0) {
+            isDashing = false;
+            LOG("Dash ended");
+        }
     }
 }
-
 void Player::HandleJump() {
     // Start jump animation when space is pressed
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isPreparingJump) {
@@ -263,16 +267,16 @@ void Player::HandleJump() {
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//pasar escena 1
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//go to scene 1
         Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 2
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//go to scene 2
         Engine::GetInstance().sceneLoader->LoadScene(2, 100, 520, true);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//pasar escena 3
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//go to scene 3
         Engine::GetInstance().sceneLoader->LoadScene(3, 2942, 848, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4) {//pasar escena 4
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4) {//go to scene 4
         Engine::GetInstance().sceneLoader->LoadScene(4, 766, 842, false);
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
@@ -445,15 +449,16 @@ void Player::DrawPlayer() {
         currentAnimation = &jump;
         texture = jumpTexture;
     }
+    else if (isDashing) {
+        // Set walking animation when moving horizontally
+        currentAnimation = &dash;
+        texture = dashTexture;
+    }
     else if (isWalking) {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
-
     }
     else {
-        // Only change back to idle if we weren't already in idle
-        // This avoids resetting the animation constantly
-
         if (currentAnimation != &idle) {
             currentAnimation = &idle;
             // Reset texture to the original one loaded in Start()
@@ -525,11 +530,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("SENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
         NeedSceneChange = true;
-        for (const auto& escena : escenas) {//recorrer todas las escenas
-            if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
+        for (const auto& escena : escenas) { // Iterate through all scenes
+            if (escena.escena == physB->sensorID) { // Check where the player needs to go
                 sceneToLoad = escena.id;
                 Playerx = escena.x;
-                Playery = escena.y;// Devuelve el ID para cargar ese mapaa
+                Playery = escena.y; // Set the destination map and player position
                 Fade = escena.fade;
             }
         }
@@ -540,11 +545,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
         {
             NeedSceneChange = true;
-            for (const auto& escena : escenas) {//recorrer todas las escenas
-                if (escena.escena == physB->sensorID) {//mirar donde tiene que ir 
+            for (const auto& escena : escenas) { // Iterate through all scenes
+                if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
                     Playerx = escena.x;
-                    Playery = escena.y;// Devuelve el ID para cargar ese mapaa
+                    Playery = escena.y; // Set the ID and coordinates to load that map
                     Fade = escena.fade;
                 }
             }
@@ -563,7 +568,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Implementaci�n vac�a pero necesaria
+    // Empty but necessary implementation
 }
 
 void Player::SetPosition(Vector2D pos) {

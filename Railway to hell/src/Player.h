@@ -109,6 +109,14 @@ private:
 	bool isPreparingJump;
 	int jumpFrameThreshold;
 
+	Animation dash;
+	SDL_Texture* dashTexture = nullptr;
+	float dashCooldown;
+	float dashDirection;   // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
+	float dashSpeed;       // Velocidad del dash
+	float dashDistance;    // Distancia total del dash  // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
+	int dashFrameCount;  // Contador de frames para el dash
+
 	Animation walk;
 	bool isWalking;
 
@@ -117,7 +125,6 @@ private:
 	bool godMode;
 	// Dash properties
 	bool isDashing = false;
-	float dashSpeed = 0.6f;
 	float dashCooldownTimer = 0.0f;
 	float dashCooldownDuration = 1.0f; // 1 second cooldown
 	bool canDash = true;

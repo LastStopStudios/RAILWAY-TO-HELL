@@ -78,7 +78,7 @@
 						<frame x="320" y="1029" w="64" h="96" />
 						<frame x="384" y="1029" w="64" h="96" />
 					</wakeup>
-					<dash loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+					<dash loop="false" speed="0.3" texture="Assets/Textures/player/Characters.png">
 						<frame x="0" y="1217" w="96" h="96" />
 						<frame x="96" y="1217" w="96" h="96" />
 						<frame x="189" y="1217" w="96" h="96" />
@@ -133,7 +133,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="200" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
+				<item name="Dash ability" x="3390" y="2079" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="16" w="16" h="16" />
