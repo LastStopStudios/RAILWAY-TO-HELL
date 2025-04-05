@@ -468,9 +468,12 @@ void Player::DrawPlayer() {
 
     // Get the current frame
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
-
+    int offsetX = 15;
+    int yOffset = 10;
+    int drawX = position.getX() + offsetX;
+    int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
-    int offsetX = 0;
+   
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
     }
@@ -478,8 +481,8 @@ void Player::DrawPlayer() {
     // Draw the player with the current animation and appropriate texture
     Engine::GetInstance().render.get()->DrawTexture(
         texture,                    // Current texture based on state
-        position.getX() - offsetX,  // X position with offset for flipping
-        position.getY(),            // Y position
+       drawX,  // X position with offset for flipping
+       drawY,            // Y position
         &frame,                     // Current animation frame
         1.0f,                       // Scale factor
         0.0,                        // No rotation
