@@ -32,6 +32,8 @@ bool Player::Start() {
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
+    idleTexture = texture;
+
     // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
     currentAnimation = &idle;
@@ -354,6 +356,7 @@ void Player::UpdateWhipAttack(float dt) {
             LOG("Whip Attack finished");
             isWhipAttacking = false;
             currentAnimation = &idle;  // Explicitly switch back to idle animation
+			texture = idleTexture;
 
             if (whipAttackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
