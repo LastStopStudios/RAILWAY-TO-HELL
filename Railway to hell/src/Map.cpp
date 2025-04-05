@@ -67,7 +67,7 @@ bool Map::Update(float dt)
     return ret;
 }
 
-// L09: TODO 2: Implement function to the Tileset based on a tile id
+//Implement function to the Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int gid) const
 {
 	TileSet* set = nullptr;
@@ -189,7 +189,7 @@ bool Map::Load(std::string path, std::string fileName)
             mapLayer->width = layerNode.attribute("width").as_int();
             mapLayer->height = layerNode.attribute("height").as_int();
 
-            //L09: TODO 6 Call Load Layer Properties
+            //Call Load Layer Properties
             LoadProperties(layerNode, mapLayer->properties);
 
             //Iterate over all the tiles and assign the values in the data array
@@ -303,7 +303,7 @@ bool Map::Load(std::string path, std::string fileName)
 
         ret = true;
 
-        // L06: TODO 5: LOG all the data loaded iterate all tilesetsand LOG everything
+        //LOG all the data loaded iterate all tilesetsand LOG everything
         if (ret == true)
         {
             LOG("Successfully parsed map XML file :%s", fileName.c_str());
@@ -338,7 +338,7 @@ bool Map::Load(std::string path, std::string fileName)
     return ret;
 }
 
-// L09: TODO 6: Load a group of properties from a node and fill a list with it
+//Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
     bool ret = false;
@@ -347,7 +347,7 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     {
         Properties::Property* p = new Properties::Property();
         p->name = propertieNode.attribute("name").as_string();
-        p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
+        p->value = propertieNode.attribute("value").as_bool();
 
         properties.propertyList.push_back(p);
     }
@@ -388,7 +388,7 @@ MapLayer* Map::GetNavigationLayer() {
 	return nullptr;
 }
 
-// L09: TODO 7: Implement a method to get the value of a custom property
+//Implement a method to get the value of a custom property
 Properties::Property* Properties::GetProperty(const char* name)
 {
     for (const auto& property : propertyList) {

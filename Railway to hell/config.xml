@@ -301,6 +301,17 @@
 				</animations>
 			</player>
 			<enemies>
+				<enemy name="badguy" x="1712" y="870" w="32" h="32" texture="Assets/Textures/enemy/Idle_HellBat.png" gravity="false" type="volador">
+					<animations>
+						<idle loop="true" speed="0.15">
+							<frame x="0" y="0" w="64" h="64" />
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+							<frame x="256" y="0" w="64" h="64" />
+						</idle>
+					</animations>
+				</enemy>
 			</enemies>
 		</entities>
 		<dialogues>

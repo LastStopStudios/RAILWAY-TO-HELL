@@ -79,8 +79,8 @@ bool Terrestre::Update(float dt)
     float distanceToPlayer = abs(playerPos.getX() - enemyPos.getX());
 
     // Player detection distance (in pixels)
-    float detectionDistance = 10.0f;
-    float moveSpeed = 30.0f;
+    float detectionDistance = 200.0f;
+    float moveSpeed = 50.0f;
 
     // If the player is within detection range
     if (distanceToPlayer <= detectionDistance) {
@@ -134,23 +134,23 @@ bool Terrestre::Update(float dt)
     }
     else {
         // If the player is out of range, patrol
-        const float patrolSpeed = 20.0f;
+        const float patrolSpeed = 30.0f;
         if (giro == true) {
             b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), pbody->body->GetLinearVelocity().y);
             pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = true;
+            isLookingLeft = false;
         }
         else if (giro == false) {
             b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), pbody->body->GetLinearVelocity().y);
             pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = false;
+            isLookingLeft = true;
         }
        
        
     }
 
     // Set sprite flip based on direction
-    flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     // Update position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -159,7 +159,7 @@ bool Terrestre::Update(float dt)
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw the enemy texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     currentAnimation->Update();
 
     // Draw the path for debugging

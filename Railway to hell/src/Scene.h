@@ -78,6 +78,7 @@ public:
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Boss*>& GetBossList() { return bossList; }
 	std::vector<Item*>& GetItemList() { return itemList; }
+
 	//Evitar salto player
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
 	void ResetSkipInput() { skipFirstInput = false; }
@@ -89,6 +90,20 @@ public:
 
 	//Carga de texturas
 	SDL_Texture* introScreenTexture = nullptr;
+
+	//camara para lucha boss
+	bool BossBattle = false;
+	struct Bosses {
+		int id;
+		float x;
+		float y;
+	};
+	//lista de escenas con su id
+	std::vector<Bosses> Bosses = {
+	{3, 1872.73, 1566.67}
+	};
+	void EntrarBoss();
+	void SalirBoss();
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;

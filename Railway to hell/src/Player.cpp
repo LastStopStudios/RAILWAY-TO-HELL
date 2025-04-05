@@ -571,6 +571,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Player::Ascensor(){
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
     {
+        Engine::GetInstance().scene->EntrarBoss();
+       //Engine::GetInstance().scene->SalirBoss();
         NeedSceneChange = true;
     }
 }
