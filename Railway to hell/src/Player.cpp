@@ -444,15 +444,15 @@ void Player::DrawPlayer() {
         // Use whip texture when whip attacking
         texture = whipAttackTexture;
     }
-    else if (isJumping || isPreparingJump) {
-        // Set the jump animation when jumping or preparing to jump
-        currentAnimation = &jump;
-        texture = jumpTexture;
-    }
     else if (isDashing) {
         // Set walking animation when moving horizontally
         currentAnimation = &dash;
         texture = dashTexture;
+    }
+    else if (isJumping || isPreparingJump) {
+        // Set the jump animation when jumping or preparing to jump
+        currentAnimation = &jump;
+        texture = jumpTexture;
     }
     else if (isWalking) {
         // Set walking animation when moving horizontally
