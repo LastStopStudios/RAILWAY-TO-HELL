@@ -56,43 +56,24 @@ bool Player::Start() {
     meleeAttack = Animation();
 
     // Load attack animations carefully and check for errors
-    pugi::xml_node attackNode = parameters.child("animations").child("attack");
-
-    if (!attackNode) {
-        LOG("ERROR: Attack animation node not found in parameters!");
-    }
-    else {
-        meleeAttack.LoadAnimations(attackNode);
-        attackTexture = Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string());
-        // Modified line - use a different approach to log animation frames
-        LOG("Attack animation loaded");
-    }
-    pugi::xml_node idleNode = parameters.child("animations").child("idle");
-    pugi::xml_node jumpNode = parameters.child("animations").child("jump"); 
-    jump.LoadAnimations(jumpNode);
-    jumpTexture = Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()); 
+    
+    meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
+    attackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("attack").attribute("texture").as_string());
+    
+    jump.LoadAnimations(parameters.child("animations").child("jump"));
+    jumpTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("jump").attribute("texture").as_string());
     isPreparingJump = false;
     isJumping = false;
     jumpFrameThreshold = 3; // This is 4th frame (0-indexed)
 
-    pugi::xml_node walkNode = parameters.child("animations").child("walk");
-    walk.LoadAnimations(walkNode);
+    walk.LoadAnimations(parameters.child("animations").child("walk"));
     isWalking = false;
 
     // Inicializar whipAttack igual que meleeAttack (fuera del bloque condicional)
     whipAttack = Animation();
 
-    // Load whip attack animations carefully and check for errors
-    pugi::xml_node whipNode = parameters.child("animations").child("whip");
-    if (!whipNode) {
-        LOG("ERROR: Whip animation node not found in parameters!");
-    }
-    else {
-        whipAttack.LoadAnimations(whipNode);
-        whipAttackTexture = Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string());
-        // Modified line - use a different approach to log animation frames
-        LOG("Whip animation loaded");
-    }
+    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
+    whipAttackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("whip").attribute("texture").as_string());
 
     // Set initial state
     isAttacking = false;
@@ -283,10 +264,10 @@ void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//pasar escena 1
-        Engine::GetInstance().sceneLoader->LoadScene(1, 257, 527, false);
+        Engine::GetInstance().sceneLoader->LoadScene(1, 257, 527, true);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 2
-        Engine::GetInstance().sceneLoader->LoadScene(2, 100, 520, false);
+        Engine::GetInstance().sceneLoader->LoadScene(2, 100, 520, true);
     }
    /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
