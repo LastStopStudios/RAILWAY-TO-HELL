@@ -270,18 +270,15 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//go to scene 1
         Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//go to scene 2
-        Engine::GetInstance().sceneLoader->LoadScene(2, 100, 520, true);
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
+        Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 2942, 848, false);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4) {//go to scene 4
-        Engine::GetInstance().sceneLoader->LoadScene(4, 766, 842, false);
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//pasar escena 4
+        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false);
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
-    }*/
+    }*/ // if para poner cambio de escena en un boton
 }
 
 // Corregir UpdateWhipAttack() para reiniciar correctamente la animación

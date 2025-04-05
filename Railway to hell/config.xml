@@ -197,96 +197,6 @@
 		</dialogues>
 	</scene>
 	<scene2>
-		<map path="Assets/Maps/" name="MapTemplate2.tmx" />
-		<entities>
-			<player x="100" y="520" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
-				<animations>
-					<idle loop="true" speed="0.5">
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="32" y="0" w="32" h="32" />
-						<frame x="64" y="0" w="32" h="32" />
-						<frame x="96" y="0" w="32" h="32" />
-						<frame x="128" y="0" w="32" h="32" />
-						<frame x="160" y="0" w="32" h="32" />
-						<frame x="192" y="0" w="32" h="32" />
-						<frame x="224" y="0" w="32" h="32" />
-						<frame x="256" y="0" w="32" h="32" />
-					</idle>
-					<attack loop="false" speed="0.15" texture="Assets/Textures/player/Cuerpo_a_Cuerpo.png">
-						<frame x="0" y="0" w="32" h="32" />
-						<frame x="32" y="0" w="32" h="32" />
-						<frame x="64" y="0" w="32" h="32" />
-						<frame x="96" y="0" w="32" h="32" />
-						<frame x="128" y="0" w="32" h="32" />
-						<frame x="160" y="0" w="32" h="32" />
-						<frame x="192" y="0" w="32" h="32" />
-						<frame x="224" y="0" w="32" h="32" />
-					</attack>
-				</animations>
-			</player>
-			<items>
-				<item name="coin" x="300" y="672" w="32" h="32" texture="Assets/Textures/goldCoin.png" gravity="true">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</item>
-			</items>
-			<enemies>
-				<enemy name="badguy2" x="260" y="500" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy2" x="600" y="600" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="volador">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy2" x="900" y="600" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="volador">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-			</enemies>
-		</entities>
-		<dialogues>
-			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
-			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
-		</dialogues>
-	</scene2>
-	<scene3>
 		<map path="Assets/Maps/" name="DE1L1.tmx" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
@@ -390,13 +300,15 @@
 					</whip>
 				</animations>
 			</player>
+			<enemies>
+			</enemies>
 		</entities>
 		<dialogues>
 			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
 			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 		</dialogues>
-	</scene3>
-	<scene4>
+	</scene2>
+	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
@@ -500,10 +412,32 @@
 					</whip>
 				</animations>
 			</player>
+			<enemies>
+				<enemy name="Anger" x="2288" y="1784" w="48" h="48" texture="Assets/Textures/bosses/latigo.png" gravity="true" type="boss">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="96" w="48" h="48" />
+							<frame x="48" y="96" w="48" h="48" />
+						</idle>
+						<walking loop="true" speed="0.1">
+							<frame x="0" y="0" w="48" h="48" />
+							<frame x="48" y="0" w="48" h="48" />
+							<frame x="96" y="0" w="48" h="48" />
+							<frame x="144" y="0" w="48" h="48" />
+						</walking>
+						<whipAttack loop="false" speed="0.05">
+							<frame x="0" y="48" w="96" h="48" />
+							<frame x="96" y="48" w="96" h="48" />
+							<frame x="192" y="48" w="96" h="48" />
+							<frame x="288" y="48" w="96" h="48" />
+						</whipAttack>
+					</animations>
+				</enemy>
+			</enemies>
 		</entities>
 		<dialogues>
 			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
 			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 		</dialogues>
-	</scene4>
+	</scene3>
 </config>

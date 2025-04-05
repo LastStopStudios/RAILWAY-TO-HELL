@@ -65,7 +65,7 @@ private:
 	float Skip = true; //Skipear textos | Ahora solo cierra los textos
 	//Margenes y posicion dialogos y fondo
 	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
-	int textMaxheigth = 420; //Maximo largo antes del salto de dialogo
+	int textMaxheigth = 405; //Maximo largo antes del salto de dialogo
 	int h, w;
 	int width, height;
 	int posx, posy;
