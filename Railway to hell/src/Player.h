@@ -120,6 +120,8 @@ private:
 	float dashSpeed;       // Velocidad del dash
 	float dashDistance;    // Distancia total del dash  // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
 	int dashFrameCount;  // Contador de frames para el dash
+	bool wasJumpingBeforeDash;
+	float originalGravityScale;
 
 	Animation walk;
 	bool isWalking;

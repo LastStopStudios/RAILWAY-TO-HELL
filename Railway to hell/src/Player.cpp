@@ -77,7 +77,8 @@ bool Player::Start() {
     dash = Animation();
     dash.LoadAnimations(parameters.child("animations").child("dash"));
     dashTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("dash").attribute("texture").as_string());
-
+    wasJumpingBeforeDash = false;
+    originalGravityScale = parameters.attribute("gravity").as_bool() ? 1.0f : 0.0f;
     // Set initial state
     isAttacking = false;
     canAttack = true;
@@ -215,6 +216,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         // Reset the animation to the beginning
         dash.Reset();
         currentAnimation = &dash;
+        texture = dashTexture;
 
         // Start dash
         isDashing = true;
@@ -232,8 +234,9 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
 
     // Update frame counter and maintain velocity while dashing
     if (isDashing) {
-        // Set constant velocity during the dash
+        // Set constant velocity during the dash - horizontal only
         velocity.x = dashDirection * dashSpeed;
+        velocity.y = 0;  // Always zero vertical velocity during dash
 
         dashFrameCount--;  // Decrease frame counter
 
