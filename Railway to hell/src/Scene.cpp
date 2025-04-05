@@ -122,8 +122,6 @@ bool Scene::Update(float dt)
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 
-		Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
-		Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;
 		//Implement a method that repositions the player in the map with a mouse click
 
 		//Get mouse position and obtain the map coordinate
@@ -165,6 +163,12 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 	
+	SceneState currentState = GetCurrentState();
+	if (currentState == SceneState::GAMEPLAY) {
+		Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
+		Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;
+	}
+
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
