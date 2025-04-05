@@ -39,8 +39,8 @@ public:
 	//lista de escenas con su id
 	std::vector<EscenaQueCargar> escenas = {
 	{"DE2L1T2", 1, 10046, 2160,false},
-	{"DT2L1E2", 4, 825, 815,false},//cuando se quite el mapa del pedro pasar a 3
-	{"DT2L1E1", 3, 3050, 860,false},//cuando se quite el mapa del pedro pasar a 2
+	{"DT2L1E2", 3, 825, 815,false},
+	{"DT2L1E1", 2, 3050, 860,false},
 	{"DE1L1T2", 1, 864, 2149,false}
 	};
 	//Control de dialogos
