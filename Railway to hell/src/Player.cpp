@@ -296,7 +296,7 @@ void Player::HandleSceneSwitching() {
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
-    }*/
+    }*/ // if para poner cambio de escena en un boton
 }
 
 // Corregir UpdateWhipAttack() para reiniciar correctamente la animación
