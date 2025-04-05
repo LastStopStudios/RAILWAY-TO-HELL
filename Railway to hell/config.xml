@@ -286,4 +286,224 @@
 			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 		</dialogues>
 	</scene2>
+	<scene3>
+		<map path="Assets/Maps/" name="DE1L1.tmx" />
+		<entities>
+			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+				<animations>
+					<death loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="0" w="64" h="96" />
+						<frame x="64" y="0" w="64" h="96" />
+						<frame x="128" y="0" w="64" h="96" />
+						<frame x="192" y="0" w="64" h="96" />
+						<frame x="256" y="0" w="64" h="96" />
+						<frame x="320" y="0" w="64" h="96" />
+						<frame x="384" y="0" w="64" h="96" />
+					</death>
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="194" w="64" h="96" />
+						<frame x="64" y="194" w="64" h="96" />
+						<frame x="128" y="194" w="64" h="96" />
+						<frame x="192" y="194" w="64" h="96" />
+						<frame x="256" y="194" w="64" h="96" />
+					</idle>
+					<jump loop="false" speed="0.2" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="416" w="64" h="128" />
+						<frame x="64" y="416" w="64" h="128" />
+						<frame x="128" y="416" w="64" h="128" />
+						<frame x="192" y="416" w="64" h="128" />
+						<frame x="256" y="416" w="64" h="128" />
+						<frame x="320" y="416" w="64" h="128" />
+						<frame x="384" y="416" w="64" h="128" />
+						<frame x="448" y="416" w="64" h="128" />
+						<frame x="512" y="416" w="64" h="128" />
+						<frame x="576" y="416" w="64" h="128" />
+					</jump>
+					<pickup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="643" w="64" h="96" />
+						<frame x="64" y="643" w="64" h="96" />
+						<frame x="128" y="643" w="64" h="96" />
+						<frame x="192" y="643" w="64" h="96" />
+						<frame x="256" y="643" w="64" h="96" />
+						<frame x="320" y="643" w="64" h="96" />
+						<frame x="384" y="643" w="64" h="96" />
+						<frame x="448" y="643" w="64" h="96" />
+						<frame x="512" y="643" w="64" h="96" />
+					</pickup>
+					<attack loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="834" w="64" h="96" />
+						<frame x="64" y="834" w="64" h="96" />
+						<frame x="128" y="834" w="64" h="96" />
+						<frame x="192" y="834" w="64" h="96" />
+						<frame x="256" y="834" w="64" h="96" />
+						<frame x="320" y="834" w="64" h="96" />
+						<frame x="384" y="834" w="64" h="96" />
+						<frame x="448" y="834" w="64" h="96" />
+						<frame x="512" y="834" w="64" h="96" />
+					</attack>
+					<wakeup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1029" w="64" h="96" />
+						<frame x="64" y="1029" w="64" h="96" />
+						<frame x="128" y="1029" w="64" h="96" />
+						<frame x="192" y="1029" w="64" h="96" />
+						<frame x="256" y="1029" w="64" h="96" />
+						<frame x="320" y="1029" w="64" h="96" />
+						<frame x="384" y="1029" w="64" h="96" />
+					</wakeup>
+					<dash loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1217" w="96" h="96" />
+						<frame x="96" y="1217" w="96" h="96" />
+						<frame x="189" y="1217" w="96" h="96" />
+						<frame x="285" y="1217" w="96" h="96" />
+						<frame x="381" y="1217" w="96" h="96" />
+						<frame x="477" y="1217" w="96" h="96" />
+						<frame x="573" y="1217" w="96" h="96" />
+					</dash>
+					<hurt loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+						<frame x="16" y="1409" w="64" h="96" />
+						<frame x="80" y="1409" w="64" h="96" />
+						<frame x="144" y="1409" w="64" h="96" />
+						<frame x="207" y="1409" w="64" h="96" />
+						<frame x="272" y="1409" w="64" h="96" />
+						<frame x="334" y="1409" w="64" h="96" />
+						<frame x="399" y="1409" w="60" h="96" />
+						<frame x="460" y="1409" w="64" h="96" />
+						<frame x="526" y="1409" w="64" h="96" />
+					</hurt>
+					<walk loop="true" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1600" w="64" h="96" />
+						<frame x="64" y="1600" w="64" h="96" />
+						<frame x="128" y="1600" w="64" h="96" />
+						<frame x="192" y="1600" w="64" h="96" />
+						<frame x="256" y="1600" w="64" h="96" />
+						<frame x="320" y="1600" w="64" h="96" />
+						<frame x="384" y="1600" w="64" h="96" />
+						<frame x="448" y="1600" w="64" h="96" />
+					</walk>
+					<whip loop="false" speed="0.15" texture="Assets/Textures/player/whipAttack.png">
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="32" y="0" w="32" h="32" />
+						<frame x="64" y="0" w="32" h="32" />
+						<frame x="96" y="0" w="32" h="32" />
+						<frame x="128" y="0" w="32" h="32" />
+						<frame x="160" y="0" w="32" h="32" />
+					</whip>
+				</animations>
+			</player>
+		</entities>
+		<dialogues>
+			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
+			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
+		</dialogues>
+	</scene3>
+	<scene4>
+		<map path="Assets/Maps/" name="DE2L1.tmx" />
+		<entities>
+			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+				<animations>
+					<death loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="0" w="64" h="96" />
+						<frame x="64" y="0" w="64" h="96" />
+						<frame x="128" y="0" w="64" h="96" />
+						<frame x="192" y="0" w="64" h="96" />
+						<frame x="256" y="0" w="64" h="96" />
+						<frame x="320" y="0" w="64" h="96" />
+						<frame x="384" y="0" w="64" h="96" />
+					</death>
+					<idle loop="true" speed="0.1">
+						<frame x="0" y="194" w="64" h="96" />
+						<frame x="64" y="194" w="64" h="96" />
+						<frame x="128" y="194" w="64" h="96" />
+						<frame x="192" y="194" w="64" h="96" />
+						<frame x="256" y="194" w="64" h="96" />
+					</idle>
+					<jump loop="false" speed="0.2" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="416" w="64" h="128" />
+						<frame x="64" y="416" w="64" h="128" />
+						<frame x="128" y="416" w="64" h="128" />
+						<frame x="192" y="416" w="64" h="128" />
+						<frame x="256" y="416" w="64" h="128" />
+						<frame x="320" y="416" w="64" h="128" />
+						<frame x="384" y="416" w="64" h="128" />
+						<frame x="448" y="416" w="64" h="128" />
+						<frame x="512" y="416" w="64" h="128" />
+						<frame x="576" y="416" w="64" h="128" />
+					</jump>
+					<pickup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="643" w="64" h="96" />
+						<frame x="64" y="643" w="64" h="96" />
+						<frame x="128" y="643" w="64" h="96" />
+						<frame x="192" y="643" w="64" h="96" />
+						<frame x="256" y="643" w="64" h="96" />
+						<frame x="320" y="643" w="64" h="96" />
+						<frame x="384" y="643" w="64" h="96" />
+						<frame x="448" y="643" w="64" h="96" />
+						<frame x="512" y="643" w="64" h="96" />
+					</pickup>
+					<attack loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="834" w="64" h="96" />
+						<frame x="64" y="834" w="64" h="96" />
+						<frame x="128" y="834" w="64" h="96" />
+						<frame x="192" y="834" w="64" h="96" />
+						<frame x="256" y="834" w="64" h="96" />
+						<frame x="320" y="834" w="64" h="96" />
+						<frame x="384" y="834" w="64" h="96" />
+						<frame x="448" y="834" w="64" h="96" />
+						<frame x="512" y="834" w="64" h="96" />
+					</attack>
+					<wakeup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1029" w="64" h="96" />
+						<frame x="64" y="1029" w="64" h="96" />
+						<frame x="128" y="1029" w="64" h="96" />
+						<frame x="192" y="1029" w="64" h="96" />
+						<frame x="256" y="1029" w="64" h="96" />
+						<frame x="320" y="1029" w="64" h="96" />
+						<frame x="384" y="1029" w="64" h="96" />
+					</wakeup>
+					<dash loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1217" w="96" h="96" />
+						<frame x="96" y="1217" w="96" h="96" />
+						<frame x="189" y="1217" w="96" h="96" />
+						<frame x="285" y="1217" w="96" h="96" />
+						<frame x="381" y="1217" w="96" h="96" />
+						<frame x="477" y="1217" w="96" h="96" />
+						<frame x="573" y="1217" w="96" h="96" />
+					</dash>
+					<hurt loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+						<frame x="16" y="1409" w="64" h="96" />
+						<frame x="80" y="1409" w="64" h="96" />
+						<frame x="144" y="1409" w="64" h="96" />
+						<frame x="207" y="1409" w="64" h="96" />
+						<frame x="272" y="1409" w="64" h="96" />
+						<frame x="334" y="1409" w="64" h="96" />
+						<frame x="399" y="1409" w="60" h="96" />
+						<frame x="460" y="1409" w="64" h="96" />
+						<frame x="526" y="1409" w="64" h="96" />
+					</hurt>
+					<walk loop="true" speed="0.15" texture="Assets/Textures/player/Characters.png">
+						<frame x="0" y="1600" w="64" h="96" />
+						<frame x="64" y="1600" w="64" h="96" />
+						<frame x="128" y="1600" w="64" h="96" />
+						<frame x="192" y="1600" w="64" h="96" />
+						<frame x="256" y="1600" w="64" h="96" />
+						<frame x="320" y="1600" w="64" h="96" />
+						<frame x="384" y="1600" w="64" h="96" />
+						<frame x="448" y="1600" w="64" h="96" />
+					</walk>
+					<whip loop="false" speed="0.15" texture="Assets/Textures/player/whipAttack.png">
+						<frame x="0" y="0" w="32" h="32" />
+						<frame x="32" y="0" w="32" h="32" />
+						<frame x="64" y="0" w="32" h="32" />
+						<frame x="96" y="0" w="32" h="32" />
+						<frame x="128" y="0" w="32" h="32" />
+						<frame x="160" y="0" w="32" h="32" />
+					</whip>
+				</animations>
+			</player>
+		</entities>
+		<dialogues>
+			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
+			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
+		</dialogues>
+	</scene4>
 </config>

@@ -38,12 +38,10 @@ public:
 	};
 	//lista de escenas con su id
 	std::vector<EscenaQueCargar> escenas = {
-	{"S1S2", 2, 219, 654,false},
-	{"S2S3", 3, 173, 648,false},
-	{"S3S1", 1, 351, 409,false},
-	{"S1S3", 3, 760, 628,false},
-	{"S3S2", 2, 1817, 640,false},
-	{"S2S1", 1, 1800, 642,false}
+	{"DE2L1T2", 1, 10046, 2160,false},
+	{"DT2L1E2", 4, 825, 815,false},
+	{"DT2L1E1", 3, 3050, 860,false},
+	{"DE1L1T2", 1, 864, 2149,false}
 	};
 	//Control de dialogos
 	void DialogoOn() { dialogo = true;}//parar player
