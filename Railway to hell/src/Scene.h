@@ -100,6 +100,7 @@ public:
 	};
 	//lista de escenas con su id
 	std::vector<Bosses> Bosses = {
+	//escena a la que va, x de la camara, y de la camara
 	{3, 1872.73, 1566.67}
 	};
 	void EntrarBoss();

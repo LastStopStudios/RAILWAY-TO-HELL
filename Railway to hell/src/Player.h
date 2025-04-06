@@ -39,6 +39,7 @@ public:
 	};
 	//lista de escenas con su id
 	std::vector<EscenaQueCargar> escenas = {
+	//id con fino, escena que cargar, x del player, y del player, hacer fade, camara de boss
 	{"DE2L1T2",1,10046,2160,false,false},
 	{"DT2L1E2",3,825,815,false,false},
 	{"DT2L1E1",2,3050,860,false,false},
