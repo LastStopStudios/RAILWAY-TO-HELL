@@ -31,15 +31,13 @@ bool Player::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-
-    idleTexture = texture;
+    idleTexture = texture;  // Default texture
 
     // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
     currentAnimation = &idle;
 
-    // Add physics to the player - initialize physics body
-    //pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+    // Physics body initialization
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
     pbody->listener = this;
     pbody->ctype = ColliderType::PLAYER;
@@ -52,33 +50,42 @@ bool Player::Start() {
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
-    // Setup melee attack - ensure proper initialization
+    // Attack animation
     meleeAttack = Animation();
-
-    // Load attack animations carefully and check for errors
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
-    attackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("attack").attribute("texture").as_string());
+    // Only load a different texture if one is specified
+    auto attackNode = parameters.child("animations").child("attack");
+    attackTexture = attackNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string()) : texture;
 
+    // Jump animation
     jump.LoadAnimations(parameters.child("animations").child("jump"));
-    jumpTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("jump").attribute("texture").as_string());
+    auto jumpNode = parameters.child("animations").child("jump");
+    jumpTexture = jumpNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()) :texture;
+
     isPreparingJump = false;
     isJumping = false;
-    jumpFrameThreshold = 3; 
+    jumpFrameThreshold = 3;
 
+    // Walk animation
     walk.LoadAnimations(parameters.child("animations").child("walk"));
+    auto walkNode = parameters.child("animations").child("walk");
+    walkTexture = walkNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(walkNode.attribute("texture").as_string()) :texture;
     isWalking = false;
 
-    // Initialize whipAttack just like meleeAttack (outside of conditional block)
+    // Whip attack animation
     whipAttack = Animation();
-
     whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
-    whipAttackTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("whip").attribute("texture").as_string());
+    auto whipNode = parameters.child("animations").child("whip");
+    whipAttackTexture = whipNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string()) :texture;
 
+    // Dash animation
     dash = Animation();
     dash.LoadAnimations(parameters.child("animations").child("dash"));
-    dashTexture = Engine::GetInstance().textures.get()->Load(parameters.child("animations").child("dash").attribute("texture").as_string());
-    wasJumpingBeforeDash = false;
+    auto dashNode = parameters.child("animations").child("dash");
+    dashTexture = dashNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(dashNode.attribute("texture").as_string()) :texture;
+
     originalGravityScale = parameters.attribute("gravity").as_bool() ? 1.0f : 0.0f;
+
     // Set initial state
     isAttacking = false;
     canAttack = true;
@@ -92,9 +99,7 @@ bool Player::Start() {
     whipAttackHitbox = nullptr;
 
     // For testing, temporarily enable whip attack
-    // Remove this line when you want the player to collect the item first
     WhipAttack = true;
-
     facingRight = true;
 
     return true;
@@ -473,6 +478,7 @@ void Player::DrawPlayer() {
     else if (isWalking) {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
+        texture = walkTexture;
     }
     else {
         if (currentAnimation != &idle) {

@@ -19,7 +19,7 @@
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
-					<death loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+					<death loop="false" speed="0.05">
 						<frame x="0" y="0" w="64" h="96" />
 						<frame x="64" y="0" w="64" h="96" />
 						<frame x="128" y="0" w="64" h="96" />
@@ -35,7 +35,7 @@
 						<frame x="192" y="194" w="64" h="96" />
 						<frame x="256" y="194" w="64" h="96" />
 					</idle>
-					<jump loop="false" speed="0.2" texture="Assets/Textures/player/Characters.png">
+					<jump loop="false" speed="0.2">
 						<frame x="0" y="416" w="64" h="128" />
 						<frame x="64" y="416" w="64" h="128" />
 						<frame x="128" y="416" w="64" h="128" />
@@ -47,7 +47,7 @@
 						<frame x="512" y="416" w="64" h="128" />
 						<frame x="576" y="416" w="64" h="128" />
 					</jump>
-					<pickup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+					<pickup loop="false" speed="0.15">
 						<frame x="0" y="643" w="64" h="96" />
 						<frame x="64" y="643" w="64" h="96" />
 						<frame x="128" y="643" w="64" h="96" />
@@ -58,7 +58,7 @@
 						<frame x="448" y="643" w="64" h="96" />
 						<frame x="512" y="643" w="64" h="96" />
 					</pickup>
-					<attack loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+					<attack loop="false" speed="0.15">
 						<frame x="0" y="834" w="64" h="96" />
 						<frame x="64" y="834" w="64" h="96" />
 						<frame x="128" y="834" w="64" h="96" />
@@ -69,7 +69,7 @@
 						<frame x="448" y="834" w="64" h="96" />
 						<frame x="512" y="834" w="64" h="96" />
 					</attack>
-					<wakeup loop="false" speed="0.15" texture="Assets/Textures/player/Characters.png">
+					<wakeup loop="false" speed="0.15">
 						<frame x="0" y="1029" w="64" h="96" />
 						<frame x="64" y="1029" w="64" h="96" />
 						<frame x="128" y="1029" w="64" h="96" />
@@ -78,7 +78,7 @@
 						<frame x="320" y="1029" w="64" h="96" />
 						<frame x="384" y="1029" w="64" h="96" />
 					</wakeup>
-					<dash loop="false" speed="0.3" texture="Assets/Textures/player/Characters.png">
+					<dash loop="false" speed="0.3">
 						<frame x="0" y="1217" w="96" h="96" />
 						<frame x="96" y="1217" w="96" h="96" />
 						<frame x="189" y="1217" w="96" h="96" />
@@ -87,7 +87,7 @@
 						<frame x="477" y="1217" w="96" h="96" />
 						<frame x="573" y="1217" w="96" h="96" />
 					</dash>
-					<hurt loop="false" speed="0.05" texture="Assets/Textures/player/Characters.png">
+					<hurt loop="false" speed="0.05">
 						<frame x="16" y="1409" w="64" h="96" />
 						<frame x="80" y="1409" w="64" h="96" />
 						<frame x="144" y="1409" w="64" h="96" />
@@ -98,7 +98,7 @@
 						<frame x="460" y="1409" w="64" h="96" />
 						<frame x="526" y="1409" w="64" h="96" />
 					</hurt>
-					<walk loop="true" speed="0.15" texture="Assets/Textures/player/Characters.png">
+					<walk loop="true" speed="0.15">
 						<frame x="0" y="1600" w="64" h="96" />
 						<frame x="64" y="1600" w="64" h="96" />
 						<frame x="128" y="1600" w="64" h="96" />
@@ -108,7 +108,7 @@
 						<frame x="384" y="1600" w="64" h="96" />
 						<frame x="448" y="1600" w="64" h="96" />
 					</walk>
-					<whip loop="false" speed="0.15" texture="Assets/Textures/player/whipAttack.png">
+					<whip loop="false" speed="0.15">
 						<frame x="0" y="0" w="32" h="32" />
 						<frame x="32" y="0" w="32" h="32" />
 						<frame x="64" y="0" w="32" h="32" />
