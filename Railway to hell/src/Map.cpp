@@ -35,27 +35,51 @@ bool Map::Start() {
 bool Map::Update(float dt)
 {
     bool ret = true;
-
+    int tilesRendered = 0;
     if (mapLoaded) {
-
         for (const auto& mapLayer : mapData.layers) {
-            //Check if the property Draw exist get the value, if it's true draw the lawyer
             if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
-                        //Get the gid from tile
-                        int gid = mapLayer->Get(i, j);
-                        //Check if the gid is different from 0 - some tiles are empty
-                        if (gid != 0) {
+                // Get camera position and dimensions without parallax (for debugging)
+                int camX = Engine::GetInstance().render->camera.x;
+                int camY = Engine::GetInstance().render->camera.y;
+                int camW = Engine::GetInstance().render->camera.w;
+                int camH = Engine::GetInstance().render->camera.h;
 
+                // Calculate which tiles are visible in the camera view
+                // Convert camera position to tile coordinates (notice we use absolute value)
+                int startTileX = abs(camX) / mapData.tileWidth;
+                int startTileY = abs(camY) / mapData.tileHeight;
+
+                // Calculate how many tiles fit in the camera view
+                int tilesWide = (camW / mapData.tileWidth) + 2; // Add extra tiles for partial visibility
+                int tilesHigh = (camH / mapData.tileHeight) + 2;
+
+                // Calculate end points
+                int endTileX = startTileX + tilesWide;
+                int endTileY = startTileY + tilesHigh;
+
+                // Clamp to map boundaries
+                if (endTileX > mapData.width) endTileX = mapData.width;
+                if (endTileY > mapData.height) endTileY = mapData.height;
+                if (startTileX < 0) startTileX = 0;
+                if (startTileY < 0) startTileY = 0;
+
+                // Debug output (remove in production)
+                // SDL_Log("Camera: %d,%d,%d,%d | Tiles: %d,%d to %d,%d", 
+                //         camX, camY, camW, camH, startTileX, startTileY, endTileX, endTileY);
+
+                // Draw only tiles in view
+                for (int x = startTileX; x < endTileX; x++) {
+                    for (int y = startTileY; y < endTileY; y++) {
+                        int gid = mapLayer->Get(x, y);
+                        if (gid != 0) {
+                            tilesRendered++;
                             TileSet* tileSet = GetTilesetFromTileId(gid);
                             if (tileSet != nullptr) {
-                                //Get the Rect from the tileSetTexture;
                                 SDL_Rect tileRect = tileSet->GetRect(gid);
-                                //Get the screen coordinates from the tile coordinates
-                                Vector2D mapCoord = MapToWorld(i, j);
-                                //Draw the texture
-                                Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
+                                Vector2D worldPos = MapToWorld(x, y);
+                                Engine::GetInstance().render->DrawTexture(tileSet->texture, worldPos.getX(), worldPos.getY(), &tileRect);
+
                             }
                         }
                     }
@@ -63,7 +87,7 @@ bool Map::Update(float dt)
             }
         }
     }
-
+    //LOG("Tiles rendereizadas: %d de %d posibles", tilesRendered, mapData.width * mapData.height); To prove that frustum culling works
     return ret;
 }
 
