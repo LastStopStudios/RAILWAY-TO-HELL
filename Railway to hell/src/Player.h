@@ -35,16 +35,20 @@ public:
 		int x;
 		int y;
 		bool fade;
+		bool CamaraBoss;
 	};
 	//lista de escenas con su id
 	std::vector<EscenaQueCargar> escenas = {
-	{"S1S2", 2, 219, 654,false},
-	{"S2S3", 3, 173, 648,false},
-	{"S3S1", 1, 351, 409,false},
-	{"S1S3", 3, 760, 628,false},
-	{"S3S2", 2, 1817, 640,false},
-	{"S2S1", 1, 1800, 642,false}
+	//id con fino, escena que cargar, x del player, y del player, hacer fade, camara de boss
+	{"DE2L1T2",1,10046,2160,false,false},
+	{"DT2L1E2",3,825,815,false,false},
+	{"DT2L1E1",2,3050,860,false,false},
+	{"DE1L1T2",1,864,2149,false,false},
+	{"DE2L1BOSS1",3,1840,1784,true,true}
 	};
+	//control ascensor
+	bool TocandoAs = false;
+	void Ascensor();
 	//Control de dialogos
 	void DialogoOn() { dialogo = true;}//parar player
 	void DialogoOff() { dialogo = false;}//devolver control player
@@ -70,6 +74,7 @@ public:
 	//Scene change
 	bool NeedSceneChange = false;
 	bool Fade;
+	bool BossCam;
 	int sceneToLoad = -1;
 	int Playerx, Playery;
 
@@ -106,12 +111,29 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
+	Animation jump; 
+	SDL_Texture* jumpTexture = nullptr;
+	bool isPreparingJump;
+	int jumpFrameThreshold;
+
+	Animation dash;
+	SDL_Texture* dashTexture = nullptr;
+	float dashCooldown;
+	float dashDirection;   // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
+	float dashSpeed;       // Velocidad del dash
+	float dashDistance;    // Distancia total del dash  // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
+	int dashFrameCount;  // Contador de frames para el dash
+	bool wasJumpingBeforeDash;
+	float originalGravityScale;
+
+	Animation walk;
+	bool isWalking;
+
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
-
+	bool godMode;
 	// Dash properties
 	bool isDashing = false;
-	float dashSpeed = 0.6f;
 	float dashCooldownTimer = 0.0f;
 	float dashCooldownDuration = 1.0f; // 1 second cooldown
 	bool canDash = true;

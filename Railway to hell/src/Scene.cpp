@@ -34,11 +34,11 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//L04: TODO 3b: Instantiate the player using the entity manager
+	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("entities").child("player"));
 	
-	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
+	//Create a new item using the entity manager and set the position to (200, 672) to test
 	for(pugi::xml_node itemNode = configParameters.child("entities").child("items").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
@@ -68,7 +68,7 @@ bool Scene::Awake()
 		
 	}
 
-	// L16: TODO 2: Instantiate a new GuiControlButton in the Scene
+	// Instantiate a new GuiControlButton in the Scene
 	SDL_Rect btPos = { 520, 350, 120,20 };
 	guiBt = (GuiControlButton*) Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
 
@@ -121,10 +121,6 @@ bool Scene::Update(float dt)
 	case SceneState::GAMEPLAY:
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
-
-		Engine::GetInstance().render.get()->camera.y = (Engine::GetInstance().window->height - 570 - player->position.getY() * 0.5);
-		Engine::GetInstance().render.get()->camera.x = (Engine::GetInstance().window->width - 900 - player->position.getX() * 0.5);
-
 		//Implement a method that repositions the player in the map with a mouse click
 
 		//Get mouse position and obtain the map coordinate
@@ -166,6 +162,22 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 	
+	SceneState currentState = GetCurrentState();
+	if (currentState == SceneState::GAMEPLAY) {
+		if(BossBattle == false){
+			Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
+			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;
+		}else if(BossBattle == true){
+			for (const auto& Bosses : Bosses) { // Iterate through all scenes
+				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
+					Engine::GetInstance().render.get()->camera.x = Bosses.x * -1.0f + 590;
+					Engine::GetInstance().render.get()->camera.y = Bosses.y * -1.0f + 415;
+				}
+			}
+		}
+		
+	}
+
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -177,7 +189,10 @@ bool Scene::PostUpdate()
 	return ret;
 }
 
+void Scene::EntrarBoss() { BossBattle = true; LOG("Entra al Boss"); }
 
+void Scene::SalirBoss() { BossBattle = false; LOG("Sale del Boss");
+}
 
 // Called before quitting
 bool Scene::CleanUp()
@@ -217,9 +232,6 @@ void Scene::LoadState() {
 								  sceneNode.child("entities").child("player").attribute("y").as_int());
 	player->SetPosition(playerPos);
 
-	
-	
-
 	//enemies
 	// ...
 
@@ -232,9 +244,6 @@ void Scene::DialogoOn() {
 void Scene::DialogoOff() {
 	player->DialogoOff();
 }
-
-
-
 
 void Scene::SaveState() {
 

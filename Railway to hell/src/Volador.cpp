@@ -151,7 +151,7 @@ bool Volador::Update(float dt) {
     }
 
     // Flip sprite configuration
-    flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     // Adjust position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -159,7 +159,7 @@ bool Volador::Update(float dt) {
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 3, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 3, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
     currentAnimation->Update();
 
