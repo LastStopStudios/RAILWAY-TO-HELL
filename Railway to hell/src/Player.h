@@ -35,14 +35,15 @@ public:
 		int x;
 		int y;
 		bool fade;
+		bool CamaraBoss;
 	};
 	//lista de escenas con su id
 	std::vector<EscenaQueCargar> escenas = {
-	{"DE2L1T2", 1, 10046, 2160,false},
-	{"DT2L1E2", 3, 825, 815,false},
-	{"DT2L1E1", 2, 3050, 860,false},
-	{"DE1L1T2", 1, 864, 2149,false},
-	{"DE2L1BOSS1", 3, 1840, 1784,true}
+	{"DE2L1T2",1,10046,2160,false,false},
+	{"DT2L1E2",3,825,815,false,false},
+	{"DT2L1E1",2,3050,860,false,false},
+	{"DE1L1T2",1,864,2149,false,false},
+	{"DE2L1BOSS1",3,1840,1784,true,true}
 	};
 	//control ascensor
 	bool TocandoAs = false;
@@ -72,6 +73,7 @@ public:
 	//Scene change
 	bool NeedSceneChange = false;
 	bool Fade;
+	bool BossCam;
 	int sceneToLoad = -1;
 	int Playerx, Playery;
 

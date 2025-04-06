@@ -22,7 +22,7 @@ class SceneLoader
 public:
 	SceneLoader();
 	~SceneLoader();
-	void LoadScene(int level, int x, int y,bool fade); // Aqui dentro se tendría que hacer tanto el Load de la siguiente escena como previamente el Unload
+	void LoadScene(int level, int x, int y,bool fade,bool bosscam); // Aqui dentro se tendría que hacer tanto el Load de la siguiente escena como previamente el Unload
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
 

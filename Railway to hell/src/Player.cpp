@@ -142,7 +142,7 @@ bool Player::Update(float dt)
             velocity.y = pbody->body->GetLinearVelocity().y;
         }
         if (NeedSceneChange) { // Scene change
-            Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade); // Pass the new scene to the sceneLoader
+            Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade, BossCam); // Pass the new scene to the sceneLoader
             NeedSceneChange = false;
             TocandoAs = false;
         }
@@ -274,13 +274,13 @@ void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//go to scene 1
-        Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false);
+        Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false, false);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
-        Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false);
+        Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false, false);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//pasar escena 4
-        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false, false);
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
@@ -554,6 +554,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Playerx = escena.x;
                 Playery = escena.y; // Set the destination map and player position
                 Fade = escena.fade;
+                BossCam = escena.CamaraBoss;
             }
         }
         break;
@@ -567,6 +568,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Playerx = escena.x;
                     Playery = escena.y; // Set the ID and coordinates to load that map
                     Fade = escena.fade;
+                    BossCam = escena.CamaraBoss;
                 }
             }
         break;
@@ -584,8 +586,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Player::Ascensor(){
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
     {
-        Engine::GetInstance().scene->EntrarBoss();
-       //Engine::GetInstance().scene->SalirBoss();
         NeedSceneChange = true;
     }
 }

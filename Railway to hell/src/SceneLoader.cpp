@@ -21,11 +21,18 @@ SceneLoader::SceneLoader() {
 
 SceneLoader::~SceneLoader() {}
 
-void SceneLoader::LoadScene(int level, int x, int y,bool fade) {
+void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
     if(fade== true)
     { 
         FadeIn(1.0f);// Animation speed (FadeIn)
+    }
+
+    if (bosscam == true) {
+        Engine::GetInstance().scene->EntrarBoss();
+    }
+    else if (bosscam == false) {
+        Engine::GetInstance().scene->SalirBoss();
     }
        
     UnLoadEnemiesItems();
