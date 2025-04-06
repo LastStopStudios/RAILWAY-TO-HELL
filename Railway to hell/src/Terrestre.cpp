@@ -53,117 +53,130 @@ bool Terrestre::Start() {
 
 	return true;
 }
-
 bool Terrestre::Update(float dt)
 {
+    // Don't process logic if we're not in GAMEPLAY mode
     if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
     {
         return true;
     }
 
+    // Handle skipping first input if necessary
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
-        Engine::GetInstance().scene->ResetSkipInput();  
+        Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
-    // Get the enemy's current position
-    enemyPos = GetPosition();
 
-    // Get the player's position
+    // Constants to adjust enemy behavior
+    const float DETECTION_DISTANCE = 200.0f;
+    const float CHASE_SPEED = 50.0f;
+    const float PATROL_SPEED = 30.0f;
+    const int MAX_PATHFINDING_ITERATIONS = 50;
+
+    // Get current positions
+    enemyPos = GetPosition();
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
-    // Convert world coordinates to tile coordinates
+    // Convert to tile coordinates
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
-    // Calculate the distance to the player
-    float distanceToPlayer = abs(playerPos.getX() - enemyPos.getX());
+    // Calculate distance to player (Euclidean distance)
+    float dx = playerPos.getX() - enemyPos.getX();
+    float dy = playerPos.getY() - enemyPos.getY();
+    float distanceToPlayer = sqrt(dx * dx + dy * dy);
 
-    // Player detection distance (in pixels)
-    float detectionDistance = 200.0f;
-    float moveSpeed = 50.0f;
+    // Variable to control speed based on mode
+    float velocityX = 0.0f;
+    bool isChasing = false;
 
-    // If the player is within detection range
-    if (distanceToPlayer <= detectionDistance) {
-        // Reset the path with the enemy's current position
+    // Chase mode (high priority)
+    if (distanceToPlayer <= DETECTION_DISTANCE)
+    {
+        isChasing = true;
+
+        // Reset and calculate path to player
         pathfinding->ResetPath(enemyTilePos);
 
-        // Run A* pathfinding to find the path to the player
-        // Only propagate A* a limited number of times
-        for (int i = 0; i < 50; i++) {
+        // Run A* algorithm with iteration limit
+        for (int i = 0; i < MAX_PATHFINDING_ITERATIONS; i++) {
             pathfinding->PropagateAStar(SQUARED);
-
-            // Stop propagating if we already found a path to the player
             if (pathfinding->ReachedPlayer(playerTilePos)) {
                 break;
             }
         }
 
-        // If a valid path is found with at least 2 points
-        if (pathfinding->pathTiles.size() >= 2) {
-            // Get the next point in the path (second to last)
-            auto it = pathfinding->pathTiles.end();
-            --it; // Last element
+        // Compute path from origin to destination
+        pathfinding->ComputePath(playerTilePos.getX(), playerTilePos.getY());
 
-            // Ensure there is at least one more point
-            if (it != pathfinding->pathTiles.begin()) {
-                --it; // Second to last element
-                Vector2D nextTile = *it;
+        // Check if a valid path was found
+        if (!pathfinding->pathTiles.empty() && pathfinding->pathTiles.size() > 1)
+        {
+            // Get the next point in the path
+            // To ensure consistency, always use the second point in the path
+            Vector2D nextTile = *(std::next(pathfinding->pathTiles.begin(), 1));
 
-                // Convert tile position to world coordinates
-                Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+            // Convert tile position to world coordinates
+            Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
 
-                // Calculate movement direction towards the next point
-                float dx = nextPos.getX() - enemyPos.getX();
+            // Determine movement direction with greater precision
+            float moveX = nextPos.getX() - enemyPos.getX();
 
-                // Determine movement direction
-                if (dx < 0) {
-                    isLookingLeft = true;
-                }
-                else {
-                    isLookingLeft = false;
-                }
+            // More precise threshold to determine direction
+            if (moveX < -1.0f) {
+                isLookingLeft = true;
+            }
+            else if (moveX > 1.0f) {
+                isLookingLeft = false;
+            }
 
-                // Calculate movement speed based on direction
-                float stepX = isLookingLeft ? -moveSpeed : moveSpeed;
+            // Adjust speed according to direction
+            velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
 
-                // Apply velocity to the physics body
-                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(stepX), pbody->body->GetLinearVelocity().y);
-                pbody->body->SetLinearVelocity(velocity);
+            // Fine-tune speed when close to target
+            if (fabs(moveX) < 5.0f) {
+                velocityX *= 0.5f;
             }
         }
     }
-    else {
-        // If the player is out of range, patrol
-        const float patrolSpeed = 30.0f;
-        if (giro == true) {
-            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), pbody->body->GetLinearVelocity().y);
-            pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = false;
-        }
-        else if (giro == false) {
-            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), pbody->body->GetLinearVelocity().y);
-            pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = true;
-        }
-       
-       
+
+    // Patrol mode (low priority) - only if not chasing
+    if (!isChasing)
+    {
+        velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
+        isLookingLeft = !giro;
     }
 
-    // Set sprite flip based on direction
-    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    // Apply velocity to physical body
+    b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
+    pbody->body->SetLinearVelocity(velocity);
 
     // Update position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    // Draw the enemy texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    // Configure sprite flip based on direction
+    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+    // Draw enemy texture and animation
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,
+        (int)position.getX(),
+        (int)position.getY(),
+        &currentAnimation->GetCurrentFrame(),
+        1.0f, 0.0, INT_MAX, INT_MAX,
+        flip
+    );
+
+    // Update animation
     currentAnimation->Update();
 
-    // Draw the path for debugging
-    pathfinding->DrawPath();
+    // Draw path for debugging
+    // Ensure it's drawn in chase mode regardless of direction
+    if (isChasing && !pathfinding->pathTiles.empty()) {
+        pathfinding->DrawPath();
+    }
 
     return true;
 }

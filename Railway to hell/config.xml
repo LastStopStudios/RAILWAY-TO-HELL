@@ -142,7 +142,7 @@
 				</item>
 			</items>
 			<enemies>
-				<enemy name="badguy" x="448" y="350" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
+				<enemy name="badguy" x="3450" y="2079" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />
