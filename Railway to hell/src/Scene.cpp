@@ -170,8 +170,8 @@ bool Scene::PostUpdate()
 		}else if(BossBattle == true){
 			for (const auto& Bosses : Bosses) { // Iterate through all scenes
 				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
-					Engine::GetInstance().render.get()->camera.x = Bosses.x * -1.0f + 590;
-					Engine::GetInstance().render.get()->camera.y = Bosses.y * -1.0f + 415;
+					Engine::GetInstance().render.get()->camera.x = - Bosses.x;
+					Engine::GetInstance().render.get()->camera.y = - Bosses.y;
 				}
 			}
 		}

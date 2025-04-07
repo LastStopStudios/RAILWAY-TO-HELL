@@ -100,8 +100,8 @@ public:
 	};
 	//lista de escenas con su id
 	std::vector<Bosses> Bosses = {
-	//escena a la que va, x de la camara, y de la camara
-	{3, 1872.73, 1566.67}
+	//escena a la que va, x (590) de la camara, y (415) de la camara
+	{3, 1282.73, 1151.67}
 	};
 	void EntrarBoss();
 	void SalirBoss();
