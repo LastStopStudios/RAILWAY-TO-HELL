@@ -71,6 +71,7 @@ private:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+	Animation die;
 	PhysBody* pbody;
 	PhysBody* area;
 	Pathfinding* pathfinding;
@@ -79,5 +80,7 @@ private:
 	float searchTime = 0.0f;
 	const float maxSearchTime = 3000.0f;
 	int texRadius;
+	bool isDead = false;
+	bool hasPlayedDeathAnim = false;
 };
 
