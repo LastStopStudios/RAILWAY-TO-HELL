@@ -387,7 +387,7 @@ void Player::UpdateMeleeAttack(float dt) {
         meleeAttack.Reset();
 
         // Calculate the size of the hitbox to fit the attack sprite.
-        int attackWidth = texW * 1.0f;
+        int attackWidth = texW * 0.5f;
         int attackHeight = texH * 1.0f;
 
         b2Vec2 playerCenter = pbody->body->GetPosition();
