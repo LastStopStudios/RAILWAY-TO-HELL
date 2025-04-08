@@ -90,9 +90,9 @@ bool Volador::Update(float dt) {
     }
 
     //salir del update si el enemigo esta muerto
-    if(a == 2){ return true; }
+    if (a == 2) { Matar(); return true; }
 
-    if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
+ /* if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
         currentAnimation->Update();
 
         // Renderiza animación de muerte
@@ -110,10 +110,10 @@ bool Volador::Update(float dt) {
         // Si ha terminado la animación, destruir enemigo
         if (currentAnimation->HasFinished()) {
             Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            a = 2;
         }
-        a = 2;
         return true; // SALIR DEL UPDATe
-    }
+    }*/
 
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
@@ -192,16 +192,19 @@ bool Volador::Update(float dt) {
 
     currentAnimation->Update();
 
+    if (isDead  && currentAnimation->HasFinished()) { a = 2; }
+
     pathfinding->DrawPath();
     pathfinding->ResetPath(enemyTilePos);
 
     return true;
 }
 
-
-// Called after all Updates
-bool PostUpdate() {
-    return true;
+void Volador::Matar(){
+    if (kill == 1) {
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        kill = 2;
+    }
 }
 
 bool Volador::CleanUp()
@@ -209,6 +212,7 @@ bool Volador::CleanUp()
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     //resetear contador
     a = 0;
+    kill = 1;
     return true;
 }
 
@@ -244,7 +248,6 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!isDead) {
             isDead = true;
             currentAnimation = &die;
-            a = 1;
 
             // Detener movimiento del cuerpo físico
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -258,6 +261,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
         }
 }
+
 
 void Volador::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {

@@ -20,9 +20,6 @@ public:
 
 	bool Update(float dt);
 
-	// Called after all Updates
-	bool PostUpdate();
-
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -43,6 +40,8 @@ public:
 
 	void ResetPath();
 
+	void Matar();
+
 	std::string GetType() const { return "volador"; }
 
 public:
@@ -51,6 +50,7 @@ public:
 	int lives = 2;
 	//control de muerte
 	int a = 0;
+	int kill = 1;
 
 private:
 
