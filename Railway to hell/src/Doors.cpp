@@ -34,15 +34,19 @@ bool Doors::Start() {
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
 	activated.LoadAnimations(parameters.child("animations").child("activated"));
+	lever_activated.LoadAnimations(parameters.child("animations").child("lever_activated"));
+	lever_door_activated.LoadAnimations(parameters.child("animations").child("lever_door_activated"));
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW/2, texH, bodyType::KINEMATIC);
-	pbody2 = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, 160, 112, bodyType::KINEMATIC);
-
+	if (GetDoorType() == "whip boss door") {
+		pbody2 = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, 160, 112, bodyType::KINEMATIC);
+	}
 	pbody->listener = this;
-	pbody2->listener = this;
-
+	if (GetDoorType() == "whip boss door") {
+		pbody2->listener = this;
+	}
 	//Assign collider type
 	pbody->ctype = ColliderType::DOORS;
 
@@ -71,7 +75,13 @@ bool Doors::Update(float dt)
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX()+ texW, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	if (GetDoorType() == "whip boss door") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW, (int)position.getY(), &currentAnimation->GetCurrentFrame()); 
+	}
+	if (GetDoorType() == "lever") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+
+	}
 	currentAnimation->Update();
 
 
@@ -98,23 +108,25 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 				}
 			}
 		}
-
-		//if (GetDoorType() == "name") {
-		//	if (!Activated) {
-		//		Activated = true;
-		//		currentAnimation = &activated;
-		//	}
-		//}
 		
-		//if (GetDoorType() == "name") {
+		//if (GetDoorType() == "lever") {
 		//	if (!Activated) {
 		//		Activated = true;
-		//		currentAnimation = &activated;
+		//		currentAnimation = &lever_activated;
 		//	}
 		//}
 
 		if (activated.HasFinished()) {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		}
+		break;
+	}
+	case ColliderType::PLAYER_WHIP_ATTACK: {
+		if (GetDoorType() == "lever") {
+			if (!Activated) {
+				Activated = true;
+				currentAnimation = &lever_activated;
+			}
 		}
 		break;
 	}

@@ -155,6 +155,21 @@
 						</activated>
 					</animations>
 				</door>
+				<door name="lever" x="3290" y="2079" w="48" h="32" texture="Assets/Textures/background/lever.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="32" />
+						</idle>
+						<lever_activated loop="false" speed="0.1">
+							<frame x="48" y="0" w="48" h="32" />
+							<frame x="96" y="0" w="48" h="32" />
+							<frame x="144" y="0" w="48" h="32" />
+
+						</lever_activated>
+					</animations>
+				</door>
+
+
 			</doors>
 			<enemies>
 				<enemy name="badguy" x="3450" y="2079" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">

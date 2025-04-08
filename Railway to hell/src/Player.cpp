@@ -334,7 +334,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Create new whip attack hitbox
         whipAttackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
-        whipAttackHitbox->ctype = ColliderType::PLAYER_ATTACK;
+        whipAttackHitbox->ctype = ColliderType::PLAYER_WHIP_ATTACK;
         whipAttackHitbox->listener = this;
     }
 
