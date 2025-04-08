@@ -43,8 +43,9 @@ bool Volador::Start() {
     texRadius = collisionRadius;
 
     //Load animations
-    idle.LoadAnimations(parameters.child("animations").child("damage"));
+    idle.LoadAnimations(parameters.child("animations").child("idle"));
 	die.LoadAnimations(parameters.child("animations").child("die"));
+    hurt.LoadAnimations(parameters.child("animations").child("die"));
     currentAnimation = &idle;
 
     moveSpeed = 30.0f; // Lateral movement speed
