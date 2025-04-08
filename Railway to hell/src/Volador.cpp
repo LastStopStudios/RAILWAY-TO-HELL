@@ -91,7 +91,7 @@ bool Volador::Update(float dt) {
     }
 
     //salir del update si el enemigo esta muerto
-    if (a == 2) {return true; }
+    if (a == 2 ) {return true; }
 
  /* if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
         currentAnimation->Update();
@@ -204,12 +204,18 @@ bool Volador::Update(float dt) {
 void Volador::Matar(){//eliminar al enemigo una vez muerto 
     if (kill == 1) {
         kill = 2;
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        Disable();//cuando se tenga que activar usar  Enable();
+       //Engine::GetInstance().entityManager.get()->DestroyEntity(this);//destruir el enemigo !!Aqui es donde peta!!
     }
 }
 
 bool Volador::CleanUp()
 {
+
+    if(texture){
+        Engine::GetInstance().textures.get()->UnLoad(texture);
+        texture = nullptr;
+    }
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
 }
