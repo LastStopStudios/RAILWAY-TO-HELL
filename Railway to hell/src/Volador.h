@@ -77,6 +77,7 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 	Animation die;
+	Animation hurt;
 	PhysBody* pbody;
 	PhysBody* area;
 	Pathfinding* pathfinding;
