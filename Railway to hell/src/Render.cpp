@@ -53,7 +53,7 @@ bool Render::Awake()
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/Jacquard12-Regular.ttf", 35);
+	font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 30);
 
 	return ret;
 }
