@@ -73,7 +73,8 @@ bool Volador::Start() {
     // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
-
+    a = 0;
+    kill = 1;
     return true;
 }
 
@@ -90,7 +91,7 @@ bool Volador::Update(float dt) {
     }
 
     //salir del update si el enemigo esta muerto
-    if (a == 2) { Matar(); return true; }
+    if (a == 2) {return true; }
 
  /* if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
         currentAnimation->Update();
@@ -192,7 +193,7 @@ bool Volador::Update(float dt) {
 
     currentAnimation->Update();
 
-    if (isDead  && currentAnimation->HasFinished()) { a = 2; }
+    if (isDead  && currentAnimation->HasFinished()) { Matar(); a = 2; }
 
     pathfinding->DrawPath();
     pathfinding->ResetPath(enemyTilePos);
@@ -200,19 +201,16 @@ bool Volador::Update(float dt) {
     return true;
 }
 
-void Volador::Matar(){
+void Volador::Matar(){//eliminar al enemigo una vez muerto 
     if (kill == 1) {
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         kill = 2;
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
 }
 
 bool Volador::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-    //resetear contador
-    a = 0;
-    kill = 1;
     return true;
 }
 
