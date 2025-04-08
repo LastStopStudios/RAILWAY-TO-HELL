@@ -43,7 +43,7 @@ bool Volador::Start() {
     texRadius = collisionRadius;
 
     //Load animations
-    idle.LoadAnimations(parameters.child("animations").child("idle"));
+    idle.LoadAnimations(parameters.child("animations").child("damage"));
 	die.LoadAnimations(parameters.child("animations").child("die"));
     currentAnimation = &idle;
 
@@ -93,8 +93,8 @@ bool Volador::Update(float dt) {
 
         // Renderiza animación de muerte
         b2Transform pbodyPos = pbody->body->GetTransform();
-        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) + 64 - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 64 - texH / 2);
 
         Engine::GetInstance().render->DrawTexture(
             texture,
@@ -180,11 +180,11 @@ bool Volador::Update(float dt) {
 
     // Adjust position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) +32 - texH / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
+    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() , (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 64, (int)position.getY() + 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
     currentAnimation->Update();
 
