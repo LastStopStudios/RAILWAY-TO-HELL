@@ -39,11 +39,13 @@ bool Volador::Start() {
     texIsDeath = parameters.attribute("isDeath").as_int();
 
     // Calcular radio de colisi�n basado en el tama�o de la textura
-    int collisionRadius = std::min(texW, texH) / 2;
+    int collisionRadius = 32;
     texRadius = collisionRadius;
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
+	die.LoadAnimations(parameters.child("animations").child("die"));
+    hurt.LoadAnimations(parameters.child("animations").child("die"));
     currentAnimation = &idle;
 
     moveSpeed = 30.0f; // Lateral movement speed
@@ -86,6 +88,33 @@ bool Volador::Update(float dt) {
         Engine::GetInstance().scene->ResetSkipInput();  // Solo lo hacemos una vez
         return true;
     }
+
+    //salir del update si el enemigo esta muerto
+    if(a == 2){ return true; }
+
+    if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
+        currentAnimation->Update();
+
+        // Renderiza animación de muerte
+        b2Transform pbodyPos = pbody->body->GetTransform();
+        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) + 64 - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 64 - texH / 2);
+
+        Engine::GetInstance().render->DrawTexture(
+            texture,
+            (int)position.getX(),
+            (int)position.getY(),
+            &currentAnimation->GetCurrentFrame()
+        );
+
+        // Si ha terminado la animación, destruir enemigo
+        if (currentAnimation->HasFinished()) {
+            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        }
+        a = 2;
+        return true; // SALIR DEL UPDATe
+    }
+
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
 
@@ -159,7 +188,7 @@ bool Volador::Update(float dt) {
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     // Draw texture and animation
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 3, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 64, (int)position.getY() + 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
     currentAnimation->Update();
 
@@ -169,9 +198,17 @@ bool Volador::Update(float dt) {
     return true;
 }
 
+
+// Called after all Updates
+bool PostUpdate() {
+    return true;
+}
+
 bool Volador::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    //resetear contador
+    a = 0;
     return true;
 }
 
@@ -198,21 +235,28 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     Player* player = Engine::GetInstance().scene.get()->GetPlayer();
 
-    switch (physB->ctype) { 
-    case ColliderType::PLAYER: 
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    switch (physB->ctype) {
+    case ColliderType::PLAYER:
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK:
         LOG("Enemy hit by player attack - DESTROY");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        break;
+        if (!isDead) {
+            isDead = true;
+            currentAnimation = &die;
+            a = 1;
+
+            // Detener movimiento del cuerpo físico
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+        }
     case ColliderType::GIRO:
         giro = !giro;
         break;
-    
+
     default:
         break;
-    }
+        }
 }
 
 void Volador::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {

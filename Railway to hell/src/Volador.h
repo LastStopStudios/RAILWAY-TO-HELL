@@ -20,6 +20,9 @@ public:
 
 	bool Update(float dt);
 
+	// Called after all Updates
+	bool PostUpdate();
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -46,6 +49,8 @@ public:
 	float texIsDeath;
 
 	int lives = 2;
+	//control de muerte
+	int a = 0;
 
 private:
 
@@ -71,6 +76,8 @@ private:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+	Animation die;
+	Animation hurt;
 	PhysBody* pbody;
 	PhysBody* area;
 	Pathfinding* pathfinding;
@@ -79,5 +86,7 @@ private:
 	float searchTime = 0.0f;
 	const float maxSearchTime = 3000.0f;
 	int texRadius;
+	bool isDead = false;
+	bool hasPlayedDeathAnim = false;
 };
 
