@@ -88,7 +88,9 @@ bool Volador::Update(float dt) {
         return true;
     }
 
-    if (isDead) {
+    if(a == 2){ return true; }
+
+    if (isDead && a == 1) {
         currentAnimation->Update();
 
         // Renderiza animación de muerte
@@ -107,7 +109,7 @@ bool Volador::Update(float dt) {
         if (currentAnimation->HasFinished()) {
             Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         }
-
+        a = 2;
         return true; // SALIR DEL UPDATe
     }
 
@@ -194,9 +196,16 @@ bool Volador::Update(float dt) {
     return true;
 }
 
+
+// Called after all Updates
+bool PostUpdate() {
+    return true;
+}
+
 bool Volador::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    a = 0;
     return true;
 }
 
@@ -232,6 +241,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!isDead) {
             isDead = true;
             currentAnimation = &die;
+            a = 1;
 
             // Detener movimiento del cuerpo físico
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));

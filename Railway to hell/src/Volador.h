@@ -20,6 +20,9 @@ public:
 
 	bool Update(float dt);
 
+	// Called after all Updates
+	bool PostUpdate();
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -46,6 +49,8 @@ public:
 	float texIsDeath;
 
 	int lives = 2;
+
+	int a = 0;
 
 private:
 
