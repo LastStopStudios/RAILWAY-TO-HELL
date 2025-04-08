@@ -89,9 +89,10 @@ bool Volador::Update(float dt) {
         return true;
     }
 
+    //salir del update si el enemigo esta muerto
     if(a == 2){ return true; }
 
-    if (isDead && a == 1) {
+    if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
         currentAnimation->Update();
 
         // Renderiza animación de muerte
@@ -206,6 +207,7 @@ bool PostUpdate() {
 bool Volador::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    //resetear contador
     a = 0;
     return true;
 }
