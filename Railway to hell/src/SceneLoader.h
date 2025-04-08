@@ -3,6 +3,8 @@
 #include <vector>
 #include "pugixml.hpp"
 #include "Item.h"
+#include "Doors.h"
+
 class Terrestre;
 class Scene;
 class Engine;
@@ -28,6 +30,7 @@ public:
 
 	int currentScene;
 	std::vector<Item*> itemsList; 
+	std::vector<Doors*> doorsList;
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();

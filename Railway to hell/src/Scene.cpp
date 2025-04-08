@@ -46,6 +46,13 @@ bool Scene::Awake()
 		itemList.push_back(item);
 	}
 
+	for (pugi::xml_node doorNode = configParameters.child("entities").child("doors").child("door"); doorNode; doorNode = doorNode.next_sibling("door"))
+	{
+		Doors* door = (Doors*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DOORS);
+		door->SetParameters(doorNode);
+		doorList.push_back(door);
+	}
+
 	// Create a enemy using the entity manager 
 	for (pugi::xml_node enemyNode = configParameters.child("entities").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{

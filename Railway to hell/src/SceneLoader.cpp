@@ -113,6 +113,16 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         }
     }
 
+    pugi::xml_node doorsNode = sceneNode.child("entities").child("doors");
+    if (doorsNode) {
+        for (pugi::xml_node doorNode = doorNode.child("door"); doorNode; doorNode = doorNode.next_sibling("door"))
+        {
+            Doors* door = (Doors*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DOORS);
+            door->SetParameters(doorNode);
+            doorsList.push_back(door);  // Now using the member variable
+        }
+    }
+
     // Initialize enemies
     for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
         enemy->Start();
@@ -127,6 +137,10 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     for (auto item : itemsList) {
         item->Start();
     } 
+
+	for (auto door : doorsList) {
+		door->Start();
+	}
 }
 
 void SceneLoader::UnLoadEnemiesItems() {

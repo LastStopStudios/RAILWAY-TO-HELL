@@ -93,6 +93,8 @@ public:
 	pugi::xml_node parameters;
 	Animation idle;
 
+public:
+	bool returnCanOpenDoor() { return canOpenDoor; }
 private:
 	// Private properties
 	Animation meleeAttack;       // Attack animation sequence
