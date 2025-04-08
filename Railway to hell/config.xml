@@ -157,7 +157,7 @@
 						</idle>
 					</animations>
 				</enemy>
-				<enemy name="badguy2" x="3300" y="2079" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="true" type="volador">
+				<enemy name="badguy2" x="3300" y="1870" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						  <idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
