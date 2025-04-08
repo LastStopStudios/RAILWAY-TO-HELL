@@ -45,7 +45,7 @@ bool Volador::Start() {
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
 	die.LoadAnimations(parameters.child("animations").child("die"));
-    hurt.LoadAnimations(parameters.child("animations").child("die"));
+    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
     currentAnimation = &idle;
 
     moveSpeed = 30.0f; // Lateral movement speed

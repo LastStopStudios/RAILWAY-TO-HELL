@@ -122,4 +122,7 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
+
+	//declaración de la musica de fondo
+	int musicaFondoId = -1;
 };
