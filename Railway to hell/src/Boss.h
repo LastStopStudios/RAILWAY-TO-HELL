@@ -72,7 +72,7 @@ private:
 	float attackCooldown = 3000.0f; 
 	float currentAttackCooldown = 0.0f;
 
-	float attackDistance = 2.0f;
+	float attackDistance = 3.0f;
 	bool canAttack = true;
 
 	int lives = 8;
