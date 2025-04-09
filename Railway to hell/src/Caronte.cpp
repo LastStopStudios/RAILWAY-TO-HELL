@@ -35,7 +35,7 @@ bool Caronte::Start() {
 	currentAnimation = &idle;
 
 	// Initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW, texH, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW, texH, bodyType::KINEMATIC);
 	AttackSensorArea = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW * 2, texH * 1.2, bodyType::DYNAMIC);
 
 	pbody->listener = this;
@@ -129,16 +129,16 @@ bool Caronte::Update(float dt)
 
 	// draw the caronte
 	if(currentAnimation == &idle){
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - (frame.w - texW * 1.3), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - (frame.w - texW * 1.3), (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
 	}
 	if (currentAnimation == &attack) {
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW/2, (int)position.getY() - texH/3, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW/2, (int)position.getY() - 24, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
 	}
 	if (currentAnimation == &hurt) {
-		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - (frame.w - texW * 1.6), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - (frame.w - texW * 1.6), (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
 	}
 	if (currentAnimation == &die) {
-		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW / 2, (int)position.getY() , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW / 2, (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
 	}
 	// update the animation
 	currentAnimation->Update();

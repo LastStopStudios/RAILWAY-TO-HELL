@@ -63,6 +63,7 @@ private:
 	void UpdateMeleeAttack(float dt);
 	void HandleJump();
 	void HandleSceneSwitching();
+	void HandleHurt(float dt);
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
@@ -132,6 +133,10 @@ private:
 	Animation walk;
 	bool isWalking;
 	SDL_Texture* walkTexture;
+
+	Animation hurt;
+	bool isHurt = false;
+	SDL_Texture* hurtTexture = nullptr;
 
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual

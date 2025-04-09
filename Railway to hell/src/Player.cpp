@@ -86,6 +86,11 @@ bool Player::Start() {
 
     originalGravityScale = parameters.attribute("gravity").as_bool() ? 1.0f : 0.0f;
 
+    // Hurt animation
+    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
+    auto hurtNode = parameters.child("animations").child("hurt");
+    hurtTexture = hurtNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(hurtNode.attribute("texture").as_string()) :texture;
+
     // Set initial state
     isAttacking = false;
     canAttack = true;
@@ -124,6 +129,7 @@ bool Player::Update(float dt)
         if (!parameters.attribute("gravity").as_bool()) {
             velocity = b2Vec2(0, 0);
         }
+       
 
         // Mutually exclusive action handling
         if (!isAttacking && !isWhipAttacking && !isDashing) {
@@ -135,6 +141,9 @@ bool Player::Update(float dt)
         if (!isAttacking && !isWhipAttacking) {
             HandleDash(velocity, dt);
         }
+
+		// Handle hurt animation
+        HandleHurt(dt);
 
         // Handle attacks only when not dashing
         if (!isDashing) {
@@ -305,6 +314,20 @@ void Player::HandleSceneSwitching() {
     }*/ // if para poner cambio de escena en un boton
 }
 
+void Player::HandleHurt(float dt) {
+	// Check if the player is hurt
+    if (isHurt) {
+        hurt.Update();
+		// Check if the hurt animation has finished
+        if (hurt.HasFinished()) {
+            // Exit hurt state
+            isHurt = false;
+            hurt.Reset();
+            currentAnimation = &idle;
+        }
+    }
+}
+
 // Corregir UpdateWhipAttack() para reiniciar correctamente la animación
 void Player::UpdateWhipAttack(float dt) {
     // Whip attack cooldown logic
@@ -468,7 +491,12 @@ void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
     SDL_Texture* originalTexture = texture;
 
-    if (isAttacking) {
+    if (isHurt) {
+        // Set hurt animation when hurt
+        texture = hurtTexture;
+        currentAnimation = &hurt;
+    }
+    else if (isAttacking) {
         currentAnimation = &meleeAttack;
         // Use attack texture when attacking
         texture = attackTexture;
@@ -543,6 +571,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         // Additional enemy hit logic can go here
         return;
     }
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isJumping = false;
@@ -562,6 +591,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
+    }
+    case ColliderType::BOSS_ATTACK: {
+        isHurt = true;
+        LOG("Player damaged");
     }
         break;
     case ColliderType::SENSOR:
