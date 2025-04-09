@@ -36,7 +36,7 @@ bool Caronte::Start() {
 
 	// Initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX(), (int)position.getY(), texW, texH, bodyType::KINEMATIC);
-	AttackSensorArea = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW * 2, texH * 1.2, bodyType::DYNAMIC);
+	AttackSensorArea = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX(), (int)position.getY(), texW * 2, texH * 1.2, bodyType::KINEMATIC);
 
 	pbody->listener = this;
 	AttackSensorArea->listener = this;
@@ -210,6 +210,11 @@ bool Caronte::CleanUp()
 
 	Engine::GetInstance().physics->DeletePhysBody(AttackSensorArea);
 	Engine::GetInstance().physics->DeletePhysBody(pbody);
+
+	if (AttackArea != nullptr) {
+		Engine::GetInstance().physics->DeletePhysBody(AttackArea);
+		AttackArea = nullptr;
+	}
 
 	return true;
 }

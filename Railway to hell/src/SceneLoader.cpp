@@ -103,6 +103,12 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 			boss->SetParameters(enemyNode);
 			Engine::GetInstance().scene->GetBossList().push_back(boss);
 		}
+        
+		if (type == "guardian") {
+			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
+			caronte->SetParameters(enemyNode);
+			Engine::GetInstance().scene->GetCaronteList().push_back(caronte);
+		}
     }
 
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
@@ -125,6 +131,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     for (auto enemy : Engine::GetInstance().scene->GetBossList()) {
         enemy->Start();
     }
+	for (auto enemy : Engine::GetInstance().scene->GetCaronteList()) {
+		enemy->Start();
+	}
     // Initialize items
     for (auto item : itemsList) {
         item->Start();
@@ -140,7 +149,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -154,6 +163,7 @@ void SceneLoader::UnLoadEnemiesItems() {
     Engine::GetInstance().scene->GetEnemyList().clear(); 
     Engine::GetInstance().scene->GetVoladorList().clear(); 
     Engine::GetInstance().scene->GetBossList().clear();
+	Engine::GetInstance().scene->GetCaronteList().clear();
     itemsList.clear();  
 }
 void SceneLoader::SetCurrentScene(int level)

@@ -10,6 +10,7 @@ class Entity;
 class Pathfinding;
 class EntityManager;
 class Item;
+class Caronte;
 #include "Entity.h"
 //#include "Scene.h"
 //#include "Enemy.h"
@@ -28,6 +29,7 @@ public:
 
 	int currentScene;
 	std::vector<Item*> itemsList; 
+
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
