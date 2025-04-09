@@ -36,4 +36,7 @@ public:
 
 	std::list<Entity*> entities;
 
+private:
+	bool isPendingToDelente = false;
+
 };

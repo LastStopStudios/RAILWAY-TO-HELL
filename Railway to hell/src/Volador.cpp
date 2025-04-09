@@ -84,37 +84,34 @@ bool Volador::Update(float dt) {
         return true;
     }
 
+    //The basic structure is that first the animation is performed and when it finishes, pendingToDelete is set to true, there is a function in entity.h that has this boolean variable
+    // and there is also a function that returns the variable, in the entity manager in the update function logic has been added to check the variable and if it is set to true it destroys it there.
+    // 
+    // Handle death animation
+    if (isDying) {
+        currentAnimation->Update();
+
+        // If death animation finished, start the timer
+        if (currentAnimation->HasFinished()) {
+            deathTimer += dt;
+            if (deathTimer >= deathDelay) {
+                // Mark for destruction in the next frame
+                pendingToDelete = true;
+            }
+        }
+
+        // Draw the death animation
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 64, (int)position.getY() + 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+
+        // When dying, don't process any other logic
+        return true;
+    }
 
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
         Engine::GetInstance().scene->ResetSkipInput();  // Solo lo hacemos una vez
         return true;
     }
-
-    //salir del update si el enemigo esta muerto
-    if (a == 2 ) {return true; }
-
- /* if (isDead && a == 1) {//eliminar al enemigo cuando el player lo golpea
-        currentAnimation->Update();
-
-        // Renderiza animación de muerte
-        b2Transform pbodyPos = pbody->body->GetTransform();
-        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) + 64 - texH / 2);
-        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 64 - texH / 2);
-
-        Engine::GetInstance().render->DrawTexture(
-            texture,
-            (int)position.getX(),
-            (int)position.getY(),
-            &currentAnimation->GetCurrentFrame()
-        );
-
-        // Si ha terminado la animación, destruir enemigo
-        if (currentAnimation->HasFinished()) {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-            a = 2;
-        }
-        return true; // SALIR DEL UPDATe
-    }*/
 
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
@@ -248,14 +245,14 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK:
-        LOG("Enemy hit by player attack - DESTROY");
-        if (!isDead) {
-            isDead = true;
+        if (!isDying) { // Prevent multiple death animations
+            isDying = true;
             currentAnimation = &die;
+            currentAnimation->Reset();
 
-            // Detener movimiento del cuerpo físico
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
     case ColliderType::GIRO:
         giro = !giro;

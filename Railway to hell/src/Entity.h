@@ -60,6 +60,10 @@ public:
 		}
 	}
 
+	virtual bool IsPendingToDelete() const {
+		return pendingToDelete;
+	}
+
 	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	};
@@ -69,7 +73,7 @@ public:
 	};
 
 public:
-
+	bool pendingToDelete = false;
 	std::string name;
 	EntityType type;
 	bool active = true;
