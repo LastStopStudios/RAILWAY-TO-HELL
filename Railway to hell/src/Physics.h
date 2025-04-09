@@ -37,6 +37,8 @@ enum class ColliderType {
 	GIRO,
 	BOSS,
 	BOSS_ATTACK,
+	CARONTE,
+	ATTACKSENSOR,
 	UNKNOWN
 	// ..
 };

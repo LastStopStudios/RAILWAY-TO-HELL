@@ -10,6 +10,7 @@ enum class EntityType
 	TERRESTRE,
 	VOLADOR,
 	BOSS,
+	CARONTE,
 	UNKNOWN
 };
 

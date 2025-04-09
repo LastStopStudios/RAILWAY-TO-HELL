@@ -36,7 +36,7 @@ bool Item::Start() {
 	currentAnimation = &idle;
 	
 	// L08 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, texH / 2, bodyType::DYNAMIC);
 
 	pbody->listener = this;
 
@@ -100,6 +100,13 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Item::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
+}
+
+void Item::SetPosition(Vector2D pos) {
+	pos.setX(pos.getX() + texW / 2);
+	pos.setY(pos.getY() + texH / 2);
+	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+	pbody->body->SetTransform(bodyPos, 0);
 }
 
 bool Item::CleanUp()

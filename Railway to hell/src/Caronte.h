@@ -6,12 +6,12 @@
 
 struct SDL_Texture;
 
-class Item : public Entity
+class Caronte : public Entity
 {
 public:
 
-	Item();
-	virtual ~Item();
+	Caronte();
+	virtual ~Caronte();
 
 	bool Awake();
 
@@ -21,8 +21,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
-
-	void SetPosition(Vector2D pos);
+	//Vector2D GetPosition();
 
 	bool CleanUp();
 
@@ -30,13 +29,17 @@ public:
 		this->parameters = parameters;
 	}
 
-	void SetItemType(const std::string& type) { itemType = type; }
+private:
 
-	const std::string& GetItemType() const { return itemType; }
+	bool candie = false;
+	bool isattacking = false;
+	bool isdeath = false;
+	bool canAttack;
+	bool attacked = false;
 
-public:
+	float attackCooldown = 3000.0f;
+	float currentAttackCooldown = 0.0f;
 
-	bool isPicked = false;
 
 private:
 
@@ -45,10 +48,10 @@ private:
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
-	Animation idle;
+	Animation idle, attack, hurt, die;
 
-	//L08 TODO 4: Add a physics to an item
+	// physics from box2d
 	PhysBody* pbody;
-
-	std::string itemType;
+	PhysBody* AttackSensorArea;
+	PhysBody* AttackArea;
 };
