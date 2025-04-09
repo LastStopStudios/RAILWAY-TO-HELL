@@ -4,6 +4,7 @@
 #include "pugixml.hpp"
 #include "Item.h"
 #include "Doors.h"
+#include "Levers.h"
 
 class Terrestre;
 class Scene;
@@ -31,6 +32,7 @@ public:
 	int currentScene;
 	std::vector<Item*> itemsList; 
 	std::vector<Doors*> doorsList;
+	std::vector<Levers*> leversList;
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();

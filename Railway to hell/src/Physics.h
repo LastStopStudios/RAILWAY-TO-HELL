@@ -39,6 +39,7 @@ enum class ColliderType {
 	BOSS,
 	BOSS_ATTACK,
 	DOORS,
+	LEVER,
 	UNKNOWN
 	// ..
 };

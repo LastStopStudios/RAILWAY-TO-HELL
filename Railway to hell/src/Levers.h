@@ -3,16 +3,15 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Animation.h"
-#include "Levers.h"
 
 struct SDL_Texture;
 
-class Doors : public Entity
+class Levers : public Entity
 {
 public:
 
-	Doors();
-	virtual ~Doors();
+	Levers();
+	virtual ~Levers();
 
 	bool Awake();
 
@@ -29,9 +28,11 @@ public:
 		this->parameters = parameters;
 	}
 
-	void SetDoorType(const std::string& type) { doorType = type; }
+	void SetLeverType(const std::string& type) { leverType = type; }
 
-	const std::string& GetDoorType() const { return doorType; }
+	const std::string& GetLeverType() const { return leverType; }
+
+	bool returnLeverActivated() const { return Lever_Door_Activated; }
 
 public:
 
@@ -45,13 +46,10 @@ private:
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
-	Animation idle, activated, lever_activated, lever_door_activated;
+	Animation idle, lever_activated;
 
 	//Add a physics to an door
 	PhysBody* pbody;
-	PhysBody* pbody2;
 
-	std::string doorType;
-
-	Levers* lever =  nullptr ;
+	std::string leverType;
 };
