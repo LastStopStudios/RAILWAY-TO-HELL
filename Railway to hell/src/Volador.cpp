@@ -83,6 +83,9 @@ bool Volador::Update(float dt) {
         return true;
     }
 
+    //The basic structure is that first the animation is performed and when it finishes, pendingToDelete is set to true, there is a function in entity.h that has this boolean variable
+    // and there is also a function that returns the variable, in the entity manager in the update function logic has been added to check the variable and if it is set to true it destroys it there.
+    // 
     // Handle death animation
     if (isDying) {
         currentAnimation->Update();
@@ -227,10 +230,11 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::PLAYER_ATTACK:
         if (!isDying) { // Prevent multiple death animations
-            LOG("Enemy hit by player attack - Starting death animation");
             isDying = true;
             currentAnimation = &die;
             currentAnimation->Reset();
+
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
