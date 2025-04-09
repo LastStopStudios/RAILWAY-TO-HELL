@@ -126,7 +126,7 @@ bool EntityManager::Update(float dt)
 	{
 		if (entity->active == false) continue;
 
-		// Use the new function to check if entity should be removed
+		// Use IsPendingToDelete to check if entity should be removed
 		if (entity->IsPendingToDelete()) {
 			// Mark for removal but don't destroy yet
 			entitiesToRemove.push_back(entity);

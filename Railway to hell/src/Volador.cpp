@@ -83,12 +83,6 @@ bool Volador::Update(float dt) {
         return true;
     }
 
-    if (shouldDestroy) {
-        // Signal to EntityManager that this entity should be destroyed
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        return true;
-    }
-
     // Handle death animation
     if (isDying) {
         currentAnimation->Update();
@@ -237,9 +231,6 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
             isDying = true;
             currentAnimation = &die;
             currentAnimation->Reset();
-
-            // Optional: Stop movement by setting velocity to zero
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
