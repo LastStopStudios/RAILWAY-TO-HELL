@@ -64,6 +64,10 @@ private:
 	bool playerNotFound;
 
 	int dieSFX;
+	bool isDying = false;
+	bool shouldDestroy = false;
+	float deathTimer = 0.0f;
+	const float deathDelay = 1.0f;
 
 	SDL_Texture* texture;
 	const char* texturePath;
