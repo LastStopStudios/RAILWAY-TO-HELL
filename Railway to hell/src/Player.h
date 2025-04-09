@@ -60,6 +60,7 @@ private:
 	void UpdateMeleeAttack(float dt);
 	void HandleJump();
 	void HandleSceneSwitching();
+	void HandleHurt();
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
@@ -91,16 +92,20 @@ public:
 	bool isJumping = false; // Flag to check if the player is currently jumping
 
 	pugi::xml_node parameters;
-	Animation idle;
 
 private:
 	// Private properties
+	
+	// Idle
+	Animation idle;
+
+
+	// Attack
 	Animation meleeAttack;       // Attack animation sequence
 	bool isAttacking = false;    // Currently attacking flag
 	bool canAttack = true;       // Attack availability flag
 	float attackCooldown = 0.0f; // Time until next attack allowed
 	PhysBody* attackHitbox = nullptr;  // Attack collision area
-	SDL_Texture* attackTexture = nullptr;  // Attack visual
 	bool facingRight = true;     // Direction facing (true=right)
 
 	// Whip attack properties
@@ -109,15 +114,12 @@ private:
 	bool isWhipAttacking = false;
 	bool canWhipAttack = true;
 	float whipAttackCooldown = 0.0f;
-	SDL_Texture* whipAttackTexture = nullptr;
 
 	Animation jump; 
-	SDL_Texture* jumpTexture = nullptr;
 	bool isPreparingJump;
 	int jumpFrameThreshold;
 
 	Animation dash;
-	SDL_Texture* dashTexture = nullptr;
 	float dashCooldown;
 	float dashDirection;   // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
 	float dashSpeed;       // Velocidad del dash
@@ -128,10 +130,12 @@ private:
 
 	Animation walk;
 	bool isWalking;
-	SDL_Texture* walkTexture;
+
+	Animation hurt;
+	bool ishurted;
 
 	Animation* currentAnimation = nullptr;
-	SDL_Texture* idleTexture = nullptr;  // Attack visual
+
 	bool godMode;
 	// Dash properties
 	bool isDashing = false;

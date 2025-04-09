@@ -31,10 +31,25 @@ bool Player::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-    idleTexture = texture;  // Default texture
 
     // Load animations
+    
+    // ---------Idle-----------
     idle.LoadAnimations(parameters.child("animations").child("idle"));
+    // ----Attack animation----
+    meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
+    // -----Jump animation-----
+    jump.LoadAnimations(parameters.child("animations").child("jump"));
+    // -----Walk animation-----
+    walk.LoadAnimations(parameters.child("animations").child("walk"));
+    // --Whip attack animation-
+    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
+    // -----Dash animation-----
+    dash.LoadAnimations(parameters.child("animations").child("dash"));
+    // -----Hurt animation-----
+    hurt.LoadAnimations(parameters.child("animations").child("dash"));
+
+    // Start animation
     currentAnimation = &idle;
 
     // Physics body initialization
@@ -50,55 +65,30 @@ bool Player::Start() {
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
-    // Attack animation
-    meleeAttack = Animation();
-    meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
-    // Only load a different texture if one is specified
-    auto attackNode = parameters.child("animations").child("attack");
-    attackTexture = attackNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(attackNode.attribute("texture").as_string()) : texture;
-
-    // Jump animation
-    jump.LoadAnimations(parameters.child("animations").child("jump"));
-    auto jumpNode = parameters.child("animations").child("jump");
-    jumpTexture = jumpNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()) :texture;
-
+    // Initialize jump variables
     isPreparingJump = false;
     isJumping = false;
     jumpFrameThreshold = 3;
 
-    // Walk animation
-    walk.LoadAnimations(parameters.child("animations").child("walk"));
-    auto walkNode = parameters.child("animations").child("walk");
-    walkTexture = walkNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(walkNode.attribute("texture").as_string()) :texture;
+    // Initialize walk variables
     isWalking = false;
 
-    // Whip attack animation
-    whipAttack = Animation();
-    whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
-    auto whipNode = parameters.child("animations").child("whip");
-    whipAttackTexture = whipNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string()) :texture;
-
-    // Dash animation
-    dash = Animation();
-    dash.LoadAnimations(parameters.child("animations").child("dash"));
-    auto dashNode = parameters.child("animations").child("dash");
-    dashTexture = dashNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(dashNode.attribute("texture").as_string()) :texture;
-
+    // Initialize dash variables
     originalGravityScale = parameters.attribute("gravity").as_bool() ? 1.0f : 0.0f;
 
-    // Set initial state
+    // Initialize attack variables
     isAttacking = false;
     canAttack = true;
     attackCooldown = 0.0f;
     attackHitbox = nullptr;
 
-    // Explicitly initialize whip attack state variables
+    // Initialize whip variables
     isWhipAttacking = false;
     canWhipAttack = true;
     whipAttackCooldown = 0.0f;
     whipAttackHitbox = nullptr;
 
-    // For testing, temporarily enable whip attack
+    // For testing, temporarily enable whip attack <---
     WhipAttack = true;
     facingRight = true;
 
@@ -126,21 +116,25 @@ bool Player::Update(float dt)
         }
 
         // Mutually exclusive action handling
-        if (!isAttacking && !isWhipAttacking && !isDashing) {
+        if (!isAttacking && !isWhipAttacking && !isDashing && !ishurted) {
             HandleMovement(velocity);
             HandleJump();
         }
 
         // Handle dash only when not attacking or jumping
-        if (!isAttacking && !isWhipAttacking) {
+        if (!isAttacking && !isWhipAttacking && !ishurted) {
             HandleDash(velocity, dt);
         }
 
         // Handle attacks only when not dashing
-        if (!isDashing) {
+        if (!isDashing && !ishurted) {
             UpdateWhipAttack(dt);
             UpdateMeleeAttack(dt);
         }
+
+        //if (ishurted) {
+        //    HandleHurt();
+        //}
 
         // If jumping, preserve the vertical velocity
         if (isJumping) {
@@ -168,9 +162,10 @@ bool Player::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
 
-    currentAnimation->Update(); 
     HandleSceneSwitching();
     DrawPlayer();
+    currentAnimation->Update();
+
     return true;
 }
 
@@ -205,6 +200,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
     }
 }
 
+void Player::HandleHurt() {
+    if (hurt.HasFinished()) {
+        ishurted = false;
+    }
+
+}
+
 void Player::HandleDash(b2Vec2& velocity, float dt) {
     // Update dash cooldown if it's active
     if (!canDash) {
@@ -223,12 +225,11 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
 
         // Allow to dash if you are in the ground o u have AirDashes aviable
-        if (isOnGround || currentAirDashes < maxAirDashes)
+        if (isOnGround || currentAirDashes > maxAirDashes)
         {
         // Reset the animation to the beginning
         dash.Reset();
         currentAnimation = &dash;
-        texture = dashTexture;
 
         // Start dash
         isDashing = true;
@@ -368,7 +369,6 @@ void Player::UpdateWhipAttack(float dt) {
             LOG("Whip Attack finished");
             isWhipAttacking = false;
             currentAnimation = &idle;  // Explicitly switch back to idle animation
-			texture = idleTexture;
 
             if (whipAttackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
@@ -466,38 +466,33 @@ void Player::UpdateMeleeAttack(float dt) {
 
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
-    SDL_Texture* originalTexture = texture;
 
     if (isAttacking) {
         currentAnimation = &meleeAttack;
         // Use attack texture when attacking
-        texture = attackTexture;
     }
     else if (isWhipAttacking) {
         currentAnimation = &whipAttack;
         // Use whip texture when whip attacking
-        texture = whipAttackTexture;
     }
     else if (isDashing) {
         // Set walking animation when moving horizontally
         currentAnimation = &dash;
-        texture = dashTexture;
     }
     else if (isJumping || isPreparingJump) {
         // Set the jump animation when jumping or preparing to jump
         currentAnimation = &jump;
-        texture = jumpTexture;
     }
     else if (isWalking) {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
-        texture = walkTexture;
+    }
+    else if (ishurted) {
+        currentAnimation = &hurt;
     }
     else {
         if (currentAnimation != &idle) {
             currentAnimation = &idle;
-            // Reset texture to the original one loaded in Start()
-            texture = originalTexture;
         }
     }
 
@@ -531,8 +526,7 @@ void Player::DrawPlayer() {
 bool Player::CleanUp() {
     LOG("Cleanup player");
     Engine::GetInstance().textures.get()->UnLoad(texture);
-    Engine::GetInstance().textures.get()->UnLoad(attackTexture);
-    Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
+
 
     return true;
 }
@@ -598,6 +592,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         NeedDialogue = true;
         Id = physB->ID;
         break;
+    case ColliderType::BOSS_ATTACK:
+        //ishurted = true;
+
     case ColliderType::UNKNOWN:
         break;
     }
