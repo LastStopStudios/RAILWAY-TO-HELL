@@ -57,6 +57,10 @@ public:
 	void DialogoOn();
 	void DialogoOff();
 
+	//Bloquear el cambio de escena cuando pelea con un boss
+	void BloquearSensor();
+	void DesbloquearSensor();
+
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
@@ -106,6 +110,7 @@ public:
 	//escena a la que va, x (590) de la camara, y (415) de la camara
 	{3, 1282.73, 1151.67}
 	};
+	//control camara
 	void EntrarBoss();
 	void SalirBoss();
 

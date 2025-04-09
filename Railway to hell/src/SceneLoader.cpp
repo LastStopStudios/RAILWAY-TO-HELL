@@ -30,9 +30,11 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
     if (bosscam == true) {
         Engine::GetInstance().scene->EntrarBoss();
+        Engine::GetInstance().scene->BloquearSensor();
     }
     else if (bosscam == false) {
         Engine::GetInstance().scene->SalirBoss();
+        Engine::GetInstance().scene->DesbloquearSensor();
     }
        
     UnLoadEnemiesItems();

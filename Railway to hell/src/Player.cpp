@@ -581,7 +581,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ASCENSORES:
         LOG("ASCENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());
-        TocandoAs = true;
+        if (Bloqueo == false) {
+            TocandoAs = true;
+           // puerta = true; //bloquear ascensor animacion
             for (const auto& escena : escenas) { // Iterate through all scenes
                 if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
@@ -591,6 +593,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     BossCam = escena.CamaraBoss;
                 }
             }
+        }
         break;
     case ColliderType::DIALOGOS:
         LOG("DIALOGOS COLLISION DETECTED");
@@ -610,10 +613,19 @@ void Player::Ascensor(){
     }
 }
 
+void Player::BloquearSensor(){
+    Bloqueo = true;
+}
+
+void Player::DesbloquearSensor(){
+    Bloqueo = false;
+}
+
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::ASCENSORES:
-        TocandoAs = false;  
+        TocandoAs = false;
+        // puerta = false; //bloquear ascensor animacion
         break;
     }
 }

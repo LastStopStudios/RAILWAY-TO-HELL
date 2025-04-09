@@ -48,7 +48,10 @@ public:
 	};
 	//control ascensor
 	bool TocandoAs = false;
+	bool Bloqueo = false;
 	void Ascensor();
+	void DesbloquearSensor();
+	void BloquearSensor();
 	//Control de dialogos
 	void DialogoOn() { dialogo = true;}//parar player
 	void DialogoOff() { dialogo = false;}//devolver control player

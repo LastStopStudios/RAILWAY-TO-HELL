@@ -271,6 +271,14 @@ void Scene::DialogoOff() {
 	player->DialogoOff();
 }
 
+void Scene::DesbloquearSensor() {
+	player->DesbloquearSensor();
+}
+
+void Scene::BloquearSensor() {
+	player->BloquearSensor();
+}
+
 void Scene::SaveState() {
 
 	pugi::xml_document loadFile;
