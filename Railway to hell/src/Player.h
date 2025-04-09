@@ -140,6 +140,9 @@ private:
 	bool canDash = true;
 	float dashDuration = 0.2f; // Duration of the dash
 	
+	int maxAirDashes = 3;      //Max number of dashes you can do in the air
+	int currentAirDashes = 0;  //How many dashes you are currently in
+
 	bool Dash = false;
 	bool WhipAttack = false;
 	bool canOpenDoor = false;

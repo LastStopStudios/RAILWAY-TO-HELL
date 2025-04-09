@@ -215,9 +215,16 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
+    // Check if we are in the plataform
+    bool isOnGround = !isJumping;
+
     // Check if we should start a new dash
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
         canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
+
+        // Allow to dash if you are in the ground o u have AirDashes aviable
+        if (isOnGround || currentAirDashes < maxAirDashes)
+        {
         // Reset the animation to the beginning
         dash.Reset();
         currentAnimation = &dash;
@@ -235,6 +242,11 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         // Configurable dash parameters
         dashSpeed = 12.0f;      // Dash speed
         dashDirection = facingRight ? 1.0f : -1.0f;
+
+        // If you are in the air update the counter
+        if (!isOnGround)
+            currentAirDashes++;
+        }
     }
 
     // Update frame counter and maintain velocity while dashing
@@ -252,6 +264,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 }
+
 void Player::HandleJump() {
     // Start jump animation when space is pressed
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping && !isPreparingJump) {
@@ -533,6 +546,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isJumping = false;
+        currentAirDashes = 0; // Reset dash count
         break;
     case ColliderType::ITEM: {
         Item* item = (Item*)physB->listener;
