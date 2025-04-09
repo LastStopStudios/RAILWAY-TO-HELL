@@ -52,6 +52,4 @@ private:
 	PhysBody* pbody2;
 
 	std::string doorType;
-
-	Levers* lever =  nullptr ;
 };

@@ -38,8 +38,8 @@ bool Doors::Start() {
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW/2, texH, bodyType::KINEMATIC);
 	if (GetDoorType() == "whip boss door") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::KINEMATIC);
 		pbody2 = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, 160, 112, bodyType::KINEMATIC);
 	}
 	if (GetDoorType() == "lever_door") {
@@ -71,8 +71,7 @@ bool Doors::Update(float dt)
 		return false;
 	}
 	if (GetDoorType() == "lever_door" ) {
-		
-		if (lever->returnLeverActivated()) {
+		if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverOne()) {
 			currentAnimation = &lever_door_activated;
 		}
 	}
@@ -89,8 +88,6 @@ bool Doors::Update(float dt)
 
 	}
 	currentAnimation->Update();
-
-
 
 	return true;
 }
@@ -122,6 +119,12 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 		//	}
 		//}
 
+		if (GetDoorType() == "lever_door") {
+			if (lever_door_activated.HasFinished()) {
+				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			}
+		}
+
 		if (activated.HasFinished()) {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
@@ -139,17 +142,26 @@ void Doors::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 bool Doors::CleanUp()
 {
 
+	if (GetDoorType() == "lever_door") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "whip boss door") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+		if (pbody2 != nullptr) {
+			pbody2->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody2);
+			pbody2 = nullptr;
+		}
+	}
 
-	if (pbody != nullptr) {
-		pbody->listener = nullptr; 
-		Engine::GetInstance().physics->DeletePhysBody(pbody);
-		pbody = nullptr;
-	}
-	if (pbody2 != nullptr) {
-		pbody2->listener = nullptr; 
-		Engine::GetInstance().physics->DeletePhysBody(pbody2);
-		pbody2 = nullptr;
-	}
 
 
 	return true;

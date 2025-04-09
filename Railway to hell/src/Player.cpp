@@ -530,6 +530,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         // Additional enemy hit logic can go here
         return;
     }
+    if (physA->ctype == ColliderType::PLAYER_WHIP_ATTACK && physB->ctype == ColliderType::LEVER) {
+        Levers* lever = (Levers*)physB->listener;
+        if (lever && lever->GetLeverType() == "lever" && !leverOne) {
+            leverOne = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        LOG("LeverOne activated");
+        return;
+    }
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isJumping = false;
@@ -548,6 +558,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
+    }
+    case ColliderType::LEVER: {
+
     }
         break;
     case ColliderType::SENSOR:

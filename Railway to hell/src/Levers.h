@@ -32,8 +32,6 @@ public:
 
 	const std::string& GetLeverType() const { return leverType; }
 
-	bool returnLeverActivated() const { return Lever_Door_Activated; }
-
 public:
 
 	bool Activated = false;
