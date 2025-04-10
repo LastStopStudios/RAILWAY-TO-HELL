@@ -15,9 +15,17 @@ Player::Player() : Entity(EntityType::PLAYER)
 {
     name = "Player";
     godMode = false;
+    bodyJoint = nullptr;
 }
 
 Player::~Player() {
+    // Asegurar que las colisiones se liberan adecuadamente
+    if (pbodyUpper != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyUpper);
+    }
+    if (pbodyLower != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyLower);
+    }
 }
 
 bool Player::Awake() {
@@ -37,15 +45,80 @@ bool Player::Start() {
     idle.LoadAnimations(parameters.child("animations").child("idle"));
     currentAnimation = &idle;
 
-    // Physics body initialization
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
-    pbody->listener = this;
-    pbody->ctype = ColliderType::PLAYER;
-
-    // Set the gravity of the body
+    // Physics body initialization - now with two circular collisions
+    int radius = texW / 3; // Smaller radius than before
+    int centerX = (int)position.getX() + texW / 2;
+    int centerY = (int)position.getY() + texH / 2;
+    // Place upper body higher up
+    pbodyUpper = Engine::GetInstance().physics.get()->CreateCircle(
+        centerX,
+        centerY - radius,  // upper part
+        radius,
+        bodyType::DYNAMIC);
+    pbodyUpper->listener = this;
+    pbodyUpper->ctype = ColliderType::PLAYER;
+    pbodyUpper->body->SetFixedRotation(true);
+    // Lower body (legs)
+    pbodyLower = Engine::GetInstance().physics.get()->CreateCircle(
+        centerX,
+        centerY + radius,  // lower part
+        radius,
+        bodyType::DYNAMIC);
+    pbodyLower->listener = this;
+    pbodyLower->ctype = ColliderType::PLAYER;
+    pbodyLower->body->SetFixedRotation(true);
+    // Disable gravity
     if (!parameters.attribute("gravity").as_bool()) {
-        pbody->body->SetGravityScale(0);
+        pbodyUpper->body->SetGravityScale(0.5);
+        pbodyLower->body->SetGravityScale(0.5);
     }
+    // Verify that bodies exist
+    if (!pbodyUpper || !pbodyLower || !pbodyUpper->body || !pbodyLower->body) {
+        LOG("Error: One or both Box2D bodies are null");
+        return false;
+    }
+    LOG("pbodyUpper: %p, pbodyLower: %p", pbodyUpper, pbodyLower);
+    LOG("pbodyUpper->body: %p, pbodyLower->body: %p", pbodyUpper->body, pbodyLower->body);
+    // Create a weld joint between the two circles
+    b2WeldJointDef jointDef;
+    jointDef.bodyA = pbodyUpper->body;
+    jointDef.bodyB = pbodyLower->body;
+    jointDef.collideConnected = false;
+    // The point where they touch: right between both
+    b2Vec2 worldAnchor = pbodyUpper->body->GetWorldCenter();
+    worldAnchor.y += radius; // connection point between both
+    jointDef.localAnchorA = pbodyUpper->body->GetLocalPoint(worldAnchor);
+    jointDef.localAnchorB = pbodyLower->body->GetLocalPoint(worldAnchor);
+    jointDef.referenceAngle = 0;
+    // Stiffness configuration
+    jointDef.stiffness = 1000.0f;
+    jointDef.damping = 0.5f;
+    bodyJoint = Engine::GetInstance().physics.get()->world->CreateJoint(&jointDef);
+    if (bodyJoint) {
+        LOG("Weld joint created successfully");
+    }
+    else {
+        LOG("Failed to create weld joint");
+    }
+    b2Fixture* fixtureUpper = pbodyUpper->body->GetFixtureList();
+    b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
+
+    if (fixtureUpper && fixtureLower) {
+        // Reducir la fricción para evitar quedarse pegado a las paredes
+        fixtureUpper->SetFriction(0.05f);  // Valor bajo para evitar adherencia a paredes
+        fixtureLower->SetFriction(0.05f);
+
+        //// Opcional: configurar valores específicos para colisiones laterales
+        //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
+        //fixtureLower->SetRestitution(0.5f);
+    }
+    // Note on weld joint properties:
+// A weld joint fuses two bodies together at a specified point, preventing relative movement.
+// - stiffness (1000.0f): Controls how rigid the connection is. Higher values create stiffer joints.
+// - damping (0.5f): Reduces oscillation. Higher values make the joint more stable but less responsive.
+// - referenceAngle (0): Maintains the initial relative angle between bodies.
+// - collideConnected (false): Prevents the connected bodies from colliding with each other.
+// This setup creates a character with connected upper and lower body parts that move as one unit.
 
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
@@ -60,7 +133,7 @@ bool Player::Start() {
     // Jump animation
     jump.LoadAnimations(parameters.child("animations").child("jump"));
     auto jumpNode = parameters.child("animations").child("jump");
-    jumpTexture = jumpNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()) :texture;
+    jumpTexture = jumpNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(jumpNode.attribute("texture").as_string()) : texture;
 
     isPreparingJump = false;
     isJumping = false;
@@ -69,20 +142,20 @@ bool Player::Start() {
     // Walk animation
     walk.LoadAnimations(parameters.child("animations").child("walk"));
     auto walkNode = parameters.child("animations").child("walk");
-    walkTexture = walkNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(walkNode.attribute("texture").as_string()) :texture;
+    walkTexture = walkNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(walkNode.attribute("texture").as_string()) : texture;
     isWalking = false;
 
     // Whip attack animation
     whipAttack = Animation();
     whipAttack.LoadAnimations(parameters.child("animations").child("whip"));
     auto whipNode = parameters.child("animations").child("whip");
-    whipAttackTexture = whipNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string()) :texture;
+    whipAttackTexture = whipNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(whipNode.attribute("texture").as_string()) : texture;
 
     // Dash animation
     dash = Animation();
     dash.LoadAnimations(parameters.child("animations").child("dash"));
     auto dashNode = parameters.child("animations").child("dash");
-    dashTexture = dashNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(dashNode.attribute("texture").as_string()) :texture;
+    dashTexture = dashNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(dashNode.attribute("texture").as_string()) : texture;
 
     originalGravityScale = parameters.attribute("gravity").as_bool() ? 1.0f : 0.0f;
 
@@ -118,13 +191,13 @@ bool Player::Update(float dt)
     }
 
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
-        Engine::GetInstance().scene->ResetSkipInput();  
+        Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
     if (dialogo == false)// Keep the player idle when dialogues are on screen
     {
-        // Initialize velocity vector
-        b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+        // Initialize velocity vector para ambos cuerpos
+        b2Vec2 velocity = b2Vec2(0, pbodyUpper->body->GetLinearVelocity().y);
 
         if (!parameters.attribute("gravity").as_bool()) {
             velocity = b2Vec2(0, 0);
@@ -153,8 +226,9 @@ bool Player::Update(float dt)
 
         // If jumping, preserve the vertical velocity
         if (isJumping) {
-            velocity.y = pbody->body->GetLinearVelocity().y;
+            velocity.y = pbodyUpper->body->GetLinearVelocity().y;
         }
+
         if (NeedSceneChange) { // Scene change
             Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, Fade, BossCam); // Pass the new scene to the sceneLoader
             NeedSceneChange = false;
@@ -168,23 +242,24 @@ bool Player::Update(float dt)
 
         Ascensor();
 
-        // Apply the velocity to the player
-        pbody->body->SetLinearVelocity(velocity);
+        // Apply the velocity to both bodies
+        pbodyUpper->body->SetLinearVelocity(velocity);
+        pbodyLower->body->SetLinearVelocity(velocity);
 
-        // Update position from physics body
-        b2Transform pbodyPos = pbody->body->GetTransform();
+        // Update position from physics body (usamos el cuerpo superior como referencia principal)
+        b2Transform pbodyPos = pbodyUpper->body->GetTransform();
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
 
-    currentAnimation->Update(); 
+    currentAnimation->Update();
     HandleSceneSwitching();
     DrawPlayer();
     return true;
 }
 
 void Player::HandleMovement(b2Vec2& velocity) {
-   
+
     // Horizontal movement
     isWalking = false;
 
@@ -289,7 +364,9 @@ void Player::HandleJump() {
         // If we've reached the threshold frame, apply the actual jump force
         if (jump.GetCurrentFrameIndex() == jumpFrameThreshold) {
             float jumpForce = 5.0f;
-            pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
+            // Aplicar impulso a ambos cuerpos
+            pbodyUpper->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
+            pbodyLower->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
 
             // Now we're officially jumping
             isPreparingJump = false;
@@ -297,6 +374,7 @@ void Player::HandleJump() {
         }
     }
 }
+
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
@@ -354,7 +432,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Create whip attack hitbox
         int attackWidth = texW * 2;
         int attackHeight = texH / 2;
-        b2Vec2 playerCenter = pbody->body->GetPosition();
+        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Usar cuerpo superior para ataques
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
@@ -391,7 +469,7 @@ void Player::UpdateWhipAttack(float dt) {
             LOG("Whip Attack finished");
             isWhipAttacking = false;
             currentAnimation = &idle;  // Explicitly switch back to idle animation
-			texture = idleTexture;
+            texture = idleTexture;
 
             if (whipAttackHitbox) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
@@ -400,6 +478,7 @@ void Player::UpdateWhipAttack(float dt) {
         }
     }
 }
+
 void Player::UpdateMeleeAttack(float dt) {
     // Attack cooldown logic
     if (!canAttack) {
@@ -419,23 +498,23 @@ void Player::UpdateMeleeAttack(float dt) {
         canAttack = false;
         attackCooldown = 0.5f;
 
-       
+
         meleeAttack.Reset();
 
         // Calculate the size of the hitbox to fit the attack sprite.
         int attackWidth = texW * 0.5f;
         int attackHeight = texH * 1.0f;
 
-        b2Vec2 playerCenter = pbody->body->GetPosition();
+        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Usar cuerpo superior
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
         // Hitbox position: in front of the player according to the direction.
         int attackX = facingRight
-			? centerX + texW / 2 - attackWidth / 2 // right
-            : centerX - texW / 2 - attackWidth / -2 ;  // left
+            ? centerX + texW / 2 - attackWidth / 2 // right
+            : centerX - texW / 2 - attackWidth / -2;  // left
 
-       
+
         int attackY = centerY + texH / -7;  // Raise the position of the hitbox on the Y.
 
         // Delete the previous hitbox if it existed.
@@ -458,16 +537,16 @@ void Player::UpdateMeleeAttack(float dt) {
         meleeAttack.Update();
 
         if (attackHitbox) {
-           
-            int centerX = METERS_TO_PIXELS(pbody->body->GetPosition().x);
-            int centerY = METERS_TO_PIXELS(pbody->body->GetPosition().y);
+
+            int centerX = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().x);
+            int centerY = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().y);
 
             // Hitbox position adjusted upwards and with the direction corrected.
             int attackX = facingRight
-				? centerX + texW / 2 - attackHitbox->width / 2 // right
-                : centerX - texW / 2 - attackHitbox->width / -2 ; // left
+                ? centerX + texW / 2 - attackHitbox->width / 2 // right
+                : centerX - texW / 2 - attackHitbox->width / -2; // left
 
-            int attackY = centerY + texH / -7;  
+            int attackY = centerY + texH / -7;
 
             attackHitbox->body->SetTransform(
                 { PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
@@ -485,7 +564,7 @@ void Player::UpdateMeleeAttack(float dt) {
             }
         }
     }
-}   
+}
 
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
@@ -539,7 +618,7 @@ void Player::DrawPlayer() {
     int drawX = position.getX() + offsetX;
     int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
-   
+
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
     }
@@ -547,24 +626,55 @@ void Player::DrawPlayer() {
     // Draw the player with the current animation and appropriate texture
     Engine::GetInstance().render.get()->DrawTexture(
         texture,                    // Current texture based on state
-       drawX,  // X position with offset for flipping
-       drawY,            // Y position
+        drawX,  // X position with offset for flipping
+        drawY,            // Y position
         &frame,                     // Current animation frame
         1.0f,                       // Scale factor
         0.0,                        // No rotation
         INT_MAX, INT_MAX,           // No pivot
         flip);                      // Flip based on direction
+
+    // Debug drawing of collision bodies (descomentar para debugging)
+    /*
+    SDL_Color upperColor = { 255, 0, 0, 255 };  // Rojo para cuerpo superior
+    SDL_Color lowerColor = { 0, 0, 255, 255 };  // Azul para cuerpo inferior
+
+    int upperRadius = texW / 3;
+    int lowerRadius = texW / 3;
+
+    // Dibuja círculos de colisión
+    Engine::GetInstance().render.get()->DrawCircle(
+        METERS_TO_PIXELS(pbodyUpper->body->GetPosition().x),
+        METERS_TO_PIXELS(pbodyUpper->body->GetPosition().y),
+        upperRadius, upperColor);
+
+    Engine::GetInstance().render.get()->DrawCircle(
+        METERS_TO_PIXELS(pbodyLower->body->GetPosition().x),
+        METERS_TO_PIXELS(pbodyLower->body->GetPosition().y),
+        lowerRadius, lowerColor);
+    */
 }
 
 bool Player::CleanUp() {
     LOG("Cleanup player");
+
+    // Cleanup physics bodies
+    if (pbodyUpper != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyUpper);
+        pbodyUpper = nullptr;
+    }
+
+    if (pbodyLower != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyLower);
+        pbodyLower = nullptr;
+    }
+    // Unload textures
     Engine::GetInstance().textures.get()->UnLoad(texture);
     Engine::GetInstance().textures.get()->UnLoad(attackTexture);
     Engine::GetInstance().textures.get()->UnLoad(whipAttackTexture);
 
     return true;
 }
-
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::TERRESTRE) {
         LOG("Player attack hit an enemy!");
@@ -631,7 +741,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Sensor ID: %s", physB->sensorID.c_str());
         if (Bloqueo == false) {
             TocandoAs = true;
-           // puerta = true; //block elevator animation
+            // puerta = true; //block elevator animation
             for (const auto& escena : escenas) { // Iterate through all scenes
                 if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
@@ -653,8 +763,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
-
-void Player::Ascensor(){
+void Player::Ascensor() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
     {
         NeedSceneChange = true;
@@ -670,6 +779,11 @@ void Player::DesbloquearSensor(){
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    // Solo procesamos colisiones de los cuerpos del jugador
+    if (physA != pbodyUpper && physA != pbodyLower) {
+        return;
+    }
+
     switch (physB->ctype) {
     case ColliderType::ASCENSORES:
         TocandoAs = false;
@@ -679,14 +793,22 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::SetPosition(Vector2D pos) {
+    // Establecer posición del cuerpo superior
     pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
+    pos.setY(pos.getY() + texH / 3);  // Ubicar en un tercio de la altura total
+    b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    pbodyUpper->body->SetTransform(upperPos, 0);
+
+    // Establecer posición del cuerpo inferior
+    Vector2D lowerPos = pos;
+    lowerPos.setY(pos.getY() + texH / 3);  // Un tercio más abajo que el superior
+    b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
+    pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Player::GetPosition() {
-    b2Vec2 bodyPos = pbody->body->GetTransform().p;
+    // Usar la posición del cuerpo superior como referencia
+    b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
     return pos;
 }

@@ -100,14 +100,12 @@ public:
 	bool IsPendingToDelete(PhysBody* physBody);
 
 	bool IsDebug() const { return debug; }
-
+	b2World* world;
 private:
 
 	// Debug mode
 	bool debug;
 
-	// Box2D World
-	b2World* world;
 
 	// List of physics bodies
 	std::list<PhysBody*> bodiesToDelete;

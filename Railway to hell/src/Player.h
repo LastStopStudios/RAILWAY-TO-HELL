@@ -67,13 +67,14 @@ private:
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
-	void InitializeAnimations(); 
 
 public:
 	// Public properties
-	float speed = 5.0f;
 	SDL_Texture* texture = NULL;
 	int texW, texH;
+	float leftOffsetX;
+	float rightOffsetX;
+	float heightOffset;
 
 	//Scene change
 	bool NeedSceneChange = false;
@@ -90,8 +91,11 @@ public:
 	// Audio fx
 	int pickCoinFxId;
 
-	PhysBody* pbody;
-	float jumpForce = 2.5f; // The force to apply when jumping
+	PhysBody* pbodyUpper;
+	PhysBody* pbodyLower;
+
+	b2Joint* bodyJoint; 
+
 	bool isJumping = false; // Flag to check if the player is currently jumping
 
 	pugi::xml_node parameters;
