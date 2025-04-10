@@ -75,46 +75,42 @@ bool Caronte::Update(float dt)
         return true;
     }
 
-    // Manejamos la secuencia de muerte si se activó
-    if (isDying) {
+    // Si la animación de hurt ha terminado, pasamos a la animación de muerte
+    if (currentAnimation == &hurt && hurt.HasFinished()) {
+        LOG("Hurt animation finished, starting death animation");
         currentAnimation = &die;
-        deathTimer += dt;
-
-        // Si han pasado 2 segundos desde que empezamos a morir, o la animación terminó
-        if (deathTimer >= 2.0f || die.HasFinished()) {
-            // Crear el item antes de marcar la entidad para eliminación
-            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-            item->SetParameters(Engine::GetInstance().scene.get()->itemConfigNode);
-            Engine::GetInstance().scene.get()->itemList.push_back(item);
-            item->Start();
-            Vector2D pos(position.getX() + texW, position.getY());
-            item->SetPosition(pos);
-
-            // Limpiamos los cuerpos físicos antes de marcar para eliminación
-            if (AttackArea != nullptr) {
-                Engine::GetInstance().physics->DeletePhysBody(AttackArea);
-                AttackArea = nullptr;
-            }
-            if (AttackSensorArea != nullptr) {
-                Engine::GetInstance().physics->DeletePhysBody(AttackSensorArea);
-                AttackSensorArea = nullptr;
-            }
-            if (pbody != nullptr) {
-                Engine::GetInstance().physics->DeletePhysBody(pbody);
-                pbody = nullptr;
-            }
-
-            // Marcar para eliminación
-            pendingToDelete = true;
-            return true;
-        }
+        die.Reset();
+        deathAnimationPlaying = true;
     }
-    else if (hurt.HasFinished()) {
-        // Activamos el modo de muerte
-        isDying = true;
-        deathTimer = 0.0f;
-        currentAnimation = &die;
-        die.Reset(); // Aseguramos que la animación empieza desde el principio
+
+    // Si la animación de muerte está reproduciéndose y ha terminado, soltamos la llave
+    if (deathAnimationPlaying && die.HasFinished()) {
+        LOG("Death animation finished, dropping key");
+        // Crear el item antes de marcar la entidad para eliminación
+        Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+        item->SetParameters(Engine::GetInstance().scene.get()->itemConfigNode);
+        Engine::GetInstance().scene.get()->itemList.push_back(item);
+        item->Start();
+        Vector2D pos(position.getX() + texW, position.getY());
+        item->SetPosition(pos);
+
+        // Limpiamos los cuerpos físicos antes de marcar para eliminación
+        if (AttackArea != nullptr) {
+            Engine::GetInstance().physics->DeletePhysBody(AttackArea);
+            AttackArea = nullptr;
+        }
+        if (AttackSensorArea != nullptr) {
+            Engine::GetInstance().physics->DeletePhysBody(AttackSensorArea);
+            AttackSensorArea = nullptr;
+        }
+        if (pbody != nullptr) {
+            Engine::GetInstance().physics->DeletePhysBody(pbody);
+            pbody = nullptr;
+        }
+
+        // Marcar para eliminación
+        pendingToDelete = true;
+        return true;
     }
 
     if (isattacking) {
@@ -137,10 +133,13 @@ bool Caronte::Update(float dt)
             }
         }
     }
-    if (attack.HasFinished()) { // stop attacking
+
+    if (attack.HasFinished() && currentAnimation == &attack) { // stop attacking
         candie = true;
         currentAnimation = &idle;
         attack.Reset();
+        isattacking = false;
+        attacked = false;
 
         if (AttackArea != nullptr) { // delete the attack area
             Engine::GetInstance().physics->DeletePhysBody(AttackArea);
@@ -180,6 +179,7 @@ bool Caronte::Update(float dt)
     if (currentAnimation == &die) {
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW / 2, (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
     }
+
     // update the animation
     currentAnimation->Update();
 
@@ -187,8 +187,8 @@ bool Caronte::Update(float dt)
 }
 
 void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
-    // Ignoramos colisiones si estamos pendientes de eliminar
-    if (pendingToDelete) return;
+    // Ignoramos colisiones si estamos pendientes de eliminar o reproduciendo la animación de muerte
+    if (pendingToDelete || deathAnimationPlaying) return;
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
@@ -196,10 +196,10 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
             isattacking = true;
             LOG("Attack Player!");
         }
-        // Ya no detectamos la muerte aquí, sino en el Update con el timer
         break;
     case ColliderType::PLAYER_ATTACK:
-        if (candie && !isDying) {
+        if (candie && currentAnimation != &hurt) {
+            LOG("Caronte hit by player attack!");
             candie = false;
             currentAnimation = &hurt;
             hurt.Reset(); // Aseguramos que la animación empieza desde el principio

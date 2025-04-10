@@ -46,6 +46,7 @@ private:
 private:
 
 	SDL_Texture* texture;
+	bool deathAnimationPlaying = false;
 	const char* texturePath;
 	int texW, texH;
 	pugi::xml_node parameters;
