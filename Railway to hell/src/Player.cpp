@@ -389,7 +389,10 @@ void Player::HandleSceneSwitching() {
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//go to scene 
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
-    }*/ // if para poner cambio de escena en un boton
+    }*/ // if to set scene change in a button
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
+        DesbloquearSensor();
+    }
 }
 
 void Player::HandleHurt(float dt) {
@@ -770,11 +773,11 @@ void Player::Ascensor() {
     }
 }
 
-void Player::BloquearSensor(){
+void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
     Bloqueo = true;
 }
 
-void Player::DesbloquearSensor(){
+void Player::DesbloquearSensor(){//unlocks sensors scene change
     Bloqueo = false;
 }
 
