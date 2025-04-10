@@ -222,7 +222,6 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::GIRO:
        giro = !giro;
-        LOG("Toco");
         break;
 	}
 }
