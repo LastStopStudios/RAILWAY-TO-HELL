@@ -157,7 +157,8 @@ bool Terrestre::Update(float dt)
         b2Transform pbodyPos = pbody->body->GetTransform();
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-    }
+    }else{ pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*frenar el cuerpo*/ }
+
         // Configure sprite flip based on direction
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 

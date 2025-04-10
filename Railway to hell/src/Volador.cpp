@@ -112,7 +112,7 @@ bool Volador::Update(float dt) {
         Engine::GetInstance().scene->ResetSkipInput();  //  We only do it once
         return true;
     }
-
+    if (Engine::GetInstance().entityManager->dialogo == false)/*Check if the dialogue to stop the enemy has been activated.*/ {
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
 
@@ -176,7 +176,10 @@ bool Volador::Update(float dt) {
         }
         
     }
+        pathfinding->DrawPath();
+        pathfinding->ResetPath(enemyTilePos);
 
+    }else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
     // Flip sprite configuration
     SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
@@ -191,9 +194,6 @@ bool Volador::Update(float dt) {
     currentAnimation->Update();
 
     if (isDead  && currentAnimation->HasFinished()) { Matar(); a = 2; }
-
-    pathfinding->DrawPath();
-    pathfinding->ResetPath(enemyTilePos);
 
     return true;
 }

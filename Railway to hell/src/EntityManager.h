@@ -32,15 +32,15 @@ public:
 
 	void AddEntity(Entity* entity);
 
-	//Control de dialogos
-	void DialogoOn() { dialogo = true; }//parar player
-	void DialogoOff() { dialogo = false; }//devolver control player
+	//Dialog control
+	void DialogoOn();//stop entities at the start of the dialogue
+	void DialogoOff();//return movement to the entities
 
 public:
 
 	std::list<Entity*> entities;
-	//Control de dialogos
-	bool dialogo = false;
+	//Dialog control
+	bool dialogo;
 
 private:
 	bool isPendingToDelente = false;

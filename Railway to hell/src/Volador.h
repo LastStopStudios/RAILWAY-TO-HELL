@@ -56,7 +56,6 @@ private:
 
 	Vector2D Lastposition;
 	Vector2D enemyPos;
-
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	bool isLookingLeft, isLookingRight = false, giro = true;;
 	bool isAttacking;
