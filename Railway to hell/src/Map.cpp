@@ -250,11 +250,11 @@ bool Map::Load(std::string path, std::string fileName)
 
                 PhysBody* rect = nullptr;
                 auto it = layerNameToId.find(layerName);
-                int layerId = (it != layerNameToId.end()) ? it->second : 0; // Valor por defecto: 0 para plataformas
+                int layerId = (it != layerNameToId.end()) ? it->second : 0; // Default value: 0 for platforms
                 MapLayer* mapLayer = new MapLayer();
 
                 switch (layerId) {
-                case 1: // Sensor cambio de escena
+                case 1: // Scene change sensor
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::SENSOR;
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
@@ -265,13 +265,13 @@ bool Map::Load(std::string path, std::string fileName)
                         }
                     }
                     break;
-                case 2: // Layer objetos llamada colisiones (en el tmx de scene 2)
+                case 2: // Layer objects called collisions (in tmx of scene 2 )
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::PLATFORM; //por ahora lo dejo asi, para que haga la colision como con el resto, si se necesita cambiar par algo que se cambie, su tipo ya esta creado.
+                    rect->ctype = ColliderType::PLATFORM; //for now I leave it like this, to make the collision as with the rest, if it needs to be changed for something to be changed, its type is already created.
                     break;
-                case 3: // Sensor Dialogos
+                case 3: // Sensor Dialogs
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
-                    rect->ctype = ColliderType::DIALOGOS;//guardar propiedades de los sensores para dialogos
+                    rect->ctype = ColliderType::DIALOGOS;//save sensor properties for dialogs
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
                     {
                         if (propertieNode.attribute("name") = "ID") {
@@ -280,7 +280,7 @@ bool Map::Load(std::string path, std::string fileName)
                         }
                     }
                     break;
-                case 4: // Sensor ascensores
+                case 4: // Elevator sensor
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::ASCENSORES;
                     for (pugi::xml_node propertieNode = tileNode.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
@@ -292,19 +292,19 @@ bool Map::Load(std::string path, std::string fileName)
                     }
                     break;
 
-                case 5: // Sensor para patrullaje enemigos
+                case 5: // Sensor for enemy patrolling
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::GIRO;
                     break;
                 
-                default: // Plataformas
+                default: // Platforms
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;
                     break;
                 }
                 //Call Load Layer Properties
 
-                    // Añade el collider a la lista
+                    // Add the collider to the list
                 colliders.push_back(rect);
             }
 

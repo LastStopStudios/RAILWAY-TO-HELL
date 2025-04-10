@@ -265,13 +265,16 @@ void Scene::LoadState() {
 
 void Scene::DialogoOn() {
 	player->DialogoOn();
+	Engine::GetInstance().entityManager->DialogoOn();
 }
 
-void Scene::DialogoOff() {
+void Scene::DialogoOff(){
 	player->DialogoOff();
+	Engine::GetInstance().entityManager->DialogoOff();
+
 }
 
-void Scene::DesbloquearSensor() {
+void Scene::DesbloquearSensor(){
 	player->DesbloquearSensor();
 }
 

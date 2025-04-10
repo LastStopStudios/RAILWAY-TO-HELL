@@ -303,13 +303,13 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//go to scene 1
         Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//go to scene 2
         Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false, false);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//pasar escena 4
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//go to scene 3
         Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false, false);
     }
-    /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//pasar escena 3
+    /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//go to scene 
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
     }*/ // if para poner cambio de escena en un boton
 }
@@ -328,7 +328,7 @@ void Player::HandleHurt(float dt) {
     }
 }
 
-// Corregir UpdateWhipAttack() para reiniciar correctamente la animación
+// Correct UpdateWhipAttack() to restart the animation correctly
 void Player::UpdateWhipAttack(float dt) {
     // Whip attack cooldown logic
     if (!canWhipAttack) {
@@ -616,7 +616,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Sensor ID: %s", physB->sensorID.c_str());
         if (Bloqueo == false) {
             TocandoAs = true;
-           // puerta = true; //bloquear ascensor animacion
+           // puerta = true; //block elevator animation
             for (const auto& escena : escenas) { // Iterate through all scenes
                 if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
@@ -658,7 +658,7 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::ASCENSORES:
         TocandoAs = false;
-        // puerta = false; //bloquear ascensor animacion
+        // puerta = false; //block elevator animation
         break;
     }
 }

@@ -76,5 +76,6 @@ private:
 	bool canAttack = true;
 
 	int lives = 8;
+	int offsetX;
 };
 

@@ -37,8 +37,12 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-public:
+	//Control de dialogos
+	//void DialogoOn() { dialogo = true; }//parar enemigos
+	//void DialogoOff() { dialogo = false; }//devolver control enemigos
 
+public:
+	//bool dialogo = true;
 private:
 	// Update logic
 	SDL_RendererFlip flip = SDL_FLIP_NONE; 
@@ -50,7 +54,7 @@ private:
 	Vector2D enemyPos;
 	bool attacking = false;
 	bool falling = false;
-
+	bool isChasing;
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;

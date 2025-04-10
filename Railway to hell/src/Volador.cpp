@@ -26,11 +26,11 @@ bool Volador::Start() {
 
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 
-    // Obtener dimensiones reales de la textura
+    // Obtain real dimensions of the texture
     int textureWidth, textureHeight;
     SDL_QueryTexture(texture, NULL, NULL, &textureWidth, &textureHeight);
 
-    // Usar las dimensiones de la textura o los valores originales como respaldo
+    // Use the texture dimensions or the original values as a backing
     texW = textureWidth > 0 ? textureWidth : parameters.attribute("w").as_int();
     texH = textureHeight > 0 ? textureHeight : parameters.attribute("h").as_int();
 
@@ -38,7 +38,7 @@ bool Volador::Start() {
     position.setY(parameters.attribute("y").as_int());
     texIsDeath = parameters.attribute("isDeath").as_int();
 
-    // Calcular radio de colisi�n basado en el tama�o de la textura
+    // Calculate collision radius based on texture size
     int collisionRadius = 32;
     texRadius = collisionRadius;
 
@@ -109,14 +109,14 @@ bool Volador::Update(float dt) {
     }
 
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
-        Engine::GetInstance().scene->ResetSkipInput();  // Solo lo hacemos una vez
+        Engine::GetInstance().scene->ResetSkipInput();  //  We only do it once
         return true;
     }
 
     Vector2D camPos(Engine::GetInstance().render->camera.x, Engine::GetInstance().render->camera.y);
     Vector2D camSize(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
 
-    // Convertir posici?n del enemigo a coordenadas de la c?mara
+    // Convert enemy position to camera coordinates
     Vector2D enemyScreenPos = enemyPos - camPos;
 
    
@@ -198,11 +198,11 @@ bool Volador::Update(float dt) {
     return true;
 }
 
-void Volador::Matar(){//eliminar al enemigo una vez muerto 
+void Volador::Matar(){//eliminating the enemy once dead 
     if (kill == 1) {
         kill = 2;
-        Disable();//cuando se tenga que activar usar  Enable();
-       //Engine::GetInstance().entityManager.get()->DestroyEntity(this);//destruir el enemigo !!Aqui es donde peta!!
+        Disable();//when it has to be activated use  Enable();
+       //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
     }
 }
 
