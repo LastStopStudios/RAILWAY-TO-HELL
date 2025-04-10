@@ -14,107 +14,152 @@
 		<resizable value="false" />
 		<fullscreen_window value="false" />
 	</window>
+	<templates>
+		<enemy-template id="volador" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+			<animations>
+				<idle loop="true" speed="0.15">
+					<frame x="0" y="0" w="64" h="64" />
+					<frame x="64" y="0" w="64" h="64" />
+					<frame x="128" y="0" w="64" h="64" />
+					<frame x="192" y="0" w="64" h="64" />
+					<frame x="256" y="0" w="64" h="64" />
+				</idle>
+				<hurt loop="true" speed="0.15">
+					<frame x="0" y="64" w="64" h="64" />
+				</hurt>
+				<die loop="false" speed="0.15">
+					<frame x="0" y="129" w="64" h="64" />
+					<frame x="64" y="129" w="64" h="64" />
+					<frame x="128" y="129" w="64" h="64" />
+					<frame x="192" y="129" w="64" h="64" />
+					<frame x="256" y="129" w="64" h="64" />
+					<frame x="320" y="129" w="64" h="64" />
+					<frame x="384" y="129" w="64" h="64" />
+					<frame x="448" y="129" w="64" h="64" />
+					<frame x="512" y="129" w="64" h="64" />
+					<frame x="567" y="129" w="64" h="64" />
+					<frame x="640" y="129" w="64" h="64" />
+				</die>
+			</animations>
+		</enemy-template>
+		<enemy-template id="rastrero" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
+			<animations>
+				<idle loop="true" speed="0.5">
+					<frame x="0" y="0" w="32" h="32" />
+					<frame x="32" y="0" w="32" h="32" />
+					<frame x="64" y="0" w="32" h="32" />
+					<frame x="96" y="0" w="32" h="32" />
+					<frame x="128" y="0" w="32" h="32" />
+					<frame x="160" y="0" w="32" h="32" />
+					<frame x="192" y="0" w="32" h="32" />
+					<frame x="224" y="0" w="32" h="32" />
+					<frame x="256" y="0" w="32" h="32" />
+				</idle>
+			</animations>
+		</enemy-template>
+		<player-template id="player" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<animations>
+				<hurt loop="false" speed="0.15">
+					<frame x="0" y="0" w="64" h="96" />
+					<frame x="64" y="0" w="64" h="96" />
+					<frame x="128" y="0" w="64" h="96" />
+					<frame x="192" y="0" w="64" h="96" />
+					<frame x="256" y="0" w="64" h="96" />
+					<frame x="320" y="0" w="64" h="96" />
+				</hurt>
+				<walk loop="true" speed="0.15">
+					<frame x="0" y="96" w="64" h="96" />
+					<frame x="64" y="96" w="64" h="96" />
+					<frame x="128" y="96" w="64" h="96" />
+					<frame x="192" y="96" w="64" h="96" />
+					<frame x="256" y="96" w="64" h="96" />
+					<frame x="320" y="96" w="64" h="96" />
+					<frame x="384" y="96" w="64" h="96" />
+					<frame x="448" y="96" w="64" h="96" />
+				</walk>
+				<idle loop="true" speed="0.1">
+					<frame x="0" y="193" w="64" h="96" />
+					<frame x="64" y="193" w="64" h="96" />
+					<frame x="128" y="193" w="64" h="96" />
+					<frame x="192" y="193" w="64" h="96" />
+					<frame x="256" y="193" w="64" h="96" />
+				</idle>
+				<dash loop="false" speed="0.3">
+					<frame x="0" y="289" w="96" h="96" />
+					<frame x="96" y="289" w="96" h="96" />
+					<frame x="189" y="289" w="96" h="96" />
+					<frame x="285" y="289" w="96" h="96" />
+					<frame x="381" y="289" w="96" h="96" />
+				</dash>
+				<whip loop="false" speed="0.05">
+					<frame x="0" y="388" w="260" h="142" />
+					<frame x="260" y="388" w="260" h="142" />
+					<frame x="520" y="388" w="260" h="142" />
+					<frame x="780" y="388" w="260" h="142" />
+					<frame x="1040" y="388" w="260" h="142" />
+					<frame x="1300" y="388" w="260" h="142" />
+					<frame x="1560" y="388" w="260" h="142" />
+					<frame x="1820" y="388" w="260" h="142" />
+					<frame x="2080" y="388" w="260" h="142" />
+				</whip>
+				<jump loop="false" speed="0.2">
+					<frame x="0" y="529" w="64" h="96" />
+					<frame x="64" y="529" w="64" h="96" />
+					<frame x="128" y="529" w="64" h="96" />
+					<frame x="192" y="529" w="64" h="96" />
+					<frame x="256" y="529" w="64" h="96" />
+					<frame x="320" y="529" w="64" h="96" />
+				</jump>
+				<death loop="false" speed="0.1">
+					<frame x="0" y="625" w="64" h="96" />
+					<frame x="64" y="625" w="64" h="96" />
+					<frame x="128" y="625" w="64" h="96" />
+					<frame x="192" y="625" w="64" h="96" />
+					<frame x="256" y="625" w="64" h="96" />
+					<frame x="320" y="625" w="64" h="96" />
+					<frame x="384" y="625" w="64" h="96" />
+					<frame x="448" y="625" w="64" h="96" />
+				</death>
+				<pickup loop="false" speed="0.15">
+					<frame x="0" y="720" w="64" h="96" />
+					<frame x="64" y="720" w="64" h="96" />
+					<frame x="128" y="720" w="64" h="96" />
+					<frame x="192" y="720" w="64" h="96" />
+					<frame x="256" y="720" w="64" h="96" />
+					<frame x="320" y="720" w="64" h="96" />
+					<frame x="384" y="720" w="64" h="96" />
+					<frame x="448" y="720" w="64" h="96" />
+					<frame x="512" y="720" w="64" h="96" />
+					<frame x="576" y="720" w="64" h="96" />
+				</pickup>
+				<attack loop="false" speed="0.1">
+					<frame x="0" y="816" w="64" h="96" />
+					<frame x="64" y="816" w="64" h="96" />
+					<frame x="128" y="816" w="64" h="96" />
+					<frame x="192" y="816" w="64" h="96" />
+					<frame x="256" y="816" w="64" h="96" />
+					<frame x="320" y="816" w="64" h="96" />
+					<frame x="384" y="816" w="64" h="96" />
+					<frame x="448" y="816" w="64" h="96" />
+					<frame x="512" y="816" w="64" h="96" />
+					<frame x="576" y="816" w="64" h="96" />
+				</attack>
+				<wakeup loop="false" speed="0.15">
+					<frame x="0" y="913" w="64" h="96" />
+					<frame x="64" y="913" w="64" h="96" />
+					<frame x="128" y="913" w="64" h="96" />
+					<frame x="192" y="913" w="64" h="96" />
+					<frame x="256" y="913" w="64" h="96" />
+					<frame x="320" y="913" w="64" h="96" />
+					<frame x="384" y="913" w="64" h="96" />
+				</wakeup>
+			</animations>
+		</player-template>
+	</templates>
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="3383" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
-				<animations>
-					<hurt loop="false" speed="0.15">
-						<frame x="0" y="0" w="64" h="96" />
-						<frame x="64" y="0" w="64" h="96" />
-						<frame x="128" y="0" w="64" h="96" />
-						<frame x="192" y="0" w="64" h="96" />
-						<frame x="256" y="0" w="64" h="96" />
-						<frame x="320" y="0" w="64" h="96" />
-					</hurt>
-					<walk loop="true" speed="0.15">
-						<frame x="0" y="96" w="64" h="96" />
-						<frame x="64" y="96" w="64" h="96" />
-						<frame x="128" y="96" w="64" h="96" />
-						<frame x="192" y="96" w="64" h="96" />
-						<frame x="256" y="96" w="64" h="96" />
-						<frame x="320" y="96" w="64" h="96" />
-						<frame x="384" y="96" w="64" h="96" />
-						<frame x="448" y="96" w="64" h="96" />
-					</walk>
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="193" w="64" h="96" />
-						<frame x="64" y="193" w="64" h="96" />
-						<frame x="128" y="193" w="64" h="96" />
-						<frame x="192" y="193" w="64" h="96" />
-						<frame x="256" y="193" w="64" h="96" />
-					</idle>
-					<dash loop="false" speed="0.3">
-						<frame x="0" y="289" w="96" h="96" />
-						<frame x="96" y="289" w="96" h="96" />
-						<frame x="189" y="289" w="96" h="96" />
-						<frame x="285" y="289" w="96" h="96" />
-						<frame x="381" y="289" w="96" h="96" />
-					</dash>
-					<whip loop="false" speed="0.05">
-						<frame x="0" y="388" w="260" h="142" />
-						<frame x="260" y="388" w="260" h="142" />
-						<frame x="520" y="388" w="260" h="142" />
-						<frame x="780" y="388" w="260" h="142" />
-						<frame x="1040" y="388" w="260" h="142" />
-						<frame x="1300" y="388" w="260" h="142" />
-						<frame x="1560" y="388" w="260" h="142" />
-						<frame x="1820" y="388" w="260" h="142" />
-						<frame x="2080" y="388" w="260" h="142" />
-					</whip>
-					<jump loop="false" speed="0.2">
-						<frame x="0" y="529" w="64" h="96" />
-						<frame x="64" y="529" w="64" h="96" />
-						<frame x="128" y="529" w="64" h="96" />
-						<frame x="192" y="529" w="64" h="96" />
-						<frame x="256" y="529" w="64" h="96" />
-						<frame x="320" y="529" w="64" h="96" />
-					</jump>
-					<death loop="false" speed="0.1">
-						<frame x="0" y="625" w="64" h="96" />
-						<frame x="64" y="625" w="64" h="96" />
-						<frame x="128" y="625" w="64" h="96" />
-						<frame x="192" y="625" w="64" h="96" />
-						<frame x="256" y="625" w="64" h="96" />
-						<frame x="320" y="625" w="64" h="96" />
-						<frame x="384" y="625" w="64" h="96" />
-						<frame x="448" y="625" w="64" h="96" />
-					</death>
-					<pickup loop="false" speed="0.15">
-						<frame x="0" y="720" w="64" h="96" />
-						<frame x="64" y="720" w="64" h="96" />
-						<frame x="128" y="720" w="64" h="96" />
-						<frame x="192" y="720" w="64" h="96" />
-						<frame x="256" y="720" w="64" h="96" />
-						<frame x="320" y="720" w="64" h="96" />
-						<frame x="384" y="720" w="64" h="96" />
-						<frame x="448" y="720" w="64" h="96" />
-						<frame x="512" y="720" w="64" h="96" />
-						<frame x="576" y="720" w="64" h="96" />
-					</pickup>
-					<attack loop="false" speed="0.1">
-						<frame x="0" y="816" w="64" h="96" />
-						<frame x="64" y="816" w="64" h="96" />
-						<frame x="128" y="816" w="64" h="96" />
-						<frame x="192" y="816" w="64" h="96" />
-						<frame x="256" y="816" w="64" h="96" />
-						<frame x="320" y="816" w="64" h="96" />
-						<frame x="384" y="816" w="64" h="96" />
-						<frame x="448" y="816" w="64" h="96" />
-						<frame x="512" y="816" w="64" h="96" />
-						<frame x="576" y="816" w="64" h="96" />
-					</attack>
-					<wakeup loop="false" speed="0.15">
-						<frame x="0" y="913" w="64" h="96" />
-						<frame x="64" y="913" w="64" h="96" />
-						<frame x="128" y="913" w="64" h="96" />
-						<frame x="192" y="913" w="64" h="96" />
-						<frame x="256" y="913" w="64" h="96" />
-						<frame x="320" y="913" w="64" h="96" />
-						<frame x="384" y="913" w="64" h="96" />
-					</wakeup>
-				</animations>
-			</player>
+			<player template="player" x="3383" y="2079" w="64" h="96" />
 			<items>
 				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
 					<animations>
@@ -182,1338 +227,96 @@
 				</lever>
 			</levers>
 			<enemies>
-				<enemy name="badguy" x="3450" y="2079" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy2" x="3300" y="1870" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="true" speed="0.15">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
-				<enemy name="badguy3" x="4378" y="2186" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy4" x="4622" y="2190" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy5" x="5184" y="2000" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy6" x="5976" y="1750" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy7" x="6262" y="1972" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy8" x="5934" y="1968" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy9" x="5793" y="2188" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6142" y="2182" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6360" y="2448" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6806" y="3508" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6232" y="3498" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6168" y="3730" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6392" y="3728" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7166" y="4180" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7776" y="4496" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7130" y="4484" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6806" y="4486" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8372" y="4496" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8684" y="4490" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8988" y="4488" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9308" y="4496" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8540" y="3666" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8848" y="3240" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8752" y="2992" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8890" y="2798" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8810" y="2674" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8502" y="2662" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8736" y="2478" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8508" y="1932" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8916" y="1404" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9364" y="1416" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8964" y="1124" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8576" y="1130" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8960" y="534" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8276" y="510" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9298" y="2452" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9118" y="2584" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9294" y="2970" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9472" y="3092" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9118" y="3350" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9296" y="3472" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9472" y="3860" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5598" y="4490" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5308" y="4492" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4832" y="4076" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4224" y="4392" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4930" y="4484" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4066" y="4656" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4382" y="4656" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4746" y="4656" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4886" y="4944" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4546" y="4938" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4232" y="4952" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4344" y="5252" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4846" y="5520" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="3984" y="5870" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4322" y="6026" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4762" y="6022" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5198" y="6034" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4048" y="4072" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="3492" y="4080" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="3218" y="4494" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2882" y="4494" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2664" y="4496" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2234" y="4480" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1870" y="4498" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1440" y="4488" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1066" y="4492" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="762" y="4488" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1680" y="4134" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1174" y="3722" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1780" y="3722" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2044" y="3724" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1442" y="3564" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1458" y="3314" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1176" y="3308" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2046" y="3248" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1836" y="2954" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1564" y="2962" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1200" y="2860" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1820" y="2728" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1404" y="2600" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1160" y="2606" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1214" y="2450" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1288" y="2188" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1496" y="2188" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</enemy>
+				<enemy-instance name="badguy" template="rastrero" x="3450" y="2079" w="32" h="32" />
+				<enemy-instance name="badguy2" template="volador" x="3300" y="1870" w="32" h="32" />
+				<enemy-instance name="badguy3" template="rastrero" x="4378" y="2186" w="32" h="32" />
+				<enemy-instance name="badguy4" template="rastrero" x="4622" y="2190" w="32" h="32" />
+				<enemy-instance name="badguy5" template="rastrero" x="5184" y="2000" w="32" h="32" />
+				<enemy-instance name="badguy6" template="rastrero" x="5976" y="1750" w="32" h="32" />
+				<enemy-instance name="badguy7" template="rastrero" x="6262" y="1972" w="32" h="32" />
+				<enemy-instance name="badguy8" template="rastrero" x="5934" y="1968" w="32" h="32" />
+				<enemy-instance name="badguy9" template="rastrero" x="5793" y="2188" w="32" h="32" />
+				<enemy-instance name="badguy10" template="rastrero" x="6142" y="2188" w="32" h="32" />
+				<enemy-instance name="badguy11" template="rastrero" x="6142" y="2182" w="32" h="32" />
+				<enemy-instance name="badguy12" template="rastrero" x="6360" y="2448" w="32" h="32" />
+				<enemy-instance name="badguy13" template="rastrero" x="6806" y="3508" w="32" h="32" />
+				<enemy-instance name="badguy14" template="rastrero" x="6232" y="3498" w="32" h="32" />
+				<enemy-instance name="badguy15" template="rastrero" x="6168" y="3730" w="32" h="32" />
+				<enemy-instance name="badguy16" template="rastrero" x="6392" y="3728" w="32" h="32" />
+				<enemy-instance name="badguy17" template="rastrero" x="7166" y="4180" w="32" h="32" />
+				<enemy-instance name="badguy18" template="rastrero" x="7776" y="4496" w="32" h="32" />
+				<enemy-instance name="badguy19" template="rastrero" x="7130" y="4484" w="32" h="32" />
+				<enemy-instance name="badguy20" template="rastrero" x="6806" y="4486" w="32" h="32" />
+				<enemy-instance name="badguy21" template="rastrero" x="8372" y="4496" w="32" h="32" />
+				<enemy-instance name="badguy22" template="rastrero" x="8684" y="4490" w="32" h="32" />
+				<enemy-instance name="badguy23" template="rastrero" x="8988" y="4488" w="32" h="32" />
+				<enemy-instance name="badguy24" template="rastrero" x="9308" y="4496" w="32" h="32" />
+				<enemy-instance name="badguy25" template="rastrero" x="8540" y="3666" w="32" h="32" />
+				<enemy-instance name="badguy26" template="rastrero" x="8848" y="3240" w="32" h="32" />
+				<enemy-instance name="badguy27" template="rastrero" x="8752" y="2992" w="32" h="32" />
+				<enemy-instance name="badguy28" template="rastrero" x="8890" y="2798" w="32" h="32" />
+				<enemy-instance name="badguy29" template="rastrero" x="8810" y="2674" w="32" h="32" />
+				<enemy-instance name="badguy30" template="rastrero" x="8502" y="2662" w="32" h="32" />
+				<enemy-instance name="badguy31" template="rastrero" x="8736" y="2478" w="32" h="32" />
+				<enemy-instance name="badguy32" template="rastrero" x="8508" y="1932" w="32" h="32" />
+				<enemy-instance name="badguy33" template="rastrero" x="8916" y="1404" w="32" h="32" />
+				<enemy-instance name="badguy34" template="rastrero" x="9364" y="1416" w="32" h="32" />
+				<enemy-instance name="badguy35" template="rastrero" x="8964" y="1124" w="32" h="32" />
+				<enemy-instance name="badguy36" template="rastrero" x="8576" y="1130" w="32" h="32" />
+				<enemy-instance name="badguy37" template="rastrero" x="8960" y="534" w="32" h="32" />
+				<enemy-instance name="badguy38" template="rastrero" x="8276" y="510" w="32" h="32" />
+				<enemy-instance name="badguy39" template="rastrero" x="9298" y="2452" w="32" h="32" />
+				<enemy-instance name="badguy40" template="rastrero" x="9118" y="2584" w="32" h="32" />
+				<enemy-instance name="badguy41" template="rastrero" x="9294" y="2970" w="32" h="32" />
+				<enemy-instance name="badguy42" template="rastrero" x="9472" y="3092" w="32" h="32" />
+				<enemy-instance name="badguy43" template="rastrero" x="9118" y="3350" w="32" h="32" />
+				<enemy-instance name="badguy44" template="rastrero" x="9296" y="3472" w="32" h="32" />
+				<enemy-instance name="badguy45" template="rastrero" x="9472" y="3860" w="32" h="32" />
+				<enemy-instance name="badguy46" template="rastrero" x="5598" y="4490" w="32" h="32" />
+				<enemy-instance name="badguy47" template="rastrero" x="5308" y="4492" w="32" h="32" />
+				<enemy-instance name="badguy48" template="rastrero" x="4832" y="4076" w="32" h="32" />
+				<enemy-instance name="badguy49" template="rastrero" x="4224" y="4392" w="32" h="32" />
+				<enemy-instance name="badguy50" template="rastrero" x="4930" y="4484" w="32" h="32" />
+				<enemy-instance name="badguy51" template="rastrero" x="4066" y="4656" w="32" h="32" />
+				<enemy-instance name="badguy52" template="rastrero" x="4382" y="4656" w="32" h="32" />
+				<enemy-instance name="badguy53" template="rastrero" x="4746" y="4656" w="32" h="32" />
+				<enemy-instance name="badguy54" template="rastrero" x="4886" y="4944" w="32" h="32" />
+				<enemy-instance name="badguy55" template="rastrero" x="4546" y="4938" w="32" h="32" />
+				<enemy-instance name="badguy56" template="rastrero" x="4232" y="4952" w="32" h="32" />
+				<enemy-instance name="badguy57" template="rastrero" x="4344" y="5252" w="32" h="32" />
+				<enemy-instance name="badguy58" template="rastrero" x="4846" y="5520" w="32" h="32" />
+				<enemy-instance name="badguy59" template="rastrero" x="3984" y="5870" w="32" h="32" />
+				<enemy-instance name="badguy60" template="rastrero" x="4322" y="6026" w="32" h="32" />
+				<enemy-instance name="badguy61" template="rastrero" x="4762" y="6022" w="32" h="32" />
+				<enemy-instance name="badguy62" template="rastrero" x="5198" y="6034" w="32" h="32" />
+				<enemy-instance name="badguy63" template="rastrero" x="4048" y="4072" w="32" h="32" />
+				<enemy-instance name="badguy64" template="rastrero" x="3492" y="4080" w="32" h="32" />
+				<enemy-instance name="badguy65" template="rastrero" x="3218" y="4494" w="32" h="32" />
+				<enemy-instance name="badguy66" template="rastrero" x="2882" y="4494" w="32" h="32" />
+				<enemy-instance name="badguy67" template="rastrero" x="2664" y="4496" w="32" h="32" />
+				<enemy-instance name="badguy68" template="rastrero" x="2234" y="4480" w="32" h="32" />
+				<enemy-instance name="badguy69" template="rastrero" x="1870" y="4498" w="32" h="32" />
+				<enemy-instance name="badguy70" template="rastrero" x="1440" y="4488" w="32" h="32" />
+				<enemy-instance name="badguy71" template="rastrero" x="1066" y="4492" w="32" h="32" />
+				<enemy-instance name="badguy72" template="rastrero" x="762" y="4488" w="32" h="32" />
+				<enemy-instance name="badguy73" template="rastrero" x="1680" y="4134" w="32" h="32" />
+				<enemy-instance name="badguy74" template="rastrero" x="1174" y="3722" w="32" h="32" />
+				<enemy-instance name="badguy75" template="rastrero" x="1780" y="3722" w="32" h="32" />
+				<enemy-instance name="badguy76" template="rastrero" x="2044" y="3724" w="32" h="32" />
+				<enemy-instance name="badguy77" template="rastrero" x="1442" y="3564" w="32" h="32" />
+				<enemy-instance name="badguy78" template="rastrero" x="1458" y="3314" w="32" h="32" />
+				<enemy-instance name="badguy79" template="rastrero" x="1176" y="3308" w="32" h="32" />
+				<enemy-instance name="badguy80" template="rastrero" x="2046" y="3248" w="32" h="32" />
+				<enemy-instance name="badguy81" template="rastrero" x="1836" y="2954" w="32" h="32" />
+				<enemy-instance name="badguy82" template="rastrero" x="1564" y="2962" w="32" h="32" />
+				<enemy-instance name="badguy83" template="rastrero" x="1200" y="2860" w="32" h="32" />
+				<enemy-instance name="badguy84" template="rastrero" x="1820" y="2728" w="32" h="32" />
+				<enemy-instance name="badguy85" template="rastrero" x="1404" y="2600" w="32" h="32" />
+				<enemy-instance name="badguy86" template="rastrero" x="1160" y="2606" w="32" h="32" />
+				<enemy-instance name="badguy87" template="rastrero" x="1214" y="2450" w="32" h="32" />
+				<enemy-instance name="badguy88" template="rastrero" x="1288" y="2188" w="32" h="32" />
+				<enemy-instance name="badguy89" template="rastrero" x="1496" y="2188" w="32" h="32" />
+
 				<enemy name="Anger" x="3400" y="1870" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
 					<animations>
 						<idle loop="true" speed="0.1">
@@ -1627,104 +430,7 @@
 	<scene2>
 		<map path="Assets/Maps/" name="DE1L1.tmx" />
 		<entities>
-			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
-				<animations>
-					<hurt loop="false" speed="0.15">
-						<frame x="0" y="0" w="64" h="96" />
-						<frame x="64" y="0" w="64" h="96" />
-						<frame x="128" y="0" w="64" h="96" />
-						<frame x="192" y="0" w="64" h="96" />
-						<frame x="256" y="0" w="64" h="96" />
-						<frame x="320" y="0" w="64" h="96" />
-					</hurt>
-					<walk loop="true" speed="0.15">
-						<frame x="0" y="96" w="64" h="96" />
-						<frame x="64" y="96" w="64" h="96" />
-						<frame x="128" y="96" w="64" h="96" />
-						<frame x="192" y="96" w="64" h="96" />
-						<frame x="256" y="96" w="64" h="96" />
-						<frame x="320" y="96" w="64" h="96" />
-						<frame x="384" y="96" w="64" h="96" />
-						<frame x="448" y="96" w="64" h="96" />
-					</walk>
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="193" w="64" h="96" />
-						<frame x="64" y="193" w="64" h="96" />
-						<frame x="128" y="193" w="64" h="96" />
-						<frame x="192" y="193" w="64" h="96" />
-						<frame x="256" y="193" w="64" h="96" />
-					</idle>
-					<dash loop="false" speed="0.3">
-						<frame x="0" y="289" w="96" h="96" />
-						<frame x="96" y="289" w="96" h="96" />
-						<frame x="189" y="289" w="96" h="96" />
-						<frame x="285" y="289" w="96" h="96" />
-						<frame x="381" y="289" w="96" h="96" />
-					</dash>
-					<whip loop="false" speed="0.05">
-						<frame x="0" y="388" w="260" h="142" />
-						<frame x="260" y="388" w="260" h="142" />
-						<frame x="520" y="388" w="260" h="142" />
-						<frame x="780" y="388" w="260" h="142" />
-						<frame x="1040" y="388" w="260" h="142" />
-						<frame x="1300" y="388" w="260" h="142" />
-						<frame x="1560" y="388" w="260" h="142" />
-						<frame x="1820" y="388" w="260" h="142" />
-						<frame x="2080" y="388" w="260" h="142" />
-					</whip>
-					<jump loop="false" speed="0.2">
-						<frame x="0" y="529" w="64" h="96" />
-						<frame x="64" y="529" w="64" h="96" />
-						<frame x="128" y="529" w="64" h="96" />
-						<frame x="192" y="529" w="64" h="96" />
-						<frame x="256" y="529" w="64" h="96" />
-						<frame x="320" y="529" w="64" h="96" />
-					</jump>
-					<death loop="false" speed="0.1">
-						<frame x="0" y="625" w="64" h="96" />
-						<frame x="64" y="625" w="64" h="96" />
-						<frame x="128" y="625" w="64" h="96" />
-						<frame x="192" y="625" w="64" h="96" />
-						<frame x="256" y="625" w="64" h="96" />
-						<frame x="320" y="625" w="64" h="96" />
-						<frame x="384" y="625" w="64" h="96" />
-						<frame x="448" y="625" w="64" h="96" />
-					</death>
-					<pickup loop="false" speed="0.15">
-						<frame x="0" y="720" w="64" h="96" />
-						<frame x="64" y="720" w="64" h="96" />
-						<frame x="128" y="720" w="64" h="96" />
-						<frame x="192" y="720" w="64" h="96" />
-						<frame x="256" y="720" w="64" h="96" />
-						<frame x="320" y="720" w="64" h="96" />
-						<frame x="384" y="720" w="64" h="96" />
-						<frame x="448" y="720" w="64" h="96" />
-						<frame x="512" y="720" w="64" h="96" />
-						<frame x="576" y="720" w="64" h="96" />
-					</pickup>
-					<attack loop="false" speed="0.1">
-						<frame x="0" y="816" w="64" h="96" />
-						<frame x="64" y="816" w="64" h="96" />
-						<frame x="128" y="816" w="64" h="96" />
-						<frame x="192" y="816" w="64" h="96" />
-						<frame x="256" y="816" w="64" h="96" />
-						<frame x="320" y="816" w="64" h="96" />
-						<frame x="384" y="816" w="64" h="96" />
-						<frame x="448" y="816" w="64" h="96" />
-						<frame x="512" y="816" w="64" h="96" />
-						<frame x="576" y="816" w="64" h="96" />
-					</attack>
-					<wakeup loop="false" speed="0.15">
-						<frame x="0" y="913" w="64" h="96" />
-						<frame x="64" y="913" w="64" h="96" />
-						<frame x="128" y="913" w="64" h="96" />
-						<frame x="192" y="913" w="64" h="96" />
-						<frame x="256" y="913" w="64" h="96" />
-						<frame x="320" y="913" w="64" h="96" />
-						<frame x="384" y="913" w="64" h="96" />
-					</wakeup>
-				</animations>
-			</player>
+			<player template="player" x="3383" y="2079" w="64" h="96" />
 			<enemies>
 				<enemy name="badguy" x="1712" y="870" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
@@ -1747,104 +453,7 @@
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
 		<entities>
-			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
-				<animations>
-					<hurt loop="false" speed="0.15">
-						<frame x="0" y="0" w="64" h="96" />
-						<frame x="64" y="0" w="64" h="96" />
-						<frame x="128" y="0" w="64" h="96" />
-						<frame x="192" y="0" w="64" h="96" />
-						<frame x="256" y="0" w="64" h="96" />
-						<frame x="320" y="0" w="64" h="96" />
-					</hurt>
-					<walk loop="true" speed="0.15">
-						<frame x="0" y="96" w="64" h="96" />
-						<frame x="64" y="96" w="64" h="96" />
-						<frame x="128" y="96" w="64" h="96" />
-						<frame x="192" y="96" w="64" h="96" />
-						<frame x="256" y="96" w="64" h="96" />
-						<frame x="320" y="96" w="64" h="96" />
-						<frame x="384" y="96" w="64" h="96" />
-						<frame x="448" y="96" w="64" h="96" />
-					</walk>
-					<idle loop="true" speed="0.1">
-						<frame x="0" y="193" w="64" h="96" />
-						<frame x="64" y="193" w="64" h="96" />
-						<frame x="128" y="193" w="64" h="96" />
-						<frame x="192" y="193" w="64" h="96" />
-						<frame x="256" y="193" w="64" h="96" />
-					</idle>
-					<dash loop="false" speed="0.3">
-						<frame x="0" y="289" w="96" h="96" />
-						<frame x="96" y="289" w="96" h="96" />
-						<frame x="189" y="289" w="96" h="96" />
-						<frame x="285" y="289" w="96" h="96" />
-						<frame x="381" y="289" w="96" h="96" />
-					</dash>
-					<whip loop="false" speed="0.05">
-						<frame x="0" y="388" w="260" h="142" />
-						<frame x="260" y="388" w="260" h="142" />
-						<frame x="520" y="388" w="260" h="142" />
-						<frame x="780" y="388" w="260" h="142" />
-						<frame x="1040" y="388" w="260" h="142" />
-						<frame x="1300" y="388" w="260" h="142" />
-						<frame x="1560" y="388" w="260" h="142" />
-						<frame x="1820" y="388" w="260" h="142" />
-						<frame x="2080" y="388" w="260" h="142" />
-					</whip>
-					<jump loop="false" speed="0.2">
-						<frame x="0" y="529" w="64" h="96" />
-						<frame x="64" y="529" w="64" h="96" />
-						<frame x="128" y="529" w="64" h="96" />
-						<frame x="192" y="529" w="64" h="96" />
-						<frame x="256" y="529" w="64" h="96" />
-						<frame x="320" y="529" w="64" h="96" />
-					</jump>
-					<death loop="false" speed="0.1">
-						<frame x="0" y="625" w="64" h="96" />
-						<frame x="64" y="625" w="64" h="96" />
-						<frame x="128" y="625" w="64" h="96" />
-						<frame x="192" y="625" w="64" h="96" />
-						<frame x="256" y="625" w="64" h="96" />
-						<frame x="320" y="625" w="64" h="96" />
-						<frame x="384" y="625" w="64" h="96" />
-						<frame x="448" y="625" w="64" h="96" />
-					</death>
-					<pickup loop="false" speed="0.15">
-						<frame x="0" y="720" w="64" h="96" />
-						<frame x="64" y="720" w="64" h="96" />
-						<frame x="128" y="720" w="64" h="96" />
-						<frame x="192" y="720" w="64" h="96" />
-						<frame x="256" y="720" w="64" h="96" />
-						<frame x="320" y="720" w="64" h="96" />
-						<frame x="384" y="720" w="64" h="96" />
-						<frame x="448" y="720" w="64" h="96" />
-						<frame x="512" y="720" w="64" h="96" />
-						<frame x="576" y="720" w="64" h="96" />
-					</pickup>
-					<attack loop="false" speed="0.1">
-						<frame x="0" y="816" w="64" h="96" />
-						<frame x="64" y="816" w="64" h="96" />
-						<frame x="128" y="816" w="64" h="96" />
-						<frame x="192" y="816" w="64" h="96" />
-						<frame x="256" y="816" w="64" h="96" />
-						<frame x="320" y="816" w="64" h="96" />
-						<frame x="384" y="816" w="64" h="96" />
-						<frame x="448" y="816" w="64" h="96" />
-						<frame x="512" y="816" w="64" h="96" />
-						<frame x="576" y="816" w="64" h="96" />
-					</attack>
-					<wakeup loop="false" speed="0.15">
-						<frame x="0" y="913" w="64" h="96" />
-						<frame x="64" y="913" w="64" h="96" />
-						<frame x="128" y="913" w="64" h="96" />
-						<frame x="192" y="913" w="64" h="96" />
-						<frame x="256" y="913" w="64" h="96" />
-						<frame x="320" y="913" w="64" h="96" />
-						<frame x="384" y="913" w="64" h="96" />
-					</wakeup>
-				</animations>
-			</player>
+			<player template="player" x="3383" y="2079" w="64" h="96" />
 			<enemies>
 				<enemy name="Anger" x="2288" y="1784" w="48" h="48" texture="Assets/Textures/bosses/latigo.png" gravity="true" type="boss">
 					<animations>
