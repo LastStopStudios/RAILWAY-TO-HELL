@@ -30,7 +30,9 @@ public:
 	}
 
 private:
-
+	// Gestión de la secuencia de muerte
+	bool isDying = false;
+	float deathTimer = 0.0f;
 	bool candie = false;
 	bool isattacking = false;
 	bool isdeath = false;
