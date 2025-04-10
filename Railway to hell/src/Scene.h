@@ -82,8 +82,8 @@ public:
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Boss*>& GetBossList() { return bossList; }
 	std::vector<Item*>& GetItemList() { return itemList; }
-	std::vector<Doors*>& GetDoorList() { return doorList; }
-	std::vector<Levers*>& GetLeverList() { return leverList; }
+	std::vector<Doors*>& GetDoorsList() { return doorList; }
+	std::vector<Levers*>& GetLeversList() { return leverList; }
 
 	//Evitar salto player
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

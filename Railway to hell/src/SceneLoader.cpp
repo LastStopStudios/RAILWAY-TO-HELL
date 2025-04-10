@@ -14,6 +14,8 @@
 #include "Item.h"
 #include "Volador.h"
 #include "Boss.h"
+#include "Doors.h"
+#include "Levers.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -115,11 +117,21 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
     pugi::xml_node doorsNode = sceneNode.child("entities").child("doors");
     if (doorsNode) {
-        for (pugi::xml_node doorNode = doorNode.child("door"); doorNode; doorNode = doorNode.next_sibling("door"))
+        for (pugi::xml_node doorNode = doorsNode.child("door"); doorNode; doorNode = doorNode.next_sibling("door"))
         {
             Doors* door = (Doors*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DOORS);
             door->SetParameters(doorNode);
-            doorsList.push_back(door);  // Now using the member variable
+            Engine::GetInstance().scene->GetDoorsList().push_back(door);
+        }
+    }
+
+	pugi::xml_node leversNode = sceneNode.child("entities").child("levers");
+    if (doorsNode) {
+        for (pugi::xml_node leverNode = leversNode.child("lever"); leverNode; leverNode = leverNode.next_sibling("lever"))
+        {
+            Levers* lever = (Levers*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LEVER);
+            lever->SetParameters(leverNode);
+            Engine::GetInstance().scene->GetLeversList().push_back(lever);
         }
     }
 
@@ -138,9 +150,13 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         item->Start();
     } 
 
-	for (auto door : doorsList) {
+	for (auto door : Engine::GetInstance().scene->GetDoorsList()) {
 		door->Start();
 	}
+	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
+		lever->Start();
+	}
+
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
@@ -152,7 +168,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -166,6 +182,8 @@ void SceneLoader::UnLoadEnemiesItems() {
     Engine::GetInstance().scene->GetEnemyList().clear(); 
     Engine::GetInstance().scene->GetVoladorList().clear(); 
     Engine::GetInstance().scene->GetBossList().clear();
+	Engine::GetInstance().scene->GetDoorsList().clear();
+	Engine::GetInstance().scene->GetLeversList().clear();
     itemsList.clear();  
 }
 void SceneLoader::SetCurrentScene(int level)
