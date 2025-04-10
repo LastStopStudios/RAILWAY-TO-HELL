@@ -14475,7 +14475,6 @@
  </layer>
  <layer id="7" name="Navigation" width="120" height="60">
   <properties>
-   <property name="Draw" type="bool" value="false"/>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
   <data>
