@@ -59,14 +59,13 @@ bool Caronte::Start() {
 
 bool Caronte::Update(float dt)
 {
-    // Si la entidad está marcada para eliminación, no actualizamos
+    // If entity is marked for deletion, skip update
     if (pendingToDelete) {
         return true;
     }
 
-    // wait for the first input to start the game
-    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
-    {
+    // Wait until the game has started (first input)
+    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY) {
         return true;
     }
 
@@ -75,7 +74,7 @@ bool Caronte::Update(float dt)
         return true;
     }
 
-    // Si la animación de hurt ha terminado, pasamos a la animación de muerte
+    // If the hurt animation has finished, switch to death animation
     if (currentAnimation == &hurt && hurt.HasFinished()) {
         LOG("Hurt animation finished, starting death animation");
         currentAnimation = &die;
@@ -83,10 +82,11 @@ bool Caronte::Update(float dt)
         deathAnimationPlaying = true;
     }
 
-    // Si la animación de muerte está reproduciéndose y ha terminado, soltamos la llave
+    // If death animation has finished, spawn the key and mark for deletion
     if (deathAnimationPlaying && die.HasFinished()) {
         LOG("Death animation finished, dropping key");
-        // Crear el item antes de marcar la entidad para eliminación
+
+        // Create the key item before deleting the entity
         Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
         item->SetParameters(Engine::GetInstance().scene.get()->itemConfigNode);
         Engine::GetInstance().scene.get()->itemList.push_back(item);
@@ -94,7 +94,7 @@ bool Caronte::Update(float dt)
         Vector2D pos(position.getX() + texW, position.getY());
         item->SetPosition(pos);
 
-        // Limpiamos los cuerpos físicos antes de marcar para eliminación
+        // Clean up all physics bodies
         if (AttackArea != nullptr) {
             Engine::GetInstance().physics->DeletePhysBody(AttackArea);
             AttackArea = nullptr;
@@ -108,11 +108,12 @@ bool Caronte::Update(float dt)
             pbody = nullptr;
         }
 
-        // Marcar para eliminación
+        // Mark the entity for deletion
         pendingToDelete = true;
         return true;
     }
 
+    // Attack logic
     if (isattacking) {
         if (!attacked) {
             attacked = true;
@@ -121,7 +122,8 @@ bool Caronte::Update(float dt)
             currentAnimation = &attack;
             currentAnimation->Reset();
 
-            if (AttackArea == nullptr) { // create the attack area
+            // Create attack area only once per attack
+            if (AttackArea == nullptr) {
                 AttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
                     (int)position.getX() - 10,
                     (int)position.getY() + texH / 2,
@@ -134,20 +136,22 @@ bool Caronte::Update(float dt)
         }
     }
 
-    if (attack.HasFinished() && currentAnimation == &attack) { // stop attacking
+    // If the attack animation finished, reset and return to idle
+    if (attack.HasFinished() && currentAnimation == &attack) {
         candie = true;
         currentAnimation = &idle;
         attack.Reset();
         isattacking = false;
         attacked = false;
 
-        if (AttackArea != nullptr) { // delete the attack area
+        // Remove attack area
+        if (AttackArea != nullptr) {
             Engine::GetInstance().physics->DeletePhysBody(AttackArea);
             AttackArea = nullptr;
         }
     }
 
-    // update the position of caronte from the physics  
+    // Update position based on physics body
     if (pbody == nullptr) {
         LOG("Caronte pbody is null!");
         return false;
@@ -157,7 +161,7 @@ bool Caronte::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    // Update the attack area position of caronte
+    // Update the attack sensor position (e.g., for detecting player proximity)
     if (AttackSensorArea != nullptr) {
         int sensorX = position.getX() + texW;
         int sensorY = position.getY() + texH * 0.4;
@@ -166,7 +170,7 @@ bool Caronte::Update(float dt)
 
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
-    // draw the caronte
+    // Render Caronte depending on the current animation
     if (currentAnimation == &idle) {
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - (frame.w - texW * 1.3), (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
     }
@@ -180,14 +184,14 @@ bool Caronte::Update(float dt)
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - texW / 2, (int)position.getY() + 8, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_HORIZONTAL);
     }
 
-    // update the animation
+    // Update the animation frame
     currentAnimation->Update();
 
     return true;
 }
 
 void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
-    // Ignoramos colisiones si estamos pendientes de eliminar o reproduciendo la animación de muerte
+    // Ignore collisions if pending deletion or playing death animation
     if (pendingToDelete || deathAnimationPlaying) return;
 
     switch (physB->ctype) {
@@ -202,7 +206,7 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
             LOG("Caronte hit by player attack!");
             candie = false;
             currentAnimation = &hurt;
-            hurt.Reset(); // Aseguramos que la animación empieza desde el principio
+            hurt.Reset(); // Ensure the animation starts from the beginning
         }
         break;
     case ColliderType::ITEM:
@@ -219,14 +223,12 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Caronte::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Ignoramos colisiones si estamos pendientes de eliminar
     if (pendingToDelete) return;
     // at the moment is not being used
 }
-
 bool Caronte::CleanUp()
 {
-    // Limpieza final de los cuerpos físicos si aún existen
+    // Final cleanup of physics bodies if they still exist
     if (AttackSensorArea != nullptr) {
         Engine::GetInstance().physics->DeletePhysBody(AttackSensorArea);
         AttackSensorArea = nullptr;
