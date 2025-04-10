@@ -119,7 +119,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         {
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(itemNode);
-            itemsList.push_back(item);  // Now using the member variable
+			Engine::GetInstance().scene->GetItemList().push_back(item);
         }
     }
 
@@ -157,7 +157,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 		enemy->Start();
 	}
     // Initialize items
-    for (auto item : itemsList) {
+    for (auto item : Engine::GetInstance().scene->GetItemList()) {
         item->Start();
     } 
 
@@ -196,7 +196,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 	Engine::GetInstance().scene->GetCaronteList().clear();
 	Engine::GetInstance().scene->GetDoorsList().clear();
 	Engine::GetInstance().scene->GetLeversList().clear();
-    itemsList.clear();  
+	Engine::GetInstance().scene->GetItemList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {

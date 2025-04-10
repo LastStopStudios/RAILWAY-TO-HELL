@@ -36,7 +36,7 @@ bool Item::Start() {
 	currentAnimation = &idle;
 	
 	// L08 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, texH / 2, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 
 	pbody->listener = this;
 

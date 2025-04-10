@@ -31,7 +31,6 @@ public:
 	int GetCurrentLevel() const { return currentScene; }
 
 	int currentScene;
-	std::vector<Item*> itemsList; 
 
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);

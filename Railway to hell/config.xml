@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="3383" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
@@ -80,7 +80,6 @@
 						<frame x="384" y="625" w="64" h="96" />
 						<frame x="448" y="625" w="64" h="96" />
 					</death>
-					
 					<pickup loop="false" speed="0.15">
 						<frame x="0" y="720" w="64" h="96" />
 						<frame x="64" y="720" w="64" h="96" />
@@ -140,7 +139,7 @@
 				</item>
 			</items>
 			<doors>
-				<door name="whip boss door" x="3390" y="2012" w="32" h="112" texture="Assets/Textures/background/whip boss door.png" gravity="false">
+				<door name="whip boss door" x="3690" y="2012" w="32" h="112" texture="Assets/Textures/background/whip boss door.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="32" h="112" />
@@ -149,11 +148,10 @@
 							<frame x="32" y="0" w="32" h="112" />
 							<frame x="64" y="0" w="32" h="112" />
 							<frame x="96" y="0" w="32" h="112" />
-
 						</activated>
 					</animations>
 				</door>
-				<door name="lever_door" x="3490" y="2079" w="32" h="64" texture="Assets/Textures/background/lever_door.png" gravity="false">
+				<door name="lever_door" x="4090" y="2049" w="32" h="64" texture="Assets/Textures/background/lever_door.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="32" h="64" />
@@ -170,7 +168,7 @@
 				</door>
 			</doors>
 			<levers>
-				<lever name="lever" x="3290" y="2079" w="48" h="32" texture="Assets/Textures/background/lever.png" gravity="false">
+				<lever name="lever" x="3890" y="2080" w="48" h="32" texture="Assets/Textures/background/lever.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="48" h="32" />
@@ -179,7 +177,6 @@
 							<frame x="48" y="0" w="48" h="32" />
 							<frame x="96" y="0" w="48" h="32" />
 							<frame x="144" y="0" w="48" h="32" />
-
 						</lever_activated>
 					</animations>
 				</lever>
@@ -202,7 +199,7 @@
 				</enemy>
 				<enemy name="badguy2" x="3300" y="1870" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
-						  <idle loop="true" speed="0.15">
+						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
 							<frame x="64" y="0" w="64" h="64" />
 							<frame x="128" y="0" w="64" h="64" />
@@ -224,7 +221,7 @@
 							<frame x="512" y="129" w="64" h="64" />
 							<frame x="567" y="129" w="64" h="64" />
 							<frame x="640" y="129" w="64" h="64" />
-							</die>
+						</die>
 					</animations>
 				</enemy>
 				<enemy name="badguy3" x="4378" y="2186" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
@@ -1520,7 +1517,7 @@
 				<enemy name="Anger" x="3400" y="1870" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0"  y="0" w="96" h="128" />
+							<frame x="0" y="0" w="96" h="128" />
 							<frame x="96" y="0" w="96" h="128" />
 							<frame x="192" y="0" w="96" h="128" />
 							<frame x="288" y="0" w="96" h="128" />
@@ -1530,10 +1527,9 @@
 							<frame x="672" y="0" w="96" h="128" />
 							<frame x="768" y="0" w="96" h="128" />
 							<frame x="864" y="0" w="96" h="128" />
-
 						</idle>
 						<walking loop="true" speed="0.1">
-							<frame x="0"  y="128"  w="96" h="128" />
+							<frame x="0" y="128" w="96" h="128" />
 							<frame x="96" y="128" w="96" h="128" />
 							<frame x="192" y="128" w="96" h="128" />
 							<frame x="288" y="128" w="96" h="128" />
@@ -1543,7 +1539,7 @@
 							<frame x="672" y="128" w="96" h="128" />
 						</walking>
 						<whipAttack loop="false" speed="0.15">
-							<frame x="0"  y="256" w="224" h="160" />
+							<frame x="0" y="256" w="224" h="160" />
 							<frame x="224" y="256" w="224" h="160" />
 							<frame x="448" y="256" w="224" h="160" />
 							<frame x="672" y="256" w="224" h="160" />
@@ -1576,7 +1572,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="Caronte" x="3730" y="2046" w="64" h="128" texture="Assets/Textures/enemy/Caronte.png" gravity="true" type="guardian">
+				<enemy name="Caronte" x="3720" y="2046" w="64" h="128" texture="Assets/Textures/enemy/Caronte.png" gravity="true" type="guardian">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="64" h="128" />
@@ -1694,7 +1690,6 @@
 						<frame x="384" y="625" w="64" h="96" />
 						<frame x="448" y="625" w="64" h="96" />
 					</death>
-
 					<pickup loop="false" speed="0.15">
 						<frame x="0" y="720" w="64" h="96" />
 						<frame x="64" y="720" w="64" h="96" />
@@ -1815,7 +1810,6 @@
 						<frame x="384" y="625" w="64" h="96" />
 						<frame x="448" y="625" w="64" h="96" />
 					</death>
-
 					<pickup loop="false" speed="0.15">
 						<frame x="0" y="720" w="64" h="96" />
 						<frame x="64" y="720" w="64" h="96" />

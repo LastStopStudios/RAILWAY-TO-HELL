@@ -41,16 +41,19 @@ bool Doors::Start() {
 	if (GetDoorType() == "whip boss door") {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::KINEMATIC);
 		pbody2 = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, 160, 112, bodyType::KINEMATIC);
-	}
-	if (GetDoorType() == "lever_door") {
-		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW , texH, bodyType::KINEMATIC);
-	}
-	pbody->listener = this;
-	if (GetDoorType() == "whip boss door") {
 		pbody2->listener = this;
 	}
-	//Assign collider type
-	pbody->ctype = ColliderType::DOORS;
+	else if (GetDoorType() == "lever_door") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	else {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	// Assign collider type
+	if (pbody != nullptr) {
+		pbody->listener = this;
+		pbody->ctype = ColliderType::DOORS;
+	}
 
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);

@@ -37,7 +37,7 @@ bool Levers::Start() {
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::KINEMATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::KINEMATIC);
 
 	pbody->listener = this;
 
