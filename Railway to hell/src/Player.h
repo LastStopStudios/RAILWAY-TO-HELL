@@ -97,6 +97,9 @@ public:
 	pugi::xml_node parameters;
 	Animation idle;
 
+public:
+	bool returnCanOpenDoor() { return canOpenDoor; }
+	bool returnLeverOne() { return leverOne; }
 private:
 	// Private properties
 	Animation meleeAttack;       // Attack animation sequence
@@ -154,4 +157,5 @@ private:
 	bool Dash = false;
 	bool WhipAttack = false;
 	bool canOpenDoor = false;
+	bool leverOne = false;
 };

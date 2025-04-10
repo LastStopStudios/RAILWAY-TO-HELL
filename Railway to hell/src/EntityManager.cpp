@@ -9,6 +9,8 @@
 #include "Volador.h"
 #include "Boss.h"
 #include "Caronte.h"
+#include "Doors.h"
+#include "Levers.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -90,6 +92,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CARONTE:
 		entity = new Caronte();
+		break;
+	case EntityType::DOORS:
+		entity = new Doors();
+		break;
+	case EntityType::LEVER:
+		entity = new Levers();
 		break;
 	default:
 		break;

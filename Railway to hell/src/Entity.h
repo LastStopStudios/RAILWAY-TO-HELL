@@ -11,6 +11,8 @@ enum class EntityType
 	VOLADOR,
 	BOSS,
 	CARONTE,
+	DOORS,
+	LEVER,
 	UNKNOWN
 };
 

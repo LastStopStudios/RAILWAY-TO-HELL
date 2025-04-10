@@ -149,6 +149,8 @@
     <ClCompile Include="src\Boss.cpp" />
     <ClCompile Include="src\Caronte.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
+    <ClCompile Include="src\Doors.cpp" />
+    <ClCompile Include="src\Levers.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -180,6 +182,8 @@
     <ClInclude Include="src\Boss.h" />
     <ClInclude Include="src\Caronte.h" />
     <ClInclude Include="src\DialogoM.h" />
+    <ClInclude Include="src\Doors.h" />
+    <ClInclude Include="src\Levers.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />

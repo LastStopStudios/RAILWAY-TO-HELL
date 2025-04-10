@@ -10,6 +10,8 @@
 #include "Boss.h"
 #include "Item.h"
 #include "Caronte.h"
+#include "Doors.h"
+#include "Levers.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -79,12 +81,16 @@ public:
 	std::vector<Boss*> bossList;
 	std::vector<Item*> itemList;
 	std::vector<Caronte*> caronteList;
+	std::vector<Doors*> doorList;
+	std::vector<Levers*> leverList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Boss*>& GetBossList() { return bossList; }
 	std::vector<Item*>& GetItemList() { return itemList; }
 	std::vector<Caronte*>& GetCaronteList() { return caronteList; }
+	std::vector<Doors*>& GetDoorsList() { return doorList; }
+	std::vector<Levers*>& GetLeversList() { return leverList; }
 
 	//Evitar salto player
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

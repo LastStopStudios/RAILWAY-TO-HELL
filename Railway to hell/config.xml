@@ -139,6 +139,51 @@
 					</animations>
 				</item>
 			</items>
+			<doors>
+				<door name="whip boss door" x="3390" y="2012" w="32" h="112" texture="Assets/Textures/background/whip boss door.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="32" h="112" />
+						</idle>
+						<activated loop="false" speed="0.1">
+							<frame x="32" y="0" w="32" h="112" />
+							<frame x="64" y="0" w="32" h="112" />
+							<frame x="96" y="0" w="32" h="112" />
+
+						</activated>
+					</animations>
+				</door>
+				<door name="lever_door" x="3490" y="2079" w="32" h="64" texture="Assets/Textures/background/lever_door.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="32" h="64" />
+						</idle>
+						<lever_door_activated loop="false" speed="0.1">
+							<frame x="32" y="0" w="32" h="64" />
+							<frame x="64" y="0" w="32" h="64" />
+							<frame x="96" y="0" w="32" h="64" />
+							<frame x="128" y="0" w="32" h="64" />
+							<frame x="160" y="0" w="32" h="64" />
+							<frame x="192" y="0" w="32" h="64" />
+						</lever_door_activated>
+					</animations>
+				</door>
+			</doors>
+			<levers>
+				<lever name="lever" x="3290" y="2079" w="48" h="32" texture="Assets/Textures/background/lever.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="32" />
+						</idle>
+						<lever_activated loop="false" speed="0.1">
+							<frame x="48" y="0" w="48" h="32" />
+							<frame x="96" y="0" w="48" h="32" />
+							<frame x="144" y="0" w="48" h="32" />
+
+						</lever_activated>
+					</animations>
+				</lever>
+			</levers>
 			<enemies>
 				<enemy name="badguy" x="3450" y="2079" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="rastrero">
 					<animations>

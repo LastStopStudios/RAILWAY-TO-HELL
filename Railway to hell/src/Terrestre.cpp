@@ -220,6 +220,10 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Enemy hit by player attack - DESTROY");
         Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
+	case ColliderType::PLAYER_WHIP_ATTACK:
+		LOG("Enemy hit by player whip attack - DESTROY");
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		break;
     case ColliderType::GIRO:
        giro = !giro;
         break;

@@ -3,6 +3,9 @@
 #include <vector>
 #include "pugixml.hpp"
 #include "Item.h"
+#include "Doors.h"
+#include "Levers.h"
+
 class Terrestre;
 class Scene;
 class Engine;

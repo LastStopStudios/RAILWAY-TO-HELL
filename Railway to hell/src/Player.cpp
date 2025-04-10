@@ -370,7 +370,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Create new whip attack hitbox
         whipAttackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
-        whipAttackHitbox->ctype = ColliderType::PLAYER_ATTACK;
+        whipAttackHitbox->ctype = ColliderType::PLAYER_WHIP_ATTACK;
         whipAttackHitbox->listener = this;
     }
 
@@ -571,6 +571,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         // Additional enemy hit logic can go here
         return;
     }
+    if (physA->ctype == ColliderType::PLAYER_WHIP_ATTACK && physB->ctype == ColliderType::LEVER) {
+        Levers* lever = (Levers*)physB->listener;
+        if (lever && lever->GetLeverType() == "lever" && !leverOne) {
+            leverOne = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        LOG("LeverOne activated");
+        return;
+    }
 
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
@@ -582,21 +591,27 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (item && item->GetItemType() == "Dash ability") {
             Dash = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            break;
         }
         if (item && item->GetItemType() == "Whip") {
             WhipAttack = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            break;
         }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            break;
         }
     }
     case ColliderType::BOSS_ATTACK: {
         isHurt = true;
         LOG("Player damaged");
-    }
         break;
+    }
+    case ColliderType::LEVER: {
+        break;
+    }
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());

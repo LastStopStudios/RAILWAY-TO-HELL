@@ -254,6 +254,18 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
+	case ColliderType::PLAYER_WHIP_ATTACK:
+		LOG("Enemy hit by player whip attack - DESTROY");
+		if (!isDead) {
+			isDead = true;
+			currentAnimation = &die;
+			a = 1;
+
+			// Detener movimiento del cuerpo físico
+			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+			pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+		}
+		break;
     case ColliderType::GIRO:
         giro = !giro;
         break;

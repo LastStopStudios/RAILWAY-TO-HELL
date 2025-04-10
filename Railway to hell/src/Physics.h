@@ -31,6 +31,7 @@ enum class ColliderType {
 	VOLADOR,
 	ENEMY,
 	PLAYER_ATTACK,
+	PLAYER_WHIP_ATTACK,
 	DIALOGOS,
 	SENSOR,
 	ASCENSORES,
@@ -39,6 +40,8 @@ enum class ColliderType {
 	BOSS_ATTACK,
 	CARONTE,
 	ATTACKSENSOR,
+	DOORS,
+	LEVER,
 	UNKNOWN
 	// ..
 };
