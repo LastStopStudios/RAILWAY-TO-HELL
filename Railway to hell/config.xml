@@ -1619,7 +1619,7 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Fondo.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
+			<dialog ID="1" Img="Assets/Textures/Fondo5.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
 			<dialog ID="2" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
 			<dialog ID="3" Img="Assets/Textures/Fondo2.png" TEXT="aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzAAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFFGGGGGGGGGGHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJKKKKKKKKKKLLLLLLLLLLMMMMMMMMMMNNNNNNNNNNOOOOOOOOOOPPPPPPPPPPQQQQQQQQQQRRRRRRRRRR1234567891TTTTTTTTTTUUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXXYYYYYYYYYYZZZZZZZZZZ" />
 		</dialogues>

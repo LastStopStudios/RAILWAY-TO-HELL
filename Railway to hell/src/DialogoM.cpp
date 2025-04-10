@@ -16,25 +16,25 @@ DialogoM::DialogoM() : Module()
 	name = "dialogoM";
 }
 
-// Destructor
+//Destructor
 DialogoM::~DialogoM()
 {
 	CleanUp();
 }
 
-// Called before render is available
+//Called before render is available
 bool DialogoM::Awake()
 {
 	return true;
 }
 
-// Called before the first frame
+//Called before the first frame
 bool DialogoM::Start()
 {
 	return true;
 }
 
-// Called each loop iteration
+//Called each loop iteration
 bool DialogoM::PreUpdate()
 {
 	
@@ -43,7 +43,7 @@ bool DialogoM::PreUpdate()
 
 // Called each loop iteration
 bool DialogoM::Update(float dt) {
-	UpdateTextAnimation(dt); // Llama a la función que maneja la animación del texto
+	UpdateTextAnimation(dt); //Call the function that handles text animation
 	
 	return true;
 }
@@ -53,22 +53,22 @@ bool DialogoM::PostUpdate()
 {
 	if (showText && textTexture != nullptr) {
 	
-		Engine::GetInstance().window.get()->GetWindowSize(w, h);//Tamaño pantalla
-		//tamaño fondo
-		width = 1200;
-		height = 600;
+		Engine::GetInstance().window.get()->GetWindowSize(w, h);//Screen size
+		//background size
+		width = 800;
+		height = 200;
 
 		//Posicion fondo
-		posx = w - 1250;//posicion del fondo con tamaño pantalla
-		posy = h - 870; //posicion del fondo con tamaño pantalla
+		posx = w - 1000;//background position with screen size
+		posy = h - 200; //background position with screen size
 
 		//posicion texto
-		texty = posy + 180 ;//posicion del texto con tamaño pantalla
-		textx = posx + 275 ;//posicion del texto con tamaño pantalla
+		texty = posy + 80 ;//text position with screen size
+		textx = posx + 50 ;//text position with screen size
 		
-		SDL_Rect dstRect = { posx, posy, width, height }; // Posicionar y escalar el fondo del texto
+		SDL_Rect dstRect = { posx, posy, width, height }; //Position and scale text background
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
-		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 0.0f, 0.0, INT_MAX, INT_MAX); // Dibujar el texto
+		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 0.0f, 0.0, INT_MAX, INT_MAX); //Draw the text
 	}
 	
 	return true;
@@ -76,14 +76,14 @@ bool DialogoM::PostUpdate()
 
 
 void DialogoM::Texto(const std::string& Dialogo) {
-	showText = !showText; // Alternar visibilidad del texto
+	showText = !showText; //Toggle text visibility
 	if (showText) {
-		Engine::GetInstance().scene->DialogoOn();//parar player
-		XMLToVariable(Dialogo); // Cargar el texto correspondiente
-		GenerateTextTexture(); // Generar la textura inicial
+		Engine::GetInstance().scene->DialogoOn();//stop entities
+		XMLToVariable(Dialogo); //Load corresponding text
+		GenerateTextTexture(); //Generate the initial texture
 	}
 	else {
-		ResetText(); // Reiniciar el texto
+		ResetText(); //Reset text
 	}
 }
 
@@ -92,7 +92,7 @@ void DialogoM::ResetText() {
 	textIndex = 0;
 	currentText = "";
 	alltext = "";
-	displayText = "";//texto entero
+	displayText = "";//full text
 	Skip = true;
 	Tim = true;
 	Siguiente = true;
@@ -100,18 +100,18 @@ void DialogoM::ResetText() {
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
 	}
-	showText = false; // Reiniciar la visibilidad del texto
+	showText = false; //Reset text visibility 
 }
 
-void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
+void DialogoM::GenerateTextTexture()//display text on the screen
 {
 	if (textTexture != nullptr)
 	{
-		SDL_DestroyTexture(textTexture); // Liberar textura anterior
+		SDL_DestroyTexture(textTexture); // Release previous texture
 		textTexture = nullptr;
 	}
 
-	SDL_Color color = { 255, 255, 255 }; // Decidir el color de la letra
+	SDL_Color color = { 255, 255, 255 }; // Decide on the font color
 	TTF_Font* font = Engine::GetInstance().render->font;
 
 	if (!font) {
@@ -119,7 +119,7 @@ void DialogoM::GenerateTextTexture()//mostrar texto por pantalla
 		return;
 	}
 
-	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divide el texto en lineas automaticamente
+	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divides text into lines automatically
 	if (surface == nullptr)
 	{
 		LOG("Error al crear superficie de texto: %s", SDL_GetError());
