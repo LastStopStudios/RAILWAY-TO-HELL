@@ -122,6 +122,15 @@ bool Player::Start() {
 
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+    punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
+    stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Character_Generic_Step_A.ogg");
+
+    int lowVolume = 5; // Low volume setting (range: 0 to 128)
+    int mediumVolume = 15;
+    int highVolume = 80;
+    Engine::GetInstance().audio.get()->SetFxVolume(punchFX, lowVolume);
+    Engine::GetInstance().audio.get()->SetFxVolume(pickCoinFxId, lowVolume);
+    Engine::GetInstance().audio.get()->SetFxVolume(stepFX, lowVolume);
 
     // Attack animation
     meleeAttack = Animation();
@@ -268,12 +277,14 @@ void Player::HandleMovement(b2Vec2& velocity) {
         velocity.x = -0.2f * 16;
         facingRight = false;
         isWalking = true;
+        //Engine::GetInstance().audio.get()->PlayFx(stepFX);
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         velocity.x = 0.2f * 16;
         facingRight = true;
         isWalking = true;
+        //Engine::GetInstance().audio.get()->PlayFx(stepFX);
     }
     // Toggle god mode when F5 is pressed
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_REPEAT) {
@@ -527,7 +538,7 @@ void Player::UpdateMeleeAttack(float dt) {
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
         !isAttacking && !isWhipAttacking && !isDashing && canAttack && !isHurt) {
-
+        Engine::GetInstance().audio.get()->PlayFx(punchFX);
         isAttacking = true;
         LOG("Attack started");
         canAttack = false;
@@ -640,6 +651,7 @@ void Player::DrawPlayer() {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
         texture = walkTexture;
+        //Engine::GetInstance().audio.get()->PlayFx(stepFX);
         walk.Update();
     }
     else {

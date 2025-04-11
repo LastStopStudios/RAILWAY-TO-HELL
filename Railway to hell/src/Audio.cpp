@@ -152,6 +152,15 @@ int Audio::LoadFx(const char* path)
 	return ret;
 }
 
+void Audio::SetFxVolume(int id, int volume) {
+	if (!active || id <= 0 || id > fx.size())
+		return;
+
+	auto fxIt = fx.begin();
+	std::advance(fxIt, id - 1);
+	Mix_VolumeChunk(*fxIt, volume);
+}
+
 // Play WAV
 bool Audio::PlayFx(int id, int repeat)
 {

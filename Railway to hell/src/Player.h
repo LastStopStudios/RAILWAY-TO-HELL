@@ -90,7 +90,7 @@ public:
 	bool dialogo = false;
 
 	// Audio fx
-	int pickCoinFxId;
+	int pickCoinFxId, punchFX, stepFX;
 
 	PhysBody* pbodyUpper;
 	PhysBody* pbodyLower;
