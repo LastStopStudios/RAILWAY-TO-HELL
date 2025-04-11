@@ -59,12 +59,12 @@ bool Caronte::Start() {
 
 bool Caronte::Update(float dt)
 {
-    // If entity is marked for deletion, skip update
+	// if is market for deletion, skip the update
     if (pendingToDelete) {
         return true;
     }
 
-    // Wait until the game has started (first input)
+    // wait for the first input to start the game
     if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY) {
         return true;
     }
@@ -113,12 +113,21 @@ bool Caronte::Update(float dt)
         return true;
     }
 
+    // Attack cooldown logic
+    if (attackOnCooldown) {
+        currentAttackCooldown -= dt;
+        if (currentAttackCooldown <= 0.0f) {
+            attackOnCooldown = false;
+            canAttack = true;
+            currentAttackCooldown = 0.0f;
+        }
+    }
+
     // Attack logic
     if (isattacking) {
         if (!attacked) {
             attacked = true;
             canAttack = false;
-            currentAttackCooldown = attackCooldown;
             currentAnimation = &attack;
             currentAnimation->Reset();
 
@@ -128,7 +137,7 @@ bool Caronte::Update(float dt)
                     (int)position.getX() - 10,
                     (int)position.getY() + texH / 2,
                     70,
-                    40,
+                    100,
                     bodyType::KINEMATIC
                 );
                 AttackArea->ctype = ColliderType::BOSS_ATTACK;
@@ -143,6 +152,8 @@ bool Caronte::Update(float dt)
         attack.Reset();
         isattacking = false;
         attacked = false;
+		attackOnCooldown = true;
+        currentAttackCooldown = attackCooldown;
 
         // Remove attack area
         if (AttackArea != nullptr) {
@@ -196,7 +207,7 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
-        if (!isattacking) {
+        if (!isattacking && !attackOnCooldown && canAttack) {
             isattacking = true;
             LOG("Attack Player!");
         }

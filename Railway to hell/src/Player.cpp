@@ -211,7 +211,7 @@ bool Player::Update(float dt)
         }
 
         // Handle dash only when not attacking or jumping
-        if (!isAttacking && !isWhipAttacking) {
+        if (!isAttacking && !isWhipAttacking && !isHurt) {
             HandleDash(velocity, dt);
         }
 
@@ -252,7 +252,7 @@ bool Player::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
 
-    currentAnimation->Update();
+    // currentAnimation->Update();
     HandleSceneSwitching();
     DrawPlayer();
     return true;
@@ -393,21 +393,39 @@ void Player::HandleSceneSwitching() {
 }
 
 void Player::HandleHurt(float dt) {
-	// Check if the player is hurt
+    // Check if the player is hurt
     if (isHurt) {
+		
+        if (!hasHurtStarted) {
+            hurt.Reset(); 
+            hasHurtStarted = true; // Reset hurt animation one time
+        }
         hurt.Update();
-		// Check if the hurt animation has finished
         if (hurt.HasFinished()) {
-            // Exit hurt state
-            isHurt = false;
-            hurt.Reset();
-            currentAnimation = &idle;
+			// Reset to idle
+            hurted = true;
+			currentAnimation = &idle; 
+            idle.Reset();
         }
     }
 }
 
 // Correct UpdateWhipAttack() to restart the animation correctly
 void Player::UpdateWhipAttack(float dt) {
+
+    if (isHurt) {
+        if (isWhipAttacking) {
+            isWhipAttacking = false;
+            if (whipAttackHitbox) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                whipAttackHitbox = nullptr;
+            }
+            currentAnimation = &idle;
+            idle.Reset();
+        }
+        return;
+    }
+
     // Whip attack cooldown logic
     if (!canWhipAttack) {
         whipAttackCooldown -= dt;
@@ -419,7 +437,7 @@ void Player::UpdateWhipAttack(float dt) {
 
     // Initiate whip attack only when not dashing, melee attacking, or already whip attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
-        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack) {
+        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack && !isHurt) {
         // Start whip attack
         isWhipAttacking = true;
         LOG("Whip Attack started");
@@ -480,6 +498,20 @@ void Player::UpdateWhipAttack(float dt) {
 }
 
 void Player::UpdateMeleeAttack(float dt) {
+
+    if (isHurt) {
+        if (isAttacking) {
+            isAttacking = false;
+            if (attackHitbox) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                attackHitbox = nullptr;
+            }
+            currentAnimation = &idle;
+            idle.Reset();
+        }
+        return;
+    }
+
     // Attack cooldown logic
     if (!canAttack) {
         attackCooldown -= dt;
@@ -491,7 +523,7 @@ void Player::UpdateMeleeAttack(float dt) {
 
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
-        !isAttacking && !isWhipAttacking && !isDashing && canAttack) {
+        !isAttacking && !isWhipAttacking && !isDashing && canAttack && !isHurt) {
 
         isAttacking = true;
         LOG("Attack started");
@@ -570,35 +602,41 @@ void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
     SDL_Texture* originalTexture = texture;
 
-    if (isHurt) {
+    if (isHurt && !hurted) {
         // Set hurt animation when hurt
         texture = hurtTexture;
         currentAnimation = &hurt;
+		hurt.Update();
     }
     else if (isAttacking) {
         currentAnimation = &meleeAttack;
         // Use attack texture when attacking
         texture = attackTexture;
+        meleeAttack.Update();
     }
     else if (isWhipAttacking) {
         currentAnimation = &whipAttack;
         // Use whip texture when whip attacking
         texture = whipAttackTexture;
+		whipAttack.Update();
     }
     else if (isDashing) {
         // Set walking animation when moving horizontally
         currentAnimation = &dash;
         texture = dashTexture;
+        dash.Update();
     }
     else if (isJumping || isPreparingJump) {
         // Set the jump animation when jumping or preparing to jump
         currentAnimation = &jump;
         texture = jumpTexture;
+        jump.Update();
     }
     else if (isWalking) {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
         texture = walkTexture;
+        walk.Update();
     }
     else {
         if (currentAnimation != &idle) {
@@ -715,8 +753,26 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
     }
     case ColliderType::BOSS_ATTACK: {
-        isHurt = true;
-        LOG("Player damaged");
+        if (!isHurt && !hasHurtStarted) {
+            isHurt = true;
+			// Cancel any ongoing attack
+            if (isAttacking) {
+                isAttacking = false;
+                if (attackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                    attackHitbox = nullptr;
+                }
+            }
+            if (isWhipAttacking) {
+                isWhipAttacking = false;
+                if (whipAttackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                    whipAttackHitbox = nullptr;
+                }
+            }
+            LOG("Player damaged");
+        }
+
         break;
     }
     case ColliderType::LEVER: {
@@ -763,6 +819,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
+
 void Player::Ascensor() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
     {
@@ -785,6 +842,13 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     }
 
     switch (physB->ctype) {
+    case ColliderType::BOSS_ATTACK:
+        if (isHurt) {
+            isHurt = false;
+            hasHurtStarted = false;
+            hurted = false;
+        }
+        break;
     case ColliderType::ASCENSORES:
         TocandoAs = false;
         // puerta = false; //block elevator animation

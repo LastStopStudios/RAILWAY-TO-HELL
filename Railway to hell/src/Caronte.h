@@ -36,10 +36,11 @@ private:
 	bool candie = false;
 	bool isattacking = false;
 	bool isdeath = false;
-	bool canAttack;
+	bool canAttack = true;
 	bool attacked = false;
+	bool attackOnCooldown = false;
 
-	float attackCooldown = 3000.0f;
+	float attackCooldown = 3000.0f;    
 	float currentAttackCooldown = 0.0f;
 
 

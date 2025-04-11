@@ -143,6 +143,8 @@ private:
 
 	Animation hurt;
 	bool isHurt = false;
+	bool hasHurtStarted = false;
+	bool hurted = false;
 	SDL_Texture* hurtTexture = nullptr;
 
 	Animation* currentAnimation = nullptr;
