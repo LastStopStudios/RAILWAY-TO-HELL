@@ -29,14 +29,15 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
     { 
         FadeIn(1.0f);// Animation speed (FadeIn)
     }
-
-    if (bosscam == true) {
-        Engine::GetInstance().scene->EntrarBoss();
-        Engine::GetInstance().scene->BloquearSensor();
+    //Switch between fixed camera for boss fight to camera following the player
+    if (bosscam == true) {//boss fight
+        Engine::GetInstance().scene->EntrarBoss();//Boss cam
+        Engine::GetInstance().scene->BloquearSensor();//Block scene change sensors to prevent the player from escaping
     }
-    else if (bosscam == false) {
-        Engine::GetInstance().scene->SalirBoss();
-        Engine::GetInstance().scene->DesbloquearSensor();
+    else if (bosscam == false) {//camera follows player
+        Engine::GetInstance().scene->SalirBoss();//Camera on player
+        /*Line to use to unlock scene change sensors*/
+        Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
     }
        
     UnLoadEnemiesItems();

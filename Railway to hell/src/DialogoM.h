@@ -40,32 +40,32 @@ public:
 
 private:
 
-	SDL_Texture* textTexture = nullptr;//textura letras
-	SDL_Texture* fondo = nullptr;//textura fondo letras
+	SDL_Texture* textTexture = nullptr;//texture letters
+	SDL_Texture* fondo = nullptr;//background texture
 
-	//voids texto
-	void GenerateTextTexture(); // mostrar texto por pantalla
-	void UpdateTextAnimation(float dt);// Llama a la función que maneja la animación del texto
-	void XMLToVariable(const std::string& id);//sacar datos del xml
+	//text voids
+	void GenerateTextTexture(); //display text on the screen
+	void UpdateTextAnimation(float dt);//Call the function that handles text animation
+	void XMLToVariable(const std::string& id);//extract data from xml
 
-	// Variables para manejar el texto
+	//Variables to handle text
 	bool showText = false;
-	//boleanos de control de errores
-	bool Tim = true;//pasa de cargar la otra parte del texto
-	bool Siguiente = true;///activar el temporizador del dibujado del texto
-	std::string scene = "";//pasar escena de la que sacar los dialogos
-	//Control del dialogo
-	std::string displayText = ""; // variable que recibe el texto entero del xml
-	std::string alltext = "";//variable de control de texto
-	std::string currentText = ""; // Texto que se muestra y se va actualizando
-	//timer y control de escritura
-	int textIndex = 0;           // Índice del último carácter mostrado
-	float textTimer = 0.0f;      // Temporizador para controlar la velocidad
-	float textSpeed = 5.0f;     // Velocidad de escritura (segundos entre letras)
-	float Skip = true; //Skipear textos | Ahora solo cierra los textos
-	//Margenes y posicion dialogos y fondo
-	int textMaxWidth = 900; // Máximo ancho antes de saltar de línea
-	int textMaxheigth = 405; //Maximo largo antes del salto de dialogo
+	//error control booleans
+	bool Tim = true;//go on to load the other part of the text
+	bool Siguiente = true;//activate the text drawing timer
+	std::string scene = "";//pass scene from which to take the dialogues
+	//Dialog control
+	std::string displayText = ""; //variable that receives the entire text of the xml
+	std::string alltext = "";//control variable
+	std::string currentText = ""; //Text displayed and updated
+	//timer and write control
+	int textIndex = 0;           // Index of the last character displayed
+	float textTimer = 0.0f;      // Timer for speed control
+	float textSpeed = 5.0f;     // Writing speed (seconds between letters)
+	float Skip = true; //Skip texts | Now only closes texts
+	//Margins and position of dialogs and backgrounds
+	int textMaxWidth = 700; // Maximum width before jumping out of line
+	int textMaxheigth = 352; //Maximum length before the dialog break
 	int h, w;
 	int width, height;
 	int posx, posy;

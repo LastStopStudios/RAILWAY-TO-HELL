@@ -249,7 +249,7 @@ bool Player::Update(float dt)
         // Update position from physics body (usamos el cuerpo superior como referencia principal)
         b2Transform pbodyPos = pbodyUpper->body->GetTransform();
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
     }
 
     // currentAnimation->Update();
@@ -389,7 +389,10 @@ void Player::HandleSceneSwitching() {
     }
     /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//go to scene 
         Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
-    }*/ // if para poner cambio de escena en un boton
+    }*/ // if to set scene change in a button
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
+        DesbloquearSensor();
+    }
 }
 
 void Player::HandleHurt(float dt) {
@@ -477,7 +480,7 @@ void Player::UpdateWhipAttack(float dt) {
 
         // Update hitbox position
         if (whipAttackHitbox) {
-            int attackX = facingRight ? position.getX() + 30 : position.getX();
+            int attackX = facingRight ? position.getX()  : position.getX();
             int attackY = position.getY() + texH / 2;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
@@ -547,7 +550,7 @@ void Player::UpdateMeleeAttack(float dt) {
             : centerX - texW / 2 - attackWidth / -2;  // left
 
 
-        int attackY = centerY + texH / -7;  // Raise the position of the hitbox on the Y.
+        int attackY = centerY + 10 + texH / -7;  // Raise the position of the hitbox on the Y.
 
         // Delete the previous hitbox if it existed.
         if (attackHitbox) {
@@ -619,6 +622,7 @@ void Player::DrawPlayer() {
         // Use whip texture when whip attacking
         texture = whipAttackTexture;
 		whipAttack.Update();
+
     }
     else if (isDashing) {
         // Set walking animation when moving horizontally
@@ -827,11 +831,11 @@ void Player::Ascensor() {
     }
 }
 
-void Player::BloquearSensor(){
+void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
     Bloqueo = true;
 }
 
-void Player::DesbloquearSensor(){
+void Player::DesbloquearSensor(){//unlocks sensors scene change
     Bloqueo = false;
 }
 

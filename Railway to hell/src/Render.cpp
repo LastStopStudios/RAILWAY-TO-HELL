@@ -26,7 +26,7 @@ bool Render::Awake()
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	//L05 TODO 5 - Load the configuration of the Render module
+	//Load the configuration of the Render module
 	if (configParameters.child("vsync").attribute("value").as_bool() == true) {
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
@@ -53,12 +53,12 @@ bool Render::Awake()
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 30);
+	font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 20);
 
 	return ret;
 }
 
-// Called before the first frame
+//Called before the first frame
 bool Render::Start()
 {
 	LOG("render start");

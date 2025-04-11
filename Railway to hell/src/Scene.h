@@ -55,11 +55,11 @@ public:
 	void SaveState();
 
 
-	//parar al player cuando sale un dialogo
+	//stop entities when a dialog is displayed
 	void DialogoOn();
 	void DialogoOff();
 
-	//Bloquear el cambio de escena cuando pelea con un boss
+	//Block scene change when fighting with a boss
 	void BloquearSensor();
 	void DesbloquearSensor();
 
@@ -92,52 +92,49 @@ public:
 	std::vector<Doors*>& GetDoorsList() { return doorList; }
 	std::vector<Levers*>& GetLeversList() { return leverList; }
 
-	//Evitar salto player
+	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
 	void ResetSkipInput() { skipFirstInput = false; }
 
-	//Mirar escena
+	//Check out the current scene
 	SceneState GetCurrentState() const;
 
 	void SetCurrentState(SceneState state);
 
-	//Carga de texturas
+	//Loading textures
 	SDL_Texture* introScreenTexture = nullptr;
 
-	//camara para lucha boss
+	//boss fight camera
 	bool BossBattle = false;
 	struct Bosses {
 		int id;
 		float x;
 		float y;
 	};
-	//lista de escenas con su id
+	//list of boss fights with their id
 	std::vector<Bosses> Bosses = {
-	//escena a la que va, x (590) de la camara, y (415) de la camara
+	//scene to which it goes, x (590) from camera, y (415) from camera
 	{3, 1282.73, 1151.67}
 	};
-	//control camara
+	//camera control
 	void EntrarBoss();
 	void SalirBoss();
 
 private:
 	SDL_Texture* mouseTileTex = nullptr;
-	SDL_Texture* textTexture = nullptr;//textura letras
-	SDL_Texture* Fondo = nullptr;//textura fondo letras
-	SDL_Texture* shadowTexture = nullptr;//textura sombra !!!!No va!!!!
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 	bool skipFirstInput = false;
-	
-	//cambio escenas
+
+	//change scenes
 	SceneState currentState;
 
-	// L16: TODO 2: Declare a GUI Control Button 
+	//Declare a GUI Control Button 
 	GuiControlButton* guiBt;
 
 	Player* player;
 
-	//declaraci�n de la musica de fondo
+	//background music statement
 	int musicaFondoId = -1;
 public:
 
