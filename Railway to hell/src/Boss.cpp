@@ -211,7 +211,7 @@ bool Boss::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     }
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY() + 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     currentAnimation->Update();
 
     // pathfinding drawing
