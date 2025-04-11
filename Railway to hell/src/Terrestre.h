@@ -20,6 +20,7 @@ public:
 	bool Start();
 
 	bool Update(float dt);
+	void Matar();
 
 	bool CleanUp();
 
@@ -43,6 +44,12 @@ public:
 
 public:
 	//bool dialogo = true;
+	float texIsDeath;
+
+	int lives = 2;
+	//control de muerte
+	int a = 0;
+	int kill = 1;
 private:
 	// Update logic
 	SDL_RendererFlip flip = SDL_FLIP_NONE; 
@@ -55,13 +62,23 @@ private:
 	bool attacking = false;
 	bool falling = false;
 	bool isChasing;
+
+	int dieSFX;
+	bool isDying = false;
+	bool shouldDestroy = false;
+	float deathTimer = 0.0f;
+	const float deathDelay = 1.0f;
+
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
+	Animation die;
+	Animation hurt;
 	PhysBody* pbody;
 	Pathfinding* pathfinding;
-
+	bool isDead = false;
+	bool hasPlayedDeathAnim = false;
 };

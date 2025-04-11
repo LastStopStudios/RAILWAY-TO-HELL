@@ -34,6 +34,8 @@ bool Terrestre::Start() {
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
+    die.LoadAnimations(parameters.child("animations").child("die"));
+    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
 	currentAnimation = &idle;
 	
 	//Add a physics to an item - initialize the physics body
@@ -50,7 +52,8 @@ bool Terrestre::Start() {
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 	ResetPath();
-
+    a = 0;
+    kill = 1;
 	return true;
 }
 bool Terrestre::Update(float dt)
@@ -58,6 +61,26 @@ bool Terrestre::Update(float dt)
     // Don't process logic if we're not in GAMEPLAY mode
     if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
     {
+        return true;
+    }
+
+    if (isDying) {
+        currentAnimation->Update();
+
+        // If death animation finished, start the timer
+        if (currentAnimation->HasFinished()) {
+            deathTimer += dt;
+            if (deathTimer >= deathDelay) {
+                // Mark for destruction in the next frame
+                pendingToDelete = true;
+            }
+        }
+
+        // Draw the death animation
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32 , (int)position.getY() -32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+
+        // When dying, don't process any other logic
         return true;
     }
 
@@ -149,6 +172,7 @@ bool Terrestre::Update(float dt)
             isLookingLeft = !giro;
         }
 
+
         // Apply velocity to physical body
         b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
         pbody->body->SetLinearVelocity(velocity);
@@ -160,7 +184,7 @@ bool Terrestre::Update(float dt)
     }else{ pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*frenar el cuerpo*/ }
 
         // Configure sprite flip based on direction
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
         // Draw enemy texture and animation
         Engine::GetInstance().render.get()->DrawTexture(
@@ -184,7 +208,13 @@ bool Terrestre::Update(float dt)
 
     return true;
 }
-
+void Terrestre::Matar() {//eliminating the enemy once dead 
+    if (kill == 1) {
+        kill = 2;
+        Disable();//when it has to be activated use  Enable();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
+}
 bool Terrestre::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -218,13 +248,26 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
 		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		break;
     case ColliderType::PLAYER_ATTACK:
-        LOG("Enemy hit by player attack - DESTROY");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        break;
+        if (!isDying) { // Prevent multiple death animations
+            isDying = true;
+            currentAnimation = &die;
+            currentAnimation->Reset();
+
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+        }
 	case ColliderType::PLAYER_WHIP_ATTACK:
-		LOG("Enemy hit by player whip attack - DESTROY");
-		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-		break;
+        if (!isDead) {
+            isDead = true;
+            currentAnimation = &die;
+            a = 1;
+
+            // Detener movimiento del cuerpo físico
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+        }
+        break;
     case ColliderType::GIRO:
        giro = !giro;
         break;
