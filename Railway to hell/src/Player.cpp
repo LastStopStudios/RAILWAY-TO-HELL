@@ -274,14 +274,14 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
     // Horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -0.2f * 16;
+        velocity.x = -0.3f * 16;
         facingRight = false;
         isWalking = true;
         //Engine::GetInstance().audio.get()->PlayFx(stepFX);
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = 0.2f * 16;
+        velocity.x = 0.3f * 16;
         facingRight = true;
         isWalking = true;
         //Engine::GetInstance().audio.get()->PlayFx(stepFX);
@@ -295,7 +295,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
     // Vertical movement when W is pressed and god mode is active
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
         if (godMode == true) { // Use == for comparison, not =
-            velocity.y = -0.2 * 16;
+            velocity.y = -0.3 * 16;
         }
     }
 }
@@ -374,7 +374,7 @@ void Player::HandleJump() {
     if (isPreparingJump) {
         // If we've reached the threshold frame, apply the actual jump force
         if (jump.GetCurrentFrameIndex() == jumpFrameThreshold) {
-            float jumpForce = 5.0f;
+            float jumpForce = 3.5f;
             // Aplicar impulso a ambos cuerpos
             pbodyUpper->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
             pbodyLower->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
