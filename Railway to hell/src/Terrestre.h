@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Pathfinding.h"
+#include "Physics.h"
 
 
 struct SDL_Texture;
@@ -29,12 +30,18 @@ public:
 	}
 
 	void SetSpecificParameters(pugi::xml_node specificNode) {
-		// Actualizar solo las posiciones desde el nodo específico
 		if (specificNode.attribute("x") && specificNode.attribute("y")) {
-			Vector2D pos;
-			pos.setX(specificNode.attribute("x").as_int());
-			pos.setY(specificNode.attribute("y").as_int());
-			SetPosition(pos);
+			position.setX(specificNode.attribute("x").as_int());
+			position.setY(specificNode.attribute("y").as_int());
+
+			// Actualizar posición del cuerpo físico si existe
+			if (pbody) {
+				b2Vec2 bodyPos(
+					METERS_TO_PIXELS(position.getX() + texW / 2),
+					METERS_TO_PIXELS(position.getY() + texH / 2)
+				);
+				pbody->body->SetTransform(bodyPos, 0);
+			}
 		}
 	}
 

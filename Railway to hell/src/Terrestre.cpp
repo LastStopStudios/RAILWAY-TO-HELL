@@ -28,21 +28,36 @@ bool Terrestre::Start() {
 
     // Load texture with error checking
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
-    if (texture == nullptr) {
+    if (!texture) {
         LOG("Error loading enemy texture: %s", parameters.attribute("texture").as_string());
         return false;
     }
 
-    // Set initial position
-    position.setX(parameters.attribute("x").as_int());
-    position.setY(parameters.attribute("y").as_int());
+    // Obtain messures
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
-    LOG("Loading enemy with texture: %s at position (%d, %d), size (%d, %d)",
-        parameters.attribute("texture").as_string(),
-        position.getX(), position.getY(),
-        texW, texH);
+    // Crear cuerpo físico PRIMERO
+    pbody = Engine::GetInstance().physics.get()->CreateCircle(
+        PIXEL_TO_METERS(position.getX() + texW / 2),
+        PIXEL_TO_METERS(position.getY() + texH / 2),
+        PIXEL_TO_METERS(texH / 2),
+        bodyType::DYNAMIC);
+
+    LOG("Enemy created at position: (%f, %f)", position.getX(), position.getY());
+
+    if (!pbody) {
+        LOG("Error creating physics body");
+        return false;
+    }
+
+    pbody->ctype = ColliderType::TERRESTRE;
+    pbody->listener = this;
+
+    // Set gravity
+    if (!parameters.attribute("gravity").as_bool()) {
+        pbody->body->SetGravityScale(0);
+    }
 
     // Load animations with error checking
     pugi::xml_node animationsNode = parameters.child("animations");
@@ -60,26 +75,6 @@ bool Terrestre::Start() {
     }
     else {
         LOG("Error: No animations node found for enemy");
-    }
-
-    // Create physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle(
-        (int)position.getX() + texW / 2,
-        (int)position.getY() + texH / 2,
-        texH / 2,
-        bodyType::DYNAMIC);
-
-    if (pbody == nullptr) {
-        LOG("Error creating physics body for enemy");
-        return false;
-    }
-
-    pbody->ctype = ColliderType::TERRESTRE;
-    pbody->listener = this;
-
-    // Set gravity
-    if (!parameters.attribute("gravity").as_bool()) {
-        pbody->body->SetGravityScale(0);
     }
 
     // Initialize pathfinding
@@ -245,6 +240,16 @@ bool Terrestre::Update(float dt)
         pathfinding->DrawPath();
     }
 
+    // Draw a simple rectangle at the enemy position
+    SDL_Rect debugRect = {
+        (int)position.getX(),
+        (int)position.getY(),
+        texW,
+        texH
+    };
+    SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(Engine::GetInstance().render->renderer, &debugRect);
+
     return true;
 }
 void Terrestre::Matar() {//eliminating the enemy once dead 
@@ -261,10 +266,16 @@ bool Terrestre::CleanUp()
 }
 
 void Terrestre::SetPosition(Vector2D pos) {
-	pos.setX(pos.getX() + texW / 2);
-	pos.setY(pos.getY() + texH / 2);
-	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-	pbody->body->SetTransform(bodyPos, 0);
+    if (!pbody) {
+        LOG("Error: Trying to set position before physics body exists");
+        return;
+    }
+    position = pos;
+    b2Vec2 bodyPos(
+        PIXEL_TO_METERS(pos.getX() + texW / 2),
+        PIXEL_TO_METERS(pos.getY() + texH / 2)
+    );
+    pbody->body->SetTransform(bodyPos, 0);
 }
 
 Vector2D Terrestre::GetPosition() {

@@ -47,9 +47,6 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
-    if (!loadFile.load_file("config.xml")) {
-        return;
-    }
     if (!result) {
         LOG("Error al cargar config.xml: %s", result.description());
         return;
@@ -139,7 +136,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
     int enemyCount = 0;
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
-        //std::string type = enemyNode.attribute("type").as_string();
         std::string templateId = enemyNode.attribute("template").as_string();
         LOG("Procesando enemigo con template: %s", templateId.c_str());
 
