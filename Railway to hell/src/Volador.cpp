@@ -24,7 +24,16 @@ bool Volador::Awake() {
 
 bool Volador::Start() {
 
-    texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file("config.xml");
+    // Obtener el nodo raíz
+    pugi::xml_node root = doc.child("config");
+
+    // Asignar un nodo específico, el del enemigo que pertoque
+    pugi::xml_node temp;
+    temp = root.child("templates").child("enemy-volador");
+    //initilize textures
+    texture = Engine::GetInstance().textures.get()->Load(temp.attribute("texture").as_string());
 
     // Obtain real dimensions of the texture
     int textureWidth, textureHeight;

@@ -76,6 +76,8 @@ public:
 
 public:
 	bool pendingToDelete = false;
+	pugi::xml_node temp; // Variable temporal para cargar texturas y animaciones
+	pugi::xml_node attributes; // Variable temporal para cargar atributos como x y ...
 	std::string name;
 	EntityType type;
 	bool active = true;

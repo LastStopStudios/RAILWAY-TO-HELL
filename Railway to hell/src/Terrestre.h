@@ -62,6 +62,6 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 	PhysBody* pbody;
-	Pathfinding* pathfinding;
+	Pathfinding* pathfinding; 
 
 };

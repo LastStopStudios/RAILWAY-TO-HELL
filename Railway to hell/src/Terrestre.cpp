@@ -24,16 +24,32 @@ bool Terrestre::Awake() {
 }
 
 bool Terrestre::Start() {
+    pugi::xml_document doc;
+    pugi::xml_parse_result result = doc.load_file("config.xml");
+    // Obtener el nodo raíz
+    pugi::xml_node root = doc.child("config");
 
+    // Asignar un nodo específico, el del enemigo que pertoque
+    pugi::xml_node temp;
+    temp = root.child("templates").child("enemy-rastrero");
+    if (temp)
+    {
+        std::cout << "Nodo encontrado: " << temp.name() << std::endl;
+        // Aquí puedes trabajar con el nodo
+    }
+    else
+    {
+        std::cout << "Nodo no encontrado" << std::endl;
+    }
 	//initilize textures
-	texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+	texture = Engine::GetInstance().textures.get()->Load(temp.attribute("texture").as_string());
 	position.setX(parameters.attribute("x").as_int());
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 
 	//Load animations
-	idle.LoadAnimations(parameters.child("animations").child("idle"));
+	idle.LoadAnimations(temp.child("animations").child("idle"));
 	currentAnimation = &idle;
 	
 	//Add a physics to an item - initialize the physics body
