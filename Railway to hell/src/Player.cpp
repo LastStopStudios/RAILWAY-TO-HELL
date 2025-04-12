@@ -672,6 +672,10 @@ void Player::DrawPlayer() {
     int drawX = position.getX() + offsetX;
     int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
+    if (isWhipAttacking) {
+        drawX = position.getX() - 20 ;
+        drawY = position.getY() - 54;
+    }
 
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
