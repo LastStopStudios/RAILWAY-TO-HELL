@@ -139,6 +139,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
     int enemyCount = 0;
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
+        //std::string type = enemyNode.attribute("type").as_string();
         std::string templateId = enemyNode.attribute("template").as_string();
         LOG("Procesando enemigo con template: %s", templateId.c_str());
 
@@ -184,10 +185,10 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
                 Engine::GetInstance().scene->GetBossList().push_back(boss);
             }
             else if (type == "guardian") {
-                Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
-                caronte->SetParameters(enemyNode);
-                Engine::GetInstance().scene->GetCaronteList().push_back(caronte);
-            }
+            Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
+            caronte->SetParameters(enemyNode);
+            Engine::GetInstance().scene->GetCaronteList().push_back(caronte);
+        }
         }
     
 
