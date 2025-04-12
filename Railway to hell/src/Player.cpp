@@ -470,7 +470,7 @@ void Player::UpdateWhipAttack(float dt) {
 
         // Calculate attack position based on facing direction
         int attackX = facingRight ? centerX + texW / 4 : centerX - texW / 4 - attackWidth / 2;
-
+        
         // Remove existing whip attack hitbox
         if (whipAttackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
@@ -491,8 +491,9 @@ void Player::UpdateWhipAttack(float dt) {
 
         // Update hitbox position
         if (whipAttackHitbox) {
-            int attackX = facingRight ? position.getX()  : position.getX();
-            int attackY = position.getY() + texH / 2;
+            //int attackX = facingRight ? position.getX()  : position.getX() + 10;
+            int attackX = (int)position.getX() + (facingRight ? 100 : 0);
+            int attackY = position.getY() + 10;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
@@ -673,8 +674,19 @@ void Player::DrawPlayer() {
     int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
     if (isWhipAttacking) {
+
+		if (facingRight) {
+		
         drawX = position.getX() - 20 ;
         drawY = position.getY() - 54;
+       
+		}
+		else {
+            
+            drawY = position.getY() - 54;
+            drawX = position.getX() - 130;
+
+        }
     }
 
     if (!facingRight) {
