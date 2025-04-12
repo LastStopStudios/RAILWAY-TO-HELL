@@ -1567,7 +1567,7 @@
 							<frame x="2240" y="256" w="224" h="160" />
 							<frame x="2464" y="256" w="224" h="160" />
 						</whipAttack>
-						<die loop="false" speed="0.05">
+						<die loop="false" speed="0.1">
 							<frame x="0" y="416" w="128" h="128" />
 							<frame x="128" y="416" w="128" h="128" />
 							<frame x="256" y="416" w="128" h="128" />

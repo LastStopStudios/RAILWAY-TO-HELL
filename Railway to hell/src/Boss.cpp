@@ -140,9 +140,9 @@ bool Boss::Update(float dt)
 
             if (area == nullptr) { // create the attack area
                 area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-                    (int)position.getX() + (isLookingLeft ? -10 : 60),
-                    (int)position.getY() + texH /-2,
-                    70, //modify according to the length of the whip
+                    (int)position.getX() + (isLookingLeft ? -30 : 160),
+                    (int)position.getY() + 50,
+                    160, //modify according to the length of the whip
                     40,
                     bodyType::KINEMATIC
                 );
