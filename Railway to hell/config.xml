@@ -391,11 +391,11 @@
 				</animations>
 			</player>
 			<enemies>
-				<enemy name="badguy" template="rata_rastrero" x="1024" y="645" />
-				<enemy name="badguy" template="rata_rastrero" x="1200" y="645" />
-				<enemy name="badguy" template="badguy_rastrero" x="1400" y="645" />
-				<enemy name="badguy" template="badguy_rastrero" x="1600" y="645" />
-				<enemy name="badguy" template="badguy_rastrero" x="1700" y="645" />
+				<enemy name="badguy" template="rata_rastrero" x="2200" y="645" />
+				<enemy name="badguy" template="rata_rastrero" x="2500" y="645" />
+				<enemy name="badguy" template="badguy_rastrero" x="2800" y="645" />
+				<enemy name="badguy" template="badguy_rastrero" x="3000" y="645" />
+				<enemy name="badguy" template="badguy_rastrero" x="2400" y="400" />
 			</enemies>
 		</entities>
 		<dialogues>

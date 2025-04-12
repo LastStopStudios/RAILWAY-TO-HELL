@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Pathfinding.h"
 #include "Physics.h"
+#include "Log.h"
 
 
 struct SDL_Texture;
@@ -31,17 +32,17 @@ public:
 
 	void SetSpecificParameters(pugi::xml_node specificNode) {
 		if (specificNode.attribute("x") && specificNode.attribute("y")) {
-			position.setX(specificNode.attribute("x").as_int());
-			position.setY(specificNode.attribute("y").as_int());
+			position.setX(specificNode.attribute("x").as_int() * 64); // 32 debería de ser porque tenemos tiles de 32 px, de alñguna forma pilla bien estos valores pero los usa 32 veces mas pequeños?????
+			position.setY(specificNode.attribute("y").as_int() * 64); // Sin sentido esta parte
 
-			// Actualizar posición del cuerpo físico si existe
 			if (pbody) {
 				b2Vec2 bodyPos(
-					METERS_TO_PIXELS(position.getX() + texW / 2),
-					METERS_TO_PIXELS(position.getY() + texH / 2)
+					PIXEL_TO_METERS(position.getX() + texW / 2),
+					PIXEL_TO_METERS(position.getY() + texH / 2)
 				);
 				pbody->body->SetTransform(bodyPos, 0);
 			}
+			LOG("Enemy position set to: (%f, %f) pixels", position.getX(), position.getY());
 		}
 	}
 

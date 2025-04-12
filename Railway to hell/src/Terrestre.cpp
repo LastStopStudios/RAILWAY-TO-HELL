@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "EntityManager.h"
+#include <SDL2/SDL.h>
 
 Terrestre::Terrestre() : Entity(EntityType::TERRESTRE)
 {
@@ -247,8 +248,9 @@ bool Terrestre::Update(float dt)
         texW,
         texH
     };
+
     SDL_SetRenderDrawColor(Engine::GetInstance().render->renderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(Engine::GetInstance().render->renderer, &debugRect);
+    SDL_RenderDrawPoint(Engine::GetInstance().render->renderer, (int)position.getX(), (int)position.getY());
 
     return true;
 }

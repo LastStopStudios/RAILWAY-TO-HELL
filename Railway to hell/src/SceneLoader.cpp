@@ -158,6 +158,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
             enemy->SetParameters(templateNode);
             enemy->SetSpecificParameters(enemyNode);
+            LOG("Enemy position from XML - x: %d, y: %d",
+                enemyNode.attribute("x").as_int(),
+                enemyNode.attribute("y").as_int());
 
             if (!enemy->Start()) {
                 LOG("Error: Falló Start() para enemigo Terrestre");
