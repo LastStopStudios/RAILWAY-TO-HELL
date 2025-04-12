@@ -91,7 +91,7 @@ bool Boss::Update(float dt)
 
         // Draw the death animation
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32 , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
         return true;
@@ -141,7 +141,7 @@ bool Boss::Update(float dt)
             if (area == nullptr) { // create the attack area
                 area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
                     (int)position.getX() + (isLookingLeft ? -10 : 60),
-                    (int)position.getY() + texH / 2,
+                    (int)position.getY() + texH /-2,
                     70, //modify according to the length of the whip
                     40,
                     bodyType::KINEMATIC
@@ -227,15 +227,33 @@ bool Boss::Update(float dt)
         }
         else {
             flip = SDL_FLIP_NONE;
+			
         }
 
         b2Transform pbodyPos = pbody->body->GetTransform();
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - 32);
 
     }
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY() , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    SDL_Rect frame = currentAnimation->GetCurrentFrame();
+
+    int renderX = (int)position.getX() - offsetX;
+    int renderY = (int)position.getY() + texH - 32 - frame.h; // Centrado vertical
+
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,
+        renderX,
+        renderY,
+		&frame,
+        1.0f,
+        0.0,
+        INT_MAX,
+        INT_MAX,
+        flip
+    );
+
     currentAnimation->Update();
+
 
     // pathfinding drawing
     pathfinding->DrawPath();
