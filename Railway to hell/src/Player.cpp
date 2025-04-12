@@ -105,8 +105,8 @@ bool Player::Start() {
 
     if (fixtureUpper && fixtureLower) {
         // Reducir la fricción para evitar quedarse pegado a las paredes
-        fixtureUpper->SetFriction(0.01f);  // Valor bajo para evitar adherencia a paredes
-        fixtureLower->SetFriction(0.01f);
+        fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
+        fixtureLower->SetFriction(0.005f);
 
         //// Opcional: configurar valores específicos para colisiones laterales
         //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
