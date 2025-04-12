@@ -64,6 +64,9 @@ bool Boss::Start() {
     pathfinding = new Pathfinding();
     ResetPath();
 
+    a = 0;
+	kill = 1;
+
     return true;
 }
 
@@ -74,6 +77,26 @@ bool Boss::Update(float dt)
     {
         return true;
     }
+    if (isDying) {
+        currentAnimation->Update();
+
+        // If death animation finished, start the timer
+        if (currentAnimation->HasFinished()) {
+            deathTimer += dt;
+            if (deathTimer >= deathDelay) {
+                // Mark for destruction in the next frame
+                pendingToDelete = true;
+            }
+        }
+
+        // Draw the death animation
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+
+        // When dying, don't process any other logic
+        return true;
+    }
+
 
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
@@ -211,7 +234,7 @@ bool Boss::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     }
-    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY() + 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY() , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     currentAnimation->Update();
 
     // pathfinding drawing
@@ -219,6 +242,14 @@ bool Boss::Update(float dt)
     pathfinding->ResetPath(enemyTilePos);
 
     return true;
+}
+
+void Boss::Matar() {//eliminating the enemy once dead 
+	if (kill == 1) {
+		kill = 2;
+		Disable();//when it has to be activated use  Enable();
+		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+	}
 }
 
 bool Boss::CleanUp()
@@ -256,8 +287,31 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
     case ColliderType::PLAYER:
         LOG("Collided with player - DESTROY");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
+
+    case ColliderType::PLAYER_ATTACK:
+        if (!isDying) { // Prevent multiple death animations
+            isDying = true;
+            currentAnimation = &die;
+            currentAnimation->Reset();
+
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+        }
+    case ColliderType::PLAYER_WHIP_ATTACK:
+        if (!isDead) {
+            isDead = true;
+            currentAnimation = &die;
+            a = 1;
+
+            // Detener movimiento del cuerpo físico
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+        }
+        break;
+
     }
 }
 

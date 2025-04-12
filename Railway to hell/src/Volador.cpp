@@ -181,7 +181,7 @@ bool Volador::Update(float dt) {
 
     }else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
     // Flip sprite configuration
-    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
     // Adjust position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();

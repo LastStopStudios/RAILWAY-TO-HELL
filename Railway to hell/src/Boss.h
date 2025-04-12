@@ -19,6 +19,7 @@ public:
 	bool Start();
 
 	bool Update(float dt);
+	void Matar();
 
 	bool CleanUp();
 
@@ -37,7 +38,9 @@ public:
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
 public:
-
+	
+	int a = 0;
+	int kill = 1;
 private:
 
 	Vector2D enemyPos; 
@@ -77,5 +80,9 @@ private:
 
 	int lives = 8;
 	int offsetX;
+	bool isDying = false;
+	bool isDead = false;
+	float deathTimer = 0.0f;
+	const float deathDelay = 1.0f;
 };
 
