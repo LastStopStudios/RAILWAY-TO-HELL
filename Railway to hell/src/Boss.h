@@ -26,6 +26,16 @@ public:
 		this->parameters = parameters;
 	}
 
+	void SetSpecificParameters(pugi::xml_node specificNode) {
+		// Actualizar solo las posiciones desde el nodo específico
+		if (specificNode.attribute("x") && specificNode.attribute("y")) {
+			Vector2D pos;
+			pos.setX(specificNode.attribute("x").as_int());
+			pos.setY(specificNode.attribute("y").as_int());
+			SetPosition(pos);
+		}
+	}
+
 	void SetPosition(Vector2D pos);
 
 	Vector2D GetPosition();

@@ -24,38 +24,77 @@ bool Terrestre::Awake() {
 }
 
 bool Terrestre::Start() {
+    LOG("Terrestre::Start()");
 
-	//initilize textures
-	texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
-	position.setX(parameters.attribute("x").as_int());
-	position.setY(parameters.attribute("y").as_int());
-	texW = parameters.attribute("w").as_int();
-	texH = parameters.attribute("h").as_int();
+    // Load texture with error checking
+    texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+    if (texture == nullptr) {
+        LOG("Error loading enemy texture: %s", parameters.attribute("texture").as_string());
+        return false;
+    }
 
-	//Load animations
-	idle.LoadAnimations(parameters.child("animations").child("idle"));
-    die.LoadAnimations(parameters.child("animations").child("die"));
-    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
-	currentAnimation = &idle;
-	
-	//Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+    // Set initial position
+    position.setX(parameters.attribute("x").as_int());
+    position.setY(parameters.attribute("y").as_int());
+    texW = parameters.attribute("w").as_int();
+    texH = parameters.attribute("h").as_int();
 
-	//Assign collider type
-	pbody->ctype = ColliderType::TERRESTRE;
+    LOG("Loading enemy with texture: %s at position (%d, %d), size (%d, %d)",
+        parameters.attribute("texture").as_string(),
+        position.getX(), position.getY(),
+        texW, texH);
 
-	pbody->listener = this;
+    // Load animations with error checking
+    pugi::xml_node animationsNode = parameters.child("animations");
+    if (animationsNode) {
+        if (animationsNode.child("idle")) {
+            idle.LoadAnimations(animationsNode.child("idle"));
+            currentAnimation = &idle;
+        }
+        if (animationsNode.child("die")) {
+            die.LoadAnimations(animationsNode.child("die"));
+        }
+        if (animationsNode.child("hurt")) {
+            hurt.LoadAnimations(animationsNode.child("hurt"));
+        }
+    }
+    else {
+        LOG("Error: No animations node found for enemy");
+    }
 
-	// Set the gravity of the body
-	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
+    // Create physics body
+    pbody = Engine::GetInstance().physics.get()->CreateCircle(
+        (int)position.getX() + texW / 2,
+        (int)position.getY() + texH / 2,
+        texH / 2,
+        bodyType::DYNAMIC);
 
-	// Initialize pathfinding
-	pathfinding = new Pathfinding();
-	ResetPath();
+    if (pbody == nullptr) {
+        LOG("Error creating physics body for enemy");
+        return false;
+    }
+
+    pbody->ctype = ColliderType::TERRESTRE;
+    pbody->listener = this;
+
+    // Set gravity
+    if (!parameters.attribute("gravity").as_bool()) {
+        pbody->body->SetGravityScale(0);
+    }
+
+    // Initialize pathfinding
+    pathfinding = new Pathfinding();
+    ResetPath();
+
+    // Initialize other variables
     a = 0;
     kill = 1;
-	return true;
+    isDying = false;
+    isDead = false;
+
+    return true;
 }
+
 bool Terrestre::Update(float dt)
 {
     // Don't process logic if we're not in GAMEPLAY mode

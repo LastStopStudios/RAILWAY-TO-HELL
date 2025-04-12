@@ -1,6 +1,8 @@
 #pragma once
 #include "Module.h"
 #include <vector>
+#include <map>
+#include <string>
 #include "pugixml.hpp"
 #include "Item.h"
 #include "Doors.h"
@@ -33,9 +35,12 @@ public:
 	int currentScene;
 
 private:
+	void LoadEnemyTemplates(pugi::xml_document& doc);
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
 	void FadeOut(float speed); // Aparición del negro
 	void FadeIn(float speed);// Desvanecimiento del negro
+
+	std::map<std::string, pugi::xml_node> enemyTemplates;
 };
 

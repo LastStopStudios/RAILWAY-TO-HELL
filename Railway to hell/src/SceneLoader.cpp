@@ -16,6 +16,7 @@
 #include "Boss.h"
 #include "Doors.h"
 #include "Levers.h"
+#include "Log.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -24,6 +25,7 @@ SceneLoader::SceneLoader() {
 SceneLoader::~SceneLoader() {}
 
 void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
+    LOG("Cargando escena %d...", level);
 
     if(fade== true)
     { 
@@ -44,9 +46,19 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
     SetCurrentScene(level);
 
     pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
     if (!loadFile.load_file("config.xml")) {
         return;
     }
+    if (!result) {
+        LOG("Error al cargar config.xml: %s", result.description());
+        return;
+    }
+    LOG("config.xml cargado correctamente");
+
+    // Cargar las plantillas antes de cargar la escena
+
+    LoadEnemyTemplates(loadFile);
 
     pugi::xml_node configNode = loadFile.child("config");
     if (!configNode) {
@@ -79,40 +91,105 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
 }
 
-void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
-
-    pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
-    if (!enemiesNode) {
+void SceneLoader::LoadEnemyTemplates(pugi::xml_document& doc) {
+    pugi::xml_node configNode = doc.child("config");
+    if (!configNode) {
+        LOG("Error: Node 'config' not found.");
         return;
     }
 
-    for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
-        std::string type = enemyNode.attribute("type").as_string();
+    pugi::xml_node templatesNode = configNode.child("templates").child("enemy_templates");
+    if (!templatesNode) {
+        LOG("Error: Node 'enemy_templates' not found.");
+        return;
+    }
 
+    // Limpiar plantillas previas
+    enemyTemplates.clear();
+    LOG("Clearing existing enemy templates.");
+
+    // Cargar todas las plantillas
+    int count = 0;
+    for (pugi::xml_node templateNode = templatesNode.child("template");
+        templateNode;
+        templateNode = templateNode.next_sibling("template")) {
+
+        std::string id = templateNode.attribute("id").as_string();
+        if (id.empty()) {
+            LOG("Error: Enemy template without id. Skipping...");
+            continue;
+        }
+
+        enemyTemplates[id] = templateNode;
+        count++;
+        LOG("Loaded template: %s", id.c_str());
+    }
+
+    LOG("Loaded %d enemy templates.", count);
+}
+
+void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
+    LOG("Cargando enemigos e items...");
+
+    pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+    if (!enemiesNode) {
+        LOG("Error: No se encontró nodo 'enemies'");
+        return;
+    }
+
+    int enemyCount = 0;
+    for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
+        std::string templateId = enemyNode.attribute("template").as_string();
+        LOG("Procesando enemigo con template: %s", templateId.c_str());
+
+        if (enemyTemplates.find(templateId) == enemyTemplates.end()) {
+            LOG("Error: No se encontró template %s", templateId.c_str());
+            continue;
+        }
+
+        pugi::xml_node templateNode = enemyTemplates[templateId];
+        std::string type = templateNode.attribute("type").as_string();
+        LOG("Creando enemigo de tipo: %s", type.c_str());
+
+            // Crear el enemigo según su tipo
         if (type == "rastrero") {
             Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
-            enemy->SetParameters(enemyNode);
-            Engine::GetInstance().scene->GetEnemyList().push_back(enemy); 
-        }
+            if (!enemy) {
+                LOG("Error: No se pudo crear entidad Terrestre");
+                continue;
+            }
 
-        if (type == "volador") {
-            Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
-            volador->SetParameters(enemyNode);
-            Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
-        }
+            enemy->SetParameters(templateNode);
+            enemy->SetSpecificParameters(enemyNode);
 
-		if (type == "boss") {
-			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
-			boss->SetParameters(enemyNode);
-			Engine::GetInstance().scene->GetBossList().push_back(boss);
-		}
-        
-		if (type == "guardian") {
-			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
-			caronte->SetParameters(enemyNode);
-			Engine::GetInstance().scene->GetCaronteList().push_back(caronte);
-		}
-    }
+            if (!enemy->Start()) {
+                LOG("Error: Falló Start() para enemigo Terrestre");
+                continue;
+            }
+
+            Engine::GetInstance().scene->GetEnemyList().push_back(enemy);
+            enemyCount++;
+            LOG("Enemigo Terrestre creado exitosamente");
+        }
+            else if (type == "volador") {
+                Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
+                volador->SetParameters(templateNode);
+                volador->SetSpecificParameters(enemyNode);
+                Engine::GetInstance().scene->GetVoladorList().push_back(volador);
+            }
+            else if (type == "boss") {
+                Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
+                boss->SetParameters(templateNode);
+                boss->SetSpecificParameters(enemyNode);
+                Engine::GetInstance().scene->GetBossList().push_back(boss);
+            }
+            else if (type == "guardian") {
+                Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
+                caronte->SetParameters(enemyNode);
+                Engine::GetInstance().scene->GetCaronteList().push_back(caronte);
+            }
+        }
+    
 
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
     if (itemsNode) {
@@ -168,7 +245,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
 		lever->Start();
 	}
-
+    LOG("Total enemigos cargados: %d", enemyCount);
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
