@@ -123,14 +123,14 @@ bool Player::Start() {
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
-    stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Character_Generic_Step_A.ogg");
+    stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
 
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
     Engine::GetInstance().audio.get()->SetFxVolume(punchFX, lowVolume);
     Engine::GetInstance().audio.get()->SetFxVolume(pickCoinFxId, lowVolume);
-    Engine::GetInstance().audio.get()->SetFxVolume(stepFX, lowVolume);
+    Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
 
     // Attack animation
     meleeAttack = Animation();
@@ -251,6 +251,14 @@ bool Player::Update(float dt)
 
         Ascensor();
 
+        if (!isJumping && isWalking) {  // Only play sound if on the ground
+            runSoundTimer += dt;
+            if (runSoundTimer >= runSoundInterval) {
+                Engine::GetInstance().audio.get()->PlayFx(stepFX);
+                runSoundTimer = 0.0f; // Reset the timer
+            }
+        }
+
         // Apply the velocity to both bodies
         pbodyUpper->body->SetLinearVelocity(velocity);
         pbodyLower->body->SetLinearVelocity(velocity);
@@ -295,7 +303,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
     // Vertical movement when W is pressed and god mode is active
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        if (godMode == true) { // Use == for comparison, not =
+        if (godMode == true) { 
             velocity.y = -0.3 * 16;
         }
     }
