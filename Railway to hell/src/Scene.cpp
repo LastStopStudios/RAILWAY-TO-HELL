@@ -92,7 +92,6 @@ bool Scene::Awake()
 			caronte->SetParameters(enemyNode);
 			caronteList.push_back(caronte);
 		}
-		
 	}
 
 	// Instantiate a new GuiControlButton in the Scene
@@ -112,20 +111,7 @@ bool Scene::Start()
 
 	// Texture to highligh mouse position 
 	mouseTileTex = Engine::GetInstance().textures.get()->Load("Assets/Maps/MapMetadata.png");
-
-	//Load an initialize Background music
-	//musicaFondoId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Music/MusicaFondo.wav");
-
-	//if (musicaFondoId > 0)
-	//{
-	//	Engine::GetInstance().audio.get()->PlayFx(musicaFondoId, -1); //loop infinito
-	//	LOG("Música de fondo reproducida");
-	//}
-	//else
-	//{
-	//	LOG("Error al cargar la música");
-	//}
-
+	introfx = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Background/.wav");
 	// Initalize the camera position
 	int w, h;
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);

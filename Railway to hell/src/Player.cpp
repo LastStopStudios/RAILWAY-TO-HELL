@@ -251,14 +251,6 @@ bool Player::Update(float dt)
 
         Ascensor();
 
-        if (!isJumping && isWalking) {  // Only play sound if on the ground
-            runSoundTimer += dt;
-            if (runSoundTimer >= runSoundInterval) {
-                Engine::GetInstance().audio.get()->PlayFx(stepFX);
-                runSoundTimer = 0.0f; // Reset the timer
-            }
-        }
-
         // Apply the velocity to both bodies
         pbodyUpper->body->SetLinearVelocity(velocity);
         pbodyLower->body->SetLinearVelocity(velocity);
@@ -671,7 +663,13 @@ void Player::DrawPlayer() {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
         texture = walkTexture;
-        //Engine::GetInstance().audio.get()->PlayFx(stepFX);
+        if (!isJumping && isWalking && !isDashing) {  // Only play sound if on the ground
+            runSoundTimer += 0.0167;
+            if (runSoundTimer >= runSoundInterval) {
+                Engine::GetInstance().audio.get()->PlayFx(stepFX);
+                runSoundTimer = 0.0f; // Reset the timer
+            }
+        }
         walk.Update();
     }
     else {

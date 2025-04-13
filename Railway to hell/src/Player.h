@@ -141,7 +141,7 @@ private:
 	bool isWalking;
 	SDL_Texture* walkTexture;
 	float runSoundTimer = 0.0f;
-	float runSoundInterval = 415.0f;
+	float runSoundInterval = 0.5f;
 
 	Animation hurt;
 	bool isHurt = false;

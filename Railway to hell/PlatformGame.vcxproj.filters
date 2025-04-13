@@ -79,6 +79,15 @@
     <ClCompile Include="src\Render.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Caronte.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Doors.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Levers.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -170,6 +179,15 @@
     </ClInclude>
     <ClInclude Include="src\Render.h">
       <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caronte.h">
+      <Filter>Source Filles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Doors.h">
+      <Filter>Source Filles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Levers.h">
+      <Filter>Source Filles\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
