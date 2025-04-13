@@ -319,49 +319,59 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
-    // Check if we are in the plataform
-    bool isOnGround = !isJumping;
 
-    // Check if we should start a new dash
+    bool isOnGround = !isJumping; //See if it's on the ground
+
+
+    static bool wasOnGroundLastFrame = false;
+    if (isOnGround && !wasOnGroundLastFrame) {
+
+        currentAirDashes = 0;
+        LOG("Landed on ground, air dashes reset to 0");
+    }
+    wasOnGroundLastFrame = isOnGround;
+
+
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
         canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
 
-        // Allow to dash if you are in the ground o u have AirDashes aviable
-        if (isOnGround || currentAirDashes < maxAirDashes)
-        {
-        // Reset the animation to the beginning
-        dash.Reset();
-        currentAnimation = &dash;
-        texture = dashTexture;
+        bool canPerformDash = false;
 
-        // Start dash
-        isDashing = true;
-        LOG("Dash started");
-        canDash = false;
-        dashCooldown = 1.5f;
+        if (isOnGround) {
 
-        // Set a specific number of frames for the dash
-        dashFrameCount = 20;  // Adjust this value as needed
+            canPerformDash = true;
 
-        // Configurable dash parameters
-        dashSpeed = 12.0f;      // Dash speed
-        dashDirection = facingRight ? 1.0f : -1.0f;
-
-        // If you are in the air update the counter
-        if (!isOnGround)
+        }
+        else if (currentAirDashes < maxAirDashes) {
+            // In the air only if there are dashes available
+            canPerformDash = true;
             currentAirDashes++;
+
+        }
+        else {
+            LOG("No air dashes remaining!");
+        }
+
+        if (canPerformDash) {
+
+            dash.Reset();
+            currentAnimation = &dash;
+            texture = dashTexture;
+            isDashing = true;
+            canDash = false;
+            dashCooldown = 1.5f;
+            dashFrameCount = 20;
+            dashSpeed = 12.0f;
+            dashDirection = facingRight ? 1.0f : -1.0f;
         }
     }
 
-    // Update frame counter and maintain velocity while dashing
+
     if (isDashing) {
-        // Set constant velocity during the dash - horizontal only
         velocity.x = dashDirection * dashSpeed;
-        velocity.y = 0;  // Always zero vertical velocity during dash
+        velocity.y = 0;
+        dashFrameCount--;
 
-        dashFrameCount--;  // Decrease frame counter
-
-        // End the dash when the counter reaches zero
         if (dashFrameCount <= 0) {
             isDashing = false;
             LOG("Dash ended");
