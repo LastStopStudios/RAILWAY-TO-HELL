@@ -106,12 +106,16 @@ bool Scene::Start()
 {
 	//Cargar Texturas splash screen
 	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen.png");
+	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto.png");
 	//L06 TODO 3: Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
 	// Texture to highligh mouse position 
 	mouseTileTex = Engine::GetInstance().textures.get()->Load("Assets/Maps/MapMetadata.png");
-	introfx = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Background/.wav");
+	std::string introMusicPath = "Assets/Audio/Music/Intro.ogg";
+	std::string textMusicPath = "Assets/Audio/Music/Text.ogg";
+	/*Engine::GetInstance().audio.get()->SetFxVolume(introfx, 1000);
+	Engine::GetInstance().audio.get()->SetFxVolume(textFx, 5);*/
 	// Initalize the camera position
 	int w, h;
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);
@@ -137,14 +141,36 @@ bool Scene::Update(float dt)
 		{
 			Engine::GetInstance().render->DrawTexture(introScreenTexture, 0, 0);
 		}
-
+		if (!introMusicPlaying) {
+			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Intro.ogg", 1.0f);
+			introMusicPlaying = true;
+			textMusicPlaying = false;
+			currentMusic = "intro";
+		}
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			currentState = SceneState::GAMEPLAY;
+			currentState = SceneState::TEXT_SCREEN;
 			skipFirstInput = true;
 		}
 		break;
+	case SceneState::TEXT_SCREEN:
+		if (!textMusicPlaying) {
+			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Text.ogg", 1.0f);
+			textMusicPlaying = true;
+			introMusicPlaying = false;
+			currentMusic = "text";
+		}
+		Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
 
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+
+		currentState = SceneState::GAMEPLAY;
+		}
+		
 	case SceneState::GAMEPLAY:
+		if (currentMusic == "text") {
+			Engine::GetInstance().audio.get()->StopAllFx();
+			currentMusic = "";
+		}
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 		//Implement a method that repositions the player in the map with a mouse click
