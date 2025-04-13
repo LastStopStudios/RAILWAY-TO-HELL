@@ -79,9 +79,21 @@ bool Volador::Start() {
 }
 
 bool Volador::Update(float dt) {
-    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
-    {
+    bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
+
+    if (!isGameplay) {
+        
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f); 
+        }
         return true;
+    }
+    else {
+      
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetGravityScale(1.0f); 
+        }
     }
 
     //The basic structure is that first the animation is performed and when it finishes, pendingToDelete is set to true, there is a function in entity.h that has this boolean variable
@@ -242,6 +254,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLAYER:
+		
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK:

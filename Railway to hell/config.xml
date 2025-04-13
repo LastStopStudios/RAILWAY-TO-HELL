@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="3383" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="3200" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
