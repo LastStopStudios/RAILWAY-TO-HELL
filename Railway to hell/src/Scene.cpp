@@ -278,14 +278,11 @@ void Scene::LoadState() {
 }
 
 void Scene::DialogoOn() {
-	player->DialogoOn();
 	Engine::GetInstance().entityManager->DialogoOn();
 }
 
 void Scene::DialogoOff(){
-	player->DialogoOff();
 	Engine::GetInstance().entityManager->DialogoOff();
-
 }
 
 void Scene::DesbloquearSensor(){

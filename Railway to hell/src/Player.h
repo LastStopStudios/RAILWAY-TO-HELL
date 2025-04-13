@@ -87,7 +87,6 @@ public:
 	//Dialogues
 	bool NeedDialogue = false;
 	std::string Id;
-	bool dialogo = false;
 
 	// Audio fx
 	int pickCoinFxId, punchFX, stepFX;

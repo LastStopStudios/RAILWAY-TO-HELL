@@ -42,7 +42,9 @@ bool Item::Start() {
 
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::ITEM;
-
+	pbody->ID = parameters.attribute("ID").as_string();
+	LOG("ID XML: %s", parameters.attribute("ID").as_string());
+	LOG("ID al cuerpo: %s", pbody->ID);
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 

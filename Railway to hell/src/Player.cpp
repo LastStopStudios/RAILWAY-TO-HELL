@@ -203,7 +203,7 @@ bool Player::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
-    if (dialogo == false)// Keep the player idle when dialogues are on screen
+    if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
         b2Vec2 velocity = b2Vec2(0, pbodyUpper->body->GetLinearVelocity().y);
@@ -260,6 +260,7 @@ bool Player::Update(float dt)
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
     }
+    else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
 
     // currentAnimation->Update();
     HandleSceneSwitching();
@@ -771,16 +772,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (item && item->GetItemType() == "Dash ability") {
             Dash = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+           /* NeedDialogue = true; //activar dialogo al tocar item, en el xml poner la id del dialogo que se tiene que activar
+            Id = physB->ID;*/
             break;
         }
         if (item && item->GetItemType() == "Whip") {
             WhipAttack = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+           NeedDialogue = true; //activar dialogo al tocar item
+           Id = physB->ID;
             break;
         }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            /* NeedDialogue = true; //activar dialogo al tocar item
+           Id = physB->ID;*/
             break;
         }
     }
