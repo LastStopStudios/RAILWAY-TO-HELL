@@ -405,7 +405,6 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
    
     if (isDashing) {
         velocity.x = dashDirection * dashSpeed;
-        velocity.y = 0;
         dashFrameCount--;
         if (dashFrameCount <= 0) {
             isDashing = false;
@@ -886,7 +885,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 recovering.Reset();
             }
         }
-      //  currentAirDashes = 0; // Reset dash count
+     
         break;
     case ColliderType::ITEM: {
         Item* item = (Item*)physB->listener;
