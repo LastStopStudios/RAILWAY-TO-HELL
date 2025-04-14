@@ -56,8 +56,8 @@
  <tileset firstgid="49" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
- <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="5612" columns="122">
-  <image source="atlas_backgrounds.png" width="3904" height="1472"/>
+ <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="6864" columns="132">
+  <image source="atlas_backgrounds.png" width="4224" height="1664"/>
  </tileset>
  <layer id="1" name="Map" width="120" height="60">
   <properties>
