@@ -69,8 +69,9 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
     pugi::xml_node playerNode = sceneNode.child("entities").child("player");
     if (playerNode) {
-        Engine::GetInstance().scene->GetPlayer()->SetPosition(
-            Vector2D(x, y));
+        Player* player = Engine::GetInstance().scene->GetPlayer();
+        player->SetPosition(Vector2D(x, y));
+        player->ResetDoorAndLeverStates();
     }
     LoadEnemiesItems(sceneNode);
 

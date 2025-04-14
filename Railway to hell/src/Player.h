@@ -103,6 +103,12 @@ public:
 	Animation idle;
 
 public:
+
+	void ResetDoorAndLeverStates() {
+		canOpenDoor = false;
+		leverOne = false;
+	}
+
 	bool returnCanOpenDoor() { return canOpenDoor; }
 	bool returnLeverOne() { return leverOne; }
 private:
