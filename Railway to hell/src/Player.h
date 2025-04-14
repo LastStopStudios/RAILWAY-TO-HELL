@@ -87,7 +87,6 @@ public:
 	//Dialogues
 	bool NeedDialogue = false;
 	std::string Id;
-	bool dialogo = false;
 
 	// Audio fx
 	int pickCoinFxId, punchFX, stepFX;
@@ -141,6 +140,8 @@ private:
 	Animation walk;
 	bool isWalking;
 	SDL_Texture* walkTexture;
+	float runSoundTimer = 0.0f;
+	float runSoundInterval = 0.5f;
 
 	Animation hurt;
 	bool isHurt = false;
@@ -158,7 +159,7 @@ private:
 	bool canDash = true;
 	float dashDuration = 0.2f; // Duration of the dash
 	
-	int maxAirDashes = 3;      //Max number of dashes you can do in the air
+	int maxAirDashes = 1;      //Max number of dashes you can do in the air
 	int currentAirDashes = 0;  //How many dashes you are currently in
 
 	bool Dash = false;

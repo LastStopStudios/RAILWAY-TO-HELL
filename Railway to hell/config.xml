@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="3383" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="3200" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
@@ -116,21 +116,21 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
+				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="16" h="16" />
 						</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true">
+				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="16" y="0" w="16" h="16" />
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="3330" y="2079" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false">
+				<item name="Dash ability" x="3330" y="2079" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="16" w="16" h="16" />
@@ -1860,6 +1860,15 @@
 					</wakeup>
 				</animations>
 			</player>
+			<items>
+				<item name="Whip" x="2151" y="869" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+					<animations>
+						<idle loop="true" speed="0.5">
+							<frame x="0" y="0" w="16" h="16" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 			<enemies>
 				<enemy name="Anger" x="2288" y="1784" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
 					<animations>
@@ -1966,8 +1975,9 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="2" Img="Assets/Textures/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
-			<dialog ID="1" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
+			<dialog ID="1" Img="Assets/Textures/Fondo5.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
+			<dialog ID="2" Img="Assets/Textures/Fondo2.png" TEXT="Cheesecake with mushrooms" />
+			<dialog ID="3" Img="Assets/Textures/Fondo2.png" TEXT="aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzAAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFFGGGGGGGGGGHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJKKKKKKKKKKLLLLLLLLLLMMMMMMMMMMNNNNNNNNNNOOOOOOOOOOPPPPPPPPPPQQQQQQQQQQRRRRRRRRRR1234567891TTTTTTTTTTUUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXXYYYYYYYYYYZZZZZZZZZZ" />
 		</dialogues>
 	</scene3>
 </config>

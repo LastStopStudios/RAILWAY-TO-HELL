@@ -59,9 +59,21 @@ bool Terrestre::Start() {
 bool Terrestre::Update(float dt)
 {
     // Don't process logic if we're not in GAMEPLAY mode
-    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
-    {
+    bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
+
+    if (!isGameplay) {
+
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
         return true;
+    }
+    else {
+
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetGravityScale(1.0f);
+        }
     }
 
     if (isDying) {

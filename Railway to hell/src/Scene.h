@@ -136,6 +136,8 @@ private:
 
 	//background music statement
 	int musicaFondoId = -1;
+
+	int introfx;
 public:
 
 	pugi::xml_node itemConfigNode; //mover a private

@@ -123,14 +123,14 @@ bool Player::Start() {
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
-    stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Character_Generic_Step_A.ogg");
+    stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
 
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
     Engine::GetInstance().audio.get()->SetFxVolume(punchFX, lowVolume);
     Engine::GetInstance().audio.get()->SetFxVolume(pickCoinFxId, lowVolume);
-    Engine::GetInstance().audio.get()->SetFxVolume(stepFX, lowVolume);
+    Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
 
     // Attack animation
     meleeAttack = Animation();
@@ -203,7 +203,7 @@ bool Player::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
-    if (dialogo == false)// Keep the player idle when dialogues are on screen
+    if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
         b2Vec2 velocity = b2Vec2(0, pbodyUpper->body->GetLinearVelocity().y);
@@ -260,6 +260,7 @@ bool Player::Update(float dt)
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
     }
+    else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
 
     // currentAnimation->Update();
     HandleSceneSwitching();
@@ -294,7 +295,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
     // Vertical movement when W is pressed and god mode is active
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        if (godMode == true) { // Use == for comparison, not =
+        if (godMode == true) { 
             velocity.y = -0.3 * 16;
         }
     }
@@ -310,49 +311,59 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
-    // Check if we are in the plataform
-    bool isOnGround = !isJumping;
 
-    // Check if we should start a new dash
+    bool isOnGround = !isJumping; //See if it's on the ground
+
+
+    static bool wasOnGroundLastFrame = false;
+    if (isOnGround && !wasOnGroundLastFrame) {
+
+        currentAirDashes = 0;
+        LOG("Landed on ground, air dashes reset to 0");
+    }
+    wasOnGroundLastFrame = isOnGround;
+
+
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
         canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
 
-        // Allow to dash if you are in the ground o u have AirDashes aviable
-        if (isOnGround || currentAirDashes < maxAirDashes)
-        {
-        // Reset the animation to the beginning
-        dash.Reset();
-        currentAnimation = &dash;
-        texture = dashTexture;
+        bool canPerformDash = false;
 
-        // Start dash
-        isDashing = true;
-        LOG("Dash started");
-        canDash = false;
-        dashCooldown = 1.5f;
+        if (isOnGround) {
 
-        // Set a specific number of frames for the dash
-        dashFrameCount = 20;  // Adjust this value as needed
+            canPerformDash = true;
 
-        // Configurable dash parameters
-        dashSpeed = 12.0f;      // Dash speed
-        dashDirection = facingRight ? 1.0f : -1.0f;
-
-        // If you are in the air update the counter
-        if (!isOnGround)
+        }
+        else if (currentAirDashes < maxAirDashes) {
+            // In the air only if there are dashes available
+            canPerformDash = true;
             currentAirDashes++;
+
+        }
+        else {
+            LOG("No air dashes remaining!");
+        }
+
+        if (canPerformDash) {
+
+            dash.Reset();
+            currentAnimation = &dash;
+            texture = dashTexture;
+            isDashing = true;
+            canDash = false;
+            dashCooldown = 1.5f;
+            dashFrameCount = 20;
+            dashSpeed = 12.0f;
+            dashDirection = facingRight ? 1.0f : -1.0f;
         }
     }
 
-    // Update frame counter and maintain velocity while dashing
+
     if (isDashing) {
-        // Set constant velocity during the dash - horizontal only
         velocity.x = dashDirection * dashSpeed;
-        velocity.y = 0;  // Always zero vertical velocity during dash
+        velocity.y = 0;
+        dashFrameCount--;
 
-        dashFrameCount--;  // Decrease frame counter
-
-        // End the dash when the counter reaches zero
         if (dashFrameCount <= 0) {
             isDashing = false;
             LOG("Dash ended");
@@ -652,7 +663,13 @@ void Player::DrawPlayer() {
         // Set walking animation when moving horizontally
         currentAnimation = &walk;
         texture = walkTexture;
-        //Engine::GetInstance().audio.get()->PlayFx(stepFX);
+        if (!isJumping && isWalking && !isDashing) {  // Only play sound if on the ground
+            runSoundTimer += 0.0167;
+            if (runSoundTimer >= runSoundInterval) {
+                Engine::GetInstance().audio.get()->PlayFx(stepFX);
+                runSoundTimer = 0.0f; // Reset the timer
+            }
+        }
         walk.Update();
     }
     else {
@@ -771,16 +788,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (item && item->GetItemType() == "Dash ability") {
             Dash = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+           /* NeedDialogue = true; //activar dialogo al tocar item, en el xml poner la id del dialogo que se tiene que activar
+            Id = physB->ID;*/
             break;
         }
         if (item && item->GetItemType() == "Whip") {
             WhipAttack = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+           NeedDialogue = true; //activar dialogo al tocar item
+           Id = physB->ID;
             break;
         }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            /* NeedDialogue = true; //activar dialogo al tocar item
+           Id = physB->ID;*/
             break;
         }
     }
