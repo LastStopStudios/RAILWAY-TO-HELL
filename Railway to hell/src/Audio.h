@@ -45,6 +45,13 @@ public:
 	// Stop all currently playing sound effects
 	void StopAllFx();
 
+	void SetMusicVolume(int volume) {
+		if (!active || music == NULL)
+			return;
+
+		Mix_VolumeMusic(volume);
+	}
+
 private:
 
 	_Mix_Music* music;

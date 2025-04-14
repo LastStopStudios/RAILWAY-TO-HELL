@@ -143,6 +143,7 @@ bool Scene::Update(float dt)
 		}
 		if (!introMusicPlaying) {
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Intro.ogg", 1.0f);
+			Engine::GetInstance().audio.get()->SetMusicVolume(2);
 			introMusicPlaying = true;
 			textMusicPlaying = false;
 			currentMusic = "intro";
