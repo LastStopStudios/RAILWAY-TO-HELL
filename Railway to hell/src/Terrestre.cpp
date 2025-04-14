@@ -86,7 +86,7 @@ bool Terrestre::Update(float dt)
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying) {
+        if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
                 pendingToDelete = true;
@@ -275,6 +275,7 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             pbody->body->SetGravityScale(0.0f);
         }
+        break;
 	case ColliderType::PLAYER_WHIP_ATTACK:
         if (!isDead) {
             isDead = true;

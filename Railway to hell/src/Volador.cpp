@@ -110,7 +110,7 @@ bool Volador::Update(float dt) {
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying) {
+        if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
                 pendingToDelete = true;
@@ -272,6 +272,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
+        break;
 	case ColliderType::PLAYER_WHIP_ATTACK:
 		LOG("Enemy hit by player whip attack - DESTROY");
 		if (!isDead) {
