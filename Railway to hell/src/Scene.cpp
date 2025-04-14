@@ -175,7 +175,6 @@ bool Scene::Update(float dt)
 		enemyList[0]->ResetPath();
 		}*/
 
-
 		break;
 	}
 	
