@@ -100,20 +100,25 @@ bool Volador::Update(float dt) {
     // and there is also a function that returns the variable, in the entity manager in the update function logic has been added to check the variable and if it is set to true it destroys it there.
     // 
     // Handle death animation
-    if (isDying) {
+    if (isDying || isDead) {
+        // Asegurar que no haya movimiento durante la muerte
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished()) {
+        if (currentAnimation->HasFinished() && isDying) {
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
-                // Mark for destruction in the next frame
                 pendingToDelete = true;
             }
         }
 
         // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 64, (int)position.getY() + 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
