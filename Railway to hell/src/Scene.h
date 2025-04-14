@@ -17,6 +17,7 @@ struct SDL_Texture;
 enum class SceneState
 {
 	INTRO_SCREEN,
+	TEXT_SCREEN,
 	GAMEPLAY
 };
 class Scene : public Module
@@ -103,7 +104,8 @@ public:
 
 	//Loading textures
 	SDL_Texture* introScreenTexture = nullptr;
-
+	SDL_Texture* introTextoTexture = nullptr;
+	float introTimeElapsed;
 	//boss fight camera
 	bool BossBattle = false;
 	struct Bosses {
@@ -125,7 +127,9 @@ private:
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
 	bool skipFirstInput = false;
-
+	std::string currentMusic = "";
+	bool introMusicPlaying = false;
+	bool textMusicPlaying = false;
 	//change scenes
 	SceneState currentState;
 
@@ -137,9 +141,13 @@ private:
 	//background music statement
 	int musicaFondoId = -1;
 
-	int introfx;
-public:
+	int introfx, textFx;
 
+	std::vector<int> fx;
+	std::vector<int> music;
+	
+public:
+	void AddToMusic(int soundID) { music.push_back(soundID); }
 	pugi::xml_node itemConfigNode; //mover a private
 
 };

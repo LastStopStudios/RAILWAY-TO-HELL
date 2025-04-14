@@ -124,7 +124,9 @@ bool Player::Start() {
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
     stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
-
+    Engine::GetInstance().scene->AddToMusic(pickCoinFxId);
+    Engine::GetInstance().scene->AddToMusic(punchFX);
+    Engine::GetInstance().scene->AddToMusic(stepFX);
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
