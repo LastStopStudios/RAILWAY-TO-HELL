@@ -68,6 +68,7 @@ private:
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
+	void HandlePickup(float dt);
 
 public:
 	// Public properties
@@ -122,10 +123,22 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
-	Animation jump; 
+	Animation jump, falling, recovering; 
 	SDL_Texture* jumpTexture = nullptr;
+	SDL_Texture* fallingTexture = nullptr;
+	SDL_Texture* recoveringTexture = nullptr;
+	bool isFalling;
+	bool isRecovering;
+	float recoveringTimer;
+	const float recoveringDuration = 0.3f;
 	bool isPreparingJump;
 	int jumpFrameThreshold;
+
+	Animation pickup;
+	SDL_Texture* pickupTexture;
+	bool isPickingUp;
+	float pickupTimer;
+	float pickupDuration;
 
 	Animation dash;
 	SDL_Texture* dashTexture = nullptr;
