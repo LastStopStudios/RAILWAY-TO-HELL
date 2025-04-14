@@ -358,40 +358,17 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
+    bool isOnGround = !isJumping;
 
-    bool isOnGround = !isJumping; //See if it's on the ground
-
-
-    static bool wasOnGroundLastFrame = false;
-    if (isOnGround && !wasOnGroundLastFrame) {
-
-        currentAirDashes = 0;
-        LOG("Landed on ground, air dashes reset to 0");
-    }
-    wasOnGroundLastFrame = isOnGround;
-
-
+    
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
         canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
 
-        bool canPerformDash = false;
-
-        if (isOnGround) {
-
-            canPerformDash = true;
-
-        }
-        else if (currentAirDashes < maxAirDashes) {
-            // In the air only if there are dashes available
-            canPerformDash = true;
-            currentAirDashes++;
-
-        }
-        else {
-            LOG("No air dashes remaining!");
-        }
-
-        if (canPerformDash) {
+        // Check if we still have dashes available
+        if (totalDashesAvailable > 0) {
+            
+            totalDashesAvailable--; // Reduce the number of available dashes
+            LOG("Dash performed. Dashes remaining: %d", totalDashesAvailable);
 
             dash.Reset();
             currentAnimation = &dash;
@@ -403,14 +380,33 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
             dashSpeed = 12.0f;
             dashDirection = facingRight ? 1.0f : -1.0f;
         }
+        else {
+            LOG("No dashes remaining!");
+        }
     }
 
+    // dash recharge
+    if (dashRechargeTimer > 0) {
+        dashRechargeTimer -= dt;
+        if (dashRechargeTimer <= 0.0f) {
+            // Recarga completa
+            totalDashesAvailable = maxTotalDashes;
+            dashRechargeTimer = 0.0f;
+            LOG("Dashes fully recharged: %d", totalDashesAvailable);
+        }
+    }
 
+    
+    if (totalDashesAvailable < maxTotalDashes && dashRechargeTimer <= 0.0f) {
+        dashRechargeTimer = dashFullRechargeTime;
+        LOG("Starting dash recharge timer");
+    }
+
+   
     if (isDashing) {
         velocity.x = dashDirection * dashSpeed;
         velocity.y = 0;
         dashFrameCount--;
-
         if (dashFrameCount <= 0) {
             isDashing = false;
             LOG("Dash ended");

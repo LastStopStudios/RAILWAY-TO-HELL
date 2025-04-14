@@ -173,16 +173,18 @@ private:
 	bool godMode;
 	// Dash properties
 	bool isDashing = false;
-	float dashCooldownTimer = 0.0f;
-	float dashCooldownDuration = 1.0f; // 1 second cooldown
 	bool canDash = true;
-	float dashDuration = 0.2f; // Duration of the dash
+	int totalDashesAvailable = 3;    // Dashes disponibles actualmente
+	int maxTotalDashes = 3;          // Máximo número de dashes permitidos
+	float dashRechargeTimer = 0.0f;  // Temporizador para recarga completa
+	float dashFullRechargeTime = 5000.0f; // Tiempo para recargar todos los dashes
 	
-	int maxAirDashes = 1;      //Max number of dashes you can do in the air
-	int currentAirDashes = 0;  //How many dashes you are currently in
+	
 
 	bool Dash = false;
 	bool WhipAttack = false;
 	bool canOpenDoor = false;
 	bool leverOne = false;
+
+
 };
