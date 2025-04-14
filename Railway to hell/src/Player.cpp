@@ -886,7 +886,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 recovering.Reset();
             }
         }
-        currentAirDashes = 0; // Reset dash count
+      //  currentAirDashes = 0; // Reset dash count
         break;
     case ColliderType::ITEM: {
         Item* item = (Item*)physB->listener;

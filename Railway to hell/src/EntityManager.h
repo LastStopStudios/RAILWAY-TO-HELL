@@ -36,12 +36,17 @@ public:
 	void DialogoOn();//stop entities at the start of the dialogue
 	void DialogoOff();//return movement to the entities
 
+	//Elevator animation
+	void AscensorOn();
+	void AscensorOff();
+
 public:
 
 	std::list<Entity*> entities;
 	//Dialog control
 	bool dialogo;
-
+	//elevator animation
+	bool Ascensor;
 private:
 	bool isPendingToDelente = false;
 

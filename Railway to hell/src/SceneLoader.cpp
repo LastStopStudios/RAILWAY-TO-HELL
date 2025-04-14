@@ -16,6 +16,8 @@
 #include "Boss.h"
 #include "Doors.h"
 #include "Levers.h"
+#include "Elevators.h"
+#include "Log.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -136,7 +138,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     }
 
 	pugi::xml_node leversNode = sceneNode.child("entities").child("levers");
-    if (doorsNode) {
+    if (leversNode) {
         for (pugi::xml_node leverNode = leversNode.child("lever"); leverNode; leverNode = leverNode.next_sibling("lever"))
         {
             Levers* lever = (Levers*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LEVER);
@@ -144,6 +146,18 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
             Engine::GetInstance().scene->GetLeversList().push_back(lever);
         }
     }
+
+    pugi::xml_node elevatorsNode = sceneNode.child("entities").child("elevators");
+    if (elevatorsNode) {
+        for (pugi::xml_node elevatorNode = elevatorsNode.child("elevator"); elevatorNode; elevatorNode = elevatorNode.next_sibling("elevator"))
+        {
+            Elevators* elevator = (Elevators*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ELEVATORS);
+            elevator->SetParameters(elevatorNode);
+            Engine::GetInstance().scene->GetElevatorsList().push_back(elevator);
+        }
+    }
+
+
 
     // Initialize enemies
     for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
@@ -161,14 +175,19 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     // Initialize items
     for (auto item : Engine::GetInstance().scene->GetItemList()) {
         item->Start();
-    } 
-
+    }
+    // Initialize Doors
 	for (auto door : Engine::GetInstance().scene->GetDoorsList()) {
 		door->Start();
 	}
+    // Initialize levers
 	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
 		lever->Start();
 	}
+    // Initialize elevators
+    for (auto elevator : Engine::GetInstance().scene->GetElevatorsList()) {
+        elevator->Start();
+    }
 
 }
 
@@ -181,7 +200,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -198,6 +217,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 	Engine::GetInstance().scene->GetCaronteList().clear();
 	Engine::GetInstance().scene->GetDoorsList().clear();
 	Engine::GetInstance().scene->GetLeversList().clear();
+    Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)

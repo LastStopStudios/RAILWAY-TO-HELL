@@ -88,6 +88,7 @@
     <ClCompile Include="src\Levers.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Elevators.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -189,6 +190,7 @@
     <ClInclude Include="src\Levers.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
+    <ClInclude Include="src\Elevators.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">

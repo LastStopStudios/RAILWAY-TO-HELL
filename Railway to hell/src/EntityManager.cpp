@@ -11,6 +11,7 @@
 #include "Caronte.h"
 #include "Doors.h"
 #include "Levers.h"
+#include "Elevators.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -42,6 +43,7 @@ bool EntityManager::Start() {
 
 	bool ret = true; 
 	dialogo = false;
+	Ascensor = true;
 	//Iterates over the entities and calls Start
 	for(const auto entity : entities)
 	{
@@ -98,6 +100,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::LEVER:
 		entity = new Levers();
+		break;
+	case EntityType::ELEVATORS:
+		entity = new Elevators();
 		break;
 	default:
 		break;
@@ -158,3 +163,6 @@ bool EntityManager::Update(float dt)
 //Control de dialogos
 void EntityManager :: DialogoOn() { dialogo = true; }//stop entities at the start of the dialogue
 void EntityManager :: DialogoOff() { dialogo = false; }//return movement to the entities
+//Elevator sensor control
+void EntityManager::AscensorOn() { Ascensor = true; }//Open animation
+void EntityManager::AscensorOff() { Ascensor = false; }//Block open animation

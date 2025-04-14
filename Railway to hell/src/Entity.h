@@ -13,6 +13,7 @@ enum class EntityType
 	CARONTE,
 	DOORS,
 	LEVER,
+	ELEVATORS,
 	UNKNOWN
 };
 

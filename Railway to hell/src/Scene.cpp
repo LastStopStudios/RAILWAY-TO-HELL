@@ -17,6 +17,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "DialogoM.h"
 #include "Volador.h"
+#include "Elevators.h"
 
 Scene::Scene() : Module()
 {
@@ -66,6 +67,13 @@ bool Scene::Awake()
 		Levers* lever = (Levers*)Engine::GetInstance().entityManager->CreateEntity(EntityType::LEVER);
 		lever->SetParameters(leverNode);
 		leverList.push_back(lever);
+	}
+
+	for (pugi::xml_node elevatorNode = configParameters.child("entities").child("elevators").child("elevator"); elevatorNode; elevatorNode = elevatorNode.next_sibling("elevator"))
+	{
+		Elevators* elevator = (Elevators*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ELEVATORS);
+		elevator->SetParameters(elevatorNode);
+		elevatorList.push_back(elevator);
 	}
 
 	// Create a enemy using the entity manager 
@@ -299,10 +307,12 @@ void Scene::DialogoOff(){
 
 void Scene::DesbloquearSensor(){
 	player->DesbloquearSensor();
+	Engine::GetInstance().entityManager->AscensorOn();
 }
 
 void Scene::BloquearSensor() {
 	player->BloquearSensor();
+	Engine::GetInstance().entityManager->AscensorOff();
 }
 
 void Scene::SaveState() {

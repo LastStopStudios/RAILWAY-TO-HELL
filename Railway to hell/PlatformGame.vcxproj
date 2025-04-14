@@ -150,6 +150,7 @@
     <ClCompile Include="src\Caronte.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
     <ClCompile Include="src\Doors.cpp" />
+    <ClCompile Include="src\Elevators.cpp" />
     <ClCompile Include="src\Levers.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="src\Caronte.h" />
     <ClInclude Include="src\DialogoM.h" />
     <ClInclude Include="src\Doors.h" />
+    <ClInclude Include="src\Elevators.h" />
     <ClInclude Include="src\Levers.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />

@@ -5,6 +5,7 @@
 #include "Item.h"
 #include "Doors.h"
 #include "Levers.h"
+#include "Elevators.h"
 
 class Terrestre;
 class Scene;
@@ -26,7 +27,7 @@ class SceneLoader
 public:
 	SceneLoader();
 	~SceneLoader();
-	void LoadScene(int level, int x, int y,bool fade,bool bosscam); // Aqui dentro se tendría que hacer tanto el Load de la siguiente escena como previamente el Unload
+	void LoadScene(int level, int x, int y,bool fade,bool bosscam); // Here you should perform both the Load of the next scene and the Unload beforehand.
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
 
@@ -35,7 +36,7 @@ public:
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
-	void FadeOut(float speed); // Aparición del negro
-	void FadeIn(float speed);// Desvanecimiento del negro
+	void FadeOut(float speed); // Appearance of black
+	void FadeIn(float speed);// Black fading
 };
 
