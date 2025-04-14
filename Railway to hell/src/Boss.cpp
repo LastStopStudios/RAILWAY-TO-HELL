@@ -89,20 +89,25 @@ bool Boss::Update(float dt)
             pbody->body->SetGravityScale(1.0f); 
         }
     }
-    if (isDying) {
+    if (isDying || isDead) {
+        // Asegurar que no haya movimiento durante la muerte
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished()) {
+        if (currentAnimation->HasFinished() && isDying) {
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
-                // Mark for destruction in the next frame
                 pendingToDelete = true;
             }
         }
 
         // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32 , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic

@@ -76,21 +76,26 @@ bool Terrestre::Update(float dt)
         }
     }
 
-    if (isDying) {
+    if (isDying || isDead) {
+        // Asegurar que no haya movimiento durante la muerte
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished()) {
+        if (currentAnimation->HasFinished() && isDying) {
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
-                // Mark for destruction in the next frame
                 pendingToDelete = true;
             }
         }
 
         // Draw the death animation
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32 , (int)position.getY() -32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32, (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
         return true;
@@ -266,8 +271,9 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
             currentAnimation->Reset();
 
             pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-
+            pbody->body->SetAwake(false);
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            pbody->body->SetGravityScale(0.0f);
         }
 	case ColliderType::PLAYER_WHIP_ATTACK:
         if (!isDead) {
@@ -277,6 +283,7 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             // Detener movimiento del cuerpo físico
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetAwake(false);
             pbody->body->SetGravityScale(0.0f); // Por si está cayendo
         }
         break;
