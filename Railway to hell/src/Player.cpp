@@ -470,6 +470,7 @@ void Player::HandleSceneSwitching() {
     // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
         DesbloquearSensor();
+        Engine::GetInstance().entityManager->AscensorOn();
     }
     //Debug Level Design
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move to desired pos

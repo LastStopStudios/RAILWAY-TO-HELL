@@ -1891,7 +1891,7 @@
 						<idle loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />
 						</idle>
-						<activated loop="false" speed="0.01">
+						<activated loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
