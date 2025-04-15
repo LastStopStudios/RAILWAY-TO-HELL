@@ -489,8 +489,8 @@ void Player::HandleSceneSwitching() {
     }
     //Debug Level Design
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move to desired pos
-        int debugXLevelDesign = 8830;
-        int debugYLevelDesign = 1414;
+        int debugXLevelDesign = 1937;
+        int debugYLevelDesign = 4051;
         Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
         SetPosition(debugPos);
     }
