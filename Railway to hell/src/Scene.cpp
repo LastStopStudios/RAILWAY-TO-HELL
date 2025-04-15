@@ -353,12 +353,12 @@ void Scene::SaveState() {
 	loadFile.save_file("config.xml");
 }
 
-bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 {
 
 
 	if (control->id == 1) {
-		Engine::GetInstance().dialogoM->Texto("1"); // Llama a Texto que toque
+		Engine::GetInstance().dialogoM->Texto("1"); // Call Text
 	}
 	return true;
 }

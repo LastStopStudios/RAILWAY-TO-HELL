@@ -28,7 +28,7 @@ Engine::Engine() {
     lastSecFrameTime = PerfTimer();
     frames = 0;
 
-    // L4: TODO 1: Add the EntityManager Module to the Engine
+    //Add the EntityManager Module to the Engine
     
     // Modules
     window = std::make_shared<Window>();

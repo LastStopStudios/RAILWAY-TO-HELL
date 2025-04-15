@@ -274,15 +274,14 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
 	case ColliderType::PLAYER_WHIP_ATTACK:
-		LOG("Enemy hit by player whip attack - DESTROY");
 		if (!isDead) {
 			isDead = true;
 			currentAnimation = &die;
 			a = 1;
 
-			// Detener movimiento del cuerpo físico
+			// Stop physical body movement
 			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-			pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+			pbody->body->SetGravityScale(0.0f); // In case it's falling
 		}
 		break;
     case ColliderType::GIRO:

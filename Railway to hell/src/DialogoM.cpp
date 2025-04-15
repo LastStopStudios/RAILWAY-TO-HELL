@@ -58,11 +58,11 @@ bool DialogoM::PostUpdate()
 		width = 800;
 		height = 200;
 
-		//Posicion fondo
+		//Background position
 		posx = w - 1000;//background position with screen size
 		posy = h - 200; //background position with screen size
 
-		//posicion texto
+		//text position
 		texty = posy + 80 ;//text position with screen size
 		textx = posx + 50 ;//text position with screen size
 		
@@ -115,14 +115,14 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 	TTF_Font* font = Engine::GetInstance().render->font;
 
 	if (!font) {
-		LOG("Error: Fuente no cargada");
+		LOG("Error: Font not loaded");
 		return;
 	}
 
 	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divides text into lines automatically
 	if (surface == nullptr)
 	{
-		LOG("Error al crear superficie de texto: %s", SDL_GetError());
+		LOG("Error creating text Render: %s", SDL_GetError());
 		return;
 	}
 
@@ -131,7 +131,7 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 
 	if (!textTexture)
 	{
-		LOG("Error al crear textura de texto/sombra: %s", SDL_GetError());
+		LOG("Error while creating text texture: %s", SDL_GetError());
 	}
 }
 
@@ -139,53 +139,46 @@ void DialogoM::UpdateTextAnimation(float dt)
 {
 	if (!showText) return;
 
-	textTimer += dt; // Aumenta el temporizador
+	textTimer += dt; // Increases the timer
 
 	if (textTimer >= textSpeed && alltext.length() != displayText.length())
 	{
-		textTimer = 0.0f; // Reinicia el temporizador
+		textTimer = 0.0f; // Reset timer
 		if (Tim == true) {
 			textIndex++;
-			LOG("textIndex: %d", textIndex);
-		}// Avanza en el texto
-		alltext = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
+		}// Go forward in the text
+		alltext = displayText.substr(0, textIndex); // Gets the new fragment
 		if (textIndex < textMaxheigth) {
-			LOG("TextIndex: %d", textIndex);//timer
-			currentText = displayText.substr(0, textIndex); // Obtiene el nuevo fragmento
-			LOG("displayText: %s", displayText.c_str());//texto entero
-			LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
-			GenerateTextTexture(); // Genera la nueva textura con el fragmento
+			currentText = displayText.substr(0, textIndex); //Gets the new fragment
+			GenerateTextTexture(); // Generate the new texture with the fragment
 		}
 		else if (textIndex == textMaxheigth) {
 			Tim = false;
-			LOG("Entro Tim : % d", Tim);
 		}
 		if (textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Tim == false) {
 
 			int finaltexto = textIndex - textMaxheigth;
 			currentText.clear();
-			currentText = displayText.substr(textMaxheigth, finaltexto); // Obtiene el nuevo fragmento
-			LOG("displayText: %s", displayText.c_str());//texto entero
-			LOG("currentText: %s", currentText.c_str());//texto que se va actualizando 
-			GenerateTextTexture(); // Genera la nueva textura con el fragmento
-			Siguiente = false;//pasa de cargar la otra parte del texto
-			Tim = true;//activar el temporizador del dibujado del texto
+			currentText = displayText.substr(textMaxheigth, finaltexto); // Gets the new fragment
+			GenerateTextTexture(); //Generate the new texture with the fragment
+			Siguiente = false;//skip loading the other part of the text
+			Tim = true;//activate the text drawing timer
 		}
 		else if (textIndex >= textMaxheigth && Siguiente == false) {
 			//Tim = true;
 			int finaltexto = textIndex - textMaxheigth;
-			currentText = displayText.substr(textMaxheigth - 1, finaltexto); // Obtiene el nuevo fragmento
-			GenerateTextTexture(); // Genera la nueva textura con el fragmento
+			currentText = displayText.substr(textMaxheigth - 1, finaltexto); // Gets the new fragment
+			GenerateTextTexture(); // Generate the new texture with the fragment
 		}
 
 
 	}
-	if (alltext.length() == displayText.length()) { Skip = false; }//el texto ya se ha skipeado, sirve de control para que no haga el skip y el cerrar a la vez
+	if (alltext.length() == displayText.length()) { Skip = false; }//the text has already been skipped, it serves as a control so that it does not skip and close at the same time.
 	
-	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Cerrar textos Tecla suprimir No pilla el enter ni por Execute.
+	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Close texts Delete key Does not catch the enter or Execute key.
 		showText = !showText;
-		Engine::GetInstance().scene->DialogoOff();//devolver control al player
-		ResetText(); // Reiniciar el texto
+		Engine::GetInstance().scene->DialogoOff();//return control to the player
+		ResetText(); //Reset text 
 	}
 
 
@@ -200,17 +193,17 @@ void DialogoM::XMLToVariable(const std::string& id) {
 
 
 	if (!result) {
-		std::cerr << "Error cargando el archivo XML: " << result.description() << std::endl;
+		std::cerr << "Error loading XML file: " << result.description() << std::endl;
 		return;
 	}
-	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //sacar la escena actual
-	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);//pasar la escena de donde sacar los dialogos
-	pugi::xml_node dialogueNode = loadFile.child("config").child(scene.c_str()).child("dialogues");//cargar los dialogos de la escena
+	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //bring out the current scene
+	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);//pass the scene from where to get the dialogues
+	pugi::xml_node dialogueNode = loadFile.child("config").child(scene.c_str()).child("dialogues");//load scene dialogs
 
-	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//recorrer todos los dialogos
-		if (std::string(dialog.attribute("ID").value()) == id) {//Mira si el id que se le da y el del dialogo es el mismo
-			fondo = Engine::GetInstance().textures->Load(dialog.attribute("Img").value()); // Cargar textura para el fondo del texto
-			displayText = dialog.attribute("TEXT").value();//darle el texto a la variable 
+	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//scroll through all dialogs
+		if (std::string(dialog.attribute("ID").value()) == id) {//See if the id given and the one in the dialog are the same
+			fondo = Engine::GetInstance().textures->Load(dialog.attribute("Img").value()); //Load texture for text background
+			displayText = dialog.attribute("TEXT").value();//give the text to the variable
 			return;
 		}
 	}
@@ -229,7 +222,7 @@ bool DialogoM::CleanUp()
 	}
 
 	if (fondo != nullptr) {
-		Engine::GetInstance().textures->UnLoad(fondo);//descargar fondo texto
+		Engine::GetInstance().textures->UnLoad(fondo);//Unload text background
 		fondo = nullptr;
 	}
 	return true;

@@ -97,7 +97,6 @@ bool Doors::Update(float dt)
 
 void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 	if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
-		LOG("Player attack hit an enemy!");
 		// Additional enemy hit logic can go here
 		return;
 	}

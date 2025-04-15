@@ -321,7 +321,6 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        LOG("Collided with player - DESTROY");
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
 
@@ -356,7 +355,6 @@ void Boss::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        LOG("Collision player");
         break;
     }
 }

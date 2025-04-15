@@ -7,7 +7,6 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
-#include "Physics.h"
 
 Elevators::Elevators() : Entity(EntityType::ELEVATORS)
 {
@@ -58,7 +57,6 @@ bool Elevators::Update(float dt){
 	}
 	// Add a physics to an enemy - update the position of the object from the physics.  
 	if (pbody == nullptr) {
-		LOG("Enemy pbody is null!");
 		return false;
 	}
 	
@@ -68,7 +66,6 @@ bool Elevators::Update(float dt){
 
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
-	LOG("*********Update**********");
 	return true;
 }
 
@@ -90,7 +87,6 @@ void Elevators::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Elevators::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
-		LOG("Toco Dibujo");
 		currentAnimation->Reset();
 		currentAnimation = &idle;
 		break;

@@ -77,7 +77,7 @@ bool Terrestre::Update(float dt)
     }
 
     if (isDying || isDead) {
-        // Asegurar que no haya movimiento durante la muerte
+        // Ensure that there is no movement during death
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(0.0f);
@@ -282,10 +282,10 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
             currentAnimation = &die;
             a = 1;
 
-            // Detener movimiento del cuerpo físico
+            // Stop physical body movement
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetAwake(false);
-            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+            pbody->body->SetGravityScale(0.0f); // In case it's falling
         }
         break;
     case ColliderType::GIRO:

@@ -19,7 +19,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 }
 
 Player::~Player() {
-    // Asegurar que las colisiones se liberan adecuadamente
+    // Ensure that collisions are released properly
     if (pbodyUpper != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(pbodyUpper);
     }
@@ -77,8 +77,6 @@ bool Player::Start() {
         LOG("Error: One or both Box2D bodies are null");
         return false;
     }
-    LOG("pbodyUpper: %p, pbodyLower: %p", pbodyUpper, pbodyLower);
-    LOG("pbodyUpper->body: %p, pbodyLower->body: %p", pbodyUpper->body, pbodyLower->body);
     // Create a weld joint between the two circles
     b2WeldJointDef jointDef;
     jointDef.bodyA = pbodyUpper->body;
@@ -291,9 +289,6 @@ bool Player::Update(float dt)
         // Check vertical velocity to determine if falling
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
 
-        // Debug vertical velocity
-        LOG("Player vertical velocity: %f", verticalVelocity);
-
         // If moving downward (positive y velocity), switch to falling animation
         if (verticalVelocity > 0.1f && !isFalling) {
             LOG("Transition to falling animation");
@@ -302,9 +297,8 @@ bool Player::Update(float dt)
         }
     }
 
-    // currentAnimation->Update();
+    currentAnimation->Update();
     HandleSceneSwitching();
-    //DrawPlayer();
     return true;
 }
 
@@ -379,7 +373,6 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         if (totalDashesAvailable > 0) {
             
             totalDashesAvailable--; // Reduce the number of available dashes
-            LOG("Dash performed. Dashes remaining: %d", totalDashesAvailable);
 
             dash.Reset();
             currentAnimation = &dash;
@@ -391,26 +384,21 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
             dashSpeed = 12.0f;
             dashDirection = facingRight ? 1.0f : -1.0f;
         }
-        else {
-            LOG("No dashes remaining!");
-        }
     }
 
     // dash recharge
     if (dashRechargeTimer > 0) {
         dashRechargeTimer -= dt;
         if (dashRechargeTimer <= 0.0f) {
-            // Recarga completa
+            // Full recharge
             totalDashesAvailable = maxTotalDashes;
             dashRechargeTimer = 0.0f;
-            LOG("Dashes fully recharged: %d", totalDashesAvailable);
         }
     }
 
     
     if (totalDashesAvailable < maxTotalDashes && dashRechargeTimer <= 0.0f) {
         dashRechargeTimer = dashFullRechargeTime;
-        LOG("Starting dash recharge timer");
     }
 
    
@@ -419,7 +407,6 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         dashFrameCount--;
         if (dashFrameCount <= 0) {
             isDashing = false;
-            LOG("Dash ended");
         }
     }
 }
@@ -452,7 +439,6 @@ void Player::HandleJump() {
 
         // If moving downward (positive y velocity), switch to falling animation
         if (verticalVelocity > 0.1f && !isFalling) {
-            LOG("Transition to falling animation");
             isFalling = true;
             falling.Reset();
         }
@@ -481,9 +467,7 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//go to scene 3
         Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false, false);
     }
-    /* if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 2) {//go to scene 
-        Engine::GetInstance().sceneLoader->LoadScene(sceneToLoad, Playerx, Playery, true);
-    }*/ // if to set scene change in a button
+    // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
         DesbloquearSensor();
     }
@@ -570,7 +554,6 @@ void Player::UpdateWhipAttack(float dt) {
         !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack && !isHurt) {
         // Start whip attack
         isWhipAttacking = true;
-        LOG("Whip Attack started");
         canWhipAttack = false;
         whipAttackCooldown = 0.7f;
 
@@ -580,7 +563,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Create whip attack hitbox
         int attackWidth = texW * 2;
         int attackHeight = texH / 2;
-        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Usar cuerpo superior para ataques
+        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body for attacks
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
@@ -615,7 +598,6 @@ void Player::UpdateWhipAttack(float dt) {
 
         // Check if animation finished
         if (whipAttack.HasFinished()) {
-            LOG("Whip Attack finished");
             isWhipAttacking = false;
             currentAnimation = &idle;  // Explicitly switch back to idle animation
             texture = idleTexture;
@@ -657,7 +639,6 @@ void Player::UpdateMeleeAttack(float dt) {
         !isAttacking && !isWhipAttacking && !isDashing && canAttack && !isHurt) {
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
         isAttacking = true;
-        LOG("Attack started");
         canAttack = false;
         attackCooldown = 0.5f;
 
@@ -668,7 +649,7 @@ void Player::UpdateMeleeAttack(float dt) {
         int attackWidth = texW * 0.5f;
         int attackHeight = texH * 1.0f;
 
-        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Usar cuerpo superior
+        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
@@ -716,7 +697,6 @@ void Player::UpdateMeleeAttack(float dt) {
         }
 
         if (meleeAttack.HasFinished()) {
-            LOG("Attack finished");
             isAttacking = false;
             currentAnimation = &idle;
             idle.Reset();
@@ -781,7 +761,6 @@ void Player::DrawPlayer() {
         currentAnimation = &falling;
         texture = fallingTexture;
         falling.Update();
-        LOG("Playing falling animation");
     }
     else if (isJumping || isPreparingJump) {
         // Set the jump animation when jumping or preparing to jump
@@ -791,16 +770,11 @@ void Player::DrawPlayer() {
         // Make sure jump animation updates properly
         if (isPreparingJump) {
             jump.Update();
-            LOG("Playing jump preparation animation, frame: %d", jump.GetCurrentFrameIndex());
         }
         else if (isJumping) {
             // If already jumped but not falling, keep the last frame
             if (!jump.HasFinished()) {
                 jump.Update();
-                LOG("Playing jump animation, frame: %d", jump.GetCurrentFrameIndex());
-            }
-            else {
-                LOG("Holding last jump frame");
             }
         }
     }
@@ -909,7 +883,6 @@ bool Player::CleanUp() {
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::TERRESTRE) {
-        LOG("Player attack hit an enemy!");
         // Additional enemy hit logic can go here
         return;
     }
@@ -919,7 +892,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             leverOne = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
-        LOG("LeverOne activated");
         return;
     }
 
@@ -948,22 +920,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Dash ability") {
                 Dash = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                /* NeedDialogue = true; //activar dialogo al tocar item, en el xml poner la id del dialogo que se tiene que activar
-                Id = physB->ID;*/
+                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID;*/ //ID from Item
                 break;
             }
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                NeedDialogue = true; //activar dialogo al tocar item
-                Id = physB->ID;
+                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID; //ID from Item
                 break;
             }
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                /* NeedDialogue = true; //activar dialogo al tocar item
-                Id = physB->ID;*/
+                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID;*/ //ID from Item
                 break;
             }
         }
@@ -986,7 +958,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     whipAttackHitbox = nullptr;
                 }
             }
-            LOG("Player damaged");
         }
 
         break;
@@ -995,8 +966,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
     case ColliderType::SENSOR:
-        LOG("SENSOR COLLISION DETECTED");
-        LOG("Sensor ID: %s", physB->sensorID.c_str());
         NeedSceneChange = true;
         for (const auto& escena : escenas) { // Iterate through all scenes
             if (escena.escena == physB->sensorID) { // Check where the player needs to go
@@ -1009,11 +978,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::ASCENSORES:
-        LOG("ASCENSOR COLLISION DETECTED");
-        LOG("Sensor ID: %s", physB->sensorID.c_str());
         if (Bloqueo == false) {
             TocandoAs = true;
-            // puerta = true; //block elevator animation
             for (const auto& escena : escenas) { // Iterate through all scenes
                 if (escena.escena == physB->sensorID) { // Check where the player needs to go
                     sceneToLoad = escena.id;
@@ -1026,8 +992,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::DIALOGOS:
-        LOG("DIALOGOS COLLISION DETECTED");
-        LOG("Sensor ID: %s", physB->ID);
         NeedDialogue = true;
         Id = physB->ID;
         break;
@@ -1052,7 +1016,7 @@ void Player::DesbloquearSensor(){//unlocks sensors scene change
 }
 
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Solo procesamos colisiones de los cuerpos del jugador
+    // We only process collisions of the player's bodies.
     if (physA != pbodyUpper && physA != pbodyLower) {
         return;
     }
@@ -1079,27 +1043,26 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::ASCENSORES:
         TocandoAs = false;
-        // puerta = false; //block elevator animation
         break;
     }
 }
 
 void Player::SetPosition(Vector2D pos) {
-    // Establecer posición del cuerpo superior
+    // Establish upper body position
     pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 3);  // Ubicar en un tercio de la altura total
+    pos.setY(pos.getY() + texH / 3);  // Locate at one third of the total height.
     b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
     pbodyUpper->body->SetTransform(upperPos, 0);
 
-    // Establecer posición del cuerpo inferior
+    // Establish lower body position
     Vector2D lowerPos = pos;
-    lowerPos.setY(pos.getY() + texH / 3);  // Un tercio más abajo que el superior
+    lowerPos.setY(pos.getY() + texH / 3);  // One third lower than the upper
     b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
     pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Player::GetPosition() {
-    // Usar la posición del cuerpo superior como referencia
+    // Use upper body position as a reference
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
     return pos;

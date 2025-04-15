@@ -26,7 +26,7 @@ bool GuiControlButton::Update(float dt)
 	}
 	if (state != GuiControlState::DISABLED)
 	{
-		// L16: TODO 3: Update the state of the GUiButton according to the mouse position
+		//Update the state of the GUiButton according to the mouse position
 		Vector2D mousePos = Engine::GetInstance().input->GetMousePosition();
 
 		//If the position of the mouse if inside the bounds of the button 

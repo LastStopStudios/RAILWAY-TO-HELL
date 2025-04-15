@@ -47,7 +47,7 @@ private:
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 
-	//L08 TODO 4: Add a physics to an item
+	//Add a physics to an item
 	PhysBody* pbody;
 
 	std::string itemType;
