@@ -70,7 +70,7 @@ bool Item::Update(float dt)
 		}
 	}
 
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
+	//Add a physics to an item - update the position of the object from the physics.  
 	if (pbody == nullptr) {
 		LOG("Enemy pbody is null!");
 		return false;
@@ -78,9 +78,11 @@ bool Item::Update(float dt)
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+	if (Engine::GetInstance().scene->dibujar == true) {//make the drawing not appear until you enter the gameplay scene 100%.
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
-	currentAnimation->Update();
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+		currentAnimation->Update();
+	}
 
 	return true;
 }

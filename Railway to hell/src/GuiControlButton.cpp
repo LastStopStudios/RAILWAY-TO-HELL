@@ -45,8 +45,8 @@ bool GuiControlButton::Update(float dt)
 		else {
 			state = GuiControlState::NORMAL;
 		}
-
-		//L16: TODO 4: Draw the button according the GuiControl State
+		if (Engine::GetInstance().scene->dibujar == true) {//make the drawing not appear until you enter the gameplay scene 100%.
+		//Draw the button according the GuiControl State
 		switch (state)
 		{
 		case GuiControlState::DISABLED:
@@ -62,8 +62,10 @@ bool GuiControlButton::Update(float dt)
 			Engine::GetInstance().render->DrawRectangle(bounds, 0, 255, 0, 255, true, false);
 			break;
 		}
-
-		Engine::GetInstance().render->DrawText(text.c_str(), bounds.x, bounds.y, bounds.w, bounds.h);
+		
+			Engine::GetInstance().render->DrawText(text.c_str(), bounds.x, bounds.y, bounds.w, bounds.h);
+		}
+		
 
 	}
 
