@@ -484,6 +484,20 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
         DesbloquearSensor();
     }
+    //Debug Level Design
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move to desired pos
+        int debugXLevelDesign = 8830;
+        int debugYLevelDesign = 1414;
+        Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
+        SetPosition(debugPos);
+    }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {//move to the initial position of the scene
+        int debugXLevelDesignInitialPositionOfLevel = 3200;
+        int debugYLevelDesignInitialPositionOfLevel = 2079;
+        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
+        SetPosition(debugPos);
+    }
+
 }
 
 void Player::HandleHurt(float dt) {
