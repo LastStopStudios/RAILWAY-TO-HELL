@@ -165,14 +165,6 @@ bool Player::Start() {
     isJumping = false;
     jumpFrameThreshold = 3;
 
-    pickup.LoadAnimations(parameters.child("animations").child("pickup"));
-    auto pickupNode = parameters.child("animations").child("pickup");
-    pickupTexture = pickupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(pickupNode.attribute("texture").as_string()) : texture;
-
-    isPickingUp = false;
-    pickupTimer = 0.0f;
-    pickupDuration = 0.5f; // Duración de la animación de pickup
-
     // Walk animation
     walk.LoadAnimations(parameters.child("animations").child("walk"));
     auto walkNode = parameters.child("animations").child("walk");
@@ -196,7 +188,12 @@ bool Player::Start() {
     // Hurt animation
     hurt.LoadAnimations(parameters.child("animations").child("hurt"));
     auto hurtNode = parameters.child("animations").child("hurt");
-    hurtTexture = hurtNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(hurtNode.attribute("texture").as_string()) :texture;
+    hurtTexture = hurtNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(hurtNode.attribute("texture").as_string()) : texture;
+
+    // Pickup animation
+    pickupAnim.LoadAnimations(parameters.child("animations").child("pickup"));
+    auto pickupNode = parameters.child("animations").child("pickup");
+    pickupTexture = pickupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(pickupNode.attribute("texture").as_string()) : texture;
 
     // Set initial state
     isAttacking = false;
@@ -237,15 +234,17 @@ bool Player::Update(float dt)
             velocity = b2Vec2(0, 0);
         }
        
+		// Handle hurt animation
+        HandlePickup(dt);
 
         // Mutually exclusive action handling
-        if (!isAttacking && !isWhipAttacking && !isDashing) {
+        if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp) {
             HandleMovement(velocity);
             HandleJump();
         }
 
         // Handle dash only when not attacking or jumping
-        if (!isAttacking && !isWhipAttacking && !isHurt) {
+        if (!isAttacking && !isWhipAttacking && !isHurt && !isPickingUp) {
             HandleDash(velocity, dt);
         }
 
@@ -253,7 +252,7 @@ bool Player::Update(float dt)
         HandleHurt(dt);
 
         // Handle attacks only when not dashing
-        if (!isDashing) {
+        if (!isDashing && !isPickingUp) {
             UpdateWhipAttack(dt);
             UpdateMeleeAttack(dt);
         }
@@ -308,6 +307,7 @@ bool Player::Update(float dt)
     //DrawPlayer();
     return true;
 }
+
 bool Player::PostUpdate() {
     if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
     {
@@ -516,6 +516,25 @@ void Player::HandleHurt(float dt) {
 			// Reset to idle
             hurted = true;
 			currentAnimation = &idle; 
+            idle.Reset();
+        }
+    }
+}
+
+void Player::HandlePickup(float dt) {
+    if (isPickingUp) {
+        if (!hasPickupStarted) {
+            pickupAnim.Reset();
+            hasPickupStarted = true; // Reset pickup animation one time
+        }
+        pickupAnim.Update(); 
+
+
+        if (pickupAnim.HasFinished()) { 
+            // Reset to idle
+            isPickingUp = false;
+            hasPickupStarted = false;
+            currentAnimation = &idle; 
             idle.Reset();
         }
     }
@@ -737,6 +756,12 @@ void Player::DrawPlayer() {
         texture = dashTexture;
         dash.Update();
     }
+    else if (isPickingUp) {
+        // Set pickup animation
+        currentAnimation = &pickupAnim;
+        texture = pickupTexture;
+		pickupAnim.Update();
+    }
     else if (isRecovering) {
         // Set recovering animation when landing
         currentAnimation = &recovering;
@@ -881,6 +906,7 @@ bool Player::CleanUp() {
 
     return true;
 }
+
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::TERRESTRE) {
         LOG("Player attack hit an enemy!");
@@ -916,6 +942,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         Item* item = (Item*)physB->listener;
 
         if (item) {
+
+            isPickingUp = true;
 
             if (item && item->GetItemType() == "Dash ability") {
                 Dash = true;

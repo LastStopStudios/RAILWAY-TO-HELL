@@ -141,12 +141,6 @@ private:
 	bool isPreparingJump;
 	int jumpFrameThreshold;
 
-	Animation pickup;
-	SDL_Texture* pickupTexture;
-	bool isPickingUp;
-	float pickupTimer;
-	float pickupDuration;
-
 	Animation dash;
 	SDL_Texture* dashTexture = nullptr;
 	float dashCooldown;
@@ -168,6 +162,12 @@ private:
 	bool hasHurtStarted = false;
 	bool hurted = false;
 	SDL_Texture* hurtTexture = nullptr;
+
+	// Pickup properties
+	Animation pickupAnim;
+	SDL_Texture* pickupTexture = nullptr;
+	bool isPickingUp = false;
+	bool hasPickupStarted = false;
 
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
