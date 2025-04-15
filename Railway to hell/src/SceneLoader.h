@@ -30,13 +30,13 @@ public:
 	void LoadScene(int level, int x, int y,bool fade,bool bosscam); // Here you should perform both the Load of the next scene and the Unload beforehand.
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
-
+	void FadeIn(float speed);// Black fading
 	int currentScene;
 
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
 	void FadeOut(float speed); // Appearance of black
-	void FadeIn(float speed);// Black fading
+	
 };
 

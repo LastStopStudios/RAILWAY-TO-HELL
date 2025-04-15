@@ -115,7 +115,7 @@ bool Scene::Start()
 	//Cargar Texturas splash screen
 	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen.png");
 	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto.png");
-	//L06 TODO 3: Call the function to load the map. 
+	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
 	// Texture to highligh mouse position 
@@ -129,6 +129,9 @@ bool Scene::Start()
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);
 	Engine::GetInstance().render.get()->camera.x = 0;
 	Engine::GetInstance().render.get()->camera.y = 0;
+
+	//Draw player
+	dibujar = false;
 
 	return true;
 }
@@ -157,6 +160,7 @@ bool Scene::Update(float dt)
 			currentMusic = "intro";
 		}
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
 			currentState = SceneState::TEXT_SCREEN;
 			skipFirstInput = true;
 		}
@@ -174,7 +178,7 @@ bool Scene::Update(float dt)
 		}
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-
+			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
 			currentState = SceneState::GAMEPLAY;
 		}
 		break;
@@ -206,7 +210,7 @@ bool Scene::Update(float dt)
 			tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
 			once = true;
 		}
-
+		dibujar = true;
 		//If mouse button is pressed modify enemy position
 		/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));

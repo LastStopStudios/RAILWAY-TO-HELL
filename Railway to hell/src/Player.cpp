@@ -313,7 +313,10 @@ bool Player::PostUpdate() {
     {
         return true;
     }
-    DrawPlayer();
+    if (Engine::GetInstance().scene->dibujar == true) {
+        DrawPlayer();
+    }
+    
     return true; 
 }
 
