@@ -19,8 +19,14 @@ public:
 	// Called after Awake
 	bool Start();
 
+	// Called before Update
+	bool PreUpdate();
+
 	// Called every frame
 	bool Update(float dt);
+	
+	//Called after Update
+	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();

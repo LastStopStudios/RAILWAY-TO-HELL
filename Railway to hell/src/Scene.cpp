@@ -162,17 +162,20 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
+		if (introTextoTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
+		}
 		if (!textMusicPlaying) {
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Text.ogg", 1.0f);
 			textMusicPlaying = true;
 			introMusicPlaying = false;
 			currentMusic = "text";
 		}
-		Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 
-		currentState = SceneState::GAMEPLAY;
+			currentState = SceneState::GAMEPLAY;
 		}
 		break;
 	case SceneState::GAMEPLAY:
@@ -261,6 +264,11 @@ bool Scene::CleanUp()
 	{
 		Engine::GetInstance().textures->UnLoad(introScreenTexture);
 		introScreenTexture = nullptr;
+	}
+	if (introTextoTexture != nullptr)
+	{
+		Engine::GetInstance().textures->UnLoad(introTextoTexture);
+		introTextoTexture = nullptr;
 	}
 	return true;
 }

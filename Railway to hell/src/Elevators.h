@@ -16,10 +16,11 @@ public:
 
 	bool Start();
 
-	// Called before all Updates
 	bool PreUpdate();
 
 	bool Update(float dt);
+
+	bool PostUpdate();
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
@@ -27,6 +28,8 @@ public:
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
+
+	void Draw();
 
 	bool CleanUp();
 public:

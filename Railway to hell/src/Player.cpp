@@ -305,8 +305,16 @@ bool Player::Update(float dt)
 
     // currentAnimation->Update();
     HandleSceneSwitching();
-    DrawPlayer();
+    //DrawPlayer();
     return true;
+}
+bool Player::PostUpdate() {
+    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+    {
+        return true;
+    }
+    DrawPlayer();
+    return true; 
 }
 
 void Player::HandleMovement(b2Vec2& velocity) {

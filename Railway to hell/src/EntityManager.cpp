@@ -130,7 +130,34 @@ void EntityManager::AddEntity(Entity* entity)
 {
 	if ( entity != nullptr) entities.push_back(entity);
 }
+bool EntityManager::PreUpdate(){ 
+	bool ret = true;
 
+	// Create a separate list for entities to be removed after the loop
+	std::vector<Entity*> entitiesToRemove;
+
+	// First update all entities
+	for (const auto& entity : entities)
+	{
+		if (entity->active == false) continue;
+
+		// Use IsPendingToDelete to check if entity should be removed
+		if (entity->IsPendingToDelete()) {
+			// Mark for removal but don't destroy yet
+			entitiesToRemove.push_back(entity);
+			continue;
+		}
+
+		ret = entity->PreUpdate();
+	}
+
+	// After the loop, remove all entities marked for deletion
+	for (auto entity : entitiesToRemove) {
+		DestroyEntity(entity);
+	}
+
+	return ret;
+}
 bool EntityManager::Update(float dt)
 {
 	bool ret = true;
@@ -151,6 +178,35 @@ bool EntityManager::Update(float dt)
 		}
 
 		ret = entity->Update(dt);
+	}
+
+	// After the loop, remove all entities marked for deletion
+	for (auto entity : entitiesToRemove) {
+		DestroyEntity(entity);
+	}
+
+	return ret;
+}
+
+bool EntityManager::PostUpdate() {
+	bool ret = true;
+
+	// Create a separate list for entities to be removed after the loop
+	std::vector<Entity*> entitiesToRemove;
+
+	// First update all entities
+	for (const auto& entity : entities)
+	{
+		if (entity->active == false) continue;
+
+		// Use IsPendingToDelete to check if entity should be removed
+		if (entity->IsPendingToDelete()) {
+			// Mark for removal but don't destroy yet
+			entitiesToRemove.push_back(entity);
+			continue;
+		}
+
+		ret = entity->PostUpdate();
 	}
 
 	// After the loop, remove all entities marked for deletion

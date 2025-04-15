@@ -41,14 +41,12 @@ bool Elevators::Start() {
 
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
-
 	return true;
 }
 
-// Called each loop iteration
-bool Elevators::PreUpdate()
-{
 
+// Called each loop iteration
+bool Elevators::PreUpdate(){
 	return true;
 }
 
@@ -63,17 +61,18 @@ bool Elevators::Update(float dt){
 		LOG("Enemy pbody is null!");
 		return false;
 	}
-
+	
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
-
 	currentAnimation->Update();
-
+	LOG("*********Update**********");
 	return true;
 }
+
+bool Elevators::PostUpdate(){return true;}
 
 void Elevators::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
@@ -92,6 +91,7 @@ void Elevators::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
 		LOG("Toco Dibujo");
+		currentAnimation->Reset();
 		currentAnimation = &idle;
 		break;
 	case ColliderType::UNKNOWN:
