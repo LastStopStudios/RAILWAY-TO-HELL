@@ -48,7 +48,7 @@ public:
 	float texIsDeath;
 
 	int lives = 2;
-	//control de muerte
+	//Death control
 	int a = 0;
 	int kill = 1;
 

@@ -40,11 +40,9 @@ bool Item::Start() {
 
 	pbody->listener = this;
 
-	// L08 TODO 7: Assign collider type
+	//Assign collider type
 	pbody->ctype = ColliderType::ITEM;
 	pbody->ID = parameters.attribute("ID").as_string();
-	LOG("ID XML: %s", parameters.attribute("ID").as_string());
-	LOG("ID al cuerpo: %s", pbody->ID);
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
@@ -89,7 +87,6 @@ bool Item::Update(float dt)
 
 void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 	if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
-		LOG("Player attack hit an enemy!");
 		// Additional enemy hit logic can go here
 		return;
 	}

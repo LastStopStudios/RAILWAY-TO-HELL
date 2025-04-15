@@ -6,6 +6,9 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
+#include "Entity.h"
+#include "Engine.h"
+#include "EntityManager.h" 
 
 class Terrestre;
 class Scene;
@@ -15,12 +18,8 @@ class Pathfinding;
 class EntityManager;
 class Item;
 class Caronte;
-#include "Entity.h"
-//#include "Scene.h"
-//#include "Enemy.h"
-#include "Engine.h"
-//#include "Pathfinding.h" 
-#include "EntityManager.h" 
+
+
 
 class SceneLoader 
 {

@@ -38,9 +38,9 @@ public:
 		bool fade;
 		bool CamaraBoss;
 	};
-	//lista de escenas con su id
+	//list of scenes with their id
 	std::vector<EscenaQueCargar> escenas = {
-	//id con fino, escena que cargar, x del player, y del player, hacer fade, camara de boss
+	//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
 	{"DE2L1T2",1,10046,2160,false,false},
 	{"DT2L1E2",3,825,815,false,false},
 	{"DT2L1E1",2,3050,860,false,false},
@@ -48,15 +48,15 @@ public:
 	{"DE2L1BOSS1",3,1840,1784,true,true},
 	{"BOSS1DE2L1",3,1840,815,true,false},
 	};
-	//control ascensor
+	//elevator control
 	bool TocandoAs = false;
 	bool Bloqueo = false;
 	void Ascensor();
 	void DesbloquearSensor();
 	void BloquearSensor();
-	//Control de dialogos
-	void DialogoOn() { dialogo = true;}//parar player
-	void DialogoOff() { dialogo = false;}//devolver control player
+	//Dialog control
+	void DialogoOn() { dialogo = true;}//stop player
+	void DialogoOff() { dialogo = false;}//return control player
 
 
 private:
@@ -141,19 +141,13 @@ private:
 	bool isPreparingJump;
 	int jumpFrameThreshold;
 
-	Animation pickup;
-	SDL_Texture* pickupTexture;
-	bool isPickingUp;
-	float pickupTimer;
-	float pickupDuration;
-
 	Animation dash;
 	SDL_Texture* dashTexture = nullptr;
 	float dashCooldown;
-	float dashDirection;   // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
-	float dashSpeed;       // Velocidad del dash
-	float dashDistance;    // Distancia total del dash  // Dirección del dash (1.0f para derecha, -1.0f para izquierda)
-	int dashFrameCount;  // Contador de frames para el dash
+	float dashDirection;   // Dash direction (1.0f for right, -1.0f for left)
+	float dashSpeed;       // Dash speed
+	float dashDistance;    // Total dash distance // Dash direction (1.0f for right, -1.0f for left)
+	int dashFrameCount;  // Frame counter for dash
 
 	float originalGravityScale;
 
@@ -169,16 +163,22 @@ private:
 	bool hurted = false;
 	SDL_Texture* hurtTexture = nullptr;
 
+	// Pickup properties
+	Animation pickupAnim;
+	SDL_Texture* pickupTexture = nullptr;
+	bool isPickingUp = false;
+	bool hasPickupStarted = false;
+
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
 	bool godMode;
 	// Dash properties
 	bool isDashing = false;
 	bool canDash = true;
-	int totalDashesAvailable = 3;    // Dashes disponibles actualmente
-	int maxTotalDashes = 3;          // Máximo número de dashes permitidos
-	float dashRechargeTimer = 0.0f;  // Temporizador para recarga completa
-	float dashFullRechargeTime = 5000.0f; // Tiempo para recargar todos los dashes
+	int totalDashesAvailable = 3;    // Dashes currently available
+	int maxTotalDashes = 3;          // Maximum number of dashes allowed
+	float dashRechargeTimer = 0.0f;  // Timer for complete recharge
+	float dashFullRechargeTime = 5000.0f; // Time to recharge all dashes
 	
 	
 

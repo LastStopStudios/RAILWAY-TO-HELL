@@ -76,7 +76,6 @@ bool Caronte::Update(float dt)
 
     // If the hurt animation has finished, switch to death animation
     if (currentAnimation == &hurt && hurt.HasFinished()) {
-        LOG("Hurt animation finished, starting death animation");
         currentAnimation = &die;
         die.Reset();
         deathAnimationPlaying = true;
@@ -84,7 +83,6 @@ bool Caronte::Update(float dt)
 
     // If death animation has finished, spawn the key and mark for deletion
     if (deathAnimationPlaying && die.HasFinished()) {
-        LOG("Death animation finished, dropping key");
 
         // Create the key item before deleting the entity
         Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
@@ -209,12 +207,10 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         if (!isattacking && !attackOnCooldown && canAttack) {
             isattacking = true;
-            LOG("Attack Player!");
         }
         break;
     case ColliderType::PLAYER_ATTACK:
         if (candie && currentAnimation != &hurt) {
-            LOG("Caronte hit by player attack!");
             candie = false;
             currentAnimation = &hurt;
             hurt.Reset(); // Ensure the animation starts from the beginning
