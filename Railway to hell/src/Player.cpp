@@ -555,7 +555,7 @@ void Player::UpdateWhipAttack(float dt) {
         whipAttack.Reset();
 
         // Create whip attack hitbox
-        int attackWidth = texW * 2;
+        int attackWidth = texW * 3;
         int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body for attacks
         int centerX = METERS_TO_PIXELS(playerCenter.x);
@@ -585,7 +585,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Update hitbox position
         if (whipAttackHitbox) {
             //int attackX = facingRight ? position.getX()  : position.getX() + 10;
-            int attackX = (int)position.getX() + (facingRight ? 100 : 0);
+            int attackX = (int)position.getX() + (facingRight ? 150 : -50);
             int attackY = position.getY() + 10;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
@@ -806,21 +806,28 @@ void Player::DrawPlayer() {
 
 		if (facingRight) {
 		
-        drawX = position.getX() - 20 ;
-        drawY = position.getY() - 54;
+        drawX = position.getX() + 35;
+        drawY = position.getY() - 50;
        
 		}
 		else {
-            
-            drawY = position.getY() - 54;
-            drawX = position.getX() - 130;
+
+            drawX = position.getX()  - 189;
+            drawY = position.getY() - 50;
+           
         }
     }
     if (isJumping) {
         if (facingRight) {
 
-            drawX = position.getX();
+            drawX = position.getX() - 7;
             drawY = position.getY();
+        }
+        else {
+
+            drawX = position.getX() + 7;
+            drawY = position.getY() ;
+
         }
     }
 
