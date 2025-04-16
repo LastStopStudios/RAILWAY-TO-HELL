@@ -28,15 +28,15 @@ public:
 	SceneLoader();
 	~SceneLoader();
 	void LoadScene(int level, int x, int y,bool fade,bool bosscam); // Here you should perform both the Load of the next scene and the Unload beforehand.
+	void DrawScene(int level, int x, int y);
 	void SetCurrentScene(int level);
 	int GetCurrentLevel() const { return currentScene; }
 	void FadeIn(float speed);// Black fading
+	void FadeOut(float speed, bool loadscene, int level = -1, int x = -1, int y = -1); // Disappearance of black // loadscene means if it should use drawcurrentscene from the scene or drawscene from the sceneloader
 	int currentScene;
-
+	
 private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
-	void UnLoadEnemiesItems();
-	void FadeOut(float speed); // Appearance of black
-	
+	void UnLoadEnemiesItems();	
 };
 

@@ -68,6 +68,9 @@ public:
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
+	// Draw the current scene
+	void DrawCurrentScene();
+
 public:
 	// Get tilePosDebug value
 	std::string GetTilePosDebug() {

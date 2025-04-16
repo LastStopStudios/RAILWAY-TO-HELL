@@ -148,16 +148,19 @@ bool Scene::Update(float dt)
 	switch (currentState)
 	{
 	case SceneState::INTRO_SCREEN:
-		if (introScreenTexture != nullptr)
-		{
-			Engine::GetInstance().render->DrawTexture(introScreenTexture, 0, 0);
-		}
+
 		if (!introMusicPlaying) {
+
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Intro.ogg", 1.0f);
 			Engine::GetInstance().audio.get()->SetMusicVolume(2);
+			Engine::GetInstance().sceneLoader->FadeOut(2.5f, false);// Animation speed (FadeOut)
+
 			introMusicPlaying = true;
 			textMusicPlaying = false;
 			currentMusic = "intro";
+		}
+		if (introMusicPlaying) {
+			DrawCurrentScene();
 		}
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
@@ -166,17 +169,17 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
-		if (introTextoTexture != nullptr)
-		{
-			Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
-		}
+
 		if (!textMusicPlaying) {
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Text.ogg", 1.0f);
 			textMusicPlaying = true;
 			introMusicPlaying = false;
 			currentMusic = "text";
+			Engine::GetInstance().sceneLoader->FadeOut(2.5, false);// Animation speed (FadeOut)
 		}
-
+		if (textMusicPlaying) {
+			DrawCurrentScene();
+		}
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
 			currentState = SceneState::GAMEPLAY;
@@ -371,4 +374,23 @@ SceneState Scene::GetCurrentState() const
 void Scene::SetCurrentState(SceneState state)
 {
 	currentState = state;
+}
+
+void Scene::DrawCurrentScene()
+{
+	switch (currentState)
+	{
+	case SceneState::INTRO_SCREEN:
+		if (introScreenTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(introScreenTexture, 0, 0);
+		}
+		break;
+	case SceneState::TEXT_SCREEN:
+		if (introTextoTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
+		}
+		break;
+	}
 }
