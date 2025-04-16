@@ -298,19 +298,12 @@ bool Player::Update(float dt)
     }
 
     currentAnimation->Update();
+    DrawPlayer();
     HandleSceneSwitching();
     return true;
 }
 
 bool Player::PostUpdate() {
-    if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
-    {
-        return true;
-    }
-    if (Engine::GetInstance().scene->dibujar == true) {
-        DrawPlayer();
-    }
-    
     return true; 
 }
 
