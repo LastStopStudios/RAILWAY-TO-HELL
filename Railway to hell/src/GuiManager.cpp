@@ -17,7 +17,7 @@ bool GuiManager::Start()
 	return true;
 }
 
-// L16: TODO 1: Implement CreateGuiControl function that instantiates a new GUI control and add it to the list of controls
+//Implement CreateGuiControl function that instantiates a new GUI control and add it to the list of controls
 GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Rect sliderBounds)
 {
 	GuiControl* guiControl = nullptr;

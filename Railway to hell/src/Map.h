@@ -11,7 +11,7 @@ class PhysBody;
 class Textures;
 class SceneLoader; // Forward declaration
 
-// L09: TODO 5: Add attributes to the property structure
+//Add attributes to the property structure
 struct Properties
 {
     struct Property
@@ -34,7 +34,7 @@ struct Properties
         propertyList.clear();
     }
 
-    // L09: DONE 7: Method to ask for the value of a custom property
+    //Method to ask for the value of a custom property
     Property* GetProperty(const char* name);
 
 };
@@ -119,10 +119,10 @@ public:
     // Load new map
     bool Load(std::string path, std::string mapFileName);
 
-    // L09: TODO 2: Implement function to the Tileset based on a tile id
+    //Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
 
-    // L09: TODO 6: Load a group of properties 
+    //Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
     int GetWidth() {
@@ -152,7 +152,7 @@ public:
 
 private:
     bool mapLoaded;
-    // L06: DONE 1: Declare a variable data of the struct MapData
+    //Declare a variable data of the struct MapData
     MapData mapData;
     std::vector<PhysBody*> colliders;
 };

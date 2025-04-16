@@ -38,16 +38,12 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	//Control de dialogos
-	//void DialogoOn() { dialogo = true; }//parar enemigos
-	//void DialogoOff() { dialogo = false; }//devolver control enemigos
-
 public:
 	//bool dialogo = true;
 	float texIsDeath;
 
 	int lives = 2;
-	//control de muerte
+	//Death control
 	int a = 0;
 	int kill = 1;
 private:

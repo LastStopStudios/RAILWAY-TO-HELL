@@ -29,8 +29,6 @@ public:
 		this->parameters = parameters;
 	}
 
-	void Draw();
-
 	bool CleanUp();
 public:
 private:

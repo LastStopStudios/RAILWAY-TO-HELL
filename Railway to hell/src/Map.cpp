@@ -261,7 +261,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         if (propertieNode.attribute("name") = "Sensor") {
                             rect->sensorID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
                         }
                     }
                     break;
@@ -276,7 +275,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         if (propertieNode.attribute("name") = "ID") {
                             rect->ID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->ID);
                         }
                     }
                     break;
@@ -287,7 +285,6 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         if (propertieNode.attribute("name") = "Sensor") {
                             rect->sensorID = propertieNode.attribute("value").as_string();
-                            LOG("!!!!!!!!!Sensor, ID: %s,!!!!!!!!!", rect->sensorID);
                         }
                     }
                     break;

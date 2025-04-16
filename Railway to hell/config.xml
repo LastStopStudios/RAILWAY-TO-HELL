@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="3200" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="2900" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.03">
 						<frame x="0" y="0" w="64" h="96" />
@@ -27,7 +27,7 @@
 						<frame x="256" y="0" w="64" h="96" />
 						<frame x="320" y="0" w="64" h="96" />
 					</hurt>
-					<walk loop="true" speed="0.15">
+					<walk loop="true" speed="0.10">
 						<frame x="0" y="96" w="64" h="96" />
 						<frame x="64" y="96" w="64" h="96" />
 						<frame x="128" y="96" w="64" h="96" />
@@ -51,7 +51,7 @@
 						<frame x="285" y="289" w="96" h="96" />
 						<frame x="381" y="289" w="96" h="96" />
 					</dash>
-					<whip loop="false" speed="0.08">
+					<whip loop="false" speed="0.10">
 						<frame x="0" y="400" w="257" h="142" />
 						<frame x="257" y="400" w="257" h="142" />
 						<frame x="514" y="400" w="257" h="142" />
@@ -76,30 +76,30 @@
 						<frame x="576" y="544" w="96" h="96" />
 						<frame x="672" y="544" w="96" h="96" />
 					</recoveringJump>
-					<death loop="false" speed="0.1">
-						<frame x="0" y="625" w="64" h="96" />
-						<frame x="64" y="625" w="64" h="96" />
-						<frame x="128" y="625" w="64" h="96" />
-						<frame x="192" y="625" w="64" h="96" />
-						<frame x="256" y="625" w="64" h="96" />
-						<frame x="320" y="625" w="64" h="96" />
-						<frame x="384" y="625" w="64" h="96" />
-						<frame x="448" y="625" w="64" h="96" />
+					<death loop="false" speed="0.08">
+						<frame x="0" y="640" w="64" h="96" />
+						<frame x="64" y="640" w="64" h="96" />
+						<frame x="128" y="640" w="64" h="96" />
+						<frame x="192" y="640" w="64" h="96" />
+						<frame x="256" y="640" w="64" h="96" />
+						<frame x="320" y="640" w="64" h="96" />
+						<frame x="384" y="640" w="64" h="96" />
+						<frame x="448" y="640" w="64" h="96" />
 					</death>
-					<pickup loop="false" speed="0.15">
-						<frame x="0" y="736" w="64" h="96" />
-						<frame x="64" y="736" w="64" h="96" />
-						<frame x="128" y="736" w="64" h="96" />
-						<frame x="192" y="736" w="64" h="96" />
-						<frame x="256" y="736" w="64" h="96" />
-						<frame x="320" y="736" w="64" h="96" />
-						<frame x="384" y="736" w="64" h="96" />
-						<frame x="448" y="736" w="64" h="96" />
-						<frame x="512" y="736" w="64" h="96" />
-						<frame x="576" y="736" w="64" h="96" />
-						<frame x="640" y="736" w="64" h="96" />
+					<pickup loop="false" speed="0.10">
+						<frame x="0" y="737" w="64" h="96" />
+						<frame x="64" y="737" w="64" h="96" />
+						<frame x="128" y="737" w="64" h="96" />
+						<frame x="192" y="737" w="64" h="96" />
+						<frame x="256" y="737" w="64" h="96" />
+						<frame x="320" y="737" w="64" h="96" />
+						<frame x="384" y="737" w="64" h="96" />
+						<frame x="448" y="737" w="64" h="96" />
+						<frame x="512" y="737" w="64" h="96" />
+						<frame x="576" y="737" w="64" h="96" />
+						<frame x="640" y="737" w="64" h="96" />
 					</pickup>
-					<attack loop="false" speed="0.1">
+					<attack loop="false" speed="0.10">
 						<frame x="0" y="832" w="96" h="96" />
 						<frame x="96" y="832" w="96" h="96" />
 						<frame x="192" y="832" w="96" h="96" />
@@ -108,14 +108,14 @@
 						<frame x="480" y="832" w="96" h="96" />
 						<frame x="576" y="832" w="96" h="96" />
 					</attack>
-					<wakeup loop="false" speed="0.15">
-						<frame x="0" y="913" w="64" h="96" />
-						<frame x="64" y="913" w="64" h="96" />
-						<frame x="128" y="913" w="64" h="96" />
-						<frame x="192" y="913" w="64" h="96" />
-						<frame x="256" y="913" w="64" h="96" />
-						<frame x="320" y="913" w="64" h="96" />
-						<frame x="384" y="913" w="64" h="96" />
+					<wakeup loop="false" speed="0.07">
+						<frame x="0" y="929" w="64" h="96" />
+						<frame x="64" y="929" w="64" h="96" />
+						<frame x="128" y="929" w="64" h="96" />
+						<frame x="192" y="929" w="64" h="96" />
+						<frame x="256" y="929" w="64" h="96" />
+						<frame x="320" y="929" w="64" h="96" />
+						<frame x="384" y="929" w="64" h="96" />
 					</wakeup>
 				</animations>
 			</player>
@@ -1891,7 +1891,7 @@
 						<idle loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />
 						</idle>
-						<activated loop="false" speed="0.01">
+						<activated loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />

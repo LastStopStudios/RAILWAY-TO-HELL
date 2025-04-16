@@ -107,7 +107,7 @@ bool Boss::Update(float dt)
         }
 
         // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32 , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
@@ -321,7 +321,6 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        LOG("Collided with player - DESTROY");
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
 
@@ -356,7 +355,6 @@ void Boss::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        LOG("Collision player");
         break;
     }
 }

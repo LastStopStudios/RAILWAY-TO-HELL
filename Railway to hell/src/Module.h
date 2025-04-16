@@ -53,7 +53,7 @@ public:
 		return true;
 	}
 	
-	//L05 TODO 4a: Declare a function to read the XML parameters	
+	//Declare a function to read the XML parameters	
 	virtual bool LoadParameters(pugi::xml_node parameters)
 	{
 		configParameters = parameters;

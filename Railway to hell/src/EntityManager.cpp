@@ -12,6 +12,8 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
+#include <vector>
+#include <algorithm>
 
 EntityManager::EntityManager() : Module()
 {
@@ -79,6 +81,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	{
 	case EntityType::PLAYER:
 		entity = new Player();
+		entity->renderPriority = 10;
 		break;
 	case EntityType::ITEM:
 		entity = new Item();
@@ -103,6 +106,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();
+		entity->renderPriority = 5;
 		break;
 	default:
 		break;
@@ -162,17 +166,23 @@ bool EntityManager::Update(float dt)
 {
 	bool ret = true;
 
-	// Create a separate list for entities to be removed after the loop
+	// Create a sorted copy of the entities for update and render
+	std::vector<Entity*> sortedEntities(entities.begin(), entities.end());
+
+	// Sort by render priority
+	std::sort(sortedEntities.begin(), sortedEntities.end(),
+		[](Entity* a, Entity* b) {
+			return a->renderPriority < b->renderPriority;
+		});
+
+	// Process the entities in the correct order
 	std::vector<Entity*> entitiesToRemove;
 
-	// First update all entities
-	for (const auto& entity : entities)
+	for (const auto& entity : sortedEntities)
 	{
 		if (entity->active == false) continue;
 
-		// Use IsPendingToDelete to check if entity should be removed
 		if (entity->IsPendingToDelete()) {
-			// Mark for removal but don't destroy yet
 			entitiesToRemove.push_back(entity);
 			continue;
 		}
@@ -180,7 +190,7 @@ bool EntityManager::Update(float dt)
 		ret = entity->Update(dt);
 	}
 
-	// After the loop, remove all entities marked for deletion
+	// Delete entities marked for removal
 	for (auto entity : entitiesToRemove) {
 		DestroyEntity(entity);
 	}

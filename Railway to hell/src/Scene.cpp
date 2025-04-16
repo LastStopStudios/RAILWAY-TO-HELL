@@ -203,10 +203,10 @@ bool Scene::Update(float dt)
 		//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
 		Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(), mouseTile.getY());
 		SDL_Rect rect = { 0,0,32,32 };
-		Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
+		/*Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
 			highlightTile.getX(),
 			highlightTile.getY(),
-			&rect);
+			&rect);*/
 
 		// saves the tile pos for debugging purposes
 		if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
@@ -236,7 +236,7 @@ bool Scene::PostUpdate()
 	if (currentState == SceneState::GAMEPLAY) {
 		if(BossBattle == false){
 			Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
-			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;
+			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 485.0f;
 		}else if(BossBattle == true){
 			for (const auto& Bosses : Bosses) { // Iterate through all scenes
 				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
@@ -356,12 +356,12 @@ void Scene::SaveState() {
 	loadFile.save_file("config.xml");
 }
 
-bool Scene::OnGuiMouseClickEvent(GuiControl* control)//al darle al boton
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 {
 
 
 	if (control->id == 1) {
-		Engine::GetInstance().dialogoM->Texto("1"); // Llama a Texto que toque
+		Engine::GetInstance().dialogoM->Texto("1"); // Call Text
 	}
 	return true;
 }
