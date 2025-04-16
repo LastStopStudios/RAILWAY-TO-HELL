@@ -92,7 +92,7 @@ bool Volador::Update(float dt) {
     else {
       
         if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetGravityScale(1.0f); 
+            pbody->body->SetGravityScale(0.0f); 
         }
     }
 
