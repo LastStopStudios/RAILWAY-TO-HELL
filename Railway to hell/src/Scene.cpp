@@ -233,7 +233,7 @@ bool Scene::PostUpdate()
 	if (currentState == SceneState::GAMEPLAY) {
 		if(BossBattle == false){
 			Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
-			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 576.0f;
+			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 485.0f;
 		}else if(BossBattle == true){
 			for (const auto& Bosses : Bosses) { // Iterate through all scenes
 				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
