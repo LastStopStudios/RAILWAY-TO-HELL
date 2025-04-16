@@ -688,7 +688,7 @@ void Player::UpdateMeleeAttack(float dt) {
 
             // Hitbox position adjusted upwards and with the direction corrected.
             int attackX = facingRight
-                ? centerX + texW / 2 - attackHitbox->width / 2 // right
+                ? centerX + texW / 2 - attackHitbox->width / -3 // right
                 : centerX - texW / 2 - attackHitbox->width / -2; // left
 
             int attackY = centerY + texH / -7;
@@ -821,7 +821,13 @@ void Player::DrawPlayer() {
             
             drawY = position.getY() - 54;
             drawX = position.getX() - 130;
+        }
+    }
+    if (isJumping) {
+        if (facingRight) {
 
+            drawX = position.getX();
+            drawY = position.getY();
         }
     }
 
@@ -832,8 +838,8 @@ void Player::DrawPlayer() {
     // Draw the player with the current animation and appropriate texture
     Engine::GetInstance().render.get()->DrawTexture(
         texture,                    // Current texture based on state
-        drawX,  // X position with offset for flipping
-        drawY,            // Y position
+        drawX,                      // X position with offset for flipping
+        drawY,                      // Y position
         &frame,                     // Current animation frame
         1.0f,                       // Scale factor
         0.0,                        // No rotation
