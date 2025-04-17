@@ -936,19 +936,21 @@ void Player::DrawPlayer() {
            
         }
     }
-    if (isJumping) {
+    if (isJumping || isFalling || isRecovering ) {
         if (facingRight) {
 
-            drawX = position.getX() - 7;
-            drawY = position.getY();
+            drawX = position.getX() - 7 ;
+            drawY = position.getY() - 10;
         }
         else {
 
-            drawX = position.getX() + 7;
-            drawY = position.getY() ;
+            drawX = position.getX() +  7;
+            drawY = position.getY() - 10 ;
 
         }
     }
+
+
 
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
