@@ -202,7 +202,8 @@ private:
 	bool canOpenDoor = false;
 	bool leverOne = false;
 
-	int lives = 3;
+	// lives
+	int lives = 10; // for testing try to set it to 3
 
 
 };

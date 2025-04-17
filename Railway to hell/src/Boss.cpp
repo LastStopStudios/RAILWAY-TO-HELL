@@ -324,29 +324,37 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
 
-    case ColliderType::PLAYER_ATTACK:
-        if (!isDying) { // Prevent multiple death animations
-            isDying = true;
-            currentAnimation = &die;
-            currentAnimation->Reset();
+    case ColliderType::PLAYER_ATTACK: {
+        if (lives > 0) {
+            lives--;
+            if (lives <= 0 && !isDying) { // Prevent multiple death animations
+                isDying = true;
+                currentAnimation = &die;
+                currentAnimation->Reset();
 
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            }
+        }
+    }
+
+    break;
+    case ColliderType::PLAYER_WHIP_ATTACK: {
+        if (lives > 0) {
+            lives = lives - 2;
+            if (lives <= 0 && !isDead) {
+                isDead = true; 
+                currentAnimation = &die;
+                a = 1;
+                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
+                // Detener movimiento del cuerpo físico
+                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+                pbody->body->SetGravityScale(0.0f); // Por si está cayendo
+            }
         }
         break;
-    case ColliderType::PLAYER_WHIP_ATTACK:
-        if (!isDead) {
-            isDead = true;
-            currentAnimation = &die;
-            a = 1;
-            Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
-            // Detener movimiento del cuerpo físico
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
-        }
-        break;
-
+    }
     }
 }
 

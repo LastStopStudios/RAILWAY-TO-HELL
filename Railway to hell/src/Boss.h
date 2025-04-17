@@ -78,7 +78,9 @@ private:
 	float attackDistance = 7.0f;
 	bool canAttack = true;
 
-	int lives = 8;
+	// lives for the boss
+	int lives = 6; // for testing try to set it to 2
+
 	int offsetX;
 	bool isDying = false;
 	bool isDead = false;

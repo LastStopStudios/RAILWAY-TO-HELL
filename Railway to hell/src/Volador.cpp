@@ -262,27 +262,36 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 		
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-    case ColliderType::PLAYER_ATTACK:
-        if (!isDying) { // Prevent multiple death animations
-            isDying = true;
-            currentAnimation = &die;
-            currentAnimation->Reset();
+    case ColliderType::PLAYER_ATTACK: {
+        if (lives > 0) {
+			lives--;
+            if (lives <= 0 && !isDying) { // Prevent multiple death animations
+                isDying = true;
+                currentAnimation = &die;
+                currentAnimation->Reset();
 
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
-            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            }
         }
+    }
         break;
-	case ColliderType::PLAYER_WHIP_ATTACK:
-		if (!isDead) {
-			isDead = true;
-			currentAnimation = &die;
-			a = 1;
+    case ColliderType::PLAYER_WHIP_ATTACK: {
+        if (lives > 0) {
+            lives = lives - 2;
+            if (lives <= 0 && !isDead) {
+			    isDead = true;
+			    currentAnimation = &die;
+			    a = 1;
 
-			// Stop physical body movement
-			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-			pbody->body->SetGravityScale(0.0f); // In case it's falling
-		}
+			    // Stop physical body movement
+			    pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+			    pbody->body->SetGravityScale(0.0f); // In case it's falling
+		    }
+        }
+    }
+		
 		break;
     case ColliderType::GIRO:
         giro = !giro;
