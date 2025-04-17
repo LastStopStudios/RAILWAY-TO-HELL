@@ -70,6 +70,7 @@ private:
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
 	void HandlePickup(float dt);
+	void HandleDeath(float dt);
 	void HandleWakeup(float dt);
 public:
 	// Public properties
@@ -187,12 +188,21 @@ private:
 	float dashRechargeTimer = 0.0f;  // Timer for complete recharge
 	float dashFullRechargeTime = 5000.0f; // Time to recharge all dashes
 	
-	
+	// Death properties
+	Animation death;
+	SDL_Texture* deathTexture = nullptr;
+	bool isDying = false;
+	bool hasDeathStarted = false;
+	bool hasDied = false;
 
+	// items booleans
 	bool Dash = false;
 	bool WhipAttack = false;
+	// door and lever booleans
 	bool canOpenDoor = false;
 	bool leverOne = false;
+
+	int lives = 3;
 
 
 };

@@ -193,6 +193,12 @@ bool Player::Start() {
     pickupAnim.LoadAnimations(parameters.child("animations").child("pickup"));
     auto pickupNode = parameters.child("animations").child("pickup");
     pickupTexture = pickupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(pickupNode.attribute("texture").as_string()) : texture;
+    
+    // Death animation
+    death.LoadAnimations(parameters.child("animations").child("death"));
+    auto deathNode = parameters.child("animations").child("death");
+    deathTexture = deathNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(deathNode.attribute("texture").as_string()) : texture;
+
 
     // Wakeup animation 
     wakeupAnim.LoadAnimations(parameters.child("animations").child("wakeup"));
@@ -268,18 +274,33 @@ bool Player::Update(float dt)
         if (!parameters.attribute("gravity").as_bool()) {
             velocity = b2Vec2(0, 0);
         }
-       
-		// Handle hurt animation
+
+        if (lives <= 0 && !isDying) {
+            isDying = true;
+
+			isAttacking = isWhipAttacking = isDashing = isJumping = isFalling = isRecovering = false;
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+        }
+
+        if (isDying && !hasDied) {
+            HandleDeath(dt);
+        }
+        if (hasDied) {
+            HandleSceneSwitching();
+			return true;
+        }
+		// Handle pickup animation
         HandlePickup(dt);
 
         // Mutually exclusive action handling
-        if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp) {
+        if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp && !isDying) {
             HandleMovement(velocity);
             HandleJump();
         }
 
         // Handle dash only when not attacking or jumping
-        if (!isAttacking && !isWhipAttacking && !isHurt && !isPickingUp) {
+        if (!isAttacking && !isWhipAttacking && !isHurt && !isPickingUp && !isDying) {
             HandleDash(velocity, dt);
         }
 
@@ -287,7 +308,7 @@ bool Player::Update(float dt)
         HandleHurt(dt);
 
         // Handle attacks only when not dashing
-        if (!isDashing && !isPickingUp) {
+        if (!isDashing && !isPickingUp && !isDying) {
             UpdateWhipAttack(dt);
             UpdateMeleeAttack(dt);
         }
@@ -339,6 +360,7 @@ bool Player::Update(float dt)
     }
     currentAnimation->Update();
     DrawPlayer();
+
     HandleSceneSwitching();
 
     return true;
@@ -514,14 +536,17 @@ void Player::HandleJump() {
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1) {//go to scene 1
-        Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false, false);
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 || hasDied && currentLvl == 1) {//go to scene 1
+        Engine::GetInstance().sceneLoader->LoadScene(1, 2900, 2079, false, false);
+		hasDied = false;    
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2) {//go to scene 2
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {//go to scene 2
         Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false, false);
+        hasDied = false;
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3) {//go to scene 3
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
         Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false, false);
+        hasDied = false;
     }
     // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
@@ -546,7 +571,7 @@ void Player::HandleSceneSwitching() {
 
 void Player::HandleHurt(float dt) {
     // Check if the player is hurt
-    if (isHurt) {
+    if (isHurt && !isDying) {
 		
         if (!hasHurtStarted) {
             hurt.Reset(); 
@@ -563,7 +588,7 @@ void Player::HandleHurt(float dt) {
 }
 
 void Player::HandlePickup(float dt) {
-    if (isPickingUp) {
+    if (isPickingUp && !isDying) {
         if (!hasPickupStarted) {
             pickupAnim.Reset();
             hasPickupStarted = true; // Reset pickup animation one time
@@ -581,10 +606,30 @@ void Player::HandlePickup(float dt) {
     }
 }
 
+void Player::HandleDeath(float dt) {
+    if (!hasDeathStarted) {
+        death.Reset();
+        hasDeathStarted = true;
+		currentAnimation = &death;
+		texture = deathTexture;
+    }
+    death.Update();
+
+    if (death.HasFinished()) {
+		hasDied = true;
+        isDying = false;
+		hasDeathStarted = false;
+        lives = 3;
+		isWakingUp = true;
+		currentAnimation = &wakeupAnim;
+		wakeupAnim.Reset();
+    }
+}
+
 // Correct UpdateWhipAttack() to restart the animation correctly
 void Player::UpdateWhipAttack(float dt) {
 
-    if (isHurt) {
+    if (isHurt || isDying) {
         if (isWhipAttacking) {
             isWhipAttacking = false;
             if (whipAttackHitbox) {
@@ -669,7 +714,7 @@ void Player::UpdateWhipAttack(float dt) {
 
 void Player::UpdateMeleeAttack(float dt) {
 
-    if (isHurt) {
+    if (isHurt || isDying) {
         if (isAttacking) {
             isAttacking = false;
             if (attackHitbox) {
@@ -769,17 +814,22 @@ void Player::UpdateMeleeAttack(float dt) {
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
     SDL_Texture* originalTexture = texture;
-    if (isWakingUp) {
-        // Set wakeup animation
-        currentAnimation = &wakeupAnim;
-        texture = wakeupTexture;
-        wakeupAnim.Update();
+    if (isDying) {
+		texture = deathTexture;
+		currentAnimation = &death;
+		//death.Update();
     }
-    else if (isHurt && !hurted) {
+    else if (isHurt && !hurted && !isDying) {
         // Set hurt animation when hurt
         texture = hurtTexture;
         currentAnimation = &hurt;
         hurt.Update();
+    }
+    else if (isWakingUp) {
+        // Set wakeup animation
+        currentAnimation = &wakeupAnim;
+        texture = wakeupTexture;
+        wakeupAnim.Update();
     }
     else if (isAttacking) {
         currentAnimation = &meleeAttack;
@@ -1017,8 +1067,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
     }
     case ColliderType::BOSS_ATTACK: {
-        if (!isHurt && !hasHurtStarted) {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurt = true;
+            lives--;
 			// Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;
