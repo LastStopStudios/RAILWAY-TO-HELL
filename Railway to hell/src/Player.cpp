@@ -538,7 +538,7 @@ void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 || hasDied && currentLvl == 1) {//go to scene 1
-        Engine::GetInstance().sceneLoader->LoadScene(1, 3330, 2079, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(1, 2900, 2079, false, false);
 		hasDied = false;    
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {//go to scene 2
@@ -621,8 +621,9 @@ void Player::HandleDeath(float dt) {
         isDying = false;
 		hasDeathStarted = false;
         lives = 3;
-		currentAnimation = &idle;
-		idle.Reset();
+		isWakingUp = true;
+		currentAnimation = &wakeupAnim;
+		wakeupAnim.Reset();
     }
 }
 
