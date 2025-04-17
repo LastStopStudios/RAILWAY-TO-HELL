@@ -265,7 +265,7 @@ bool Player::Update(float dt)
         DrawPlayer();
         return true;
     }
-
+ 
     if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
@@ -354,11 +354,15 @@ bool Player::Update(float dt)
             falling.Reset();
         }
     }
-
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_REPEAT) {
+        godMode = !godMode; // This properly toggles between true and false
+        // Vertical movement
+    }
     currentAnimation->Update();
     DrawPlayer();
 
     HandleSceneSwitching();
+
     return true;
 }
 
@@ -417,11 +421,6 @@ void Player::HandleMovement(b2Vec2& velocity) {
     // Restore vertical velocity after horizontal input
     if (isJumping || isFalling) {
         velocity.y = verticalVelocity;
-    }
-    // Toggle god mode when F5 is pressed
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_REPEAT) {
-        godMode = !godMode; // This properly toggles between true and false
-        // Vertical movement
     }
 
     // Vertical movement when W is pressed and god mode is active
