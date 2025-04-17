@@ -60,7 +60,7 @@ private:
 	pugi::xml_node parameters;
 
 	Animation* currentAnimation = nullptr;
-	Animation idle, attack, running, die;
+	Animation idle, attack, running, hurt, die;
 
 	PhysBody* pbody;
 	PhysBody* area;
@@ -86,5 +86,8 @@ private:
 	bool isDead = false;
 	float deathTimer = 0.0f;
 	const float deathDelay = 1.0f;
+
+	bool ishurt = false;
+	
 };
 

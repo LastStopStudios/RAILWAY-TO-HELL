@@ -77,4 +77,6 @@ private:
 	Pathfinding* pathfinding;
 	bool isDead = false;
 	bool hasPlayedDeathAnim = false;
+
+	bool ishurt = false;
 };

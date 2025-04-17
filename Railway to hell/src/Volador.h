@@ -91,5 +91,7 @@ private:
 	int texRadius;
 	bool isDead = false;
 	bool hasPlayedDeathAnim = false;
+
+	bool ishurt = false;
 };
 

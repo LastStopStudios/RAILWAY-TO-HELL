@@ -76,6 +76,17 @@ bool Terrestre::Update(float dt)
         }
     }
 
+    if (ishurt) {
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+        if (hurt.HasFinished()) {
+            ishurt = false;
+            currentAnimation = &idle;
+        }
+    }
+
     if (isDying || isDead) {
         // Ensure that there is no movement during death
         if (pbody != nullptr && pbody->body != nullptr) {
@@ -133,63 +144,65 @@ bool Terrestre::Update(float dt)
         isChasing = false;
 
         // Chase mode (high priority)
-        if (distanceToPlayer <= DETECTION_DISTANCE)
-        {
-            isChasing = true;
-
-            // Reset and calculate path to player
-            pathfinding->ResetPath(enemyTilePos);
-
-            // Run A* algorithm with iteration limit
-            for (int i = 0; i < MAX_PATHFINDING_ITERATIONS; i++) {
-                pathfinding->PropagateAStar(SQUARED);
-                if (pathfinding->ReachedPlayer(playerTilePos)) {
-                    break;
-                }
-            }
-
-            // Compute path from origin to destination
-            pathfinding->ComputePath(playerTilePos.getX(), playerTilePos.getY());
-
-            // Check if a valid path was found
-            if (!pathfinding->pathTiles.empty() && pathfinding->pathTiles.size() > 1)
+        if (!ishurt) {
+            if (distanceToPlayer <= DETECTION_DISTANCE)
             {
-                // Get the next point in the path
-                // To ensure consistency, always use the second point in the path
-                Vector2D nextTile = *(std::next(pathfinding->pathTiles.begin(), 1));
+                isChasing = true;
 
-                // Convert tile position to world coordinates
-                Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+                // Reset and calculate path to player
+                pathfinding->ResetPath(enemyTilePos);
 
-                // Determine movement direction with greater precision
-                float moveX = nextPos.getX() - enemyPos.getX();
-
-                // More precise threshold to determine direction
-                if (moveX < -1.0f) {
-                    isLookingLeft = true;
-                }
-                else if (moveX > 1.0f) {
-                    isLookingLeft = false;
+                // Run A* algorithm with iteration limit
+                for (int i = 0; i < MAX_PATHFINDING_ITERATIONS; i++) {
+                    pathfinding->PropagateAStar(SQUARED);
+                    if (pathfinding->ReachedPlayer(playerTilePos)) {
+                        break;
+                    }
                 }
 
-                // Adjust speed according to direction
-                velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
+                // Compute path from origin to destination
+                pathfinding->ComputePath(playerTilePos.getX(), playerTilePos.getY());
 
-                // Fine-tune speed when close to target
-                if (fabs(moveX) < 5.0f) {
-                    velocityX *= 0.5f;
+                // Check if a valid path was found
+                if (!pathfinding->pathTiles.empty() && pathfinding->pathTiles.size() > 1)
+                {
+                    // Get the next point in the path
+                    // To ensure consistency, always use the second point in the path
+                    Vector2D nextTile = *(std::next(pathfinding->pathTiles.begin(), 1));
+
+                    // Convert tile position to world coordinates
+                    Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+
+                    // Determine movement direction with greater precision
+                    float moveX = nextPos.getX() - enemyPos.getX();
+
+                    // More precise threshold to determine direction
+                    if (moveX < -1.0f) {
+                        isLookingLeft = true;
+                    }
+                    else if (moveX > 1.0f) {
+                        isLookingLeft = false;
+                    }
+
+                    // Adjust speed according to direction
+                    velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
+
+                    // Fine-tune speed when close to target
+                    if (fabs(moveX) < 5.0f) {
+                        velocityX *= 0.5f;
+                    }
                 }
             }
+
+
+            // Patrol mode (low priority) - only if not chasing
+            if (!isChasing)
+            {
+                velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
+                isLookingLeft = !giro;
+            }
+
         }
-
-        // Patrol mode (low priority) - only if not chasing
-        if (!isChasing)
-        {
-            velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
-            isLookingLeft = !giro;
-        }
-
-
         // Apply velocity to physical body
         b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
         pbody->body->SetLinearVelocity(velocity);
@@ -267,33 +280,43 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
             lives--;
-            if (lives <= 0 && !isDying) { // Prevent multiple death animations
-                isDying = true;
-                currentAnimation = &die;
-                currentAnimation->Reset();
+            currentAnimation = &hurt;
+            hurt.Reset();
+            ishurt = true;
+        }
 
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                pbody->body->SetAwake(false);
-                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-                pbody->body->SetGravityScale(0.0f);
-            }
+        else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            isDying = true;
+            currentAnimation = &die;
+            currentAnimation->Reset();
+
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            pbody->body->SetAwake(false);
+            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            pbody->body->SetGravityScale(0.0f);
+
         }
     }
         break;
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives = lives - 2;
-            if (lives <= 0 && !isDead) {
-                isDead = true;
-                currentAnimation = &die;
-                a = 1;
-
-                // Stop physical body movement
-                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-                pbody->body->SetAwake(false);
-                pbody->body->SetGravityScale(0.0f); // In case it's falling
-            }
+            currentAnimation = &hurt;
+            hurt.Reset();
+            ishurt = true;
         }
+   
+        else if (lives <= 0 && !isDead) {
+            isDead = true;
+            currentAnimation = &die;
+            a = 1;
+
+            // Stop physical body movement
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetAwake(false);
+            pbody->body->SetGravityScale(0.0f); // In case it's falling
+        }
+        
     }
 
         break;

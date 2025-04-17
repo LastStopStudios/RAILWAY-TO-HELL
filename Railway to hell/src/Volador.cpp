@@ -96,6 +96,17 @@ bool Volador::Update(float dt) {
         }
     }
 
+    if (ishurt) {
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+		if (hurt.HasFinished()) {
+			ishurt = false;
+			currentAnimation = &idle;
+		}
+    }
+
     //The basic structure is that first the animation is performed and when it finishes, pendingToDelete is set to true, there is a function in entity.h that has this boolean variable
     // and there is also a function that returns the variable, in the entity manager in the update function logic has been added to check the variable and if it is set to true it destroys it there.
     // 
@@ -147,51 +158,53 @@ bool Volador::Update(float dt) {
     static bool movingRight = true;
 
     // Patrol and pathfinding logic
-    if (distanceToPlayerX <= patrolDistance) {
-        // Pathfinding and moving towards the player
-        int maxIterations = 100;
-        int iterations = 0;
+    if (!ishurt) {
+        if (distanceToPlayerX <= patrolDistance) {
+            // Pathfinding and moving towards the player
+            int maxIterations = 100;
+            int iterations = 0;
 
-        while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
-            pathfinding->PropagateAStar(SQUARED);
-            iterations++;
-        }
-
-        if (!pathfinding->pathTiles.empty()) {
-            auto it = pathfinding->pathTiles.end();
-            --it; --it;
-            Vector2D nextTile = *it;
-            Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
-            float dx = nextPos.getX() - enemyPos.getX();
-            float dy = nextPos.getY() - enemyPos.getY();
-            float distance = sqrt(dx * dx + dy * dy);
-
-            if (distance < 5.0f) {
-                pathfinding->pathTiles.pop_back();
+            while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
+                pathfinding->PropagateAStar(SQUARED);
+                iterations++;
             }
-            else {
-                float stepX = (dx / distance) * moveSpeed;
-                float stepY = (dy / distance) * moveSpeed;
-                isLookingLeft = (dx < 0);
-                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(stepX), PIXEL_TO_METERS(stepY));
+
+            if (!pathfinding->pathTiles.empty()) {
+                auto it = pathfinding->pathTiles.end();
+                --it; --it;
+                Vector2D nextTile = *it;
+                Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+                float dx = nextPos.getX() - enemyPos.getX();
+                float dy = nextPos.getY() - enemyPos.getY();
+                float distance = sqrt(dx * dx + dy * dy);
+
+                if (distance < 5.0f) {
+                    pathfinding->pathTiles.pop_back();
+                }
+                else {
+                    float stepX = (dx / distance) * moveSpeed;
+                    float stepY = (dy / distance) * moveSpeed;
+                    isLookingLeft = (dx < 0);
+                    b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(stepX), PIXEL_TO_METERS(stepY));
+                    pbody->body->SetLinearVelocity(velocity);
+                }
+            }
+        }
+        else {
+
+            const float patrolSpeed = 20.0f;
+            if (giro == true) {
+                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
                 pbody->body->SetLinearVelocity(velocity);
+                isLookingLeft = true;
             }
+            else if (giro == false) {
+                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
+                pbody->body->SetLinearVelocity(velocity);
+                isLookingLeft = false;
+            }
+
         }
-    }
-    else {
-           
-        const float patrolSpeed = 20.0f;
-        if (giro == true) {
-            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
-            pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = true;
-        }
-        else if (giro == false) {
-            b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
-            pbody->body->SetLinearVelocity(velocity);
-            isLookingLeft = false;
-        }
-        
     }
         pathfinding->DrawPath();
         pathfinding->ResetPath(enemyTilePos);
@@ -264,8 +277,12 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
-			lives--;
-            if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            lives--;
+            currentAnimation = &hurt;
+            hurt.Reset();
+			ishurt = true;
+        }
+        else if (lives <= 0 && !isDying) { // Prevent multiple death animations
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
@@ -273,23 +290,27 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
                 // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-            }
         }
+        
     }
         break;
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives = lives - 2;
-            if (lives <= 0 && !isDead) {
+            currentAnimation = &hurt;
+            hurt.Reset();
+            ishurt = true;
+        }
+
+        else if (lives <= 0 && !isDead) {
 			    isDead = true;
 			    currentAnimation = &die;
 			    a = 1;
-
 			    // Stop physical body movement
 			    pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 			    pbody->body->SetGravityScale(0.0f); // In case it's falling
-		    }
-        }
+		}
+        
     }
 		
 		break;
