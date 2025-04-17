@@ -42,15 +42,15 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
         Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
     }
       
-    if (fade == false) {
-        UnLoadEnemiesItems();
-        SetCurrentScene(level);
-        DrawScene(level, x, y);
-    }
-
-	if (fade == true) {
-		FadeOut(1.0f, true, level, x, y); // Animation speed (FadeOut)
-	}
+    /*if (fade == false) {
+        
+    }*/
+    UnLoadEnemiesItems();
+    SetCurrentScene(level);
+    DrawScene(level, x, y);
+	//if (fade == true) {
+	//	FadeOut(1.0f, true, level, x, y); // Animation speed (FadeOut)
+	//}
 
 }
 
