@@ -108,7 +108,7 @@
 						<frame x="480" y="832" w="96" h="96" />
 						<frame x="576" y="832" w="96" h="96" />
 					</attack>
-					<wakeup loop="false" speed="0.07">
+					<wakeup loop="false" speed="0.03">
 						<frame x="0" y="929" w="64" h="96" />
 						<frame x="64" y="929" w="64" h="96" />
 						<frame x="128" y="929" w="64" h="96" />

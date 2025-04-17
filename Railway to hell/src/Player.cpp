@@ -16,6 +16,8 @@ Player::Player() : Entity(EntityType::PLAYER)
     name = "Player";
     godMode = false;
     bodyJoint = nullptr;
+    isWakingUp = true;
+    hasWokenUp = false;
 }
 
 Player::~Player() {
@@ -151,7 +153,6 @@ bool Player::Start() {
     recovering.LoadAnimations(parameters.child("animations").child("recoveringJump"));
     auto recoveringNode = parameters.child("animations").child("recoveringJump");
     recoveringTexture = recoveringNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(recoveringNode.attribute("texture").as_string()) : texture;
-
     
     isPreparingJump = false;
     isJumping = false;
@@ -199,6 +200,16 @@ bool Player::Start() {
     deathTexture = deathNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(deathNode.attribute("texture").as_string()) : texture;
 
 
+    // Wakeup animation 
+    wakeupAnim.LoadAnimations(parameters.child("animations").child("wakeup"));
+    auto wakeupNode = parameters.child("animations").child("wakeup");
+    wakeupTexture = wakeupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(wakeupNode.attribute("texture").as_string()) : texture;
+
+    // Initialize wakeup animation
+    isWakingUp = true;
+    hasWakeupStarted = false;
+    wakeupTimer = 0.0f;
+
     // Set initial state
     isAttacking = false;
     canAttack = true;
@@ -215,6 +226,12 @@ bool Player::Start() {
     WhipAttack = true;
     facingRight = true;
 
+    // Set initial animation to wakeup if we haven't woken up yet
+    if (isWakingUp && !hasWokenUp) {
+        currentAnimation = &wakeupAnim;
+        texture = wakeupTexture;
+    }
+
     return true;
 }
 
@@ -229,6 +246,26 @@ bool Player::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
+
+    // Handle wakeup animation first
+    if (isWakingUp) {
+        HandleWakeup(dt);
+
+        // During wakeup, we freeze player position and don't process other inputs
+        pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+        // Update position from physics body
+        b2Transform pbodyPos = pbodyUpper->body->GetTransform();
+        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
+
+        // Draw the player with the wakeup animation
+        currentAnimation->Update();
+        DrawPlayer();
+        return true;
+    }
+
     if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
@@ -327,6 +364,33 @@ bool Player::Update(float dt)
 
 bool Player::PostUpdate() {
     return true; 
+}
+
+void Player::HandleWakeup(float dt) {
+    if (!hasWakeupStarted) {
+        wakeupAnim.Reset();
+        hasWakeupStarted = true;
+        texture = wakeupTexture;
+        currentAnimation = &wakeupAnim;
+
+        // Disable player movement during wakeup
+        pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+        LOG("Starting wakeup animation");
+    }
+
+    wakeupAnim.Update();
+
+    // Once the animation completes, return to idle state
+    if (wakeupAnim.HasFinished()) {
+        isWakingUp = false;
+        hasWakeupStarted = false;
+        hasWokenUp = true;
+        currentAnimation = &idle;
+        texture = idleTexture;
+        LOG("Wakeup animation completed");
+    }
 }
 
 void Player::HandleMovement(b2Vec2& velocity) {
@@ -760,6 +824,12 @@ void Player::DrawPlayer() {
         texture = hurtTexture;
         currentAnimation = &hurt;
         hurt.Update();
+    }
+    else if (isWakingUp) {
+        // Set wakeup animation
+        currentAnimation = &wakeupAnim;
+        texture = wakeupTexture;
+        wakeupAnim.Update();
     }
     else if (isAttacking) {
         currentAnimation = &meleeAttack;

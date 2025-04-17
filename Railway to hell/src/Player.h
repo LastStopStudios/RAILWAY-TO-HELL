@@ -71,8 +71,7 @@ private:
 	void UpdateWhipAttack(float dt);
 	void HandlePickup(float dt);
 	void HandleDeath(float dt);
-
-
+	void HandleWakeup(float dt);
 public:
 	// Public properties
 	SDL_Texture* texture = NULL;
@@ -170,6 +169,13 @@ private:
 	SDL_Texture* pickupTexture = nullptr;
 	bool isPickingUp = false;
 	bool hasPickupStarted = false;
+
+	// Wakeup properties
+	Animation wakeupAnim;
+	SDL_Texture* wakeupTexture = nullptr;
+	bool isWakingUp, hasWokenUp;
+	bool hasWakeupStarted;
+	float wakeupTimer;
 
 	Animation* currentAnimation = nullptr;
 	SDL_Texture* idleTexture = nullptr;  // Attack visual
