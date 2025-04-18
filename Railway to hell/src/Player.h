@@ -33,8 +33,8 @@ public:
 	struct EscenaQueCargar {
 		std::string escena;
 		int id;
-		int x;
-		int y;
+		float x;
+		float y;
 		bool fade;
 		bool CamaraBoss;
 	};
@@ -42,11 +42,11 @@ public:
 	std::vector<EscenaQueCargar> escenas = {
 	//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
 	{"DE2L1T2",1,10046,2160,false,false},
-	{"DT2L1E2",3,825,815,false,false},
+	{"DT2L1E2",3,825,704,false,false},
 	{"DT2L1E1",2,3050,860,false,false},
 	{"DE1L1T2",1,864,2149,false,false},
-	{"DE2L1BOSS1",3,1840,1784,true,true},
-	{"BOSS1DE2L1",3,1840,815,true,false},
+	{"DE2L1BOSS1",3,1854,1598.90,true,true},
+	{"BOSS1DE2L1",3,2624,704,true,false},
 	};
 	//elevator control
 	bool TocandoAs = false;
@@ -85,7 +85,7 @@ public:
 	bool Fade;
 	bool BossCam;
 	int sceneToLoad = -1;
-	int Playerx, Playery;
+	float Playerx, Playery;
 
 	//Dialogues
 	bool NeedDialogue = false;
