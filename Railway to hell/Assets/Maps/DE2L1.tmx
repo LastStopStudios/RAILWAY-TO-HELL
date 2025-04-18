@@ -60,6 +60,9 @@
   <image source="atlas_backgrounds.png" width="4864" height="1664"/>
  </tileset>
  <layer id="18" name="Fondo" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -7264,6 +7267,9 @@
   </data>
  </layer>
  <layer id="19" name="Capa de patrones 5" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -28882,6 +28888,9 @@
   </data>
  </layer>
  <layer id="23" name="Grafitis" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -43293,6 +43302,9 @@
   </data>
  </layer>
  <layer id="21" name="Decoració" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -50497,6 +50509,9 @@
   </data>
  </layer>
  <layer id="24" name="Obstaculos" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -57701,6 +57716,9 @@
   </data>
  </layer>
  <layer id="25" name="Obstaculos2" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -64905,6 +64923,9 @@
   </data>
  </layer>
  <layer id="22" name="Ascensor" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -72109,6 +72130,9 @@
   </data>
  </layer>
  <layer id="20" name="Llums" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
