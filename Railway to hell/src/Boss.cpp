@@ -40,33 +40,85 @@ bool Boss::Start() {
     attack.LoadAnimations(parameters.child("animations").child("whipAttack"));
     running.LoadAnimations(parameters.child("animations").child("walking"));
     die.LoadAnimations(parameters.child("animations").child("die"));
-	hurt.LoadAnimations(parameters.child("animations").child("hurt"));
+    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
     currentAnimation = &idle;
 
     //initialize enemy parameters 
-    moveSpeed = 30.0f; 
+    moveSpeed = 30.0f;
     patrolSpeed = 30.0f;
     savedPosX = 0.0f;
+    // Physics body initialization - now with two circular collisions
+    int radius = texW / 3; // Smaller radius than before
+    int centerX = (int)position.getX() + texW / 2;
+    int centerY = (int)position.getY() + texH / 2;
+    // Place upper body higher up
+    pbodyUpper = Engine::GetInstance().physics.get()->CreateCircle(
+        centerX,
+        centerY - radius,  // upper part
+        radius,
+        bodyType::DYNAMIC);
+    pbodyUpper->listener = this;
+    pbodyUpper->ctype = ColliderType::BOSS;
+    pbodyUpper->body->SetFixedRotation(true);
+    // Lower body (legs)
+    pbodyLower = Engine::GetInstance().physics.get()->CreateCircle(
+        centerX,
+        centerY + radius,  // lower part
+        radius,
+        bodyType::DYNAMIC);
+    pbodyLower->listener = this;
+    pbodyLower->ctype = ColliderType::BOSS;
+    pbodyLower->body->SetFixedRotation(true);
+    // Disable gravity
+    if (!parameters.attribute("gravity").as_bool()) {
+        pbodyUpper->body->SetGravityScale(0.5);
+        pbodyLower->body->SetGravityScale(0.5);
+    }
+    // Verify that bodies exist
+    if (!pbodyUpper || !pbodyLower || !pbodyUpper->body || !pbodyLower->body) {
+        LOG("Error: One or both Box2D bodies are null");
+        return false;
+    }
+    // Create a weld joint between the two circles
+    b2WeldJointDef jointDef;
+    jointDef.bodyA = pbodyUpper->body;
+    jointDef.bodyB = pbodyLower->body;
+    jointDef.collideConnected = false;
+    // The point where they touch: right between both
+    b2Vec2 worldAnchor = pbodyUpper->body->GetWorldCenter();
+    worldAnchor.y += radius; // connection point between both
+    jointDef.localAnchorA = pbodyUpper->body->GetLocalPoint(worldAnchor);
+    jointDef.localAnchorB = pbodyLower->body->GetLocalPoint(worldAnchor);
+    jointDef.referenceAngle = 0;
+    // Stiffness configuration
+    jointDef.stiffness = 1000.0f;
+    jointDef.damping = 0.5f;
+    bodyJoint = Engine::GetInstance().physics.get()->world->CreateJoint(&jointDef);
+    if (bodyJoint) {
+        LOG("Weld joint created successfully");
+    }
+    else {
+        LOG("Failed to create weld joint");
+    }
+    b2Fixture* fixtureUpper = pbodyUpper->body->GetFixtureList();
+    b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
 
-    //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+    if (fixtureUpper && fixtureLower) {
+        // Reducir la fricción para evitar quedarse pegado a las paredes
+        fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
+        fixtureLower->SetFriction(0.005f);
 
-    pbody->listener = this;
-    //Assign collider type
-    pbody->ctype = ColliderType::BOSS;
-
-    pbody->body->SetFixedRotation(false);
-    pbody->body->SetGravityScale(1.0f);
-
-    // Set the gravity of the body
-    if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(2.0f);
+        //// Opcional: configurar valores específicos para colisiones laterales
+        //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
+        //fixtureLower->SetRestitution(0.5f);
+    }
 
     // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
 
     a = 0;
-	kill = 1;
+    kill = 1;
 
     return true;
 }
@@ -77,24 +129,35 @@ bool Boss::Update(float dt)
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
-       
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f); 
+        // Stop physics movement when not in gameplay
+        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyUpper->body->SetGravityScale(0.0f);
+        }
+        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetGravityScale(0.0f);
         }
         return true;
     }
     else {
-        
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetGravityScale(1.0f); 
+        // Restore gravity when back in gameplay
+        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+            pbodyUpper->body->SetGravityScale(1.0f);
+        }
+        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+            pbodyLower->body->SetGravityScale(1.0f);
         }
     }
 
     if (ishurt) {
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f);
+        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyUpper->body->SetGravityScale(0.0f);
+        }
+        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetGravityScale(0.0f);
         }
         if (hurt.HasFinished()) {
             ishurt = false;
@@ -104,9 +167,13 @@ bool Boss::Update(float dt)
 
     if (isDying || isDead) {
         // Asegurar que no haya movimiento durante la muerte
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f);
+        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyUpper->body->SetGravityScale(0.0f);
+        }
+        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetGravityScale(0.0f);
         }
 
         currentAnimation->Update();
@@ -121,7 +188,7 @@ bool Boss::Update(float dt)
 
         // Draw the death animation
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32 , &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
         return true;
@@ -136,7 +203,9 @@ bool Boss::Update(float dt)
     if (!ishurt) {
         if (Engine::GetInstance().entityManager->dialogo == false) {
 
-            b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+            // Get current velocity of upper body
+            b2Vec2 velocityUpper = pbodyUpper->body->GetLinearVelocity();
+            b2Vec2 velocityLower = pbodyLower->body->GetLinearVelocity();
 
             float dx = playerTilePos.getX() - enemyTilePos.getX();
             float dy = playerTilePos.getY() - enemyTilePos.getY();
@@ -155,12 +224,11 @@ bool Boss::Update(float dt)
             }
 
             if ((isLookingLeft && dx <= -attackDistance)) {
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, velocityUpper.y));
+                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, velocityLower.y));
             }
 
             isLookingLeft = dx < 0; // Set the direction of the enemy
-
-
 
             if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) { // start attacking
                 isAttacking = true;
@@ -182,13 +250,13 @@ bool Boss::Update(float dt)
             }
 
             if (isAttacking) {
-                pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
+                pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
 
                 if (attack.HasFinished()) { // stop attacking
                     isAttacking = false;
                     currentAnimation = &running;
                     attack.Reset();
-
 
                     if (area != nullptr) { // delete the attack area
                         Engine::GetInstance().physics.get()->DeletePhysBody(area);
@@ -231,8 +299,9 @@ bool Boss::Update(float dt)
                             }
                             else {
                                 float velocityX = isLookingLeft ? -moveSpeed : moveSpeed;
-                                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
-                                pbody->body->SetLinearVelocity(velocity);
+                                // Apply velocity to both bodies
+                                pbodyUpper->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityUpper.y));
+                                pbodyLower->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityLower.y));
                             }
                         }
                     }
@@ -243,8 +312,8 @@ bool Boss::Update(float dt)
                         currentAnimation = &idle;
                         idle.Reset();
                     }
-                    b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
-                    pbody->body->SetLinearVelocity(velocity);
+                    pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
+                    pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
                 }
             }
 
@@ -258,15 +327,15 @@ bool Boss::Update(float dt)
             }
             else {
                 flip = SDL_FLIP_NONE;
-
             }
 
-            b2Transform pbodyPos = pbody->body->GetTransform();
-            position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-            position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - 32);
-
+            // Update position from the upper body's transform
+            b2Transform pbodyUpperPos = pbodyUpper->body->GetTransform();
+            position.setX(METERS_TO_PIXELS(pbodyUpperPos.p.x) - texH / 2);
+            position.setY(METERS_TO_PIXELS(pbodyUpperPos.p.y) - 32);
         }
     }
+
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
     int renderX = (int)position.getX() - offsetX;
@@ -276,7 +345,7 @@ bool Boss::Update(float dt)
         texture,
         renderX,
         renderY,
-		&frame,
+        &frame,
         1.0f,
         0.0,
         INT_MAX,
@@ -286,7 +355,6 @@ bool Boss::Update(float dt)
 
     currentAnimation->Update();
 
-
     // pathfinding drawing
     pathfinding->DrawPath();
     pathfinding->ResetPath(enemyTilePos);
@@ -295,11 +363,11 @@ bool Boss::Update(float dt)
 }
 
 void Boss::Matar() {//eliminating the enemy once dead 
-	if (kill == 1) {
-		kill = 2;
-		Disable();//when it has to be activated use  Enable();
-		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-	}
+    if (kill == 1) {
+        kill = 2;
+        Disable();//when it has to be activated use  Enable();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    }
 }
 
 bool Boss::CleanUp()
@@ -309,7 +377,21 @@ bool Boss::CleanUp()
         area = nullptr;
     }
 
-    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    if (bodyJoint != nullptr) {
+        Engine::GetInstance().physics.get()->world->DestroyJoint(bodyJoint);
+        bodyJoint = nullptr;
+    }
+
+    if (pbodyUpper != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyUpper);
+        pbodyUpper = nullptr;
+    }
+
+    if (pbodyLower != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbodyLower);
+        pbodyLower = nullptr;
+    }
+
     return true;
 }
 
@@ -317,11 +399,22 @@ void Boss::SetPosition(Vector2D pos) {
     pos.setX(pos.getX() + texW / 2);
     pos.setY(pos.getY() + texH / 2);
     b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
+
+    // Calculate the current offset between upper and lower bodies
+    b2Vec2 upperPos = pbodyUpper->body->GetPosition();
+    b2Vec2 lowerPos = pbodyLower->body->GetPosition();
+    b2Vec2 offset = lowerPos - upperPos;
+
+    // Set position for upper body
+    pbodyUpper->body->SetTransform(bodyPos, 0);
+
+    // Set position for lower body, maintaining the same offset
+    pbodyLower->body->SetTransform(bodyPos + offset, 0);
 }
 
 Vector2D Boss::GetPosition() {
-    b2Vec2 bodyPos = pbody->body->GetTransform().p;
+    // We use the upper body for position tracking
+    b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
     return pos;
 }
@@ -333,10 +426,15 @@ void Boss::ResetPath() {
 }
 
 void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
+    // First check if the collision involves one of our bodies
+    if (physA != pbodyUpper && physA != pbodyLower) {
+        return;
+    }
+
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        // Player collision handling
         break;
 
     case ColliderType::PLAYER_ATTACK: {
@@ -351,14 +449,15 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             currentAnimation = &die;
             currentAnimation->Reset();
 
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            // Stop both bodies
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
             Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
         }
-        
     }
+                                    break;
 
-    break;
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives = lives - 2;
@@ -371,18 +470,27 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             currentAnimation = &die;
             a = 1;
             Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
-            // Detener movimiento del cuerpo físico
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f); // Por si está cayendo
-        }
 
+            // Stop both bodies
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+            // Disable gravity on both bodies
+            pbodyUpper->body->SetGravityScale(0.0f);
+            pbodyLower->body->SetGravityScale(0.0f);
+        }
     }
-    break;
+                                         break;
     }
 }
 
 void Boss::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {
+    // Check if the collision involves one of our bodies
+    if (physA != pbodyUpper && physA != pbodyLower) {
+        return;
+    }
+
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:

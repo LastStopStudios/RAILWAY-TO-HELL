@@ -4,6 +4,8 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Pathfinding.h"
+#include <vector>
+#include "Box2D/Box2D.h"
 
 struct SDL_Texture;
 
@@ -49,6 +51,11 @@ private:
 	float patrolSpeed;
 	float savedPosX; 
 	bool patroling = false; 
+
+	PhysBody* pbodyUpper;
+	PhysBody* pbodyLower;
+
+	b2Joint* bodyJoint;
 
 	SDL_RendererFlip flip = SDL_FLIP_NONE; 
 	bool isLookingLeft = false; 
