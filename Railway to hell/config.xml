@@ -143,15 +143,15 @@
 				</item>
 			</items>
 			<doors>
-				<door name="whip boss door" x="3690" y="2012" w="32" h="112" texture="Assets/Textures/background/whip boss door.png" gravity="false">
+				<door name="whip boss door" x="3713" y="1905" w="64" h="240" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
-							<frame x="0" y="0" w="32" h="112" />
+							<frame x="0" y="304" w="64" h="240" />
 						</idle>
 						<activated loop="false" speed="0.1">
-							<frame x="32" y="0" w="32" h="112" />
-							<frame x="64" y="0" w="32" h="112" />
-							<frame x="96" y="0" w="32" h="112" />
+							<frame x="64" y="304" w="64" h="240" />
+							<frame x="129" y="304" w="64" h="240" />
+							<frame x="192" y="304" w="64" h="240" />
 						</activated>
 					</animations>
 				</door>
