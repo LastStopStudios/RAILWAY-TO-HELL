@@ -38,6 +38,7 @@ bool Doors::Start() {
 	lever_door_Viewleft.LoadAnimations(parameters.child("animations").child("lever_door_Viewleft"));
 	door_lever_memory_left_activated.LoadAnimations(parameters.child("animations").child("door_lever_memory_left_activated"));
 	door_lever_to_station_activated.LoadAnimations(parameters.child("animations").child("door_lever_to_station_activated"));
+	door_lever_next_to_dashItem_activated.LoadAnimations(parameters.child("animations").child("door_lever_next_to_dashItem_activated"));
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
@@ -56,6 +57,9 @@ bool Doors::Start() {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
 	else if (GetDoorType() == "door_lever_to_station") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	else if (GetDoorType() == "door_lever_next_to_dashItem") {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
 	else {
@@ -106,6 +110,11 @@ bool Doors::Update(float dt)
 			currentAnimation = &door_lever_to_station_activated;
 		}
 	}
+	if (GetDoorType() == "door_lever_next_to_dashItem") {
+		if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverFour()) {
+			currentAnimation = &door_lever_next_to_dashItem_activated;
+		}
+	}
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
@@ -124,6 +133,9 @@ bool Doors::Update(float dt)
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	}
 	if (GetDoorType() == "door_lever_to_station") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	}
+	if (GetDoorType() == "door_lever_next_to_dashItem") {
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	}
 	currentAnimation->Update();
@@ -171,7 +183,11 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 			}
 		}
-
+		if (GetDoorType() == "door_lever_next_to_dashItem") {
+			if (door_lever_next_to_dashItem_activated.HasFinished()) {
+				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			}
+		}
 		if (GetDoorType() == "lever_door") {
 			if (lever_door_activated.HasFinished()) {
 				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
@@ -217,6 +233,13 @@ bool Doors::CleanUp()
 		}
 	}
 	if (GetDoorType() == "door_lever_to_station") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "door_lever_next_to_dashItem") {
 		if (pbody != nullptr) {
 			pbody->listener = nullptr;
 			Engine::GetInstance().physics->DeletePhysBody(pbody);

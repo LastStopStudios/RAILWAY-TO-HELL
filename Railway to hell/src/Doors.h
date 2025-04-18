@@ -44,7 +44,7 @@ private:
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
-	Animation idle, activated, lever_activated, lever_door_activated, lever_door_Viewleft, door_lever_memory_left_activated, door_lever_to_station_activated;
+	Animation idle, activated, lever_activated, lever_door_activated, lever_door_Viewleft, door_lever_memory_left_activated, door_lever_to_station_activated, door_lever_next_to_dashItem_activated;
 
 	//Add a physics to an door
 	PhysBody* pbody;

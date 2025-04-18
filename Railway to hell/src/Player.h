@@ -111,12 +111,14 @@ public:
 		leverOne = false;
 		leverTwo = false;
 		leverThree = false;
+		leverFour = false;
 	}
 
 	bool returnCanOpenDoor() { return canOpenDoor; }
 	bool returnLeverOne() { return leverOne; }
 	bool returnLeverTwo() { return leverTwo; }
 	bool returnLeverThree() { return leverThree; }
+	bool returnLeverFour() { return leverFour; }
 private:
 	// Private properties
 	Animation meleeAttack;       // Attack animation sequence
@@ -207,6 +209,7 @@ private:
 	bool leverOne = false;
 	bool leverTwo = false;
 	bool leverThree = false;
+	bool leverFour = false;
 
 	// lives
 	int lives = 10; // for testing try to set it to 3

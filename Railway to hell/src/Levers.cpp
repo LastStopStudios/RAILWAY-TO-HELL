@@ -80,6 +80,10 @@ bool Levers::Update(float dt)
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 
 	}
+	if (GetLeverType() == "lever_next_to_dash") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+
+	}
 	currentAnimation->Update();
 
 
@@ -111,6 +115,12 @@ void Levers::OnCollision(PhysBody* physA, PhysBody* physB) {
 			}
 		}
 		if (GetLeverType() == "lever_to_Station_E1L1") {
+			if (!Activated) {
+				Lever_Door_Activated = true;
+				currentAnimation = &lever_activated;
+			}
+		}
+		if (GetLeverType() == "lever_next_to_dash") {
 			if (!Activated) {
 				Lever_Door_Activated = true;
 				currentAnimation = &lever_activated;

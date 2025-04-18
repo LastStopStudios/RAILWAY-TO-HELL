@@ -194,6 +194,18 @@
 						</door_lever_memory_left_activated>
 					</animations>
 				</door>
+				<door name="door_lever_next_to_dashItem" x="6375" y="4415" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+						<door_lever_next_to_dashItem_activated loop="false" speed="0.1">
+							<frame x="64" y="0" w="48" h="144" />
+							<frame x="128" y="0" w="48" h="144" /> 
+							<frame x="192" y="0" w="48" h="144" />
+						</door_lever_next_to_dashItem_activated>
+					</animations>
+				</door>
 				<door name="door_lever_to_station" x="583" y="2114" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
@@ -231,6 +243,17 @@
 					</animations>
 				</lever>
 				<lever name="lever_to_Station_E1L1" x="980" y="2118" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</lever>
+				<lever name="lever_next_to_dash" x="6863" y="4420" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />

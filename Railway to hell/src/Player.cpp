@@ -572,6 +572,12 @@ void Player::HandleSceneSwitching() {
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {//move to the initial position of the scene
+        int debugXLevelDesignInitialPositionOfLevel = 6651;
+        int debugYLevelDesignInitialPositionOfLevel = 4426;
+        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
+        SetPosition(debugPos);
+    }
 }
  
 void Player::HandleHurt(float dt) {
@@ -1032,6 +1038,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (lever && lever->GetLeverType() == "lever_to_Station_E1L1" && !leverThree) {
                 leverThree = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        if (lever && lever->GetLeverType() == "lever_next_to_dash" && !leverFour) {
+            leverFour = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
         return;
     }
