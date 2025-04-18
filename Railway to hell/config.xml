@@ -170,17 +170,72 @@
 						</lever_door_activated>
 					</animations>
 				</door>
-			</doors>
-			<levers>
-				<lever name="lever" x="3890" y="2080" w="48" h="32" texture="Assets/Textures/background/lever.png" gravity="false">
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+						<lever_door_Viewleft loop="false" speed="0.1">
+							<frame x="64" y="0" w="48" h="144" />
+							<frame x="128" y="0" w="48" h="144" />
+							<frame x="192" y="0" w="48" h="144" />
+						</lever_door_Viewleft>
+				</animations>
+				</door>
+				<door name="door_lever_memory_left" x="294" y="4222" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>  
+						<idle loop="false" speed="0.5"> 
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+						<door_lever_memory_left_activated loop="false" speed="0.1">
+							<frame x="64" y="0" w="48" h="144" />
+							<frame x="128" y="0" w="48" h="144" />
+							<frame x="192" y="0" w="48" h="144" />
+						</door_lever_memory_left_activated>
+					</animations>
+				</door>
+				<door name="door_lever_to_station" x="583" y="2114" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
-							<frame x="0" y="0" w="48" h="32" />
+							<frame x="0" y="0" w="48" h="144" />
 						</idle>
-						<lever_activated loop="false" speed="0.1">
-							<frame x="48" y="0" w="48" h="32" />
-							<frame x="96" y="0" w="48" h="32" />
-							<frame x="144" y="0" w="48" h="32" />
+						<door_lever_to_station_activated loop="false" speed="0.1">
+							<frame x="64" y="0" w="48" h="144" />
+							<frame x="128" y="0" w="48" h="144" />
+							<frame x="192" y="0" w="48" h="144" />
+						</door_lever_to_station_activated>
+					</animations>
+				</door>
+			</doors>
+			<levers>
+				<lever name="lever" x="3790" y="4070" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</lever>
+				<lever name="lever_memory_left" x="450" y="4260" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</lever>
+				<lever name="lever_to_Station_E1L1" x="980" y="2118" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
 						</lever_activated>
 					</animations>
 				</lever>

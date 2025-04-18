@@ -35,6 +35,9 @@ bool Doors::Start() {
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
 	activated.LoadAnimations(parameters.child("animations").child("activated"));
 	lever_door_activated.LoadAnimations(parameters.child("animations").child("lever_door_activated"));
+	lever_door_Viewleft.LoadAnimations(parameters.child("animations").child("lever_door_Viewleft"));
+	door_lever_memory_left_activated.LoadAnimations(parameters.child("animations").child("door_lever_memory_left_activated"));
+	door_lever_to_station_activated.LoadAnimations(parameters.child("animations").child("door_lever_to_station_activated"));
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
@@ -46,9 +49,19 @@ bool Doors::Start() {
 	else if (GetDoorType() == "lever_door") {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
+	else if (GetDoorType() == "door_lever_2") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	else if (GetDoorType() == "door_lever_memory_left") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	else if (GetDoorType() == "door_lever_to_station") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
 	else {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
+
 	// Assign collider type
 	if (pbody != nullptr) {
 		pbody->listener = this;
@@ -73,9 +86,24 @@ bool Doors::Update(float dt)
 		LOG("Enemy pbody is null!");
 		return false;
 	}
-	if (GetDoorType() == "lever_door" ) {
+	//if (GetDoorType() == "lever_door" ) {
+	//	if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverOne()) {
+	//		currentAnimation = &lever_door_activated;
+	//	}
+	//}
+	if (GetDoorType() == "door_lever_2") {
 		if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverOne()) {
-			currentAnimation = &lever_door_activated;
+			currentAnimation = &lever_door_Viewleft;
+		}
+	}
+	if (GetDoorType() == "door_lever_memory_left") {
+		if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverTwo()) {
+			currentAnimation = &door_lever_memory_left_activated;
+		}
+	}
+	if (GetDoorType() == "door_lever_to_station") {
+		if (Engine::GetInstance().scene.get()->GetPlayer()->returnLeverThree()) {
+			currentAnimation = &door_lever_to_station_activated;
 		}
 	}
 
@@ -88,7 +116,15 @@ bool Doors::Update(float dt)
 	}
 	if (GetDoorType() == "lever_door") {
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW/2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
-
+	}
+	if (GetDoorType() == "door_lever_2") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	}
+	if (GetDoorType() == "door_lever_memory_left") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	}
+	if (GetDoorType() == "door_lever_to_station") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	}
 	currentAnimation->Update();
 
@@ -120,6 +156,21 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 		//		currentAnimation = &lever_activated;
 		//	}
 		//}
+		if (GetDoorType() == "door_lever_2") {
+			if (lever_door_Viewleft.HasFinished()) {
+				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			}
+		}
+		if (GetDoorType() == "door_lever_memory_left") {
+			if (door_lever_memory_left_activated.HasFinished()) {
+				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			}
+		}
+		if (GetDoorType() == "door_lever_to_station") {
+			if (door_lever_to_station_activated.HasFinished()) {
+				Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			}
+		}
 
 		if (GetDoorType() == "lever_door") {
 			if (lever_door_activated.HasFinished()) {
@@ -145,6 +196,27 @@ bool Doors::CleanUp()
 {
 
 	if (GetDoorType() == "lever_door") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "door_lever_2") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "door_lever_memory_left") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "door_lever_to_station") {
 		if (pbody != nullptr) {
 			pbody->listener = nullptr;
 			Engine::GetInstance().physics->DeletePhysBody(pbody);

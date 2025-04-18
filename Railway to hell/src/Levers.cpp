@@ -72,6 +72,14 @@ bool Levers::Update(float dt)
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 
 	}
+	if (GetLeverType() == "lever_memory_left") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+
+	}
+	if (GetLeverType() == "lever_to_Station_E1L1") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
+
+	}
 	currentAnimation->Update();
 
 
@@ -91,6 +99,18 @@ void Levers::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLAYER_WHIP_ATTACK: {
 		if (GetLeverType() == "lever") {
+			if (!Activated) {
+				Lever_Door_Activated = true;
+				currentAnimation = &lever_activated;
+			}
+		}
+		if (GetLeverType() == "lever_memory_left") {
+			if (!Activated) {
+				Lever_Door_Activated = true;
+				currentAnimation = &lever_activated;
+			}
+		}
+		if (GetLeverType() == "lever_to_Station_E1L1") {
 			if (!Activated) {
 				Lever_Door_Activated = true;
 				currentAnimation = &lever_activated;

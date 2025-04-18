@@ -555,20 +555,25 @@ void Player::HandleSceneSwitching() {
     }
     //Debug Level Design
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move to desired pos
-        int debugXLevelDesign = 1937;
-        int debugYLevelDesign = 4051;
+        int debugXLevelDesign = 4008;
+        int debugYLevelDesign = 4094;
         Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
         SetPosition(debugPos);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {//move to the initial position of the scene
-        int debugXLevelDesignInitialPositionOfLevel = 3200;
-        int debugYLevelDesignInitialPositionOfLevel = 2079;
+        int debugXLevelDesignInitialPositionOfLevel = 613;
+        int debugYLevelDesignInitialPositionOfLevel = 4257;
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
-
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {//move to the initial position of the scene
+        int debugXLevelDesignInitialPositionOfLevel = 1106;
+        int debugYLevelDesignInitialPositionOfLevel = 2031;
+        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
+        SetPosition(debugPos);
+    }
 }
-
+ 
 void Player::HandleHurt(float dt) {
     // Check if the player is hurt
     if (isHurt && !isDying) {
@@ -1019,6 +1024,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (lever && lever->GetLeverType() == "lever" && !leverOne) {
             leverOne = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        if (lever && lever->GetLeverType() == "lever_memory_left" && !leverTwo) {
+            leverTwo = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
+        if (lever && lever->GetLeverType() == "lever_to_Station_E1L1" && !leverThree) {
+                leverThree = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
         return;
     }
