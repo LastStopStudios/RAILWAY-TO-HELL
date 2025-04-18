@@ -7267,6 +7267,9 @@
   </data>
  </layer>
  <layer id="22" name="Capa de patrones 8" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -14471,6 +14474,9 @@
   </data>
  </layer>
  <layer id="18" name="Fondo" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -21675,6 +21681,9 @@
   </data>
  </layer>
  <layer id="19" name="Grafitis" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -28879,6 +28888,9 @@
   </data>
  </layer>
  <layer id="20" name="Decoración" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -36083,6 +36095,9 @@
   </data>
  </layer>
  <layer id="21" name="Luces" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
