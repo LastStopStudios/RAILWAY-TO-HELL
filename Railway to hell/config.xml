@@ -170,6 +170,8 @@
 						</lever_door_activated>
 					</animations>
 				</door>
+				<door name="door_lever_2" x="3656" y="4000" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="48" h="144" />
 						</idle>
