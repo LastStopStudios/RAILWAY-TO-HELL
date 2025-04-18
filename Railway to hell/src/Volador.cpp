@@ -112,7 +112,7 @@ bool Volador::Update(float dt) {
     // 
     // Handle death animation
     if (isDying || isDead) {
-        // Asegurar que no haya movimiento durante la muerte
+        // Ensure that there is no movement during death
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(0.0f);
@@ -191,14 +191,15 @@ bool Volador::Update(float dt) {
             }
         }
         else {
+            //patrol
 
             const float patrolSpeed = 20.0f;
-            if (giro == true) {
+            if (giro) {
                 b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
                 pbody->body->SetLinearVelocity(velocity);
                 isLookingLeft = false;  // Change from true
             }
-            else if (giro == false) {
+            else{
                 b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
                 pbody->body->SetLinearVelocity(velocity);
                 isLookingLeft = true;  // Change from false

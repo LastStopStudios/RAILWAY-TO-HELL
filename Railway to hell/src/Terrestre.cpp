@@ -211,16 +211,10 @@ bool Terrestre::Update(float dt)
                     }
                 }
                 else {
-
+                    // Patrol mode (low priority) - only if not chasing
                     velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
                     isLookingLeft = !giro;
                 }
-            }
-            // Patrol mode (low priority) - only if not chasing
-            if (!isChasing)
-            {
-               
-
             }
           
 
