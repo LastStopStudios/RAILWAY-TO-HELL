@@ -124,16 +124,16 @@ bool Player::Start() {
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
     stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
-    Engine::GetInstance().scene->AddToMusic(pickCoinFxId);
-    Engine::GetInstance().scene->AddToMusic(punchFX);
-    Engine::GetInstance().scene->AddToMusic(stepFX);
+    diedFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Game_Died_A.ogg");
+    hurtFX= Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/hurt.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
     Engine::GetInstance().audio.get()->SetFxVolume(punchFX, lowVolume);
     Engine::GetInstance().audio.get()->SetFxVolume(pickCoinFxId, lowVolume);
     Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
-
+    Engine::GetInstance().audio.get()->SetFxVolume(diedFX, 4);
+    Engine::GetInstance().audio.get()->SetFxVolume(hurtFX, 1);
     // Attack animation
     meleeAttack = Animation();
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
@@ -231,7 +231,6 @@ bool Player::Start() {
         currentAnimation = &wakeupAnim;
         texture = wakeupTexture;
     }
-
     return true;
 }
 
@@ -545,7 +544,7 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 842, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 700, false, false);
         hasDied = false;
     }
     // unlocks sensors
@@ -579,20 +578,42 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
 }
- 
 void Player::HandleHurt(float dt) {
     // Check if the player is hurt
     if (isHurt && !isDying) {
-		
         if (!hasHurtStarted) {
-            hurt.Reset(); 
+            hurt.Reset();
             hasHurtStarted = true; // Reset hurt animation one time
+            Engine::GetInstance().audio.get()->PlayFx(hurtFX);
+
+            // Reset attack states when hurt
+            isAttacking = false;
+            if (attackHitbox) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                attackHitbox = nullptr;
+            }
+
+            // Reset whip attack states when hurt
+            isWhipAttacking = false;
+            if (whipAttackHitbox) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                whipAttackHitbox = nullptr;
+            }
+
+            // Ensure we can attack again after being hurt
+            canAttack = true;
+            attackCooldown = 0.0f;
+            canWhipAttack = true;
+            whipAttackCooldown = 0.0f;
         }
+
         hurt.Update();
         if (hurt.HasFinished()) {
-			// Reset to idle
+            // Reset to idle
             hurted = true;
-			currentAnimation = &idle; 
+            isHurt = false;
+            hasHurtStarted = false;
+            currentAnimation = &idle;
             idle.Reset();
         }
     }
@@ -754,8 +775,6 @@ void Player::UpdateMeleeAttack(float dt) {
         isAttacking = true;
         canAttack = false;
         attackCooldown = 0.5f;
-
-
         meleeAttack.Reset();
 
         // Calculate the size of the hitbox to fit the attack sprite.
@@ -771,8 +790,8 @@ void Player::UpdateMeleeAttack(float dt) {
             ? centerX + texW / 2 - attackWidth / 2 // right
             : centerX - texW / 2 - attackWidth / -2;  // left
 
-
-        int attackY = centerY + 10 + texH / -7;  // Raise the position of the hitbox on the Y.
+        // Position the hitbox lower by using a positive value for texH division
+        int attackY = centerY + texH / 4;  // Move hitbox down by half texture height
 
         // Delete the previous hitbox if it existed.
         if (attackHitbox) {
@@ -782,7 +801,7 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Create a new hitbox and store dimensions for debugging.
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-            attackX, attackY, attackWidth, attackHeight, bodyType::DYNAMIC);
+            attackX, attackY, attackWidth, attackHeight - 64, bodyType::DYNAMIC);
         attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
         attackHitbox->listener = this;
         attackHitbox->width = attackWidth;
@@ -794,16 +813,16 @@ void Player::UpdateMeleeAttack(float dt) {
         meleeAttack.Update();
 
         if (attackHitbox) {
-
             int centerX = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().x);
             int centerY = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().y);
 
-            // Hitbox position adjusted upwards and with the direction corrected.
+            // Hitbox position adjusted with the direction corrected.
             int attackX = facingRight
                 ? centerX + texW / 2 - attackHitbox->width / -3 // right
                 : centerX - texW / 2 - attackHitbox->width / -2; // left
 
-            int attackY = centerY + texH / -7;
+            // Keep the hitbox consistently positioned lower
+            int attackY = centerY + texH / 4;  // Same offset as in creation
 
             attackHitbox->body->SetTransform(
                 { PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
@@ -828,6 +847,7 @@ void Player::DrawPlayer() {
     if (isDying) {
 		texture = deathTexture;
 		currentAnimation = &death;
+        Engine::GetInstance().audio.get()->PlayFx(diedFX);
 		//death.Update();
     }
     else if (isHurt && !hurted && !isDying) {
@@ -1085,6 +1105,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
                 /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID;*/ //ID from Item
                 break;

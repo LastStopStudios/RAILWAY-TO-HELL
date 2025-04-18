@@ -187,7 +187,7 @@ bool Scene::Update(float dt)
 		break;
 	case SceneState::GAMEPLAY:
 		if (currentMusic == "text") {
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Nothing.ogg", 1.0f);
+			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
 			currentMusic = "";
 		}
 		//Make the camera movement independent of framerate
