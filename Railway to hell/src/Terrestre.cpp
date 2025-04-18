@@ -51,6 +51,7 @@ bool Terrestre::Start() {
 
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
+    vez = 1;
 	ResetPath();
     a = 0;
     kill = 1;
@@ -194,13 +195,34 @@ bool Terrestre::Update(float dt)
                 }
             }
 
+            if (vez < 3 && !isChasing) {
+                velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
+                isLookingLeft = !giro;
+            }else if(!isChasing){
+                bool isOutsidePatrolBounds = (enemyPos.getX() < std::min(patrol1, patrol2) || enemyPos.getX() > std::max(patrol1, patrol2));
+                if (isOutsidePatrolBounds) {
+                    float patrolCenter = (patrol1 + patrol2) / 2.0f;
+                    float direction = (patrolCenter > enemyPos.getX()) ? 1.0f : -1.0f;
+                    velocityX = direction * PATROL_SPEED;
+                    isLookingLeft = (direction < 0);
 
+                    if (!isOutsidePatrolBounds) {
+                        giro = (enemyPos.getX() < patrolCenter);
+                    }
+                }
+                else {
+
+                    velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
+                    isLookingLeft = !giro;
+                }
+            }
             // Patrol mode (low priority) - only if not chasing
             if (!isChasing)
             {
-                velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
-                isLookingLeft = !giro;
+               
+
             }
+          
 
         }
         // Apply velocity to physical body
@@ -238,6 +260,7 @@ bool Terrestre::Update(float dt)
 
     return true;
 }
+
 void Terrestre::Matar() {//eliminating the enemy once dead 
     if (kill == 1) {
         kill = 2;
@@ -248,6 +271,7 @@ void Terrestre::Matar() {//eliminating the enemy once dead
 bool Terrestre::CleanUp()
 {
 	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    vez = 1;
 	return true;
 }
 
@@ -322,6 +346,15 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::GIRO:
        giro = !giro;
+       if(vez == 1){
+           Vector2D pos = GetPosition();
+           patrol1 = pos.getX();
+           vez++;
+       }else if (vez == 2) {
+           Vector2D pos = GetPosition();
+           patrol2 = pos.getX();
+           vez++;
+       }
         break;
 	}
 }
@@ -331,7 +364,6 @@ void Terrestre::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		LOG("Collision player");
 		break;
 	}
 }

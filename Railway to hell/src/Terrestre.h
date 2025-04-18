@@ -79,4 +79,7 @@ private:
 	bool hasPlayedDeathAnim = false;
 
 	bool ishurt = false;
+	//Patroling Control 
+	int vez, patrol1, patrol2;
+
 };
