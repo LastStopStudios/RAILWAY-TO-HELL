@@ -196,12 +196,12 @@ bool Volador::Update(float dt) {
             if (giro == true) {
                 b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
                 pbody->body->SetLinearVelocity(velocity);
-                isLookingLeft = true;
+                isLookingLeft = false;  // Change from true
             }
             else if (giro == false) {
                 b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
                 pbody->body->SetLinearVelocity(velocity);
-                isLookingLeft = false;
+                isLookingLeft = true;  // Change from false
             }
 
         }
@@ -211,7 +211,7 @@ bool Volador::Update(float dt) {
 
     }else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
     // Flip sprite configuration
-    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+    SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     // Adjust position for rendering
     b2Transform pbodyPos = pbody->body->GetTransform();
