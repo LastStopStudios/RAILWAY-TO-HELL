@@ -377,11 +377,6 @@ bool Boss::CleanUp()
         area = nullptr;
     }
 
-    if (bodyJoint != nullptr) {
-        Engine::GetInstance().physics.get()->world->DestroyJoint(bodyJoint);
-        bodyJoint = nullptr;
-    }
-
     if (pbodyUpper != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(pbodyUpper);
         pbodyUpper = nullptr;
