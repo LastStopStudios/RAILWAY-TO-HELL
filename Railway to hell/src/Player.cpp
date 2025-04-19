@@ -126,6 +126,8 @@ bool Player::Start() {
     stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
     diedFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Game_Died_A.ogg");
     hurtFX= Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/hurt.ogg");
+	dashFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/dash.ogg");
+	whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
@@ -134,6 +136,8 @@ bool Player::Start() {
     Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
     Engine::GetInstance().audio.get()->SetFxVolume(diedFX, 4);
     Engine::GetInstance().audio.get()->SetFxVolume(hurtFX, 1);
+	Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 1);
+	Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
     // Attack animation
     meleeAttack = Animation();
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
@@ -315,6 +319,7 @@ bool Player::Update(float dt)
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
+           
         }
 
         if (NeedSceneChange) { // Scene change
@@ -436,6 +441,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         dashCooldown -= dt;
         if (dashCooldown <= 0.0f) {
             canDash = true;
+            Engine::GetInstance().audio.get()->PlayFx(dashFX);
             dashCooldown = 0.0f;
         }
     }
@@ -665,9 +671,11 @@ void Player::UpdateWhipAttack(float dt) {
         if (isWhipAttacking) {
             isWhipAttacking = false;
             if (whipAttackHitbox) {
+                
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
                 whipAttackHitbox = nullptr;
             }
+           
             currentAnimation = &idle;
             idle.Reset();
         }
@@ -687,6 +695,7 @@ void Player::UpdateWhipAttack(float dt) {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
         !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack && !isHurt) {
         // Start whip attack
+        Engine::GetInstance().audio.get()->PlayFx(whipFX);
         isWhipAttacking = true;
         canWhipAttack = false;
         whipAttackCooldown = 0.7f;
@@ -888,6 +897,7 @@ void Player::DrawPlayer() {
     }
     else if (isRecovering) {
         // Set recovering animation when landing
+       
         currentAnimation = &recovering;
         texture = recoveringTexture;
         recovering.Update();

@@ -92,7 +92,7 @@ public:
 	std::string Id;
 
 	// Audio fx
-	int pickCoinFxId, punchFX, stepFX, diedFX, hurtFX;
+	int pickCoinFxId, punchFX, stepFX, diedFX, hurtFX,dashFX,whipFX;
 
 	PhysBody* pbodyUpper;
 	PhysBody* pbodyLower;
