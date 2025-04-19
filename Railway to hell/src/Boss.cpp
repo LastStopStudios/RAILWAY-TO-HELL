@@ -48,7 +48,7 @@ bool Boss::Start() {
     patrolSpeed = 30.0f;
     savedPosX = 0.0f;
     // Physics body initialization - now with two circular collisions
-    int radius = texW / 3; // Smaller radius than before
+    int radius = texW / 3.1; // Smaller radius than before
     int centerX = (int)position.getX() + texW / 2;
     int centerY = (int)position.getY() + texH / 2;
     // Place upper body higher up
@@ -338,8 +338,8 @@ bool Boss::Update(float dt)
 
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
-    int renderX = (int)position.getX() - offsetX;
-    int renderY = (int)position.getY() + texH - 32 - frame.h; // Centrado vertical
+    int renderX = (int)position.getX() - offsetX + 16;
+    int renderY = (int)position.getY() + texH - 5  - frame.h; // Centrado vertical
 
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
