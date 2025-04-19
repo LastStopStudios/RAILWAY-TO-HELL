@@ -93,5 +93,8 @@ private:
 	bool hasPlayedDeathAnim = false;
 
 	bool ishurt = false;
+	//Patroling Control 
+	int vez, patrol1x, patrol1y, patrol2x, patrol2y;
+	bool Chasing;
 };
 

@@ -75,6 +75,8 @@ bool Volador::Start() {
     ResetPath();
     a = 0;
     kill = 1;
+    Chasing = false;
+    vez = 1;
     return true;
 }
 
@@ -161,6 +163,7 @@ bool Volador::Update(float dt) {
     if (!ishurt) {
         if (distanceToPlayerX <= patrolDistance) {
             // Pathfinding and moving towards the player
+            Chasing = true;
             int maxIterations = 100;
             int iterations = 0;
 
@@ -191,19 +194,69 @@ bool Volador::Update(float dt) {
             }
         }
         else {
-            //patrol
-
+            Chasing = false;
             const float patrolSpeed = 20.0f;
-            if (giro) {
-                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(patrolSpeed), 0.0f);
-                pbody->body->SetLinearVelocity(velocity);
-                isLookingLeft = false;  // Change from true
+
+            // Only patrol if we already have both sensors
+            if (vez >= 3) {
+                Vector2D currentPos = GetPosition();
+
+                // Calculate patrol centre and boundaries
+                float minPatrolX = std::min(patrol1x, patrol2x);
+                float maxPatrolX = std::max(patrol1x, patrol2x);
+                float targetY = (patrol1y + patrol2y) / 2.0f;
+
+                // Determine if outside the patrol area
+                bool isOutsideX = (currentPos.getX() < minPatrolX || currentPos.getX() > maxPatrolX);
+                bool isWrongHeight = fabs(currentPos.getY() - targetY) > 20.0f;
+
+                // If outside the zone in X or Y
+                if (isOutsideX || isWrongHeight) {
+                    // adjust height if necessary
+                    if (isWrongHeight) {
+                        float dirY = (targetY > currentPos.getY()) ? 1.0f : -1.0f;
+                        b2Vec2 velocity(0, PIXEL_TO_METERS(dirY * patrolSpeed * 0.7f));
+                        pbody->body->SetLinearVelocity(velocity);
+                    }
+                    // adjust horizontal position
+                    else if (isOutsideX) {
+                        float targetX = (currentPos.getX() < minPatrolX) ? minPatrolX : maxPatrolX;
+                        float dirX = (targetX > currentPos.getX()) ? 1.0f : -1.0f;
+                        isLookingLeft = (dirX < 0);
+                        b2Vec2 velocity(PIXEL_TO_METERS(dirX * patrolSpeed), 0);
+                        pbody->body->SetLinearVelocity(velocity);
+                    }
+                }
+                else {
+                    // Normal patrol between the points
+                    float targetX = giro ? patrol2x : patrol1x;
+                    float dirX = (targetX > currentPos.getX()) ? 1.0f : -1.0f;
+                    isLookingLeft = (dirX < 0);
+
+                    b2Vec2 velocity(PIXEL_TO_METERS(dirX * patrolSpeed),0 );
+                    pbody->body->SetLinearVelocity(velocity);
+
+                    // Change direction if you reached the point
+                    if (fabs(currentPos.getX() - targetX) < 15.0f) {
+                        giro = !giro;
+                    }
+                }
             }
-            else{
-                b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-patrolSpeed), 0.0f);
-                pbody->body->SetLinearVelocity(velocity);
-                isLookingLeft = true;  // Change from false
+            else {
+                // Initial behaviour until both sensors are detected
+                const float initialPatrolSpeed = 20.0f;
+                if (giro) {
+                    b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(initialPatrolSpeed), 0.0f);
+                    pbody->body->SetLinearVelocity(velocity);
+                    isLookingLeft = false;
+                }
+                else {
+                    b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(-initialPatrolSpeed), 0.0f);
+                    pbody->body->SetLinearVelocity(velocity);
+                    isLookingLeft = true;
+                }
             }
+
 
         }
     }
@@ -245,6 +298,8 @@ bool Volador::CleanUp()
         texture = nullptr;
     }
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+    vez = 1;
+    Chasing = false;
     return true;
 }
 
@@ -317,6 +372,18 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
     case ColliderType::GIRO:
         giro = !giro;
+        if (vez == 1) {//First sensor
+            Vector2D pos = GetPosition();//Right sensor position
+            patrol1x = pos.getX();
+            patrol1y = pos.getY();
+            vez++;
+        }
+        else if (vez == 2) {//Second sensor
+            Vector2D pos = GetPosition();//Left sensor position
+            patrol2x = pos.getX();
+            patrol2y = pos.getY();
+            vez++;
+        }
         break;
 
     default:
