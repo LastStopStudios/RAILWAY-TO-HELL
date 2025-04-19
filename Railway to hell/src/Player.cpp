@@ -1076,6 +1076,36 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
+    if (physA->ctype == ColliderType::PLAYER  &&  physB->ctype == ColliderType::ITEM) {
+        Item* item = (Item*)physB->listener;
+
+        if (item) {
+
+            isPickingUp = true;
+
+            if (item && item->GetItemType() == "Dash ability") {
+                Dash = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID;*/ //ID from Item
+            }
+            if (item && item->GetItemType() == "Whip") {
+                WhipAttack = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID; //ID from Item
+            }
+            if (item && item->GetItemType() == "Door key") {
+                canOpenDoor = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
+                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID;*/ //ID from Item
+            }
+        }
+        return;
+    }
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         if (isJumping || isFalling) {
@@ -1092,35 +1122,36 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
      
         break;
     case ColliderType::ITEM: {
-        Item* item = (Item*)physB->listener;
+        //Item* item = (Item*)physB->listener;
 
-        if (item) {
+        //if (item) {
 
-            isPickingUp = true;
+        //    isPickingUp = true;
 
-            if (item && item->GetItemType() == "Dash ability") {
-                Dash = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID;*/ //ID from Item
-                break;
-            }
-            if (item && item->GetItemType() == "Whip") {
-                WhipAttack = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID; //ID from Item
-                break;
-            }
-            if (item && item->GetItemType() == "Door key") {
-                canOpenDoor = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
-                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID;*/ //ID from Item
-                break;
-            }
-        }
+        //    if (item && item->GetItemType() == "Dash ability") {
+        //        Dash = true;
+        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        //        /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+        //        Id = physB->ID;*/ //ID from Item
+        //        break;
+        //    }
+        //    if (item && item->GetItemType() == "Whip") {
+        //        WhipAttack = true;
+        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        //        NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+        //        Id = physB->ID; //ID from Item
+        //        break;
+        //    }
+        //    if (item && item->GetItemType() == "Door key") {
+        //        canOpenDoor = true;
+        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        //        Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
+        //        /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+        //        Id = physB->ID;*/ //ID from Item
+        //        break;
+        //    }
+        //}
+        break;
     }
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {

@@ -435,47 +435,51 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
             lives--;
-            currentAnimation = &hurt;
-            hurt.Reset();
-            ishurt = true;
-        }
-        else if (lives <= 0 && !isDying) { // Prevent multiple death animations
-            isDying = true;
-            currentAnimation = &die;
-            currentAnimation->Reset();
+            if (lives > 0) {
+                currentAnimation = &hurt;
+                hurt.Reset();
+                ishurt = true;
+            }
+            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+                isDying = true;
+                currentAnimation = &die;
+                currentAnimation->Reset();
 
-            // Stop both bodies
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                // Stop both bodies
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            }
         }
     }
-                                    break;
+    break;
 
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
-            lives = lives - 2;
-            currentAnimation = &hurt;
-            hurt.Reset();
-            ishurt = true;
-        }
-        else if (lives <= 0 && !isDead) {
-            isDead = true;
-            currentAnimation = &die;
-            a = 1;
-            Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
+            lives -= 1;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
+            if (lives > 0) {
+                currentAnimation = &hurt;
+                hurt.Reset();
+                ishurt = true;
+            }
+            else if (lives <= 0 && !isDead) {
+                isDead = true;
+                currentAnimation = &die;
+                a = 1;
+                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
 
-            // Stop both bodies
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                // Stop both bodies
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
-            // Disable gravity on both bodies
-            pbodyUpper->body->SetGravityScale(0.0f);
-            pbodyLower->body->SetGravityScale(0.0f);
+                // Disable gravity on both bodies
+                pbodyUpper->body->SetGravityScale(0.0f);
+                pbodyLower->body->SetGravityScale(0.0f);
+            }
         }
     }
-                                         break;
+    break;
     }
 }
 

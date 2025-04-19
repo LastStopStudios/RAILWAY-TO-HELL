@@ -334,11 +334,12 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
             lives--;
-            currentAnimation = &hurt;
-            hurt.Reset();
-			ishurt = true;
-        }
-        else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            if (lives > 0) {
+                currentAnimation = &hurt;
+                hurt.Reset();
+                ishurt = true;
+            }
+            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
@@ -346,6 +347,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
                 // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            }
         }
         
     }
@@ -353,19 +355,22 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives = lives - 2;
-            currentAnimation = &hurt;
-            hurt.Reset();
-            ishurt = true;
+            if (lives > 0) {
+                currentAnimation = &hurt;
+                hurt.Reset();
+                ishurt = true;
+            }
+            else if (lives <= 0 && !isDead) {
+                isDead = true;
+                currentAnimation = &die;
+                a = 1;
+                // Stop physical body movement
+                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+                pbody->body->SetGravityScale(0.0f); // In case it's falling
+            }
         }
 
-        else if (lives <= 0 && !isDead) {
-			    isDead = true;
-			    currentAnimation = &die;
-			    a = 1;
-			    // Stop physical body movement
-			    pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-			    pbody->body->SetGravityScale(0.0f); // In case it's falling
-		}
+       
         
     }
 		
