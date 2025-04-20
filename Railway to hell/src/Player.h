@@ -87,6 +87,8 @@ public:
 	int sceneToLoad = -1;
 	float Playerx, Playery;
 
+	bool changeMusicCaronte = false;
+
 	//Dialogues
 	bool NeedDialogue = false;
 	std::string Id;

@@ -309,7 +309,10 @@ bool Player::Update(float dt)
 
 		// Handle hurt animation
         HandleHurt(dt);
-
+        if (changeMusicCaronte) {
+            Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
+            changeMusicCaronte = false;
+        }
         // Handle attacks only when not dashing
         if (!isDashing && !isPickingUp && !isDying) {
             UpdateWhipAttack(dt);
@@ -1104,7 +1107,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
+                changeMusicCaronte = true; 
+                //Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
                 /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID;*/ //ID from Item
             }
