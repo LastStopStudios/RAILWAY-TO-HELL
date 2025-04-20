@@ -550,7 +550,7 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 766, 704, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 859, 646, false, false);
         hasDied = false;
     }
     // unlocks sensors

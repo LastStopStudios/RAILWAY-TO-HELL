@@ -2957,8 +2957,7 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo.png" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo2.png" TEXT="Cheesecake with mushrooms" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You're on the right track. For now you've reached the end of this vertical slice." />
 		</dialogues>
 	</scene2>
 	<scene3>
@@ -3063,7 +3062,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="2151" y="869" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+				<item name="Prueba" x="2151" y="869" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="16" h="16" />
@@ -3084,7 +3083,7 @@
 							</activated>
 						</animations>
 				</elevator>
-				<elevator name="elevator" x="1854" y="1598,90" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
+				<elevator name="elevator" x="1344" y="1536" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />
@@ -3203,9 +3202,8 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo5.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo2.png" TEXT="Cheesecake with mushrooms" />
-			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo2.png" TEXT="aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzAAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFFGGGGGGGGGGHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJKKKKKKKKKKLLLLLLLLLLMMMMMMMMMMNNNNNNNNNNOOOOOOOOOOPPPPPPPPPPQQQQQQQQQQRRRRRRRRRR1234567891TTTTTTTTTTUUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXXYYYYYYYYYYZZZZZZZZZZ" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Noma.png" TEXT="How did you manage to get out of your prison?! It was supposed to be your last stop. How dare you tiny soul stand against your judgment?! It doesn’t matter... Lets see how dauntless you are when face to face with the very incarnation of wrath and greed!" />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis... Can you hear me? I can hear your steps closer, but you still have a long way to go... Hurry, there is something lurking in the shadows, I don’t have much time..." />
 		</dialogues>
 	</scene3>
 </config>
