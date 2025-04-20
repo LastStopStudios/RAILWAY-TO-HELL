@@ -127,6 +127,13 @@
 						</idle>
 					</animations>
 				</item>
+				<item name="Remember1" x="239" y="4305" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="4">
+					<animations>
+						<idle loop="true" speed="0.5">
+							<frame x="0" y="16" w="16" h="16" />
+						</idle>
+					</animations>
+				</item>
 				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
@@ -2828,9 +2835,10 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo5.png" TEXT="War. War never changes. When atomic fire consumed the earth, those who survived did so in great underground vaults. When they opened, their inhabitants moved through the ruins of the old world to build new societies, establish new villages, form new tribes. As the decades passed, what had been the American Southwest united under the banner of the New Republic of California, dedicated to the old-world values of democracy and the rule of law." />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo2.png" TEXT="Cheesecake with mushrooms" />
-			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo2.png" TEXT="aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggghhhhhhhhhhiiiiiiiiiijjjjjjjjjjkkkkkkkkkkllllllllllmmmmmmmmmmnnnnnnnnnnooooooooooppppppppppqqqqqqqqqqrrrrrrrrrrssssssssssttttttttttuuuuuuuuuuvvvvvvvvvvwwwwwwwwwwxxxxxxxxxxyyyyyyyyyyzzzzzzzzzzAAAAAAAAAABBBBBBBBBBCCCCCCCCCCDDDDDDDDDDEEEEEEEEEEFFFFFFFFFFGGGGGGGGGGHHHHHHHHHHIIIIIIIIIIJJJJJJJJJJKKKKKKKKKKLLLLLLLLLLMMMMMMMMMMNNNNNNNNNNOOOOOOOOOOPPPPPPPPPPQQQQQQQQQQRRRRRRRRRR1234567891TTTTTTTTTTUUUUUUUUUUVVVVVVVVVVWWWWWWWWWWXXXXXXXXXXYYYYYYYYYYZZZZZZZZZZ" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="Welcome to your last stop. Eternal damnation between seats and forgotten cases in this train with no destiny." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="I shall never let you cross these bars, and in the most improbable case you did... may the darkness guide you and the shadows be your company." />
+			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis?... sis... Is that you? I've been seeing nothing but darkness for far too long, I'm scared, I don't know how I ended up here. I'm at the last stop of a green train line... Come rescue me, so we can get out of this hell. I will guide you." />
+			<dialog ID="4" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those pink sneakers you gave me for my birthday? I know it costed you a lot to get them." />		
 		</dialogues>
 	</scene>
 	<scene2>

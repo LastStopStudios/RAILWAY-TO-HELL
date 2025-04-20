@@ -103,7 +103,9 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (GetItemType() == "Door key") {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
-
+		if (GetItemType() == "Remember1") {
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		}
 		break;
 	}
 	case ColliderType::UNKNOWN:
