@@ -860,7 +860,7 @@ void Player::DrawPlayer() {
 		texture = deathTexture;
 		currentAnimation = &death;
         Engine::GetInstance().audio.get()->PlayFx(diedFX);
-		//death.Update();
+		death.Update();
     }
     else if (isHurt && !hurted && !isDying) {
         // Set hurt animation when hurt
@@ -969,14 +969,14 @@ void Player::DrawPlayer() {
 
 		if (facingRight) {
 		
-        drawX = position.getX() + 35;
-        drawY = position.getY() - 50;
+        drawX = position.getX() - 32;
+        drawY = position.getY() - 74;
        
 		}
 		else {
 
-            drawX = position.getX()  - 189;
-            drawY = position.getY() - 50;
+            drawX = position.getX() - 128;
+            drawY = position.getY() - 74;
            
         }
     }
@@ -993,8 +993,6 @@ void Player::DrawPlayer() {
 
         }
     }
-
-
 
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped

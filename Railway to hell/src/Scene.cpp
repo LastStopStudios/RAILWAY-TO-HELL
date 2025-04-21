@@ -171,7 +171,7 @@ bool Scene::Update(float dt)
 	case SceneState::TEXT_SCREEN:
 
 		if (!textMusicPlaying) {
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Text.ogg", 1.0f);
+			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Nothing.ogg", 1.0f);
 			textMusicPlaying = true;
 			introMusicPlaying = false;
 			currentMusic = "text";
