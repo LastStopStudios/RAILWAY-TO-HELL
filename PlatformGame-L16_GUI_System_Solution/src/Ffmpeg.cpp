@@ -12,13 +12,14 @@
 Ffmpeg::Ffmpeg(bool enabled) : Module()
 {
     name = "cutsceneplayer";
+    audioIndex = -1;
 }
 
 Ffmpeg::~Ffmpeg()
 {
 }
 
-bool Ffmpeg::Awake(pugi::xml_node& config)
+bool Ffmpeg::Awake()
 {
     LOG("Loading CutscenePlayer");
     bool ret = true;
@@ -54,7 +55,7 @@ bool Ffmpeg::Start()
     av_dump_format(formatContext, 0, file, 0);
 
     // Open codec context for video and audio streams
-    OpenCodecContext(&streamIndex);
+    OpenCodecContext(&streamIndex);                     // Funcion para abrir audio y video
 
     // Create SDL texture for rendering video frames
     renderTexture = SDL_CreateTexture(Engine::GetInstance().render.get()->renderer, SDL_PIXELFORMAT_YV12,
@@ -67,73 +68,84 @@ bool Ffmpeg::Start()
     // Set up SDL rectangle for video rendering
     renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
 
-    // Load additional textures for rendering
-    texture1 = Engine::GetInstance().textures->Load("Assets/rakan.png");
-    texture2 = Engine::GetInstance().textures->Load("Assets/xayah.png");
-
     // Set the module state to running
     running = true;
     return true;
 }
-
 bool Ffmpeg::OpenCodecContext(int* index)
 {
     // Find video stream in the file
     int videoIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
     if (videoIndex < 0) {
-        printf("Failed to find video stream in input file\n");
+        LOG("Failed to find video stream in input file\n");
         return true;
     }
+    LOG("Video index found: %d", videoIndex);
 
     // Find audio stream in the file
     int audioIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
     if (audioIndex < 0) {
-        printf("Failed to find audio stream in input file\n");
+        LOG("Failed to find audio stream in input file\n");
         // No audio stream found, continue without audio
+        audioIndex = -1;  // Mark as not available with a clear value
+    }
+    else {
+        LOG("Audio index found: %d", audioIndex);
     }
 
     // Open video codec context
-    if (OpenVideoCodecContext(videoIndex)) {
+    bool videoOpenFailed = OpenVideoCodecContext(videoIndex);
+    if (videoOpenFailed) {
+        LOG("Failed to open video codec context");
         return true;
     }
 
     // Open audio codec context if audio stream found
-    if (audioIndex >= 0 && OpenAudioCodecContext(audioIndex)) {
-        return true;
+    bool audioOpenFailed = false;
+    if (audioIndex >= 0) {
+        audioOpenFailed = OpenAudioCodecContext(audioIndex);
+        if (audioOpenFailed) {
+            LOG("Failed to open audio codec context");
+            // Just log the failure, we can continue without audio
+            audioIndex = -1;  // Mark as not available
+        }
     }
 
     *index = videoIndex;
+    this->audioIndex = audioIndex;  // Store the audio index, even if -1
 
-    return false;
+    LOG("Successfully opened codec contexts. Video index: %d, Audio index: %d", videoIndex, audioIndex);
+    return false; // Everything is set up
 }
-
 bool Ffmpeg::OpenVideoCodecContext(int videoIndex)
 {
     // Find the decoder for the video codec
     const AVCodec* codec = avcodec_find_decoder(formatContext->streams[videoIndex]->codecpar->codec_id);
     if (!codec) {
-        printf("Failed to find video codec!\n");
+        LOG("Failed to find video codec!\n");
         return true;
     }
 
     // Allocate a codec context for the decoder
     videoCodecContext = avcodec_alloc_context3(codec);
     if (!videoCodecContext) {
-        printf("Failed to allocate the video codec context\n");
+        LOG("Failed to allocate the video codec context\n");
         return true;
     }
 
     // Copy video codec parameters to the decoder context
     if (avcodec_parameters_to_context(videoCodecContext, formatContext->streams[videoIndex]->codecpar) < 0) {
-        printf("Failed to copy video codec parameters to decoder context!\n");
+        LOG("Failed to copy video codec parameters to decoder context!\n");
         return true;
     }
 
     // Open the video codec
     if (avcodec_open2(videoCodecContext, codec, NULL) < 0) {
-        printf("Failed to open video codec\n");
+        LOG("Failed to open video codec\n");
         return true;
     }
+
+// Devuelve true en todos los casos donde falle el abrir y cargar bien el video, si todo sale bien devuelve false. por lo que no se haria un return temprano en la func. de arriba
 
     return false;
 }
@@ -265,6 +277,8 @@ void Ffmpeg::ProcessAudio()
 
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
+    LOG("ConvertPixels called with videoIndex=%d, audioIndex=%d", videoIndex, audioIndex);
+
     // Calculate time per frame based on the average frame rate of the video stream
     int time = 1000 * formatContext->streams[videoIndex]->avg_frame_rate.den
         / formatContext->streams[videoIndex]->avg_frame_rate.num;
@@ -274,10 +288,12 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
     // Allocate memory for source and destination frames
     AVFrame* srcFrame = av_frame_alloc();
     if (!srcFrame) {
+        LOG("Failed to allocate source frame");
         return false;
     }
     AVFrame* dstFrame = av_frame_alloc();
     if (!dstFrame) {
+        LOG("Failed to allocate destination frame");
         av_frame_free(&srcFrame);
         return false;
     }
@@ -291,16 +307,29 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         videoCodecContext->width, videoCodecContext->height, AV_PIX_FMT_YUV420P,
         SWS_BILINEAR, NULL, NULL, NULL);
 
+    int packetCount = 0;
+    int videoPackets = 0;
+    int audioPackets = 0;
+
     // Loop through each packet in the video stream
     while (av_read_frame(formatContext, &packet) >= 0 && running)
     {
+        packetCount++;
+        LOG("Processing packet %d with stream_index=%d", packetCount, packet.stream_index);
+
         if (packet.stream_index == videoIndex)
         {
+            videoPackets++;
+            LOG("Found video packet %d", videoPackets);
+
             // Send packet to video decoder
             avcodec_send_packet(videoCodecContext, &packet);
             // Receive decoded frame
             int ret = avcodec_receive_frame(videoCodecContext, srcFrame);
-            if (ret) continue;
+            if (ret) {
+                LOG("Failed to receive frame, error=%d", ret);
+                continue;
+            }
 
             // Scale the source frame to the destination frame
             sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
@@ -324,12 +353,23 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
             // Unreference the packet to release its resources
             av_packet_unref(&packet);
         }
-        else if (packet.stream_index == audioIndex)
+        else if (audioIndex >= 0 && packet.stream_index == audioIndex)  // Fix this condition
         {
+            audioPackets++;
+            LOG("Found audio packet %d. Pushing to audio buffer.", audioPackets);
             // Push to the audio buffer
             audioBuffer.push(packet);
         }
+        else {
+            LOG("Unknown packet stream_index=%d, not matching video(%d) or audio(%d)",
+                packet.stream_index, videoIndex, audioIndex);
+            // Unreference the packet to release its resources
+            av_packet_unref(&packet);
+        }
     }
+
+    LOG("Finished processing packets. Total: %d, Video: %d, Audio: %d",
+        packetCount, videoPackets, audioPackets);
 
     // Free memory allocated for the destination frame
     av_freep(&dstFrame->data[0]);
@@ -340,7 +380,6 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 
     return false;
 }
-
 bool Ffmpeg::AllocImage(AVFrame* image)
 {
     // Set the pixel format, width, and height of the image frame
@@ -366,41 +405,6 @@ void Ffmpeg::RenderCutscene()
 
     SDL_RenderPresent(Engine::GetInstance().render.get()->renderer);
 }
-
-//void Ffmpeg::SelectCharacter()
-//{
-//    SDL_Event event;
-//    SDL_PollEvent(&event);
-//    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
-//    {
-//        running = false;
-//        LOG("Mouse clicked");
-//        app->fade->Fade(this, (Module*)app->scene, 10.0f);
-//        app->sceneMenu->Disable();
-//        app->map->Enable();
-//        app->entityManager->Enable();
-//    }
-//
-//    int mouseX, mouseY;
-//    SDL_GetMouseState(&mouseX, &mouseY);
-//
-//    if (mouseX >= rect1.x && mouseX <= rect1.x + rect1.w &&
-//        mouseY >= rect1.y && mouseY <= rect1.y + rect1.h) {
-//        isHover1 = true;
-//    }
-//    else {
-//        isHover1 = false;
-//    }
-//
-//    if (mouseX >= rect2.x && mouseX <= rect2.x + rect2.w &&
-//        mouseY >= rect2.y && mouseY <= rect2.y + rect2.h) {
-//        isHover2 = true;
-//    }
-//    else {
-//        isHover2 = false;
-//    }
-//
-//}
 
 bool Ffmpeg::Update(float dt)
 {

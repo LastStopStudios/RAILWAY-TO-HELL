@@ -31,7 +31,7 @@ public:
 
 	virtual ~Ffmpeg();
 
-	bool Awake(pugi::xml_node& conf);
+	bool Awake();
 
 	bool Start();
 
@@ -45,7 +45,6 @@ public:
 	bool ConvertPixels(int videoIndex, int audioIndex);
 	bool AllocImage(AVFrame* dstFrame);
 	void RenderCutscene();
-	void SelectCharacter();//esta dentro del codigo comentado
 	void ProcessAudio();
 
 public:
@@ -53,7 +52,7 @@ public:
 	AVFormatContext* formatContext;
 	AVCodecContext* videoCodecContext;
 	AVCodecContext* audioCodecContext;
-
+	int audioIndex;  // Nuevo miembro para el índice de audio
 	SDL_AudioDeviceID audioDevice;
 	int audioStreamIndex;
 

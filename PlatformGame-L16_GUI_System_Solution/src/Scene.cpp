@@ -62,10 +62,12 @@ bool Scene::Start()
 {
 	// Las siguientes 4 lineas de codigo sirven para reproducir el video
 	//
+	Ffmpeg* videoPlayer = new Ffmpeg(true);
+	Engine::GetInstance().ffmpeg->Awake();
 	Engine::GetInstance().ffmpeg->Start(); // This will open the default video file
 	Engine::GetInstance().ffmpeg->ConvertPixels(
 		Engine::GetInstance().ffmpeg->streamIndex,
-		Engine::GetInstance().ffmpeg->audioStreamIndex
+		Engine::GetInstance().ffmpeg->audioIndex  // Cambia audioStreamIndex a audioIndex
 	);
 	//
 	//L06 TODO 3: Call the function to load the map. 
