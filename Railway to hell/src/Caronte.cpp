@@ -7,6 +7,7 @@
 #include "Log.h"
 #include "Physics.h"
 #include "Caronte.h"
+#include "DialogoM.h"
 
 Caronte::Caronte() : Entity(EntityType::CARONTE)
 {
@@ -207,6 +208,7 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         if (!isattacking && !attackOnCooldown && canAttack) {
             isattacking = true;
+            //Engine::GetInstance().dialogoM->Texto("3");//text after attack 
         }
         break;
     case ColliderType::PLAYER_ATTACK:

@@ -275,6 +275,7 @@ bool Map::Load(std::string path, std::string fileName)
                     {
                         if (propertieNode.attribute("name") = "ID") {
                             rect->ID = propertieNode.attribute("value").as_string();
+                            rect->Salio = false;
                         }
                     }
                     break;

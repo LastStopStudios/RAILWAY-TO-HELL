@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "EntityManager.h"
+#include "DialogoM.h"
 
 
 Boss::Boss() : Entity(EntityType::BOSS)
@@ -449,6 +450,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                 // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             }
         }
@@ -467,7 +469,8 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 isDead = true;
                 currentAnimation = &die;
                 a = 1;
-                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors 
+                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                Engine::GetInstance().dialogoM->Texto("2");//text after boss death 
 
                 // Stop both bodies
                 pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));

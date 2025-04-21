@@ -1214,8 +1214,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::DIALOGOS:
-        NeedDialogue = true;
-        Id = physB->ID;
+        if (physB->Salio == false) {//makes the dialog trigger only once
+            NeedDialogue = true;
+            Id = physB->ID;
+            physB->Salio = true;
+        }
         break;
     case ColliderType::UNKNOWN:
         break;
@@ -1265,6 +1268,9 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::ASCENSORES:
         TocandoAs = false;
+        break;
+    case ColliderType::DIALOGOS:
+        physB->Salio = true;
         break;
     }
 }
