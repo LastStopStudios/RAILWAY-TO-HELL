@@ -263,7 +263,7 @@ bool Volador::Update(float dt) {
         pathfinding->DrawPath();
         pathfinding->ResetPath(enemyTilePos);
 
-    }else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
+    }else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ currentAnimation = &idle;}
     // Flip sprite configuration
     SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
