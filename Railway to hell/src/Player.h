@@ -72,6 +72,7 @@ private:
 	void HandlePickup(float dt);
 	void HandleDeath(float dt);
 	void HandleWakeup(float dt);
+	void Idle();
 public:
 	// Public properties
 	SDL_Texture* texture = NULL;

@@ -42,6 +42,8 @@ private:
 
 	float attackCooldown = 3000.0f;    
 	float currentAttackCooldown = 0.0f;
+	//dialogue
+	bool done;
 
 
 private:

@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "Caronte.h"
 #include "DialogoM.h"
+#include "EntityManager.h"
 
 Caronte::Caronte() : Entity(EntityType::CARONTE)
 {
@@ -55,6 +56,10 @@ bool Caronte::Start() {
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
+
+    //dialogue
+    done = false;
+
     return true;
 }
 
@@ -74,7 +79,7 @@ bool Caronte::Update(float dt)
         Engine::GetInstance().scene->ResetSkipInput();
         return true;
     }
-
+    if (Engine::GetInstance().entityManager->dialogo == false)/*Check if the dialogue to stop the enemy has been activated.*/ {
     // If the hurt animation has finished, switch to death animation
     if (currentAnimation == &hurt && hurt.HasFinished()) {
         currentAnimation = &die;
@@ -153,6 +158,11 @@ bool Caronte::Update(float dt)
         attacked = false;
 		attackOnCooldown = true;
         currentAttackCooldown = attackCooldown;
+        if (done == false) {
+            Engine::GetInstance().dialogoM->Texto("3");//text after attack 
+            done = true;
+        }
+        
 
         // Remove attack area
         if (AttackArea != nullptr) {
@@ -177,6 +187,9 @@ bool Caronte::Update(float dt)
         int sensorY = position.getY() + texH * 0.4;
         AttackSensorArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(sensorX), PIXEL_TO_METERS(sensorY)), 0);
     }
+
+    }
+else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ currentAnimation = &idle; }
 
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
@@ -208,7 +221,6 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         if (!isattacking && !attackOnCooldown && canAttack) {
             isattacking = true;
-            //Engine::GetInstance().dialogoM->Texto("3");//text after attack 
         }
         break;
     case ColliderType::PLAYER_ATTACK:
@@ -252,6 +264,6 @@ bool Caronte::CleanUp()
         Engine::GetInstance().physics->DeletePhysBody(AttackArea);
         AttackArea = nullptr;
     }
-
+    done = false;
     return true;
 }

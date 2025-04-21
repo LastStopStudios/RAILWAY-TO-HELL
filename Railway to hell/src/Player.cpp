@@ -347,7 +347,7 @@ bool Player::Update(float dt)
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
     }
-    else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
+    else { currentAnimation = &idle; pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
 
     // Handle animations depending on state
     if (isJumping && !isPreparingJump) {
@@ -553,7 +553,7 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 859, 646, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 859, 602, false, false);
         hasDied = false;
     }
     // unlocks sensors
