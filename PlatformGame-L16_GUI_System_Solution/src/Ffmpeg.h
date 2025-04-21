@@ -55,7 +55,7 @@ public:
 	int audioIndex;  // Nuevo miembro para el índice de audio
 	SDL_AudioDeviceID audioDevice;
 	int audioStreamIndex;
-
+	SwrContext* swr;
 	SDL_Texture* renderTexture;
 	SDL_Texture* texture1;
 	SDL_Texture* texture2;

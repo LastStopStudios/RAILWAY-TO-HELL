@@ -13,6 +13,7 @@ Ffmpeg::Ffmpeg(bool enabled) : Module()
 {
     name = "cutsceneplayer";
     audioIndex = -1;
+    swr = nullptr;
 }
 
 Ffmpeg::~Ffmpeg()
@@ -164,117 +165,158 @@ bool Ffmpeg::OpenAudioCodecContext(int audioIndex)
     // Find the decoder for the audio codec
     const AVCodec* codec = avcodec_find_decoder(formatContext->streams[audioIndex]->codecpar->codec_id);
     if (!codec) {
-        printf("Failed to find audio codec!\n");
+        LOG("Failed to find audio codec!");
         return true;
     }
 
-    // Allocate a codec context for the decoder
+    // Allocate and configure the codec context
     audioCodecContext = avcodec_alloc_context3(codec);
     if (!audioCodecContext) {
-        printf("Failed to allocate the audio codec context\n");
+        LOG("Failed to allocate the audio codec context");
         return true;
     }
 
-    // Copy audio codec parameters to the decoder context
-    if (avcodec_parameters_to_context(audioCodecContext, formatContext->streams[audioIndex]->codecpar) < 0) {
-        printf("Failed to copy audio codec parameters to decoder context!\n");
+    // Copy codec parameters and open the codec
+    if (avcodec_parameters_to_context(audioCodecContext, formatContext->streams[audioIndex]->codecpar) < 0 ||
+        avcodec_open2(audioCodecContext, codec, NULL) < 0) {
+        LOG("Failed to set up audio codec context");
         return true;
     }
 
-    // Open the audio codec
-    if (avcodec_open2(audioCodecContext, codec, NULL) < 0) {
-        printf("Failed to open audio codec\n");
+    // Create and configure the audio resampler
+    SwrContext* swr = swr_alloc();
+    if (!swr) {
+        LOG("Failed to allocate resampler context");
         return true;
     }
 
-    // Set up SDL audio device
+    // Set up channel layouts
+    AVChannelLayout in_ch_layout, out_ch_layout;
+    av_channel_layout_default(&in_ch_layout, audioCodecContext->ch_layout.nb_channels);
+    av_channel_layout_default(&out_ch_layout, 2); // Stereo output
+
+    // Configure resampler
+    av_opt_set_int(swr, "in_sample_rate", audioCodecContext->sample_rate, 0);
+    av_opt_set_int(swr, "out_sample_rate", 44100, 0);
+    av_opt_set_sample_fmt(swr, "in_sample_fmt", audioCodecContext->sample_fmt, 0);
+    av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0);
+    av_opt_set_chlayout(swr, "in_chlayout", &audioCodecContext->ch_layout, 0);
+    av_opt_set_chlayout(swr, "out_chlayout", &out_ch_layout, 0);
+
+    if (swr_init(swr) < 0) {
+        LOG("Failed to initialize resampler");
+        swr_free(&swr);
+        return true;
+    }
+
+    // Save the resampler
+    this->swr = swr;
+
+    // Configure SDL audio
     SDL_AudioSpec wantedSpec, obtainedSpec;
-    wantedSpec.freq = audioCodecContext->sample_rate;
-    switch (audioCodecContext->sample_fmt) {
-    case AV_SAMPLE_FMT_U8:
-    case AV_SAMPLE_FMT_U8P:
-        wantedSpec.format = AUDIO_U8;
-        break;
-    case AV_SAMPLE_FMT_S16:
-    case AV_SAMPLE_FMT_S16P:
-        wantedSpec.format = AUDIO_S16SYS;
-        break;
-    case AV_SAMPLE_FMT_S32:
-    case AV_SAMPLE_FMT_S32P:
-        wantedSpec.format = AUDIO_S32SYS;
-        break;
-    case AV_SAMPLE_FMT_FLT:
-    case AV_SAMPLE_FMT_FLTP:
-        wantedSpec.format = AUDIO_F32SYS;
-        break;
-    }
+    wantedSpec.freq = 44100;
+    wantedSpec.format = AUDIO_S16SYS;
     wantedSpec.channels = 2;
     wantedSpec.silence = 0;
-    wantedSpec.samples = audioCodecContext->frame_size;
+    wantedSpec.samples = 1024;
     wantedSpec.callback = NULL;
     wantedSpec.userdata = NULL;
 
-    // Open the audio device
+    // Open audio device
     audioDevice = SDL_OpenAudioDevice(NULL, 0, &wantedSpec, &obtainedSpec, 0);
     if (audioDevice == 0) {
-        printf("Failed to open audio device %s\n", SDL_GetError());
+        LOG("Failed to open audio device: %s", SDL_GetError());
         return true;
     }
 
+    // Set up audio timer and start playback
     SDL_AddTimer((1000 * wantedSpec.samples) / wantedSpec.freq, audioTimerCallback, this);
-
-    // Start audio playback
     SDL_PauseAudioDevice(audioDevice, 0);
 
-    system("cls");
     return false;
 }
-
 void Ffmpeg::ProcessAudio()
 {
-    // Allocate memory for an audio frame
+    // Declarar antes para mantener el alcance
+    AVPacket packet;
     AVFrame* frame = av_frame_alloc();
     if (!frame) {
         return;
     }
 
-    Uint8* stream;
-    AVPacket packet;
+    // Para almacenar datos convertidos
+    uint8_t* outBuffer = NULL;
+    int outBufferSize = 0;
 
-    // Process each packet in the audio buffer
+    // Procesar cada paquete del buffer de audio
     if (!audioBuffer.empty()) {
-        // Get the first packet from the audio buffer
         packet = audioBuffer.front();
         audioBuffer.pop();
 
-        // Send the packet to the audio decoder
+        // Enviar el paquete al decodificador
         int ret = avcodec_send_packet(audioCodecContext, &packet);
         if (ret < 0) {
+            LOG("Error sending packet to audio decoder: %d", ret);
             av_frame_free(&frame);
             return;
         }
 
-        // Receive decoded audio frame
+        // Recibir el frame decodificado
         ret = avcodec_receive_frame(audioCodecContext, frame);
         if (ret < 0) {
+            LOG("Error receiving frame from audio decoder: %d", ret);
             av_frame_free(&frame);
             return;
         }
 
-        // Get the pointer to the audio data
-        stream = reinterpret_cast<Uint8*>(frame->data[0]);
+        // Calcular el tamaño del buffer de salida
+        int outSamples = av_rescale_rnd(
+            swr_get_delay(swr, audioCodecContext->sample_rate) + frame->nb_samples,
+            44100, // Frecuencia de salida
+            audioCodecContext->sample_rate,
+            AV_ROUND_UP
+        );
 
-        // Queue the audio data for playback
-        SDL_QueueAudio(audioDevice, stream, frame->linesize[0]);
+        int outChannels = 2; // Estéreo
+        outBufferSize = outSamples * outChannels * 2; // 2 bytes por muestra para S16
 
-        // Unreference the frame
+        // Asignar memoria para el buffer de salida
+        outBuffer = (uint8_t*)av_malloc(outBufferSize);
+        if (!outBuffer) {
+            LOG("Failed to allocate output buffer");
+            av_frame_free(&frame);
+            return;
+        }
+
+        // Convertir el audio usando el resampler
+        ret = swr_convert(
+            swr,
+            &outBuffer, outSamples,
+            (const uint8_t**)frame->data, frame->nb_samples
+        );
+
+        if (ret < 0) {
+            LOG("Error converting audio: %d", ret);
+            av_freep(&outBuffer);
+            av_frame_free(&frame);
+            return;
+        }
+
+        // El tamaño real de los datos convertidos
+        int convertedSize = ret * outChannels * 2;
+
+        // Reproducir el audio
+        SDL_QueueAudio(audioDevice, outBuffer, convertedSize);
+
+        // Liberar recursos
+        av_freep(&outBuffer);
+        av_packet_unref(&packet);
         av_frame_unref(frame);
     }
 
-    // Free memory allocated for the audio frame
+    // Liberar frame
     av_frame_free(&frame);
 }
-
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
     LOG("ConvertPixels called with videoIndex=%d, audioIndex=%d", videoIndex, audioIndex);
