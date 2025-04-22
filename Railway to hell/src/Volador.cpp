@@ -155,13 +155,14 @@ bool Volador::Update(float dt) {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
+    float distanceToPlayerY = abs(playerTilePos.getY() - enemyTilePos.getY());
     float distanceToPlayerX = abs(playerTilePos.getX() - enemyTilePos.getX());
     const float patrolDistance = 7.0f;
     static bool movingRight = true;
 
     // Patrol and pathfinding logic
     if (!ishurt) {
-        if (distanceToPlayerX <= patrolDistance) {
+        if (distanceToPlayerX <= patrolDistance && distanceToPlayerY <= patrolDistance) {
             // Pathfinding and moving towards the player
             Chasing = true;
             int maxIterations = 100;
