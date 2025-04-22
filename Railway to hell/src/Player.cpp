@@ -128,6 +128,7 @@ bool Player::Start() {
     hurtFX= Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/hurt.ogg");
 	dashFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/dash.ogg");
 	whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
+	fallFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/fall.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
@@ -138,6 +139,7 @@ bool Player::Start() {
     Engine::GetInstance().audio.get()->SetFxVolume(hurtFX, 1);
 	Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 1);
 	Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
+	Engine::GetInstance().audio.get()->SetFxVolume(fallFX, 4);
     // Attack animation
     meleeAttack = Animation();
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
@@ -916,7 +918,9 @@ void Player::DrawPlayer() {
     else if (isFalling) {
         // Set falling animation when in air with downward velocity
         currentAnimation = &falling;
+       
         texture = fallingTexture;
+       
         falling.Update();
     }
     else if (isJumping || isPreparingJump) {
@@ -1120,6 +1124,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             // Player has landed
             isJumping = false;
             if (isFalling) {
+                Engine::GetInstance().audio.get()->PlayFx(fallFX);
                 // Transition to recovering animation
                 isFalling = false;
                 isRecovering = true;
