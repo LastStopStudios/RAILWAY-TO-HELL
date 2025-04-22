@@ -182,13 +182,13 @@ bool Boss::Update(float dt)
         // If death animation finished, start the timer
         if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
             // Create the key item before deleting the entity
+            // Create the key item before deleting the entity
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(Engine::GetInstance().scene.get()->whipItemConfigNode);
             Engine::GetInstance().scene.get()->itemList.push_back(item);
             item->Start();
-            Vector2D pos(position.getX() + texW/2, position.getY());
+            Vector2D pos(position.getX() + texW, position.getY());
             item->SetPosition(pos);
-
             deathTimer += dt;
             if (deathTimer >= deathDelay) {
                 pendingToDelete = true;

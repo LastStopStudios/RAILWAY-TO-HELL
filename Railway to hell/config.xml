@@ -3439,9 +3439,6 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="Anger" x="2288" y="1784" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
-					<animations>
-						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="96" h="128" />
 							<frame x="96" y="0" w="96" h="128" />
 							<frame x="192" y="0" w="96" h="128" />
@@ -3559,7 +3556,7 @@
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Noma.png" TEXT="How did you manage to get out of your prison?! It was supposed to be your last stop. How dare you tiny soul stand against your judgment?! It doesn't matter... Lets see how dauntless you are when face to face with the very incarnation of wrath and greed!" />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis... Can you hear me? I can hear your steps closer, but you still have a long way to go... Hurry, there is something lurking in the shadows, I don’t have much time..." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis... Can you hear me? I can hear your steps closer, but you still have a long way to go... Hurry, there is something lurking in the shadows, I don't have much time..." />
 		</dialogues>
 	</scene3>
 </config>
