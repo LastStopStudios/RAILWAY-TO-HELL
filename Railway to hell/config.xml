@@ -3210,13 +3210,6 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true" ID="1">
-						<animations>
-							<idle loop="true" speed="0.5">
-								<frame x="16" y="0" w="16" h="16" />
-							</idle>
-						</animations>
-				</item>
 			</items>
 			<elevators>
 				<elevator name="elevator" x="2624" y="666" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
