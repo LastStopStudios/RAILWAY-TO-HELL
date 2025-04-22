@@ -129,6 +129,7 @@ bool Player::Start() {
 	dashFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/dash.ogg");
 	whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
 	fallFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/fall.ogg");
+	jumpFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
@@ -137,9 +138,11 @@ bool Player::Start() {
     Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
     Engine::GetInstance().audio.get()->SetFxVolume(diedFX, 4);
     Engine::GetInstance().audio.get()->SetFxVolume(hurtFX, 1);
-	Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 1);
+	Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 2);
 	Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
 	Engine::GetInstance().audio.get()->SetFxVolume(fallFX, 4);
+	Engine::GetInstance().audio.get()->SetFxVolume(jumpFX, 10);
+
     // Attack animation
     meleeAttack = Animation();
     meleeAttack.LoadAnimations(parameters.child("animations").child("attack"));
@@ -514,6 +517,7 @@ void Player::HandleJump() {
         // Set jump state
         isJumping = true;
         isFalling = false;
+        Engine::GetInstance().audio.get()->PlayFx(jumpFX);
 
         // Reset and start jump animation
         jump.Reset();
@@ -925,6 +929,7 @@ void Player::DrawPlayer() {
     }
     else if (isJumping || isPreparingJump) {
         // Set the jump animation when jumping or preparing to jump
+    
         currentAnimation = &jump;
         texture = jumpTexture;
 
@@ -1131,6 +1136,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 recoveringTimer = recoveringDuration;
                 recovering.Reset();
             }
+			
         }
      
         break;
