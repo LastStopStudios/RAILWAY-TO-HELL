@@ -555,11 +555,11 @@ void Player::HandleSceneSwitching() {
 		hasDied = false;    
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {//go to scene 2
-        Engine::GetInstance().sceneLoader->LoadScene(2, 2942, 848, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(2, 3082, 720, false, false);
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 859, 602, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
         hasDied = false;
     }
     // unlocks sensors
@@ -568,7 +568,7 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().entityManager->AscensorOn();
     }
     //Debug Level Design
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move the player to the start position tunel scene
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) { //Move the player to the start position tunel scene
         int debugXLevelDesign = 2893;
         int debugYLevelDesign = 2048;
         Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
