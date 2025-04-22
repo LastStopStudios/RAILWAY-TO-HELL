@@ -45,7 +45,10 @@ bool Scene::Awake()
 		std::string type = itemNode.attribute("name").as_string();
 
 		if (type == "Door key"){
-			itemConfigNode = itemNode;
+			doorItemConfigNode = itemNode;
+		}
+		else if (type == "Whip") {
+			whipItemConfigNode = itemNode;
 		}
 		else {
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);

@@ -92,7 +92,7 @@ bool Caronte::Update(float dt)
 
         // Create the key item before deleting the entity
         Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-        item->SetParameters(Engine::GetInstance().scene.get()->itemConfigNode);
+        item->SetParameters(Engine::GetInstance().scene.get()->doorItemConfigNode);
         Engine::GetInstance().scene.get()->itemList.push_back(item);
         item->Start();
         Vector2D pos(position.getX() + texW, position.getY());
