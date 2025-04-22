@@ -52,7 +52,7 @@ bool Boss::Start() {
     currentAnimation = &idle;
 
     //initialize enemy parameters 
-    moveSpeed = 30.0f;
+    moveSpeed = 80.0f;
     patrolSpeed = 30.0f;
     savedPosX = 0.0f;
     // Physics body initialization - now with two circular collisions
@@ -170,16 +170,6 @@ bool Boss::Update(float dt)
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
             pbodyLower->body->SetGravityScale(0.0f);
         }
-
-        // Add this section to clean up attack area when hurt
-        if (isAttacking) {
-            isAttacking = false;
-            if (area != nullptr) {
-                Engine::GetInstance().physics.get()->DeletePhysBody(area);
-                area = nullptr;
-            }
-        }
-
         if (hurt.HasFinished()) {
             ishurt = false;
             currentAnimation = &idle;
@@ -195,13 +185,6 @@ bool Boss::Update(float dt)
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
             pbodyLower->body->SetGravityScale(0.0f);
-        }
-        if (isAttacking) {
-            isAttacking = false;
-            if (area != nullptr) {
-                Engine::GetInstance().physics.get()->DeletePhysBody(area);
-                area = nullptr;
-            }
         }
 
         currentAnimation->Update();
@@ -230,8 +213,6 @@ bool Boss::Update(float dt)
         return true;
     }
 
-    // Check if boss fight has started - add this line
-    bool bossFightActive = Engine::GetInstance().dialogoM->bossFightReady;
 
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
@@ -302,10 +283,9 @@ bool Boss::Update(float dt)
                     }
                 }
             }
-
+            bool bossFightActive = Engine::GetInstance().dialogoM->bossFightReady;
             if (!isAttacking) {
-                // MODIFIED SECTION: Check if boss fight is active to decide whether to use patrolDistance limit
-                if (bossFightActive || distanceToPlayer <= patrolDistance) { // Always chase if boss fight active OR if player is within patrol distance
+                if (bossFightActive) { // if player is within patrol distance
                     if (!resting) { // start chasing player
                         resting = true;
                         currentAnimation = &running;
@@ -337,11 +317,7 @@ bool Boss::Update(float dt)
                                 pathfinding->pathTiles.pop_back();
                             }
                             else {
-                                // MODIFIED: Make sure boss moves in the direction of the path, not just based on player position
-                                bool shouldMoveLeft = x2 < x1;
-                                isLookingLeft = shouldMoveLeft;
                                 float velocityX = isLookingLeft ? -moveSpeed : moveSpeed;
-
                                 // Apply velocity to both bodies
                                 pbodyUpper->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityUpper.y));
                                 pbodyLower->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityLower.y));
@@ -404,6 +380,7 @@ bool Boss::Update(float dt)
 
     return true;
 }
+
 void Boss::Matar() {//eliminating the enemy once dead 
     if (kill == 1) {
         kill = 2;
