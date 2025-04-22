@@ -354,7 +354,7 @@ bool Boss::Update(float dt)
             b2Transform pbodyUpperPos = pbodyUpper->body->GetTransform();
             position.setX(METERS_TO_PIXELS(pbodyUpperPos.p.x) - texH / 2);
             position.setY(METERS_TO_PIXELS(pbodyUpperPos.p.y) - 32);
-        }
+        }else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0)); pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));/*frenar el cuerpo*/ currentAnimation = &idle; }
     }
 
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
@@ -497,7 +497,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-                //Engine::GetInstance().dialogoM->Texto("2");//text after boss death
+                Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                 // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             }
         }

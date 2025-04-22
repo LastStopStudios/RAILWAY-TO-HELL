@@ -298,8 +298,6 @@ bool Player::Update(float dt)
             HandleSceneSwitching();
 			return true;
         }
-		// Handle pickup animation
-        HandlePickup(dt);
 
         // Mutually exclusive action handling
         if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp && !isDying) {
@@ -352,7 +350,10 @@ bool Player::Update(float dt)
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
     }
-    else { currentAnimation = &idle; pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
+    else { isWalking = false; currentAnimation = &idle; pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*stop body*/ }
+
+    // Handle pickup animation
+    HandlePickup(dt);
 
     // Handle animations depending on state
     if (isJumping && !isPreparingJump) {
@@ -624,19 +625,23 @@ void Player::HandleHurt(float dt) {
 
 void Player::HandlePickup(float dt) {
     if (isPickingUp && !isDying) {
+        LOG("pillando");
         if (!hasPickupStarted) {
+            LOG("Empezo a pillar");
             pickupAnim.Reset();
             hasPickupStarted = true; // Reset pickup animation one time
         }
         pickupAnim.Update(); 
-
+        LOG("Acabo de pillar");
 
         if (pickupAnim.HasFinished()) { 
+            LOG("Reseteo pos pillar");
             // Reset to idle
             isPickingUp = false;
             hasPickupStarted = false;
-            currentAnimation = &idle; 
             idle.Reset();
+            currentAnimation = &idle;
+            
         }
     }
 }
@@ -1090,9 +1095,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID; //ID from Item
-                //Engine::GetInstance().dialogoM->Texto("2");
+              /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID;*/ //ID from Item
             }
             if (item && item->GetItemType() == "Remember1") {
                 WhipAttack = true;
