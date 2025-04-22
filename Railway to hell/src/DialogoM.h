@@ -38,6 +38,9 @@ public:
 
 	void ResetText();
 
+	bool bossFightReady = false;
+	std::string lastDialogID = "";
+
 private:
 
 	SDL_Texture* textTexture = nullptr;//texture letters

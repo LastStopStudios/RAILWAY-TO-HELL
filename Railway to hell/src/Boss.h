@@ -39,11 +39,16 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
+	void TriggerBossDialog();
+
 public:
 	
 	int a = 0;
 	int kill = 1;
 private:
+	float initialWalkTimer = 0.0f;
+	bool initialWalkComplete = false;
+	const float initialWalkDuration = 4.0f; // duración en segundos
 
 	Vector2D enemyPos; 
 
@@ -93,6 +98,9 @@ private:
 	bool isDead = false;
 	float deathTimer = 0.0f;
 	const float deathDelay = 1.0f;
+
+	bool dialogTriggered = false;
+	bool battleStarted = false;
 
 	bool ishurt = false;
 	
