@@ -59,7 +59,7 @@ bool DialogoM::PostUpdate()
 		height = 200;
 
 		//Background position
-		posx = w - 1000;//background position with screen size
+		posx = w - 1050;//background position with screen size
 		posy = h - 200; //background position with screen size
 
 		//text position
