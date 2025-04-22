@@ -120,31 +120,67 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="1">
 					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="16" h="16" />
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+							<frame x="288" y="0" w="32" h="32" />
 						</idle>
 					</animations>
 				</item>
-				<item name="Remember1" x="239" y="4305" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="4">
+				<item name="Remember1" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
 					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="16" w="16" h="16" />
-						</idle>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />						
+					</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true" ID="1">
+				<item name="Door key" x="300" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
 					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="16" y="0" w="16" h="16" />
-						</idle>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+							<frame x="288" y="0" w="32" h="32" />						
+					</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="6656" y="4482" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+				<item name="Dash ability" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1">
 					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="16" w="16" h="16" />
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="0" y="32" w="32" h="32" />
+							<frame x="32" y="32" w="32" h="32" />	
+							<frame x="64" y="32" w="32" h="32" />	
 						</idle>
 					</animations>
 				</item>
@@ -3203,17 +3239,35 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="1">
 					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="16" h="16" />
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+							<frame x="288" y="0" w="32" h="32" />	
 						</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="300" y="692" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="true" ID="1">
+				<item name="Door key" x="300" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
 						<animations>
-							<idle loop="true" speed="0.5">
-								<frame x="16" y="0" w="16" h="16" />
+							<idle loop="true" speed="0.2">
+								<frame x="0" y="0" w="32" h="32" />
+								<frame x="32" y="0" w="32" h="32" />
+								<frame x="64" y="0" w="32" h="32" />
+								<frame x="96" y="0" w="32" h="32" />
+								<frame x="128" y="0" w="32" h="32" />
+								<frame x="160" y="0" w="32" h="32" />
+								<frame x="192" y="0" w="32" h="32" />
+								<frame x="224" y="0" w="32" h="32" />
+								<frame x="256" y="0" w="32" h="32" />
+								<frame x="288" y="0" w="32" h="32" />	
 							</idle>
 						</animations>
 				</item>
