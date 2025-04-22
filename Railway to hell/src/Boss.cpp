@@ -44,6 +44,13 @@ bool Boss::Start() {
     hurt.LoadAnimations(parameters.child("animations").child("hurt"));
     currentAnimation = &idle;
 
+    dialogTriggered = false;
+    battleStarted = false;
+    isLookingLeft = true;
+
+    // Start with idle animation until dialog is shown
+    currentAnimation = &idle;
+
     //initialize enemy parameters 
     moveSpeed = 30.0f;
     patrolSpeed = 30.0f;
@@ -124,202 +131,229 @@ bool Boss::Start() {
     return true;
 }
 
+void Boss::TriggerBossDialog() {
+    dialogTriggered = true;
+}
+
 bool Boss::Update(float dt)
 {
-
-    bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
-
-    if (!isGameplay) {
-        // Stop physics movement when not in gameplay
-        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
+    if (!battleStarted) {
+        // Check if boss dialog has been shown and closed
+        if (Engine::GetInstance().dialogoM->bossFightReady) {
+            battleStarted = true;
+            // Immediately set looking left and running animation for initial walk
+            isLookingLeft = true;
+            currentAnimation = &running;
+            running.Reset();
         }
-        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
-        }
-        return true;
-    }
-    else {
-        // Restore gravity when back in gameplay
-        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
-            pbodyUpper->body->SetGravityScale(1.0f);
-        }
-        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
-            pbodyLower->body->SetGravityScale(1.0f);
-        }
-    }
-
-    if (ishurt) {
-        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
-        }
-        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
-        }
-        if (hurt.HasFinished()) {
-            ishurt = false;
+        else {
+            // Keep boss in idle until battle begins
             currentAnimation = &idle;
-        }
-    }
 
-    if (isDying || isDead) {
-        // Asegurar que no haya movimiento durante la muerte
-        if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
-        }
-        if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
-        }
-
-        currentAnimation->Update();
-
-        // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
-            deathTimer += dt;
-            if (deathTimer >= deathDelay) {
-                pendingToDelete = true;
+            // Make sure boss doesn't move while waiting
+            if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
             }
+            if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+                pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            }
+
+            // Calculate the frame and offset the same way as in the main animation code
+            SDL_Rect frame = currentAnimation->GetCurrentFrame();
+
+            // Initialize offsetX
+            offsetX = 0;
+
+            // Set flip direction consistently even during idle state
+            if (isLookingLeft) {
+                flip = SDL_FLIP_HORIZONTAL;
+                offsetX = (frame.w - texW);
+            }
+            else {
+                flip = SDL_FLIP_NONE;
+            }
+
+            int renderX = (int)position.getX() - offsetX;
+            int renderY = (int)position.getY() + texH - 25 - frame.h; // Vertical centering
+
+            Engine::GetInstance().render.get()->DrawTexture(
+                texture,
+                renderX,
+                renderY,
+                &frame,
+                1.0f,
+                0.0,
+                INT_MAX,
+                INT_MAX,
+                flip
+            );
+
+            currentAnimation->Update();
+            return true; // Skip the rest of the logic until battle starts
         }
-
-        // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
-
-        // When dying, don't process any other logic
-        return true;
     }
-
 
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
-    if (!ishurt) {
-        if (Engine::GetInstance().entityManager->dialogo == false) {
+    // FIX: Check if hurt animation is complete and reset to appropriate animation
+    if (ishurt) {
+        if (hurt.HasFinished()) {
+            ishurt = false;
+            // Return to the appropriate animation state
+            if (isAttacking) {
+                currentAnimation = &attack;
+            }
+            else {
+                currentAnimation = &running; // Always go to running when not attacking
+            }
+        }
+    }
 
+    if (!ishurt && !isDying && !isDead) {
+        if (Engine::GetInstance().entityManager->dialogo == false) {
             // Get current velocity of upper body
             b2Vec2 velocityUpper = pbodyUpper->body->GetLinearVelocity();
             b2Vec2 velocityLower = pbodyLower->body->GetLinearVelocity();
 
-            float dx = playerTilePos.getX() - enemyTilePos.getX();
-            float dy = playerTilePos.getY() - enemyTilePos.getY();
-            // Calculate the distance between the enemy and the player only on the X axis
-            float distanceToPlayer = abs(dx);
+            // Verify if we should do the initial walk
+            if (!initialWalkComplete) {
+                initialWalkTimer += dt;
 
-            // Limit movement towards the player only if within X tiles
-            float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player 
-
-            if (!canAttack) { // update the attack cooldown
-                currentAttackCooldown -= dt;
-                if (currentAttackCooldown <= 0) {
-                    canAttack = true;
-                    currentAttackCooldown = 0.0f;
-                }
-            }
-
-            if ((isLookingLeft && dx <= -attackDistance)) {
-                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, velocityUpper.y));
-                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, velocityLower.y));
-            }
-
-            isLookingLeft = dx < 0; // Set the direction of the enemy
-
-            if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) { // start attacking
-                isAttacking = true;
-                canAttack = false;
-                currentAttackCooldown = attackCooldown;
-                currentAnimation = &attack;
-                currentAnimation->Reset();
-
-                if (area == nullptr) { // create the attack area
-                    area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-                        (int)position.getX() + (isLookingLeft ? -30 : 160),
-                        (int)position.getY() + 50,
-                        160, //modify according to the length of the whip
-                        40,
-                        bodyType::KINEMATIC
-                    );
-                    area->ctype = ColliderType::BOSS_ATTACK;
-                }
-            }
-
-            if (isAttacking) {
-                pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
-                pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
-
-                if (attack.HasFinished()) { // stop attacking
-                    isAttacking = false;
+                // Start walking animation
+                if (currentAnimation != &running) {
                     currentAnimation = &running;
-                    attack.Reset();
+                    running.Reset();
+                }
 
-                    if (area != nullptr) { // delete the attack area
-                        Engine::GetInstance().physics.get()->DeletePhysBody(area);
-                        area = nullptr;
+                // Force looking left for initial walk
+                isLookingLeft = true;
+
+                // Always move left for initial walk
+                float velocityX = -moveSpeed; // Move left
+                pbodyUpper->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityUpper.y));
+                pbodyLower->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityLower.y));
+
+                // Check if walk time is finished
+                if (initialWalkTimer >= initialWalkDuration) {
+                    initialWalkComplete = true;
+                    currentAnimation = &running; // Changed from idle to running to be consistent
+                }
+            }
+            else {
+                // Normal boss logic after initial walk
+                float dx = playerTilePos.getX() - enemyTilePos.getX();
+                float dy = playerTilePos.getY() - enemyTilePos.getY();
+
+                // Set looking direction based on player position
+                isLookingLeft = dx < 0;
+
+                // Attack cooldown management
+                if (!canAttack) {
+                    currentAttackCooldown -= dt;
+                    if (currentAttackCooldown <= 0) {
+                        canAttack = true;
+                        currentAttackCooldown = 0.0f;
                     }
                 }
-            }
 
-            if (!isAttacking) {
-                if (distanceToPlayer <= patrolDistance) { // if player is within patrol distance
-                    if (!resting) { // start chasing player
-                        resting = true;
+                // Check for attack condition - using absolute distance for flexibility
+                float distanceToPlayer = abs(dx);
+
+                // If in attack range and can attack, start attacking
+                if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
+                    isAttacking = true;
+                    canAttack = false;
+                    currentAttackCooldown = attackCooldown;
+                    currentAnimation = &attack;
+                    currentAnimation->Reset();
+
+                    // Create attack area if it doesn't exist
+                    if (area == nullptr) {
+                        area = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+                            (int)position.getX() + (isLookingLeft ? -30 : 160),
+                            (int)position.getY() + 50,
+                            160, // adjust according to whip length
+                            40,
+                            bodyType::KINEMATIC
+                        );
+                        area->ctype = ColliderType::BOSS_ATTACK;
+                    }
+                }
+
+                // Handle attack state
+                if (isAttacking) {
+                    // Stay still while attacking
+                    pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
+                    pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
+
+                    // Check if attack animation is finished
+                    if (attack.HasFinished()) {
+                        isAttacking = false;
+                        currentAnimation = &running;
+                        attack.Reset();
+
+                        // Delete attack area after attack
+                        if (area != nullptr) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                            area = nullptr;
+                        }
+                    }
+                }
+                else {
+                    // Always chase player with pathfinding regardless of distance
+                    if (currentAnimation != &running) {
                         currentAnimation = &running;
                         running.Reset();
                     }
 
-                    if (currentAnimation == &running) { // pathfinding logic
-                        int maxIterations = 100;
-                        int iterations = 0;
+                    // Pathfinding logic - always active now
+                    int maxIterations = 100;
+                    int iterations = 0;
 
-                        while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
-                            pathfinding->PropagateAStar(SQUARED);
-                            iterations++;
+                    while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
+                        pathfinding->PropagateAStar(SQUARED);
+                        iterations++;
+                    }
+
+                    if (pathfinding->pathTiles.size() >= 2) {
+                        auto it = pathfinding->pathTiles.end();
+                        --it;
+                        --it;
+                        Vector2D nextTile = *it;
+                        Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+
+                        float x2 = nextPos.getX();
+                        float x1 = enemyPos.getX();
+                        float dx = x2 - x1;
+                        float distance = abs(dx);
+
+                        if (distance < 5.0f) {
+                            pathfinding->pathTiles.pop_back();
                         }
+                        else {
+                            // Adjust movement direction based on path
+                            bool shouldMoveLeft = x2 < x1;
+                            isLookingLeft = shouldMoveLeft;
 
-                        if (pathfinding->pathTiles.size() >= 2) {
-                            auto it = pathfinding->pathTiles.end();
-                            --it;
-                            --it;
-                            Vector2D nextTile = *it;
-                            Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
-
-                            float x2 = nextPos.getX();
-                            float x1 = enemyPos.getX();
-                            float dx = x2 - x1;
-                            float distance = abs(dx);
-
-                            if (distance < 5.0f) {
-                                pathfinding->pathTiles.pop_back();
-                            }
-                            else {
-                                float velocityX = isLookingLeft ? -moveSpeed : moveSpeed;
-                                // Apply velocity to both bodies
-                                pbodyUpper->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityUpper.y));
-                                pbodyLower->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityLower.y));
-                            }
+                            float velocityX = shouldMoveLeft ? -moveSpeed : moveSpeed;
+                            // Apply velocity to both bodies to follow path
+                            pbodyUpper->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityUpper.y));
+                            pbodyLower->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(velocityX), velocityLower.y));
                         }
                     }
-                }
-                else { // idle (not chasing player)
-                    if (resting) {
-                        resting = false;
-                        currentAnimation = &idle;
-                        idle.Reset();
+                    else {
+                        // If no path found, keep running animation but stop moving
+                        pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
+                        pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
                     }
-                    pbodyUpper->body->SetLinearVelocity(b2Vec2(0, velocityUpper.y));
-                    pbodyLower->body->SetLinearVelocity(b2Vec2(0, velocityLower.y));
                 }
             }
 
             SDL_Rect frame = currentAnimation->GetCurrentFrame();
-            offsetX = 0; // used to adjust the position of the sprite
+            offsetX = 0; // used to adjust sprite position
 
             // change sprite direction
             if (isLookingLeft) {
@@ -340,7 +374,7 @@ bool Boss::Update(float dt)
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
     int renderX = (int)position.getX() - offsetX + 16;
-    int renderY = (int)position.getY() + texH - 5  - frame.h; // Centrado vertical
+    int renderY = (int)position.getY() + texH - 5 - frame.h; // Vertical centering
 
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
@@ -362,7 +396,6 @@ bool Boss::Update(float dt)
 
     return true;
 }
-
 void Boss::Matar() {//eliminating the enemy once dead 
     if (kill == 1) {
         kill = 2;
@@ -373,6 +406,7 @@ void Boss::Matar() {//eliminating the enemy once dead
 
 bool Boss::CleanUp()
 {
+    // First delete all physics bodies
     if (area != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(area);
         area = nullptr;
@@ -387,6 +421,14 @@ bool Boss::CleanUp()
         Engine::GetInstance().physics.get()->DeletePhysBody(pbodyLower);
         pbodyLower = nullptr;
     }
+
+    // Set joint to null after deleting bodies
+    bodyJoint = nullptr;
+
+    // Make sure textures are properly released
+    // We don't need to destroy the texture as it's managed elsewhere
+    // Just set our pointer to null to avoid double deletion issues
+    texture = nullptr;
 
     return true;
 }
@@ -421,6 +463,7 @@ void Boss::ResetPath() {
     pathfinding->ResetPath(tilePos);
 }
 
+// Fix for hurt animation in OnCollision
 void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     // First check if the collision involves one of our bodies
     if (physA != pbodyUpper && physA != pbodyLower) {
@@ -437,9 +480,9 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (lives > 0) {
             lives--;
             if (lives > 0) {
+                ishurt = true;
                 currentAnimation = &hurt;
                 hurt.Reset();
-                ishurt = true;
             }
             else if (lives <= 0 && !isDying) { // Prevent multiple death animations
                 isDying = true;
@@ -455,15 +498,15 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
     }
-    break;
+                                    break;
 
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives -= 1;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
             if (lives > 0) {
+                ishurt = true;
                 currentAnimation = &hurt;
                 hurt.Reset();
-                ishurt = true;
             }
             else if (lives <= 0 && !isDead) {
                 isDead = true;
@@ -482,7 +525,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
     }
-    break;
+                                         break;
     }
 }
 

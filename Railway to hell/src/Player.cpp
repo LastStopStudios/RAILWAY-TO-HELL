@@ -961,7 +961,7 @@ void Player::DrawPlayer() {
     // Get the current frame
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
     int offsetX = 15;
-    int yOffset = 10;
+    int yOffset = 15;
     int drawX = position.getX() + offsetX;
     int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
@@ -970,13 +970,13 @@ void Player::DrawPlayer() {
 		if (facingRight) {
 		
         drawX = position.getX() - 32;
-        drawY = position.getY() - 74;
+        drawY = position.getY() - 79;
        
 		}
 		else {
 
             drawX = position.getX() - 128;
-            drawY = position.getY() - 74;
+            drawY = position.getY() - 79;
            
         }
     }
@@ -1218,6 +1218,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             NeedDialogue = true;
             Id = physB->ID;
             physB->Salio = true;
+
         }
         break;
     case ColliderType::UNKNOWN:
