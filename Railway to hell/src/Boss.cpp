@@ -44,8 +44,15 @@ bool Boss::Start() {
     hurt.LoadAnimations(parameters.child("animations").child("hurt"));
     currentAnimation = &idle;
 
+    dialogTriggered = false;
+    battleStarted = false;
+    isLookingLeft = true;
+
+    // Start with idle animation until dialog is shown
+    currentAnimation = &idle;
+
     //initialize enemy parameters 
-    moveSpeed = 30.0f;
+    moveSpeed = 80.0f;
     patrolSpeed = 30.0f;
     savedPosX = 0.0f;
     // Physics body initialization - now with two circular collisions
@@ -105,11 +112,11 @@ bool Boss::Start() {
     b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
 
     if (fixtureUpper && fixtureLower) {
-        // Reducir la fricción para evitar quedarse pegado a las paredes
+        // Reducir la fricciï¿½n para evitar quedarse pegado a las paredes
         fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
         fixtureLower->SetFriction(0.005f);
 
-        //// Opcional: configurar valores específicos para colisiones laterales
+        //// Opcional: configurar valores especï¿½ficos para colisiones laterales
         //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
         //fixtureLower->SetRestitution(0.5f);
     }
@@ -124,9 +131,15 @@ bool Boss::Start() {
     return true;
 }
 
+void Boss::TriggerBossDialog() {
+    dialogTriggered = true;
+}
+
 bool Boss::Update(float dt)
 {
-
+    if (pendingToDelete) {
+        return true;
+    }
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
@@ -181,7 +194,6 @@ bool Boss::Update(float dt)
 
         // If death animation finished, start the timer
         if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
-            // Create the key item before deleting the entity
             // Create the key item before deleting the entity
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(Engine::GetInstance().scene.get()->whipItemConfigNode);
@@ -273,9 +285,9 @@ bool Boss::Update(float dt)
                     }
                 }
             }
-
+            bool bossFightActive = Engine::GetInstance().dialogoM->bossFightReady;
             if (!isAttacking) {
-                if (distanceToPlayer <= patrolDistance) { // if player is within patrol distance
+                if (bossFightActive) { // if player is within patrol distance
                     if (!resting) { // start chasing player
                         resting = true;
                         currentAnimation = &running;
@@ -348,7 +360,7 @@ bool Boss::Update(float dt)
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
 
     int renderX = (int)position.getX() - offsetX + 16;
-    int renderY = (int)position.getY() + texH - 5  - frame.h; // Centrado vertical
+    int renderY = (int)position.getY() + texH - 5 - frame.h; // Centrado vertical
 
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
@@ -381,6 +393,7 @@ void Boss::Matar() {//eliminating the enemy once dead
 
 bool Boss::CleanUp()
 {
+    // First delete all physics bodies
     if (area != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(area);
         area = nullptr;
@@ -395,6 +408,14 @@ bool Boss::CleanUp()
         Engine::GetInstance().physics.get()->DeletePhysBody(pbodyLower);
         pbodyLower = nullptr;
     }
+
+    // Set joint to null after deleting bodies
+    bodyJoint = nullptr;
+
+    // Make sure textures are properly released
+    // We don't need to destroy the texture as it's managed elsewhere
+    // Just set our pointer to null to avoid double deletion issues
+    texture = nullptr;
 
     return true;
 }
@@ -429,6 +450,7 @@ void Boss::ResetPath() {
     pathfinding->ResetPath(tilePos);
 }
 
+// Fix for hurt animation in OnCollision
 void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     // First check if the collision involves one of our bodies
     if (physA != pbodyUpper && physA != pbodyLower) {
@@ -445,11 +467,28 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (lives > 0) {
             lives--;
             if (lives > 0) {
+                ishurt = true;
                 currentAnimation = &hurt;
                 hurt.Reset();
-                ishurt = true;
+
+                // Add cleanup when getting hurt
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (area != nullptr) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                        area = nullptr;
+                    }
+                }
             }
-            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            else if (lives <= 0 && !isDying) {
+                // Same cleanup for death case
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (area != nullptr) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                        area = nullptr;
+                    }
+                }
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
@@ -458,20 +497,20 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
                 Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-                Engine::GetInstance().dialogoM->Texto("2");//text after boss death
+                //Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                 // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             }
         }
     }
-    break;
+                                    break;
 
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives -= 1;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
             if (lives > 0) {
+                ishurt = true;
                 currentAnimation = &hurt;
                 hurt.Reset();
-                ishurt = true;
             }
             else if (lives <= 0 && !isDead) {
                 isDead = true;
@@ -490,7 +529,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
     }
-    break;
+                                         break;
     }
 }
 

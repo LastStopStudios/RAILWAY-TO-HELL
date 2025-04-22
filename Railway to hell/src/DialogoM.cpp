@@ -76,14 +76,15 @@ bool DialogoM::PostUpdate()
 
 
 void DialogoM::Texto(const std::string& Dialogo) {
-	showText = !showText; //Toggle text visibility
+	showText = !showText; // Toggle text visibility
 	if (showText) {
-		Engine::GetInstance().scene->DialogoOn();//stop entities
-		XMLToVariable(Dialogo); //Load corresponding text
-		GenerateTextTexture(); //Generate the initial texture
+		lastDialogID = Dialogo;  // Guardar el ID del diálogo actual
+		Engine::GetInstance().scene->DialogoOn(); // stop entities
+		XMLToVariable(Dialogo); // Load corresponding text
+		GenerateTextTexture(); // Generate the initial texture
 	}
 	else {
-		ResetText(); //Reset text
+		ResetText(); // Reset text
 	}
 }
 
@@ -92,7 +93,7 @@ void DialogoM::ResetText() {
 	textIndex = 0;
 	currentText = "";
 	alltext = "";
-	displayText = "";//full text
+	displayText = ""; // full text
 	Skip = true;
 	Tim = true;
 	Siguiente = true;
@@ -100,7 +101,8 @@ void DialogoM::ResetText() {
 		SDL_DestroyTexture(textTexture);
 		textTexture = nullptr;
 	}
-	showText = false; //Reset text visibility 
+	showText = false; // Reset text visibility 
+	// No resetear lastDialogID aquí
 }
 
 void DialogoM::GenerateTextTexture()//display text on the screen
@@ -175,14 +177,17 @@ void DialogoM::UpdateTextAnimation(float dt)
 	}
 	if (alltext.length() == displayText.length()) { Skip = false; }//the text has already been skipped, it serves as a control so that it does not skip and close at the same time.
 	
-	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {//Close texts Delete key Does not catch the enter or Execute key.
+	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {
 		showText = !showText;
-		Engine::GetInstance().scene->DialogoOff();//return control to the player
-		ResetText(); //Reset text 
+		Engine::GetInstance().scene->DialogoOff(); // return control to the player
+
+		// Si el diálogo que se acaba de cerrar era el del boss (ID "1")
+		if (lastDialogID == "1") {
+			bossFightReady = true;
+		}
+
+		ResetText(); // Reset text 
 	}
-
-
-
 }
 
 void DialogoM::XMLToVariable(const std::string& id) {
@@ -190,7 +195,6 @@ void DialogoM::XMLToVariable(const std::string& id) {
 
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
 
 	if (!result) {
 		std::cerr << "Error loading XML file: " << result.description() << std::endl;

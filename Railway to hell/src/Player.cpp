@@ -958,7 +958,7 @@ void Player::DrawPlayer() {
     // Get the current frame
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
     int offsetX = 15;
-    int yOffset = 10;
+    int yOffset = 15;
     int drawX = position.getX() + offsetX;
     int drawY = position.getY() - yOffset;
     // Calculate offset for flipping (similar to Boss class)
@@ -967,13 +967,13 @@ void Player::DrawPlayer() {
 		if (facingRight) {
 		
         drawX = position.getX() - 32;
-        drawY = position.getY() - 74;
+        drawY = position.getY() - 79;
        
 		}
 		else {
 
             drawX = position.getX() - 128;
-            drawY = position.getY() - 74;
+            drawY = position.getY() - 79;
            
         }
     }
@@ -1090,8 +1090,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-               // NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-               // Id = physB->ID; //ID from Item
+                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID; //ID from Item
+                //Engine::GetInstance().dialogoM->Texto("2");
             }
             if (item && item->GetItemType() == "Remember1") {
                 WhipAttack = true;
@@ -1217,6 +1218,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             NeedDialogue = true;
             Id = physB->ID;
             physB->Salio = true;
+
         }
         break;
     case ColliderType::UNKNOWN:

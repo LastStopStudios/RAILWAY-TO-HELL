@@ -154,8 +154,9 @@ private:
 	
 public:
 	void AddToMusic(int soundID) { music.push_back(soundID); }
-	pugi::xml_node doorItemConfigNode; //mover a private
-	pugi::xml_node whipItemConfigNode; //mover a private
+	pugi::xml_node itemConfigNode; //mover a private
+	pugi::xml_node whipItemConfigNode;
+	pugi::xml_node doorItemConfigNode;
 	bool dibujar;
 
 };
