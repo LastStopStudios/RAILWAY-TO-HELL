@@ -1095,6 +1095,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
+                Engine::GetInstance().dialogoM->Texto("2");
             }
             if (item && item->GetItemType() == "Remember1") {
                 WhipAttack = true;
