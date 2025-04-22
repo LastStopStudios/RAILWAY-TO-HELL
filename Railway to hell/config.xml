@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="2900" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="2893" y="2048" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.03">
 						<frame x="0" y="0" w="64" h="96" />
@@ -141,7 +141,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="3330" y="2079" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
+				<item name="Dash ability" x="6656" y="4482" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="16" w="16" h="16" />
@@ -840,36 +840,6 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="7965" y="4496" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
 				<enemy name="badguy" x="7605" y="4484" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
@@ -901,36 +871,6 @@
 					</animations>
 				</enemy>
 				<enemy name="badguy" x="7170" y="4442" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6692" y="4425" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2838,7 +2778,7 @@
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="Welcome to your last stop. Eternal damnation between seats and forgotten cases in this train with no destiny." />
 			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="I shall never let you cross these bars, and in the most improbable case you did... may the darkness guide you and the shadows be your company." />
 			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis?... sis... Is that you? I've been seeing nothing but darkness for far too long, I'm scared, I don't know how I ended up here. I'm at the last stop of a green train line... Come rescue me, so we can get out of this hell. I will guide you." />
-			<dialog ID="4" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those pink sneakers you gave me for my birthday? I know it costed you a lot to get them." />		
+			<dialog ID="4" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those pink sneakers you gave me for my birthday? I know it costed you a lot to get them." />
 		</dialogues>
 	</scene>
 	<scene2>
@@ -3061,29 +3001,21 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-				<item name="Prueba" x="2151" y="869" w="16" h="16" texture="Assets/Textures/Items/items.png" gravity="false" ID="1">
-					<animations>
-						<idle loop="true" speed="0.5">
-							<frame x="0" y="0" w="16" h="16" />
-						</idle>
-					</animations>
-				</item>
-			</items>
+			<items />
 			<elevators>
-				<elevator name="elevator" x="2624" y="704" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
-						<animations>
-							<idle loop="false" speed="0.5">
-								<frame x="0" y="0" w="82" h="120" />
-							</idle>
-							<activated loop="false" speed="0.05">
-								<frame x="0" y="0" w="82" h="120" />
-								<frame x="82" y="0" w="82" h="120" />
-								<frame x="164" y="0" w="82" h="120" />
-							</activated>
-						</animations>
+				<elevator name="elevator" x="2624" y="666" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="82" h="120" />
+						</idle>
+						<activated loop="false" speed="0.05">
+							<frame x="0" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="164" y="0" w="82" h="120" />
+						</activated>
+					</animations>
 				</elevator>
-				<elevator name="elevator" x="1344" y="1536" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
+				<elevator name="elevator" x="1344" y="1529" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.05">
 							<frame x="0" y="0" w="82" h="120" />

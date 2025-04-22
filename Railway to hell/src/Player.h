@@ -41,10 +41,10 @@ public:
 	//list of scenes with their id
 	std::vector<EscenaQueCargar> escenas = {
 	//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
-	{"DE2L1T2",1,10046,2160,false,false},
-	{"DT2L1E2",3,755,646,false,false},
-	{"DT2L1E1",2,3050,860,false,false},
-	{"DE1L1T2",1,864,2149,false,false},
+	{"DE2L1T2",1,10114,2122,true,false},
+	{"DT2L1E2",3,700,600,true,false},
+	{"DT2L1E1",2,3082,720,true,false},
+	{"DE1L1T2",1,690,2137,true,false},
 	{"DE2L1BOSS1",3,1381,1573,true,true},
 	{"BOSS1DE2L1",3,2624,704,true,false},
 	};

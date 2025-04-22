@@ -568,26 +568,14 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().entityManager->AscensorOn();
     }
     //Debug Level Design
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move to desired pos
-        int debugXLevelDesign = 4008;
-        int debugYLevelDesign = 4094;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {//move the player to the start position tunel scene
+        int debugXLevelDesign = 2893;
+        int debugYLevelDesign = 2048;
         Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
         SetPosition(debugPos);
     }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {//move to the initial position of the scene
-        int debugXLevelDesignInitialPositionOfLevel = 613;
-        int debugYLevelDesignInitialPositionOfLevel = 4257;
-        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
-        SetPosition(debugPos);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {//move to the initial position of the scene
-        int debugXLevelDesignInitialPositionOfLevel = 1106;
-        int debugYLevelDesignInitialPositionOfLevel = 2031;
-        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
-        SetPosition(debugPos);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {//move to the initial position of the scene
-        int debugXLevelDesignInitialPositionOfLevel = 6651;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) { //Move the player yo de dash item
+        int debugXLevelDesignInitialPositionOfLevel = 6600;
         int debugYLevelDesignInitialPositionOfLevel = 4426;
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
