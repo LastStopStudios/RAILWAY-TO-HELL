@@ -137,6 +137,9 @@ void Boss::TriggerBossDialog() {
 
 bool Boss::Update(float dt)
 {
+    if (pendingToDelete) {
+        return true;
+    }
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
