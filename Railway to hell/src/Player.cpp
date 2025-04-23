@@ -232,7 +232,7 @@ bool Player::Start() {
     whipAttackHitbox = nullptr;
 
     // For testing, temporarily enable whip attack
-    WhipAttack = false;
+    WhipAttack = true;
     facingRight = true;
 
     // Set initial animation to wakeup if we haven't woken up yet
@@ -739,7 +739,7 @@ void Player::UpdateWhipAttack(float dt) {
         whipAttack.Reset();
 
         // Create whip attack hitbox
-        int attackWidth = texW * 3;
+        int attackWidth = texW * 2.5;
         int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body for attacks
         int centerX = METERS_TO_PIXELS(playerCenter.x);
@@ -769,7 +769,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Update hitbox position
         if (whipAttackHitbox) {
             //int attackX = facingRight ? position.getX()  : position.getX() + 10;
-            int attackX = (int)position.getX() + (facingRight ? 150 : -50);
+            int attackX = (int)position.getX() + (facingRight ? 128 : -28);
             int attackY = position.getY() + 10;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
