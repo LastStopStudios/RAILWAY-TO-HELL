@@ -93,8 +93,10 @@ void Elevators::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Elevators::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
-		currentAnimation = &deactivated;
-		activated.Reset();
+		if (Engine::GetInstance().entityManager->Ascensor == true) {
+			currentAnimation = &deactivated;
+			activated.Reset();
+		}
 		break;
 	case ColliderType::UNKNOWN:
 		break;
