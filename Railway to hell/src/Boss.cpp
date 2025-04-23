@@ -64,7 +64,7 @@ bool Boss::Start() {
         centerX,
         centerY - radius,  // upper part
         radius,
-        bodyType::KINEMATIC);
+        bodyType::DYNAMIC);
     pbodyUpper->listener = this;
     pbodyUpper->ctype = ColliderType::BOSS;
     pbodyUpper->body->SetFixedRotation(true);
@@ -73,7 +73,7 @@ bool Boss::Start() {
         centerX,
         centerY + radius,  // lower part
         radius,
-        bodyType::KINEMATIC);
+        bodyType::DYNAMIC);
     pbodyLower->listener = this;
     pbodyLower->ctype = ColliderType::BOSS;
     pbodyLower->body->SetFixedRotation(true);
@@ -162,6 +162,14 @@ bool Boss::Update(float dt)
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetGravityScale(1.0f);
         }
+    }
+    if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
+        pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 1));
+        pbodyUpper->body->SetGravityScale(1.0f);
+    }
+    if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
+        pbodyLower->body->SetLinearVelocity(b2Vec2(0, 1));
+        pbodyLower->body->SetGravityScale(1.0f);
     }
 
     if (ishurt) {
