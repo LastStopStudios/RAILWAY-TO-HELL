@@ -658,18 +658,13 @@ void Player::HandleHurt(float dt) {
 
 void Player::HandlePickup(float dt) {
     if (isPickingUp && !isDying) {
-        LOG("pillando");
         if (!hasPickupStarted) {
-            LOG("Empezo a pillar");
             pickupAnim.Reset();
             hasPickupStarted = true; // Reset pickup animation one time
         }
         pickupAnim.Update(); 
-        LOG("Acabo de pillar");
 
         if (pickupAnim.HasFinished()) { 
-            LOG("Reseteo pos pillar");
-            // Reset to idle
             isPickingUp = false;
             hasPickupStarted = false;
             idle.Reset();
@@ -1031,8 +1026,6 @@ void Player::DrawPlayer() {
         }
     }
 
-    
-
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
     }
@@ -1185,38 +1178,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-    case ColliderType::ITEM: {
-        //Item* item = (Item*)physB->listener;
-
-        //if (item) {
-
-        //    isPickingUp = true;
-
-        //    if (item && item->GetItemType() == "Dash ability") {
-        //        Dash = true;
-        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-        //        /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-        //        Id = physB->ID;*/ //ID from Item
-        //        break;
-        //    }
-        //    if (item && item->GetItemType() == "Whip") {
-        //        WhipAttack = true;
-        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-        //        NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-        //        Id = physB->ID; //ID from Item
-        //        break;
-        //    }
-        //    if (item && item->GetItemType() == "Door key") {
-        //        canOpenDoor = true;
-        //        Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-        //        Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
-        //        /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-        //        Id = physB->ID;*/ //ID from Item
-        //        break;
-        //    }
-        //}
-        break;
-    }
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurt = true;
@@ -1268,14 +1229,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 }
             }
         }
-        break;
-    case ColliderType::DIALOGOS:
-        //if (physB->Salio == false) {//makes the dialog trigger only once
-        //    NeedDialogue = true;
-        //    Id = physB->ID;
-        //    physB->Salio = true;
-
-        //}
         break;
     case ColliderType::UNKNOWN:
         break;
