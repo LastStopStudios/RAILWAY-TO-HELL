@@ -322,7 +322,6 @@ bool Player::Update(float dt)
         }
         if (!isDashing && !isPickingUp && !isDying && !isJumping && !isFalling && !isRecovering) {
             UpdateWhipAttack(dt);
- 
         }
         // If jumping, preserve the vertical velocity
         if (isJumping) {
