@@ -159,7 +159,7 @@ bool Caronte::Update(float dt)
 		attackOnCooldown = true;
         currentAttackCooldown = attackCooldown;
         if (done == false) {
-            Engine::GetInstance().dialogoM->Texto("3");//text after attack 
+            Engine::GetInstance().dialogoM->Texto("2");//text after attack 
             done = true;
         }
         
