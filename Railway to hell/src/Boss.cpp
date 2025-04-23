@@ -64,7 +64,7 @@ bool Boss::Start() {
         centerX,
         centerY - radius,  // upper part
         radius,
-        bodyType::DYNAMIC);
+        bodyType::KINEMATIC);
     pbodyUpper->listener = this;
     pbodyUpper->ctype = ColliderType::BOSS;
     pbodyUpper->body->SetFixedRotation(true);
@@ -73,7 +73,7 @@ bool Boss::Start() {
         centerX,
         centerY + radius,  // lower part
         radius,
-        bodyType::DYNAMIC);
+        bodyType::KINEMATIC);
     pbodyLower->listener = this;
     pbodyLower->ctype = ColliderType::BOSS;
     pbodyLower->body->SetFixedRotation(true);
@@ -178,7 +178,6 @@ bool Boss::Update(float dt)
             currentAnimation = &idle;
         }
     }
-    pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0)); pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
 
     if (isDying || isDead) {
         // Asegurar que no haya movimiento durante la muerte

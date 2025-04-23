@@ -3369,7 +3369,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="Anger" x="2045,45" y="1648,48" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
+				<enemy name="Anger" x="2045,45" y="1608,48" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="96" h="128" />
