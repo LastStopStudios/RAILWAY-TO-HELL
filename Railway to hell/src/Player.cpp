@@ -739,7 +739,7 @@ void Player::UpdateWhipAttack(float dt) {
         whipAttack.Reset();
 
         // Create whip attack hitbox
-        int attackWidth = texW * 3;
+        int attackWidth = texW * 2.5;
         int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body for attacks
         int centerX = METERS_TO_PIXELS(playerCenter.x);
@@ -769,7 +769,7 @@ void Player::UpdateWhipAttack(float dt) {
         // Update hitbox position
         if (whipAttackHitbox) {
             //int attackX = facingRight ? position.getX()  : position.getX() + 10;
-            int attackX = (int)position.getX() + (facingRight ? 150 : -50);
+            int attackX = (int)position.getX() + (facingRight ? 128 : -28);
             int attackY = position.getY() + 10;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
@@ -831,11 +831,11 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Hitbox position: in front of the player according to the direction.
         int attackX = facingRight
-            ? centerX + texW / 2 - attackWidth / 2 // right
-            : centerX - texW / 2 - attackWidth / -2;  // left
+            ? centerX + texW / 3 - attackWidth / -3 // right
+            : centerX - texW / 3 - attackWidth / 3;  // left
 
         // Position the hitbox lower by using a positive value for texH division
-        int attackY = centerY + texH / 4;  // Move hitbox down by half texture height
+        int attackY = centerY + texH / 7;  // Move hitbox down by half texture height
 
         // Delete the previous hitbox if it existed.
         if (attackHitbox) {
@@ -862,11 +862,11 @@ void Player::UpdateMeleeAttack(float dt) {
 
             // Hitbox position adjusted with the direction corrected.
             int attackX = facingRight
-                ? centerX + texW / 2 - attackHitbox->width / -3 // right
-                : centerX - texW / 2 - attackHitbox->width / -2; // left
+                ? centerX + texW / 3 - attackHitbox->width / -3// right
+                : centerX - texW / 3  - attackHitbox->width / 3; // left
 
             // Keep the hitbox consistently positioned lower
-            int attackY = centerY + texH / 4;  // Same offset as in creation
+            int attackY = centerY + texH / 7;  // Same offset as in creation
 
             attackHitbox->body->SetTransform(
                 { PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
@@ -1002,6 +1002,21 @@ void Player::DrawPlayer() {
            
         }
     }
+    if (isAttacking)
+    {
+        if (facingRight) {
+
+            drawX = position.getX() +1;
+            drawY = position.getY() -16;
+        }
+        else {
+
+            drawX = position.getX() - 2.25 ;
+            drawY = position.getY() - 16;
+
+        }
+    }
+
     if (isJumping || isFalling || isRecovering ) {
         if (facingRight) {
 
@@ -1015,6 +1030,8 @@ void Player::DrawPlayer() {
 
         }
     }
+
+    
 
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
@@ -1114,6 +1131,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
+                Id = physB->ID; //ID from Item
 
             }
             if (item && item->GetItemType() == "Remember1") {

@@ -30,6 +30,7 @@ bool Elevators::Start() {
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
 	activated.LoadAnimations(parameters.child("animations").child("activated"));
+	deactivated.LoadAnimations(parameters.child("animations").child("deactivated"));
 	currentAnimation = &idle;
 
 
@@ -64,6 +65,11 @@ bool Elevators::Update(float dt){
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
+	if (deactivated.HasFinished()) {
+		currentAnimation->Reset();
+		currentAnimation = &idle;
+	}
+
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	currentAnimation->Update();
 	return true;
@@ -87,8 +93,10 @@ void Elevators::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Elevators::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLAYER:
-		currentAnimation->Reset();
-		currentAnimation = &idle;
+		if (Engine::GetInstance().entityManager->Ascensor == true) {
+			currentAnimation = &deactivated;
+			activated.Reset();
+		}
 		break;
 	case ColliderType::UNKNOWN:
 		break;
