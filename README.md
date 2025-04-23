@@ -27,8 +27,23 @@ Video Game Development Project 2 CITM 2024/2025 by
 - K Use Whip
 - L Throw Balls
 - TAB Alternate Type Balls
-- E Use Key (Doors and Interactions)
+- E Use Key (Doors and Interactions) and close dialogues
 - M Map
 
 ### *Implemented Features*
+- Dialogue system personalized for each character, with rendered animations.
+- Scene Loader
+- Scene Loader triggered by different types of sensors
+- Dash
+- Melee and whip attack
+- One boss
+- Four different items implemented 
+- Caronte Entity has been fully developed
+- Two types of enemies
+- Doors can be unlocked using items
+- Doors can be unlocked using levers, combined with whip attacks
+- Render depth system
+- SFX effects and background music added
+- Boss fight camera
+- Elevators entity 
 
