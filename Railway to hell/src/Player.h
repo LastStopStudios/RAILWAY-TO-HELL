@@ -8,6 +8,8 @@
 
 struct SDL_Texture;
 
+
+
 class Player : public Entity
 {
 public:
@@ -58,12 +60,11 @@ public:
 	void DialogoOn() { dialogo = true;}//stop player
 	void DialogoOff() { dialogo = false;}//return control player
 
-
 private:
 	// Private methods
 	void DrawPlayer();
 	void UpdateMeleeAttack(float dt);
-	void HandleJump();
+	void HandleJump(float dt);
 	void HandleSceneSwitching();
 	void HandleHurt(float dt);
 	void HandleDash(b2Vec2& velocity, float dt);
@@ -73,13 +74,16 @@ private:
 	void HandleDeath(float dt);
 	void HandleWakeup(float dt);
 	void Idle();
-public:
+private:
 	// Public properties
 	SDL_Texture* texture = NULL;
 	int texW, texH;
 	float leftOffsetX;
 	float rightOffsetX;
 	float heightOffset;
+
+	float fallingTimer = 0.0f;
+	bool isTransitioningToFalling = false;
 
 	//Scene change
 	bool NeedSceneChange = false;

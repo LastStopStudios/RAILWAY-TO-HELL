@@ -302,7 +302,7 @@ bool Player::Update(float dt)
         // Mutually exclusive action handling
         if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp && !isDying) {
             HandleMovement(velocity);
-            HandleJump();
+            HandleJump(dt);
         }
 
         // Handle dash only when not attacking or jumping
@@ -503,8 +503,8 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
     }
 }
 
-void Player::HandleJump() {
-    // Trigger jump directly when space is pressed (no preparation phase)
+void Player::HandleJump(float dt) {
+    float currentVerticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN &&
         !isJumping && !isFalling) {
 
@@ -530,13 +530,45 @@ void Player::HandleJump() {
     if (isJumping) {
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
 
-        // If moving downward (positive y velocity), switch to falling animation
-        if (verticalVelocity > 0.1f && !isFalling) {
+        if (verticalVelocity > 0.005f && !isFalling) {
             isFalling = true;
+            isTransitioningToFalling = true;  // Mark that we're in transition
             falling.Reset();
+            
         }
     }
+    if (isFalling) {
+        // Check both bodies' vertical velocity to determine if player has actually stopped falling
+        float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
+        float lowerVelocity = pbodyLower->body->GetLinearVelocity().y;
 
+        // If both bodies have very little vertical movement and the player isn't intentionally jumping
+        if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
+            // We've probably landed but the collision wasn't registered properly
+            isFalling = false;
+            isJumping = false;
+            falling.Reset();
+
+            // Transition to recovering animation
+            isRecovering = true;
+            recoveringTimer = recoveringDuration;
+            recovering.Reset();
+        }
+
+        fallingTimer += dt;
+        if (fallingTimer > 100.0f) {  // If we've been falling for over x seconds
+            // Check if we're not actually moving much
+            if (fabs(upperVelocity) < 0.5f && fabs(lowerVelocity) < 0.5f) {
+                isFalling = false;
+                isJumping = false;
+                fallingTimer = 0.0f;
+            }
+        }
+    }
+    else {
+        // Reset falling timer when not falling
+        fallingTimer = 0.0f;
+    }
     // Check if player is falling off a platform without jumping
     if (!isJumping && !isDashing && !isAttacking && !isWhipAttacking && !isRecovering) {
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
@@ -856,96 +888,84 @@ void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
     SDL_Texture* originalTexture = texture;
     if (isDying) {
-		texture = deathTexture;
-		currentAnimation = &death;
+        texture = deathTexture;
+        currentAnimation = &death;
         Engine::GetInstance().audio.get()->PlayFx(diedFX);
-		death.Update();
+        death.Update();
     }
     else if (isHurt && !hurted && !isDying) {
-        // Set hurt animation when hurt
         texture = hurtTexture;
         currentAnimation = &hurt;
         hurt.Update();
     }
     else if (isWakingUp) {
-        // Set wakeup animation
         currentAnimation = &wakeupAnim;
         texture = wakeupTexture;
         wakeupAnim.Update();
     }
     else if (isAttacking) {
         currentAnimation = &meleeAttack;
-        // Use attack texture when attacking
         texture = attackTexture;
         meleeAttack.Update();
     }
     else if (isWhipAttacking) {
         currentAnimation = &whipAttack;
-        // Use whip texture when whip attacking
         texture = whipAttackTexture;
         whipAttack.Update();
     }
     else if (isDashing) {
-        // Set dashing animation
         currentAnimation = &dash;
         texture = dashTexture;
         dash.Update();
     }
     else if (isPickingUp) {
-        // Set pickup animation
         currentAnimation = &pickupAnim;
         texture = pickupTexture;
-		pickupAnim.Update();
+        pickupAnim.Update();
     }
+    else if (isJumping || isFalling) {
+        // Make sure we never switch back to idle during transitions
+        if (isTransitioningToFalling || isFalling) {
+            if (currentAnimation != &falling) {
+                currentAnimation = &falling;
+                texture = fallingTexture;
+            }
+            falling.Update();
+
+            // Once we've made the transition, clear the flag
+            if (isTransitioningToFalling) {
+                isTransitioningToFalling = false;
+            }
+        }
+        else {
+            if (currentAnimation != &jump) {
+                currentAnimation = &jump;
+                texture = jumpTexture;
+            }
+            jump.Update();
+        }
+    }
+
     else if (isRecovering) {
-        // Set recovering animation when landing
-       
         currentAnimation = &recovering;
         texture = recoveringTexture;
         recovering.Update();
 
-        // Update recovery timer
-        recoveringTimer -= 0.0167f; // Approximately one frame at 60fps
+        recoveringTimer -= 0.0167f;
         if (recoveringTimer <= 0 || recovering.HasFinished()) {
             isRecovering = false;
             currentAnimation = &idle;
             idle.Reset();
         }
     }
-    else if (isFalling) {
-        // Set falling animation when in air with downward velocity
-        currentAnimation = &falling;
-       
-        texture = fallingTexture;
-       
-        falling.Update();
-    }
-    else if (isJumping || isPreparingJump) {
-        // Set the jump animation when jumping or preparing to jump
-    
-        currentAnimation = &jump;
-        texture = jumpTexture;
-
-        // Make sure jump animation updates properly
-        if (isPreparingJump) {
-            jump.Update();
-        }
-        else if (isJumping) {
-            // If already jumped but not falling, keep the last frame
-            if (!jump.HasFinished()) {
-                jump.Update();
-            }
-        }
-    }
     else if (isWalking) {
-        // Set walking animation when moving horizontally
         currentAnimation = &walk;
         texture = walkTexture;
-        if (!isJumping && isWalking && !isDashing) {  // Only play sound if on the ground
+        if (!isJumping && isWalking && !isDashing) {
             runSoundTimer += 0.0167;
             if (runSoundTimer >= runSoundInterval) {
                 Engine::GetInstance().audio.get()->PlayFx(stepFX);
-                runSoundTimer = 0.0f; // Reset the timer
+                runSoundTimer = 0.0f;
             }
         }
         walk.Update();
@@ -953,7 +973,6 @@ void Player::DrawPlayer() {
     else {
         if (currentAnimation != &idle) {
             currentAnimation = &idle;
-            // Reset texture to the original one loaded in Start()
             texture = originalTexture;
         }
     }
@@ -1128,20 +1147,27 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
+        // Get the contact point and normal to better determine if we landed on top
         if (isJumping || isFalling) {
-            // Player has landed
-            isJumping = false;
-            if (isFalling) {
-                Engine::GetInstance().audio.get()->PlayFx(fallFX);
-                // Transition to recovering animation
+            // Check vertical velocity to confirm we're moving downward (landing)
+            float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
+
+            // Only consider it a landing if we're moving downward (positive Y velocity)
+            if (verticalVelocity >= 0) {
+                // Force reset both states at the same time
+                isJumping = false;
                 isFalling = false;
+                fallingTimer = 0.0f;  // Reset the timer
+
+                // Transition directly to recovering animation
                 isRecovering = true;
                 recoveringTimer = recoveringDuration;
                 recovering.Reset();
+
+                // Play the landing sound
+                Engine::GetInstance().audio.get()->PlayFx(fallFX);
             }
-			
         }
-     
         break;
     case ColliderType::ITEM: {
         //Item* item = (Item*)physB->listener;
