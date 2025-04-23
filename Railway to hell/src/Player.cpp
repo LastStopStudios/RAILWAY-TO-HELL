@@ -1116,6 +1116,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
+        if (physB->Salio == false) {//makes the dialog trigger only once
+            NeedDialogue = true;
+            Id = physB->ID;
+            physB->Salio = true;
+
+        }
+        return;
+    }
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         if (isJumping || isFalling) {
@@ -1218,12 +1228,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::DIALOGOS:
-        if (physB->Salio == false) {//makes the dialog trigger only once
-            NeedDialogue = true;
-            Id = physB->ID;
-            physB->Salio = true;
+        //if (physB->Salio == false) {//makes the dialog trigger only once
+        //    NeedDialogue = true;
+        //    Id = physB->ID;
+        //    physB->Salio = true;
 
-        }
+        //}
         break;
     case ColliderType::UNKNOWN:
         break;
