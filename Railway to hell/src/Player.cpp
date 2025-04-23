@@ -1110,17 +1110,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Dash ability") {
                 Dash = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID;*/ //ID from Item
+
             }
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-             /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID; */ //ID from Item
+
             }
             if (item && item->GetItemType() == "Remember1") {
-                WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
@@ -1130,8 +1127,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
                 changeMusicCaronte = true; 
                 //Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
-                /* NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID;*/ //ID from Item
+
             }
         }
         return;
