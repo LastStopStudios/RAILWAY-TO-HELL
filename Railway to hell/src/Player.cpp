@@ -232,7 +232,7 @@ bool Player::Start() {
     whipAttackHitbox = nullptr;
 
     // For testing, temporarily enable whip attack
-    WhipAttack = true;
+    WhipAttack = false;
     facingRight = true;
 
     // Set initial animation to wakeup if we haven't woken up yet
@@ -831,11 +831,11 @@ void Player::UpdateMeleeAttack(float dt) {
 
         // Hitbox position: in front of the player according to the direction.
         int attackX = facingRight
-            ? centerX + texW / 2 - attackWidth / 2 // right
-            : centerX - texW / 2 - attackWidth / -2;  // left
+            ? centerX + texW / 3 - attackWidth / -3 // right
+            : centerX - texW / 3 - attackWidth / 3;  // left
 
         // Position the hitbox lower by using a positive value for texH division
-        int attackY = centerY + texH / 4;  // Move hitbox down by half texture height
+        int attackY = centerY + texH / 7;  // Move hitbox down by half texture height
 
         // Delete the previous hitbox if it existed.
         if (attackHitbox) {
@@ -862,11 +862,11 @@ void Player::UpdateMeleeAttack(float dt) {
 
             // Hitbox position adjusted with the direction corrected.
             int attackX = facingRight
-                ? centerX + texW / 2 - attackHitbox->width / -3 // right
-                : centerX - texW / 2 - attackHitbox->width / -2; // left
+                ? centerX + texW / 3 - attackHitbox->width / -3// right
+                : centerX - texW / 3  - attackHitbox->width / 3; // left
 
             // Keep the hitbox consistently positioned lower
-            int attackY = centerY + texH / 4;  // Same offset as in creation
+            int attackY = centerY + texH / 7;  // Same offset as in creation
 
             attackHitbox->body->SetTransform(
                 { PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
@@ -1002,6 +1002,21 @@ void Player::DrawPlayer() {
            
         }
     }
+    if (isAttacking)
+    {
+        if (facingRight) {
+
+            drawX = position.getX() +1;
+            drawY = position.getY() -16;
+        }
+        else {
+
+            drawX = position.getX() - 2.25 ;
+            drawY = position.getY() - 16;
+
+        }
+    }
+
     if (isJumping || isFalling || isRecovering ) {
         if (facingRight) {
 
@@ -1015,6 +1030,8 @@ void Player::DrawPlayer() {
 
         }
     }
+
+    
 
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
