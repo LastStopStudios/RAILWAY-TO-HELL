@@ -3149,7 +3149,7 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
-						<deactivated>
+						<deactivated loop="false" speed="0.05">
 							<frame x="164" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="0" y="0" w="82" h="120" />
@@ -3166,7 +3166,7 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
-						<deactivated>
+						<deactivated loop="false" speed="0.05">>
 							<frame x="164" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="0" y="0" w="82" h="120" />
