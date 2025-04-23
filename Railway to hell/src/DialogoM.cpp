@@ -157,7 +157,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 		else if (textIndex == textMaxheigth) {
 			Tim = false;
 		}
-		if (textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Tim == false) {
+		if (textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && Tim == false) {
 
 			int finaltexto = textIndex - textMaxheigth;
 			currentText.clear();
@@ -177,7 +177,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 	}
 	if (alltext.length() == displayText.length()) { Skip = false; }//the text has already been skipped, it serves as a control so that it does not skip and close at the same time.
 	
-	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && Skip == false) {
+	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && Skip == false) {
 		showText = !showText;
 		Engine::GetInstance().scene->DialogoOff(); // return control to the player
 
