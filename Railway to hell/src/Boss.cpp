@@ -121,6 +121,11 @@ bool Boss::Start() {
         //fixtureLower->SetRestitution(0.5f);
     }
 
+    pbodyUpper->body->GetFixtureList()->SetDensity(1000.0f);
+    pbodyLower->body->GetFixtureList()->SetDensity(1000.0f);
+    pbodyUpper->body->ResetMassData();
+    pbodyLower->body->ResetMassData();
+
     // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
@@ -167,11 +172,11 @@ bool Boss::Update(float dt)
     if (ishurt) {
         if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
             pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
+            pbodyUpper->body->SetGravityScale(1.0f);
         }
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
+            pbodyLower->body->SetGravityScale(1.0f);
         }
         if (hurt.HasFinished()) {
             ishurt = false;
@@ -183,11 +188,11 @@ bool Boss::Update(float dt)
         // Asegurar que no haya movimiento durante la muerte
         if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
             pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
+            pbodyUpper->body->SetGravityScale(1.0f);
         }
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
+            pbodyLower->body->SetGravityScale(1.0f);
         }
 
         currentAnimation->Update();
