@@ -3122,6 +3122,7 @@
 			</player>
 			<items>
 				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="1">
+				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3149,6 +3150,11 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
+						<deactivated>
+							<frame x="164" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="0" y="0" w="82" h="120" />
+						</deactivated>
 					</animations>
 				</elevator>
 				<elevator name="elevator" x="1344" y="1529" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
@@ -3161,6 +3167,11 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
+						<deactivated>
+							<frame x="164" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="0" y="0" w="82" h="120" />
+						</deactivated>
 					</animations>
 				</elevator>
 			</elevators>
