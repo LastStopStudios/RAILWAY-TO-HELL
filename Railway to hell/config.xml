@@ -2631,7 +2631,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="HellBat1" x="6046" y="2400º" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat1" x="6046" y="2368" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2658,7 +2658,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat2" x="6741" y="2400" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat2" x="6741" y="2368" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2685,7 +2685,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat3" x="6782" y="4010" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat3" x="6782" y="3968" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2712,7 +2712,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat4" x="5476" y="4120" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat4" x="5476" y="4096" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2739,7 +2739,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat5" x="4829" y="4240" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat5" x="4829" y="4224" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2766,7 +2766,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat6" x="4346" y="5490" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat6" x="4346" y="5472" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2793,7 +2793,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat7" x="2508" y="4170" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat7" x="2508" y="4128" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2820,7 +2820,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat8" x="8832" y="1665" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat8" x="8832" y="1600" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
