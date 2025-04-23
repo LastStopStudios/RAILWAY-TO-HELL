@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<engine>
-		<title>My platformer game</title>
+		<title>Railway to hell</title>
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
