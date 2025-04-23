@@ -180,7 +180,21 @@ bool Boss::Update(float dt)
         }
         if (hurt.HasFinished()) {
             ishurt = false;
-            currentAnimation = &idle;
+            currentAnimation = &running;
+
+            b2Vec2 velocity = b2Vec2(0, 0);
+            if (Engine::GetInstance().dialogoM->bossFightReady && !isAttacking) {
+                float speed;
+                if (isLookingLeft) {
+                    speed = -moveSpeed;
+                }
+                else {
+                    speed = moveSpeed;
+                }
+                velocity = b2Vec2(PIXEL_TO_METERS(speed), 0);
+            }
+            pbodyUpper->body->SetLinearVelocity(velocity);
+            pbodyLower->body->SetLinearVelocity(velocity);
         }
     }
 
