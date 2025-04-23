@@ -48,7 +48,7 @@ public:
 private:
 	float initialWalkTimer = 0.0f;
 	bool initialWalkComplete = false;
-	const float initialWalkDuration = 4.0f; // duración en segundos
+	const float initialWalkDuration = 4.0f; // duration in seconds
 
 	Vector2D enemyPos; 
 

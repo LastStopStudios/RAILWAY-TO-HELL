@@ -371,8 +371,7 @@ void Volador::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
 
-       
-        
+  
     }
 		
 		break;

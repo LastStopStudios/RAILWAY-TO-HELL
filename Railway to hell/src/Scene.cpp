@@ -226,8 +226,6 @@ bool Scene::Update(float dt)
 
 		break;
 	}
-	
-
 	return true;
 }
 

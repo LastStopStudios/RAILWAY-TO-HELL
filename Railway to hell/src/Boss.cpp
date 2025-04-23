@@ -112,13 +112,8 @@ bool Boss::Start() {
     b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
 
     if (fixtureUpper && fixtureLower) {
-        // Reducir la fricci�n para evitar quedarse pegado a las paredes
-        fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
+        fixtureUpper->SetFriction(0.005f);
         fixtureLower->SetFriction(0.005f);
-
-        //// Opcional: configurar valores espec�ficos para colisiones laterales
-        //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
-        //fixtureLower->SetRestitution(0.5f);
     }
 
     pbodyUpper->body->GetFixtureList()->SetDensity(1000.0f);
