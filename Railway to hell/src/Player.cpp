@@ -318,10 +318,12 @@ bool Player::Update(float dt)
         }
         // Handle attacks only when not dashing
         if (!isDashing && !isPickingUp && !isDying) {
-            UpdateWhipAttack(dt);
             UpdateMeleeAttack(dt);
         }
-
+        if (!isDashing && !isPickingUp && !isDying && !isJumping && !isFalling && !isRecovering) {
+            UpdateWhipAttack(dt);
+ 
+        }
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
