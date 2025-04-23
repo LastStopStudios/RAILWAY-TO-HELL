@@ -3121,7 +3121,6 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="1">
 				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
 					<animations>
 						<idle loop="true" speed="0.2">
