@@ -167,27 +167,28 @@ bool Boss::Update(float dt)
     if (ishurt) {
         if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
             pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
+            pbodyUpper->body->SetGravityScale(1.0f);
         }
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
+            pbodyLower->body->SetGravityScale(1.0f);
         }
         if (hurt.HasFinished()) {
             ishurt = false;
             currentAnimation = &idle;
         }
     }
+    pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0)); pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
 
     if (isDying || isDead) {
         // Asegurar que no haya movimiento durante la muerte
         if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
             pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyUpper->body->SetGravityScale(0.0f);
+            pbodyUpper->body->SetGravityScale(1.0f);
         }
         if (pbodyLower != nullptr && pbodyLower->body != nullptr) {
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetGravityScale(0.0f);
+            pbodyLower->body->SetGravityScale(1.0f);
         }
 
         currentAnimation->Update();
