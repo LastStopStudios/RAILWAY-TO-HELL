@@ -117,7 +117,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
+				<item name="Whip" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -148,7 +148,7 @@
 					</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="300" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
+				<item name="Door key" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
