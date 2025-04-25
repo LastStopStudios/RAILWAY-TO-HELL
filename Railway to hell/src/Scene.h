@@ -13,7 +13,7 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
-
+#include "ParticlesSystem.h"
 struct SDL_Texture;
 enum class SceneState
 {
@@ -129,6 +129,10 @@ public:
 	void SalirBoss();
 
 private:
+
+	SDL_Renderer* renderer;
+	ParticlesSystem* particleSystem;
+
 	SDL_Texture* mouseTileTex = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;

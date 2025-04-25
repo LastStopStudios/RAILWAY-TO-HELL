@@ -152,7 +152,7 @@
     <ClCompile Include="src\Doors.cpp" />
     <ClCompile Include="src\Elevators.cpp" />
     <ClCompile Include="src\Levers.cpp" />
-    <ClCompile Include="src\Particles.cpp" />
+    <ClCompile Include="src\ParticlesSystem.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -187,7 +187,7 @@
     <ClInclude Include="src\Doors.h" />
     <ClInclude Include="src\Elevators.h" />
     <ClInclude Include="src\Levers.h" />
-    <ClInclude Include="src\Particles.h" />
+    <ClInclude Include="src\ParticlesSystem.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />

@@ -91,7 +91,7 @@
     <ClCompile Include="src\GuiManager.cpp">
       <Filter>Source Filles\Engine\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Particles.cpp">
+    <ClCompile Include="src\ParticlesSystem.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -198,7 +198,7 @@
     <ClInclude Include="src\GuiControl.h">
       <Filter>Source Filles\Engine\UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Particles.h">
+    <ClInclude Include="src\ParticlesSystem.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
   </ItemGroup>

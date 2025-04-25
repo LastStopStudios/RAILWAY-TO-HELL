@@ -18,6 +18,7 @@
 #include "DialogoM.h"
 #include "Volador.h"
 #include "Elevators.h"
+#include "ParticlesSystem.h"
 
 Scene::Scene() : Module()
 {
@@ -134,6 +135,12 @@ bool Scene::Start()
 	Engine::GetInstance().render.get()->camera.x = 0;
 	Engine::GetInstance().render.get()->camera.y = 0;
 
+	particleSystem = new ParticlesSystem(Engine::GetInstance().render->renderer);
+	particleSystem->setScreenDimensions(w, h);
+
+	// Emitir algunas partículas iniciales por toda la pantalla
+	particleSystem->emitFullScreen(100);
+
 	//Draw player
 	dibujar = false;
 
@@ -194,6 +201,18 @@ bool Scene::Update(float dt)
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
 			currentMusic = "";
 		}
+		particleSystem->update(dt);
+		particleSystem->emitFullScreen(5, Engine::GetInstance().render.get()->camera);
+
+		// With:
+		// Only emit particles in the visible area
+		if (dibujar && particleSystem != nullptr) {
+			int x = player->position.getX();
+			int y = player->position.getY();
+			int spreadX = Engine::GetInstance().window.get()->width / 3;
+			int spreadY = Engine::GetInstance().window.get()->height / 3;
+			particleSystem->emit(x, y, 5, spreadX, spreadY);
+		}// 5 nuevas partículas cada frame
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 		//Implement a method that repositions the player in the map with a mouse click
@@ -249,9 +268,14 @@ bool Scene::PostUpdate()
 				}
 			}
 		}
-		
+		if (particleSystem != nullptr && currentState == SceneState::GAMEPLAY) {
+		particleSystem->render(Engine::GetInstance().render.get()->camera);
 	}
-
+	else if (particleSystem != nullptr) {
+		particleSystem->render(); // Sin offset de cámara para intro y texto
+	}
+	}
+	
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -280,6 +304,10 @@ bool Scene::CleanUp()
 	{
 		Engine::GetInstance().textures->UnLoad(introTextoTexture);
 		introTextoTexture = nullptr;
+	}
+	if (particleSystem != nullptr) {
+		delete particleSystem;
+		particleSystem = nullptr;
 	}
 	return true;
 }
