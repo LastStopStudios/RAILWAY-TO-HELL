@@ -218,6 +218,9 @@ private:
 	bool leverThree = false;
 	bool leverFour = false;
 
+	//Ice Platforms
+	bool resbalar;
+	float vel = 1;
 	// lives
 	int lives = 10; // for testing try to set it to 3
 

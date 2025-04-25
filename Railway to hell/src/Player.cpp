@@ -414,22 +414,43 @@ void Player::HandleWakeup(float dt) {
 void Player::HandleMovement(b2Vec2& velocity) {
 
     float verticalVelocity = velocity.y;
-
-    // Horizontal movement
     isWalking = false;
-    velocity.x = 0; // Reset horizontal velocity
+    // Horizontal movement
+    if (resbalar == true) {
+        if(facingRight == true){
+            velocity.x = vel; //horizontal velocity on ice rigth
+        }else{
+            velocity.x = -vel; //horizontal velocity on ice left
+        }
+    }else {        
+        velocity.x = 0; //horizontal velocity
+    }
 
     // Apply horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -0.3f * 16;
-        facingRight = false;
-        isWalking = true;
+        if (resbalar == true) {
+            velocity.x = -0.3f * 16 - vel;
+            facingRight = false;
+            isWalking = true;
+        }else {
+            velocity.x = -0.3f * 16;
+            facingRight = false;
+            isWalking = true;
+        }
+        
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = 0.3f * 16;
-        facingRight = true;
-        isWalking = true;
+        if (resbalar == true) {
+            velocity.x = 0.3f * 16 + vel;
+            facingRight = true;
+            isWalking = true;
+        }else{
+            velocity.x = 0.3f * 16;
+            facingRight = true;
+            isWalking = true;
+        }
+       
     }
 
     // Restore vertical velocity after horizontal input
@@ -1178,6 +1199,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
+    case ColliderType::PLATFORMICE:
+        resbalar = true;//Ice platform
+        break;
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurt = true;
@@ -1268,6 +1292,9 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
                 falling.Reset();
             }
         }
+        break;
+    case ColliderType::PLATFORMICE:
+        resbalar = false;//Ice platform
         break;
     case ColliderType::BOSS_ATTACK:
         if (isHurt) {

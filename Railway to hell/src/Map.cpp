@@ -229,7 +229,8 @@ bool Map::Load(std::string path, std::string fileName)
            {"Colisiones", 2},
 		   {"Dialogos", 3},
 		   {"Ascensores", 4},
-           {"Giro", 5}
+           {"Giro", 5},
+           {"Ice", 6}
         };
         float x = 0.0f;
         float y = 0.0f;
@@ -295,6 +296,10 @@ bool Map::Load(std::string path, std::string fileName)
                     rect->ctype = ColliderType::GIRO;
                     break;
                 
+                case 6: // Ice Platforms
+                    rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::PLATFORMICE;
+                    break;
                 default: // Platforms
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;
