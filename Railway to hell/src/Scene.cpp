@@ -139,7 +139,7 @@ bool Scene::Start()
 	particleSystem->setScreenDimensions(w, h);
 
 	// Emitir algunas partículas iniciales por toda la pantalla
-	particleSystem->emitFullScreen(20);
+	particleSystem->emitFullScreen(5);
 
 	//Draw player
 	dibujar = false;
@@ -202,7 +202,10 @@ bool Scene::Update(float dt)
 			currentMusic = "";
 		}
 		particleSystem->update(dt);
-		particleSystem->emitFullScreen(2, Engine::GetInstance().render.get()->camera);
+		// Reducir de 1 a 0.5 partículas por frame (en promedio)
+		if (rand() % 2 == 0) {  // Solo emite una partícula el 50% de las veces
+			particleSystem->emitFullScreen(1, Engine::GetInstance().render.get()->camera);
+		}
 
 		// With:
 		// Only emit particles in the visible area
@@ -211,8 +214,9 @@ bool Scene::Update(float dt)
 			int y = player->position.getY();
 			int spreadX = Engine::GetInstance().window.get()->width / 3;
 			int spreadY = Engine::GetInstance().window.get()->height / 3;
-			particleSystem->emit(x, y, 5, spreadX, spreadY);
-		}// 5 nuevas partículas cada frame
+			// Reducir de 2 a 1 partícula por emisión
+			particleSystem->emit(x, y, 1, spreadX, spreadY);
+		}
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 		//Implement a method that repositions the player in the map with a mouse click

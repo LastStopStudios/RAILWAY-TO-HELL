@@ -15,17 +15,19 @@ void Particle::update(float deltaTime) {
     life -= deltaTime;
 }
 
-// Calcular alpha para el fade in/out
 float Particle::getAlpha() const {
-    // Fade in durante el primer 20% de vida
-    // Fade out durante el último 30% de vida
-    if (life > 0.8f * maxLife) {
-        return 1.0f - (maxLife - life) / (0.2f * maxLife); // Fade in
+    // Usamos una curva más suave para el fade in/out
+    if (life > 0.7f * maxLife) {
+        // Fade in con curva suavizada - dura el 30% inicial de la vida
+        float t = (maxLife - life) / (0.3f * maxLife);
+        return 0.8f * (1.0f - cos(t * M_PI / 2)); // Usando coseno para una transición más suave
     }
-    else if (life < 0.3f * maxLife) {
-        return life / (0.3f * maxLife); // Fade out
+    else if (life < 0.4f * maxLife) {
+        // Fade out con curva suavizada - dura el 40% final de la vida
+        float t = life / (0.4f * maxLife);
+        return 0.8f * (1.0f - cos(t * M_PI / 2)); // Usando coseno para una transición más suave
     }
-    return 1.0f; // Alpha completo en medio de la vida
+    return 0.8f; // Alpha máximo reducido a 80% en la parte central de la vida
 }
 
 // Constructor del sistema de partículas
@@ -41,15 +43,19 @@ void ParticlesSystem::setScreenDimensions(int width, int height) {
 }
 
 void ParticlesSystem::emitFullScreen(int count, const SDL_Rect& camera) {
+    // Reducir el número de partículas a emitir (originalmente era count)
+    int reducedCount = count / 2; // Reducimos a la mitad el número de partículas
+    if (reducedCount < 1) reducedCount = 1;
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(camera.x, camera.x + screenWidth);
     std::uniform_real_distribution<float> disY(camera.y, camera.y + screenHeight);
     std::uniform_real_distribution<float> disVel(-0.1f, 0.1f);
-    std::uniform_real_distribution<float> disLife(500.0f, 10000.0f);
-    std::uniform_real_distribution<float> disSize(5.0f, 10.0f); // Partículas más grandes
+    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f); // Incrementamos la vida para que permanezcan más tiempo
+    std::uniform_real_distribution<float> disSize(5.0f, 10.0f);
 
-    for (int i = 0; i < count && particles.size() < maxParticles; ++i) {
+    for (int i = 0; i < reducedCount && particles.size() < maxParticles; ++i) {
         float x = disX(gen);
         float y = disY(gen);
         float vx = disVel(gen);
@@ -63,15 +69,19 @@ void ParticlesSystem::emitFullScreen(int count, const SDL_Rect& camera) {
 
 // Emitir nuevas partículas en posición específica
 void ParticlesSystem::emit(float x, float y, int count, float spreadX, float spreadY) {
+    // Reducir el número de partículas a emitir
+    int reducedCount = count / 2; // Reducimos a la mitad
+    if (reducedCount < 1) reducedCount = 1;
+
     // Generador de números aleatorios
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(-spreadX, spreadX);
     std::uniform_real_distribution<float> disY(-spreadY, spreadY);
-    std::uniform_real_distribution<float> disLife(500.0f, 10000.0f);
+    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f); // Incrementamos la vida
     std::uniform_real_distribution<float> disSize(3.0f, 10.0f);
 
-    for (int i = 0; i < count && particles.size() < maxParticles; ++i) {
+    for (int i = 0; i < reducedCount && particles.size() < maxParticles; ++i) {
         float vx = disX(gen) * 0.5f;
         float vy = disY(gen) * 0.5f;
         float maxLife = disLife(gen);
@@ -96,7 +106,6 @@ void ParticlesSystem::update(float deltaTime) {
     );
 }
 
-// Renderizar todas las partículas con offset de cámara
 void ParticlesSystem::render(const SDL_Rect& camera) {
     // Guardar el modo de mezcla actual
     SDL_BlendMode originalBlendMode;
@@ -106,20 +115,38 @@ void ParticlesSystem::render(const SDL_Rect& camera) {
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
 
     for (const auto& particle : particles) {
-        // Calcular alpha basado en la vida
+        // Calcular alpha basado en la vida con una transición más suave
         Uint8 alpha = static_cast<Uint8>(255 * particle.getAlpha());
 
-        // Dibujar partícula como un punto blanco con transparencia
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, alpha);
+        // Establecer color blanco con transparencia
+        SDL_SetRenderDrawColor(renderer, 220, 220, 220, alpha);
 
-        // Dibujar la partícula como un cuadrado pequeño, aplicando offset de cámara
-        SDL_Rect rect = {
-            static_cast<int>(particle.x - particle.size / 2) - camera.x,
-            static_cast<int>(particle.y - particle.size / 2) - camera.y,
-            static_cast<int>(particle.size),
-            static_cast<int>(particle.size)
-        };
-        SDL_RenderFillRect(renderer, &rect);
+        // Posición central con offset de cámara
+        int centerX = static_cast<int>(particle.x) - camera.x;
+        int centerY = static_cast<int>(particle.y) - camera.y;
+        int radius = static_cast<int>(particle.size / 2);
+
+        // Usar SDL_RenderFillCircle si está disponible en tu versión de SDL
+        // Si no, creamos un círculo suave usando un enfoque diferente
+
+        // Dibujar un círculo relleno suave
+        for (int w = -radius; w <= radius; w++) {
+            for (int h = -radius; h <= radius; h++) {
+                float distance = sqrt(w * w + h * h);
+                if (distance <= radius) {
+                    // Añadir un gradiente suave al borde del círculo
+                    float edgeFade = 1.0f;
+                    if (distance > radius * 0.7f) {
+                        edgeFade = 1.0f - ((distance - radius * 0.7f) / (radius * 0.3f));
+                    }
+
+                    // Aplicar el gradiente al alpha
+                    Uint8 pixelAlpha = static_cast<Uint8>(alpha * edgeFade);
+                    SDL_SetRenderDrawColor(renderer, 220, 220, 220, pixelAlpha);
+                    SDL_RenderDrawPoint(renderer, centerX + w, centerY + h);
+                }
+            }
+        }
     }
 
     // Restaurar el modo de mezcla original
