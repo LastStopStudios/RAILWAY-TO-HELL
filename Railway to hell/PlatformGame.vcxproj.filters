@@ -28,28 +28,10 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\DialogoM.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiControlButton.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiManager.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\Map.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\PlatformGame.cpp">
@@ -91,6 +73,27 @@
     <ClCompile Include="src\Elevators.cpp">
       <Filter>Source Filles\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>Source Filles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DialogoM.cpp">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlButton.cpp">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiManager.cpp">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particles.cpp">
+      <Filter>Source Filles\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -126,37 +129,13 @@
     <ClInclude Include="src\Scene.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
-    <ClInclude Include="src\DialogoM.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControl.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControlButton.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiManager.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Map.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Module.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pathfinding.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\SceneLoader.h">
@@ -195,6 +174,33 @@
     <ClInclude Include="src\Elevators.h">
       <Filter>Source Filles\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\Entity.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pathfinding.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics.h">
+      <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DialogoM.h">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiManager.h">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlButton.h">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControl.h">
+      <Filter>Source Filles\Engine\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particles.h">
+      <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">
@@ -222,6 +228,12 @@
     </Filter>
     <Filter Include="Source Filles\Engine">
       <UniqueIdentifier>{0345ce0b-58d7-4d67-95d1-7c0f5a1be4a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Engine\Entities">
+      <UniqueIdentifier>{952df3b7-77e7-4268-8946-e71a828ec07f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Engine\UI">
+      <UniqueIdentifier>{bcb75567-952b-4dc6-ab4d-e70d38a052ac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
