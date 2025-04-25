@@ -3,12 +3,12 @@
 #include <random>
 #include <cmath>
 
-// Constructor de Particle
+// Particle constructor
 Particle::Particle(float x, float y, float vx, float vy, float maxLife, float size)
     : x(x), y(y), vx(vx), vy(vy), life(maxLife), maxLife(maxLife), size(size) {
 }
 
-// Actualizar la partícula
+// Update particle
 void Particle::update(float deltaTime) {
     x += vx * deltaTime;
     y += vy * deltaTime;
@@ -16,51 +16,51 @@ void Particle::update(float deltaTime) {
 }
 
 float Particle::getAlpha() const {
-    // Usamos una curva más suave para el fade in/out
+    // Use a smoother fade in/out curve
     if (life > 0.7f * maxLife) {
-        // Fade in con curva suavizada - dura el 30% inicial de la vida
+        // Smooth fade-in - lasts for the first 30% of life
         float t = (maxLife - life) / (0.3f * maxLife);
-        return 0.5f * (1.0f - cos(t * M_PI / 2)); // Reducido de 0.8f a 0.5f para más transparencia
+        return 0.5f * (1.0f - cos(t * M_PI / 2)); // Reduced from 0.8f to 0.5f for more transparency
     }
     else if (life < 0.4f * maxLife) {
-        // Fade out con curva suavizada - dura el 40% final de la vida
+        // Smooth fade-out - lasts for the last 40% of life
         float t = life / (0.4f * maxLife);
-        return 0.5f * (1.0f - cos(t * M_PI / 2)); // Reducido de 0.8f a 0.5f para más transparencia
+        return 0.5f * (1.0f - cos(t * M_PI / 2)); // Reduced from 0.8f to 0.5f for more transparency
     }
-    return 0.5f; // Alpha máximo reducido de 0.8f a 0.5f en la parte central de la vida
+    return 0.5f; // Max alpha reduced from 0.8f to 0.5f in the middle of life
 }
 
-// Constructor del sistema de partículas
+// Particle system constructor
 ParticlesSystem::ParticlesSystem(SDL_Renderer* renderer, int maxParticles)
     : renderer(renderer), maxParticles(maxParticles), screenWidth(800), screenHeight(600) {
     particles.reserve(maxParticles);
 }
 
-// Establecer dimensiones de la pantalla
+// Set screen dimensions
 void ParticlesSystem::setScreenDimensions(int width, int height) {
     screenWidth = width;
     screenHeight = height;
 }
 
 void ParticlesSystem::emitFullScreen(int count, const SDL_Rect& camera) {
-    // Reducir el número de partículas a emitir (originalmente era count)
-    int reducedCount = count / 2; // Reducimos a la mitad el número de partículas
+    // Reduce number of particles emitted (originally was count)
+    int reducedCount = count / 2;
     if (reducedCount < 1) reducedCount = 1;
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(camera.x, camera.x + screenWidth);
-    // Las partículas comienzan desde más arriba (por encima de la pantalla)
+    // Particles start from above the screen
     std::uniform_real_distribution<float> disY(camera.y - screenHeight * 0.5f, camera.y);
-    std::uniform_real_distribution<float> disVelX(-0.05f, 0.05f); // Pequeño movimiento horizontal aleatorio
-    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f); // Incrementamos la vida para que permanezcan más tiempo
+    std::uniform_real_distribution<float> disVelX(-0.05f, 0.05f); // Small random horizontal movement
+    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f); // Increased lifetime
     std::uniform_real_distribution<float> disSize(5.0f, 10.0f);
 
     for (int i = 0; i < reducedCount && particles.size() < maxParticles; ++i) {
         float x = disX(gen);
         float y = disY(gen);
-        float vx = disVelX(gen); // Movimiento horizontal aleatorio pequeño
-        float vy = 0.1f; // Velocidad constante hacia abajo (positiva en SDL)
+        float vx = disVelX(gen);
+        float vy = 0.1f; // Constant downward velocity (positive in SDL)
         float maxLife = disLife(gen);
         float size = disSize(gen);
 
@@ -68,27 +68,26 @@ void ParticlesSystem::emitFullScreen(int count, const SDL_Rect& camera) {
     }
 }
 
-// Emitir nuevas partículas en posición específica
+// Emit new particles at a specific position
 void ParticlesSystem::emit(float x, float y, int count, float spreadX, float spreadY) {
-    // Reducir el número de partículas a emitir
-    int reducedCount = count / 2; // Reducimos a la mitad
+    // Reduce the number of particles to emit
+    int reducedCount = count / 2;
     if (reducedCount < 1) reducedCount = 1;
 
-    // Generador de números aleatorios
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(-spreadX, spreadX);
-    // Ajustamos la distribución vertical para que las partículas empiecen más arriba
+    // Adjust vertical distribution so particles start higher
     std::uniform_real_distribution<float> disY(-spreadY - 200.0f, -spreadY);
-    std::uniform_real_distribution<float> disVelX(-0.05f, 0.05f); // Pequeño movimiento horizontal aleatorio
-    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f); // Incrementamos la vida
+    std::uniform_real_distribution<float> disVelX(-0.05f, 0.05f);
+    std::uniform_real_distribution<float> disLife(1000.0f, 15000.0f);
     std::uniform_real_distribution<float> disSize(3.0f, 10.0f);
 
     for (int i = 0; i < reducedCount && particles.size() < maxParticles; ++i) {
         float offsetX = disX(gen);
         float offsetY = disY(gen);
-        float vx = disVelX(gen); // Movimiento horizontal aleatorio pequeño
-        float vy = 0.1f; // Velocidad constante hacia abajo (positiva en SDL)
+        float vx = disVelX(gen);
+        float vy = 0.1f;
         float maxLife = disLife(gen);
         float size = disSize(gen);
 
@@ -96,14 +95,13 @@ void ParticlesSystem::emit(float x, float y, int count, float spreadX, float spr
     }
 }
 
-// Actualizar todas las partículas
+// Update all particles
 void ParticlesSystem::update(float deltaTime) {
-    // Actualizar partículas existentes
     for (auto& particle : particles) {
         particle.update(deltaTime);
     }
 
-    // Eliminar partículas que han terminado su vida
+    // Remove dead particles
     particles.erase(
         std::remove_if(particles.begin(), particles.end(),
             [](const Particle& p) { return p.life <= 0.0f; }),
@@ -112,38 +110,33 @@ void ParticlesSystem::update(float deltaTime) {
 }
 
 void ParticlesSystem::render(const SDL_Rect& camera) {
-    // Guardar el modo de mezcla actual
     SDL_BlendMode originalBlendMode;
     SDL_GetRenderDrawBlendMode(renderer, &originalBlendMode);
 
-    // Configurar para blending aditivo para un efecto más brillante
+    // Use additive blending for brighter effect
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
 
     for (const auto& particle : particles) {
-        // Calcular alpha basado en la vida con una transición más suave
         Uint8 alpha = static_cast<Uint8>(255 * particle.getAlpha());
 
-        // Establecer color más tenue y transparente (cambiado de 220,220,220 a 180,180,180)
+        // Softer and more transparent color (changed from 220,220,220 to 180,180,180)
         SDL_SetRenderDrawColor(renderer, 180, 180, 180, alpha);
 
-        // Posición central con offset de cámara
         int centerX = static_cast<int>(particle.x) - camera.x;
         int centerY = static_cast<int>(particle.y) - camera.y;
         int radius = static_cast<int>(particle.size / 2);
 
-        // Dibujar un círculo relleno suave
+        // Draw a soft filled circle
         for (int w = -radius; w <= radius; w++) {
             for (int h = -radius; h <= radius; h++) {
                 float distance = sqrt(w * w + h * h);
                 if (distance <= radius) {
-                    // Añadir un gradiente suave al borde del círculo
                     float edgeFade = 1.0f;
-                    if (distance > radius * 0.6f) { // Aumentado el área de difuminado (antes 0.7f)
+                    if (distance > radius * 0.6f) {
                         edgeFade = 1.0f - ((distance - radius * 0.6f) / (radius * 0.4f));
                     }
 
-                    // Aplicar el gradiente al alpha con mayor transparencia
-                    Uint8 pixelAlpha = static_cast<Uint8>(alpha * edgeFade * 0.7f); // Factor adicional de transparencia
+                    Uint8 pixelAlpha = static_cast<Uint8>(alpha * edgeFade * 0.7f);
                     SDL_SetRenderDrawColor(renderer, 180, 180, 180, pixelAlpha);
                     SDL_RenderDrawPoint(renderer, centerX + w, centerY + h);
                 }
@@ -151,16 +144,16 @@ void ParticlesSystem::render(const SDL_Rect& camera) {
         }
     }
 
-    // Restaurar el modo de mezcla original
+    // Restore original blend mode
     SDL_SetRenderDrawBlendMode(renderer, originalBlendMode);
 }
 
-// Limpiar todas las partículas
+// Clear all particles
 void ParticlesSystem::clear() {
     particles.clear();
 }
 
-// Obtener número de partículas activas
+// Get number of active particles
 int ParticlesSystem::getActiveCount() const {
     return static_cast<int>(particles.size());
 }

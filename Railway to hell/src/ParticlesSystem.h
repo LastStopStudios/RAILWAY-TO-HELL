@@ -3,19 +3,21 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
+// Represents a single particle
 class Particle {
 public:
-    float x, y;         // Posición
-    float vx, vy;       // Velocidad
-    float life;         // Vida actual
-    float maxLife;      // Vida máxima
-    float size;         // Tamaño
+    float x, y;         // Position
+    float vx, vy;       // Velocity
+    float life;         // Current life
+    float maxLife;      // Maximum life
+    float size;         // Size
 
     Particle(float x, float y, float vx, float vy, float maxLife, float size);
     void update(float deltaTime);
-    float getAlpha() const;  // Para el fade in/out
+    float getAlpha() const;  // For fade in/out effect
 };
 
+// Particle system manager
 class ParticlesSystem {
 private:
     std::vector<Particle> particles;
@@ -26,27 +28,27 @@ private:
     float speedFactor = 0.2f;
 
 public:
-    // Constructor que toma un SDL_Renderer* y dimensiones de pantalla
+    // Constructor that takes an SDL_Renderer* and optionally sets max particles
     ParticlesSystem(SDL_Renderer* renderer, int maxParticles = 200);
 
-    // Establece dimensiones de la pantalla
+    // Set screen dimensions
     void setScreenDimensions(int width, int height);
 
-    // Emitir partículas en toda la pantalla
+    // Emit particles across the entire screen
     void emitFullScreen(int count, const SDL_Rect& camera = { 0, 0, 0, 0 });
 
-    // Método principal para emitir partículas en una posición específica
+    // Emit particles at a specific position
     void emit(float x, float y, int count, float spreadX = 30.0f, float spreadY = 30.0f);
 
-    // Actualiza todas las partículas
+    // Update all particles
     void update(float deltaTime);
 
-    // Dibuja todas las partículas
+    // Render all particles
     void render(const SDL_Rect& camera = { 0, 0, 0, 0 });
 
-    // Elimina todas las partículas
+    // Clear all particles
     void clear();
 
-    // Devuelve número de partículas activas
+    // Get number of active particles
     int getActiveCount() const;
 };
