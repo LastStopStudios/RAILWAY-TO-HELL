@@ -41,6 +41,20 @@ public:
 
 	void TriggerBossDialog();
 
+	void HandleUpdateLogic();
+
+	void HandleWhipAttack(float dt, float distanceToPlayer, float dx, b2Vec2 velocityUpper, b2Vec2 velocityLower);
+
+	void HandleHurt();
+
+	void HandleRest(b2Vec2 velocityUpper, b2Vec2 velocityLower);
+
+	void HandleDeath(float dt);
+
+	void HandlePathfinding(b2Vec2 velocityUpper, b2Vec2 velocityLower);
+
+	void HandleDraw();
+
 public:
 	
 	int a = 0;
