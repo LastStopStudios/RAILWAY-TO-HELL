@@ -45,15 +45,15 @@ void ParticlesSystem::emitFullScreen(int count, const SDL_Rect& camera) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(camera.x, camera.x + screenWidth);
     std::uniform_real_distribution<float> disY(camera.y, camera.y + screenHeight);
-    std::uniform_real_distribution<float> disVel(-10.0f, 10.0f);
-    std::uniform_real_distribution<float> disLife(1.0f, 5.0f);
-    std::uniform_real_distribution<float> disSize(8.0f, 15.0f); // Partículas más grandes
+    std::uniform_real_distribution<float> disVel(-0.1f, 0.1f);
+    std::uniform_real_distribution<float> disLife(500.0f, 10000.0f);
+    std::uniform_real_distribution<float> disSize(5.0f, 10.0f); // Partículas más grandes
 
     for (int i = 0; i < count && particles.size() < maxParticles; ++i) {
         float x = disX(gen);
         float y = disY(gen);
-        float vx = disVel(gen) * 0.5f;
-        float vy = disVel(gen) * 0.5f;
+        float vx = disVel(gen);
+        float vy = disVel(gen);
         float maxLife = disLife(gen);
         float size = disSize(gen);
 
@@ -68,7 +68,7 @@ void ParticlesSystem::emit(float x, float y, int count, float spreadX, float spr
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> disX(-spreadX, spreadX);
     std::uniform_real_distribution<float> disY(-spreadY, spreadY);
-    std::uniform_real_distribution<float> disLife(1.0f, 4.0f);
+    std::uniform_real_distribution<float> disLife(500.0f, 10000.0f);
     std::uniform_real_distribution<float> disSize(3.0f, 10.0f);
 
     for (int i = 0; i < count && particles.size() < maxParticles; ++i) {

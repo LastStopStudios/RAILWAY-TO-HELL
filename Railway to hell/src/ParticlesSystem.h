@@ -23,6 +23,7 @@ private:
     SDL_Renderer* renderer;
     int screenWidth;
     int screenHeight;
+    float speedFactor = 0.2f;
 
 public:
     // Constructor que toma un SDL_Renderer* y dimensiones de pantalla

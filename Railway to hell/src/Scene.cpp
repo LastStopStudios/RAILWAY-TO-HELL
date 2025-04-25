@@ -139,7 +139,7 @@ bool Scene::Start()
 	particleSystem->setScreenDimensions(w, h);
 
 	// Emitir algunas partículas iniciales por toda la pantalla
-	particleSystem->emitFullScreen(100);
+	particleSystem->emitFullScreen(20);
 
 	//Draw player
 	dibujar = false;
@@ -202,7 +202,7 @@ bool Scene::Update(float dt)
 			currentMusic = "";
 		}
 		particleSystem->update(dt);
-		particleSystem->emitFullScreen(5, Engine::GetInstance().render.get()->camera);
+		particleSystem->emitFullScreen(2, Engine::GetInstance().render.get()->camera);
 
 		// With:
 		// Only emit particles in the visible area
