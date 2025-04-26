@@ -31,7 +31,7 @@ bool Ffmpeg::Awake()
 bool Ffmpeg::Start()
 {
     // File path of the video to be played
-    const char* file = "Assets/Video/test3.mp4";
+    const char* file = "Assets/Video/test2.webm";
 
     // Allocate memory for the format context
     formatContext = avformat_alloc_context();
