@@ -12,13 +12,13 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#include <libavutil/imgutils.h>
 #include <libavutil/avutil.h>
 #include <libswscale/swscale.h>
 #include <libswresample/swresample.h>
 #include <libpostproc/postprocess.h>
 #include <libavfilter/avfilter.h>
 #include <libavdevice/avdevice.h>
-#include <libavutil/imgutils.h>
 }
 
 struct SDL_Texture;
@@ -70,5 +70,10 @@ public:
 	bool isHover2 = false;
 
 	std::queue<AVPacket> audioBuffer;
+
+	double audio_clock;      // Tiempo actual de audio en segundos
+	double video_clock;      // Tiempo actual de video en segundos
+	double frame_timer;      // Último tiempo de renderizado
+	double frame_delay;      // Delay entre frames basado en FPS
 
 };

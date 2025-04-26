@@ -31,7 +31,7 @@ bool Ffmpeg::Awake()
 bool Ffmpeg::Start()
 {
     // File path of the video to be played
-    const char* file = "Assets/Video/test.mp4";
+    const char* file = "Assets/Video/test3.mp4";
 
     // Allocate memory for the format context
     formatContext = avformat_alloc_context();
@@ -56,11 +56,31 @@ bool Ffmpeg::Start()
     av_dump_format(formatContext, 0, file, 0);
 
     // Open codec context for video and audio streams
-    OpenCodecContext(&streamIndex);                     // Funcion para abrir audio y video
+    if (OpenCodecContext(&streamIndex)) {
+        LOG("Failed to open codec contexts");
+        return true;
+    }
+
+    // Inicializa las variables de sincronización DESPUÉS de tener streamIndex válido
+    audio_clock = 0;
+    video_clock = 0;
+    frame_timer = 0;
+
+    // Asegurarnos que streamIndex es válido antes de usarlo
+    if (streamIndex >= 0 && streamIndex < (int)formatContext->nb_streams) {
+        frame_delay = av_q2d(formatContext->streams[streamIndex]->time_base);
+    }
+    else {
+        LOG("Invalid video stream index: %d", streamIndex);
+        frame_delay = 0.04; // Valor por defecto (25 FPS)
+    }
 
     // Create SDL texture for rendering video frames
-    renderTexture = SDL_CreateTexture(Engine::GetInstance().render.get()->renderer, SDL_PIXELFORMAT_YV12,
-        SDL_TEXTUREACCESS_STREAMING, videoCodecContext->width, videoCodecContext->height);
+    renderTexture = SDL_CreateTexture(Engine::GetInstance().render.get()->renderer,
+        SDL_PIXELFORMAT_YV12,
+        SDL_TEXTUREACCESS_STREAMING,
+        videoCodecContext->width,
+        videoCodecContext->height);
     if (!renderTexture) {
         printf("Failed to create texture - %s\n", SDL_GetError());
         return true;
@@ -72,8 +92,7 @@ bool Ffmpeg::Start()
     // Set the module state to running
     running = true;
     return true;
-}
-bool Ffmpeg::OpenCodecContext(int* index)
+}bool Ffmpeg::OpenCodecContext(int* index)
 {
     // Find video stream in the file
     int videoIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
@@ -116,6 +135,13 @@ bool Ffmpeg::OpenCodecContext(int* index)
     this->audioIndex = audioIndex;  // Store the audio index, even if -1
 
     LOG("Successfully opened codec contexts. Video index: %d, Audio index: %d", videoIndex, audioIndex);
+
+    // Al final de la función, asegúrate de asignar el índice
+    *index = videoIndex;  // Esto debería ser el índice válido del stream de video
+    this->audioIndex = audioIndex;
+
+    LOG("Opened streams - Video: %d, Audio: %d", *index, this->audioIndex);
+
     return false; // Everything is set up
 }
 bool Ffmpeg::OpenVideoCodecContext(int videoIndex)
@@ -295,6 +321,8 @@ void Ffmpeg::ProcessAudio()
             (const uint8_t**)frame->data, frame->nb_samples
         );
 
+        audio_clock = frame->pts * av_q2d(formatContext->streams[audioIndex]->time_base);
+
         if (ret < 0) {
             LOG("Error converting audio: %d", ret);
             av_freep(&outBuffer);
@@ -321,18 +349,19 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
     LOG("ConvertPixels called with videoIndex=%d, audioIndex=%d", videoIndex, audioIndex);
 
-    // Calculate time per frame based on the average frame rate of the video stream
-    int time = 1000 * formatContext->streams[videoIndex]->avg_frame_rate.den
-        / formatContext->streams[videoIndex]->avg_frame_rate.num;
+    // Inicialización de variables para sincronización
+    double frame_timer = static_cast<double>(SDL_GetTicks()) / 1000.0;
+    double frame_delay = av_q2d(formatContext->streams[videoIndex]->time_base);
+    double video_clock = 0;
+    double audio_clock = 0;
 
     AVPacket packet;
-
-    // Allocate memory for source and destination frames
     AVFrame* srcFrame = av_frame_alloc();
     if (!srcFrame) {
         LOG("Failed to allocate source frame");
         return false;
     }
+
     AVFrame* dstFrame = av_frame_alloc();
     if (!dstFrame) {
         LOG("Failed to allocate destination frame");
@@ -340,10 +369,10 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         return false;
     }
 
-    // Allocate memory for the image data of the destination frame
+    // Allocate image for dstFrame
     AllocImage(dstFrame);
 
-    // Create a scaling context to convert the pixel format of the video frames
+    // Create scaling context
     struct SwsContext* sws_ctx = sws_getContext(
         videoCodecContext->width, videoCodecContext->height, videoCodecContext->pix_fmt,
         videoCodecContext->width, videoCodecContext->height, AV_PIX_FMT_YUV420P,
@@ -353,7 +382,6 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
     int videoPackets = 0;
     int audioPackets = 0;
 
-    // Loop through each packet in the video stream
     while (av_read_frame(formatContext, &packet) >= 0 && running)
     {
         packetCount++;
@@ -364,48 +392,81 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
             videoPackets++;
             LOG("Found video packet %d", videoPackets);
 
-            // Send packet to video decoder
-            avcodec_send_packet(videoCodecContext, &packet);
-            // Receive decoded frame
-            int ret = avcodec_receive_frame(videoCodecContext, srcFrame);
-            if (ret) {
-                LOG("Failed to receive frame, error=%d", ret);
+            // Send packet to decoder
+            if (avcodec_send_packet(videoCodecContext, &packet) < 0) {
+                LOG("Error sending video packet to decoder");
+                av_packet_unref(&packet);
                 continue;
             }
 
-            // Scale the source frame to the destination frame
-            sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
-                srcFrame->linesize, 0, videoCodecContext->height,
-                dstFrame->data, dstFrame->linesize);
+            // Receive decoded frame
+            while (avcodec_receive_frame(videoCodecContext, srcFrame) == 0) {
+                // Calculate video clock
+                if (srcFrame->pts != AV_NOPTS_VALUE) {
+                    video_clock = srcFrame->pts * av_q2d(formatContext->streams[videoIndex]->time_base);
+                }
+                else {
+                    video_clock += frame_delay;
+                }
 
-            // Update the SDL texture with the scaled YUV data
-            SDL_UpdateYUVTexture(renderTexture, &renderRect,
-                dstFrame->data[0], dstFrame->linesize[0],
-                dstFrame->data[1], dstFrame->linesize[1],
-                dstFrame->data[2], dstFrame->linesize[2]
-            );
+                // Calculate delay for synchronization
+                double current_time = static_cast<double>(SDL_GetTicks()) / 1000.0;
+                double actual_delay = video_clock - frame_timer;
 
-            // Render the video
-            RenderCutscene();
-            // SelectCharacter();
+                // Sync with audio if available
+                if (audioIndex >= 0) {
+                    double diff = video_clock - audio_clock;
+                    double sync_threshold = (diff > 0) ? 0.1 : -0.1;
 
-             // Wait for the specified time before processing the next frame
-            SDL_Delay(time);
+                    // Adjust delay to stay in sync with audio
+                    if (diff > sync_threshold) {
+                        actual_delay = FFMIN(actual_delay, diff);
+                    }
+                    else if (diff < -0.5) {
+                        // Video is too far behind, skip frame
+                        continue;
+                    }
+                }
 
-            // Unreference the packet to release its resources
+                // Wait if needed
+                if (actual_delay > 0 && actual_delay < 1.0) {
+                    SDL_Delay(static_cast<Uint32>(actual_delay * 1000.0));
+                }
+
+                // Convert and render the frame
+                sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
+                    srcFrame->linesize, 0, videoCodecContext->height,
+                    dstFrame->data, dstFrame->linesize);
+
+                SDL_UpdateYUVTexture(renderTexture, &renderRect,
+                    dstFrame->data[0], dstFrame->linesize[0],
+                    dstFrame->data[1], dstFrame->linesize[1],
+                    dstFrame->data[2], dstFrame->linesize[2]);
+
+                RenderCutscene();
+
+                // Update frame timer
+                frame_timer = video_clock;
+            }
+
             av_packet_unref(&packet);
         }
-        else if (audioIndex >= 0 && packet.stream_index == audioIndex)  // Fix this condition
+        else if (audioIndex >= 0 && packet.stream_index == audioIndex)
         {
             audioPackets++;
             LOG("Found audio packet %d. Pushing to audio buffer.", audioPackets);
-            // Push to the audio buffer
+
+            // Store audio packet timestamp before pushing to buffer
+            if (packet.pts != AV_NOPTS_VALUE) {
+                audio_clock = packet.pts * av_q2d(formatContext->streams[audioIndex]->time_base);
+            }
+
             audioBuffer.push(packet);
         }
-        else {
+        else
+        {
             LOG("Unknown packet stream_index=%d, not matching video(%d) or audio(%d)",
                 packet.stream_index, videoIndex, audioIndex);
-            // Unreference the packet to release its resources
             av_packet_unref(&packet);
         }
     }
@@ -413,12 +474,11 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
     LOG("Finished processing packets. Total: %d, Video: %d, Audio: %d",
         packetCount, videoPackets, audioPackets);
 
-    // Free memory allocated for the destination frame
+    // Cleanup
     av_freep(&dstFrame->data[0]);
-
-    // Free memory allocated for source and destination frames
     av_frame_free(&srcFrame);
     av_frame_free(&dstFrame);
+    sws_freeContext(sws_ctx);
 
     return false;
 }
