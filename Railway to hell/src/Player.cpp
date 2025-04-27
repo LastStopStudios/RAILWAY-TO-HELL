@@ -416,61 +416,65 @@ void Player::HandleMovement(b2Vec2& velocity) {
     float verticalVelocity = velocity.y;
     isWalking = false;
     // Horizontal movement
-    if (resbalar == true) {
+    if (resbalar == true) {//Ice platform
         if(facingRight == true){
-            velocity.x = vel; //horizontal velocity on ice rigth
+            velocity.x = icev; //horizontal velocity on ice rigth
+            LOG("velocidad Idle derecha: %f", velocity.x);
+           /*b = 0;
+            LOG("Reset B: % d", b);    */       
         }else{
-            velocity.x = -vel; //horizontal velocity on ice left
+            velocity.x = -icev; //horizontal velocity on ice left
+            LOG("velocidad idle izquierda: %f", velocity.x);
+           /*a = 0;
+            LOG("reset A: %d", a);*/
         }
     }else {        
         velocity.x = 0; //horizontal velocity
+        
     }
 
     // Apply horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        if (resbalar == true) {
-            if (velocity.x > 0) {
-                velocity.x = - 0.3f * 16 - vel + a;
-                facingRight = false;
-                isWalking = true;
-                if (a != 0) { a = a--; }
-            }
-            else {
-                velocity.x = -0.3f * 16 - vel;
-                facingRight = false;
-                isWalking = true;
-                a = 7;
+        b = 0;
+        antb = 0.59f;
+        if (resbalar == true) {//Ice platform
+            if(velocity.x < 0.0f && a < dificultty) {
+                velocity.x = velocity.x - anta;//adding vel to speed up on ice
+                LOG("velocidad izquierda resbalando: %f", velocity.x);
+                a++;
+                anta = anta - 0.59f;
+                LOG("A: %f", a);
+            }else{
+                velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
+                LOG("velocidad Izquierda: %f", velocity.x);
+                
             }
         }else {
             velocity.x = -0.3f * 16;
-            facingRight = false;
-            isWalking = true;
         }
-        
+        facingRight = false;
+        isWalking = true;        
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        if (resbalar == true) {
-            if (velocity.x < 0) {
-                velocity.x = 0.3f * 16 + vel - a;
-                facingRight = true;
-                isWalking = true;
-                if(a != 0){a = a--; }
-               
-            }
-            else {
-                velocity.x = 0.3f * 16 + vel;
-                facingRight = true;
-                isWalking = true;
-                a = 7;
-            }
-           
+        a = 0;
+        anta = 0.59f;
+        if (resbalar == true) {//Ice platform
+            if (velocity.x > 0.0f && b < dificultty) {
+                velocity.x = velocity.x + antb;//adding vel to speed up on ice
+                LOG("velocidad derecha resbalando: %f", velocity.x);
+                b++;
+                antb = antb - 0.59f;
+                LOG("B: %f", b);
+            }else{
+                velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
+                LOG("velocidad derecha: %f", velocity.x);
+            }                  
         }else{
             velocity.x = 0.3f * 16;
-            facingRight = true;
-            isWalking = true;
         }
-       
+        facingRight = true;
+        isWalking = true;       
     }
 
     // Restore vertical velocity after horizontal input

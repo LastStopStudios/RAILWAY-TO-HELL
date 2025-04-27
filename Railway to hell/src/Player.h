@@ -220,8 +220,8 @@ private:
 
 	//Ice Platforms
 	bool resbalar;
-	float vel = 3;
-	float a = 7.0;
+	float icev = 5;
+	float a = 0, b = 0, anta = 8.85f, antb = 8.85f, dificultty = 15;
 	// lives
 	int lives = 10; // for testing try to set it to 3
 

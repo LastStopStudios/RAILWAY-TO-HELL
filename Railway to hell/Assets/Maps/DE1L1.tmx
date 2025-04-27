@@ -64923,7 +64923,7 @@
   </data>
  </layer>
  <objectgroup id="28" name="Ice">
-  <object id="241" x="642.424" y="865.758" width="1022.09" height="94.8485"/>
+  <object id="241" x="642.049" y="864.008" width="1022.09" height="97.3333"/>
  </objectgroup>
  <objectgroup id="12" name="Colisiones">
   <object id="174" x="640" y="192" width="32" height="768"/>
