@@ -429,9 +429,18 @@ void Player::HandleMovement(b2Vec2& velocity) {
     // Apply horizontal movement
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         if (resbalar == true) {
-            velocity.x = -0.3f * 16 - vel;
-            facingRight = false;
-            isWalking = true;
+            if (velocity.x > 0) {
+                velocity.x = - 0.3f * 16 - vel + a;
+                facingRight = false;
+                isWalking = true;
+                if (a != 0) { a = a--; }
+            }
+            else {
+                velocity.x = -0.3f * 16 - vel;
+                facingRight = false;
+                isWalking = true;
+                a = 7;
+            }
         }else {
             velocity.x = -0.3f * 16;
             facingRight = false;
@@ -442,9 +451,20 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         if (resbalar == true) {
-            velocity.x = 0.3f * 16 + vel;
-            facingRight = true;
-            isWalking = true;
+            if (velocity.x < 0) {
+                velocity.x = 0.3f * 16 + vel - a;
+                facingRight = true;
+                isWalking = true;
+                if(a != 0){a = a--; }
+               
+            }
+            else {
+                velocity.x = 0.3f * 16 + vel;
+                facingRight = true;
+                isWalking = true;
+                a = 7;
+            }
+           
         }else{
             velocity.x = 0.3f * 16;
             facingRight = true;

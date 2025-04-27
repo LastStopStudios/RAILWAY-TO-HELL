@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="28" nextobjectid="241">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="242">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -64922,6 +64922,9 @@
    <tile/>
   </data>
  </layer>
+ <objectgroup id="28" name="Ice">
+  <object id="241" x="642.424" y="865.758" width="1022.09" height="94.8485"/>
+ </objectgroup>
  <objectgroup id="12" name="Colisiones">
   <object id="174" x="640" y="192" width="32" height="768"/>
   <object id="177" x="3168" y="224" width="32" height="704"/>
@@ -64929,11 +64932,10 @@
   <object id="181" x="1280" y="1184" width="32" height="736"/>
   <object id="182" x="2528" y="1184" width="32" height="736"/>
   <object id="183" x="1312" y="1888" width="1216" height="32"/>
-  <object id="227" x="640" y="864" width="2560" height="96"/>
+  <object id="227" x="1664.24" y="864" width="1535.76" height="96"/>
   <object id="228" x="1952" y="672" width="448" height="192"/>
   <object id="229" x="2400" y="768" width="352" height="96"/>
-  <object id="230" x="1280" y="800" width="128" height="32"/>
-  <object id="231" x="1472" y="736" width="128" height="32"/>
+  <object id="231" x="1472" y="723" width="128" height="32"/>
   <object id="232" x="1664" y="672" width="128" height="32"/>
   <object id="235" x="640" y="192" width="2560" height="224"/>
  </objectgroup>
