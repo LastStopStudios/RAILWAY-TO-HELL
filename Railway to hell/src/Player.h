@@ -221,5 +221,9 @@ private:
 	// lives
 	int lives = 10; // for testing try to set it to 3
 
+	//Doble salto
+	bool doubleJump = false;       // Whether double jump ability is enabled
+	bool canDoubleJump;    // Whether player can perform a double jump in the current jump sequence
+	int jumpCount;         // Track how many jumps have been performed in sequence
 
 };

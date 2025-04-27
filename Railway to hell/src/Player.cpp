@@ -163,8 +163,7 @@ bool Player::Start() {
     auto recoveringNode = parameters.child("animations").child("recoveringJump");
     recoveringTexture = recoveringNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(recoveringNode.attribute("texture").as_string()) : texture;
     
-    isPreparingJump = false;
-    isJumping = false;
+
     isFalling = false;
     isRecovering = false;
     recoveringTimer = 0.0f;
@@ -172,6 +171,8 @@ bool Player::Start() {
     isPreparingJump = false;
     isJumping = false;
     jumpFrameThreshold = 3;
+    jumpCount = 0;
+    canDoubleJump = true;
 
     // Walk animation
     walk.LoadAnimations(parameters.child("animations").child("walk"));
@@ -506,6 +507,8 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
 
 void Player::HandleJump(float dt) {
     float currentVerticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
+
+    // First jump when on ground
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN &&
         !isJumping && !isFalling) {
 
@@ -519,9 +522,37 @@ void Player::HandleJump(float dt) {
         // Set jump state
         isJumping = true;
         isFalling = false;
+        jumpCount = 1;
+        canDoubleJump = doubleJump; // Only enable double jump if the feature is active
         Engine::GetInstance().audio.get()->PlayFx(jumpFX);
 
         // Reset and start jump animation
+        jump.Reset();
+        currentAnimation = &jump;
+        texture = jumpTexture;
+    }
+    // Double jump when already in air and double jump is enabled
+    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN &&
+        (isJumping || isFalling) && canDoubleJump && jumpCount < 2) {
+
+        // Cancel current vertical velocity for a consistent second jump height
+        pbodyUpper->body->SetLinearVelocity(b2Vec2(pbodyUpper->body->GetLinearVelocity().x, 0));
+        pbodyLower->body->SetLinearVelocity(b2Vec2(pbodyLower->body->GetLinearVelocity().x, 0));
+
+        // Apply second jump force (can be different from first jump if desired)
+        float doubleJumpForce = 3.0f;
+
+        pbodyUpper->body->ApplyLinearImpulseToCenter(b2Vec2(0, -doubleJumpForce), true);
+        pbodyLower->body->ApplyLinearImpulseToCenter(b2Vec2(0, -doubleJumpForce), true);
+
+        // Update state
+        isJumping = true;
+        isFalling = false;
+        jumpCount = 2;
+        canDoubleJump = false; // Disable further jumps until landing
+        Engine::GetInstance().audio.get()->PlayFx(jumpFX);
+
+        // Reset jump animation for the second jump
         jump.Reset();
         currentAnimation = &jump;
         texture = jumpTexture;
@@ -535,9 +566,9 @@ void Player::HandleJump(float dt) {
             isFalling = true;
             isTransitioningToFalling = true;  // Mark that we're in transition
             falling.Reset();
-            
         }
     }
+
     if (isFalling) {
         // Check both bodies' vertical velocity to determine if player has actually stopped falling
         float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
@@ -546,14 +577,19 @@ void Player::HandleJump(float dt) {
         // If both bodies have very little vertical movement and the player isn't intentionally jumping
         if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
             // We've probably landed but the collision wasn't registered properly
-            isFalling = false;
             isJumping = false;
-            falling.Reset();
+            isFalling = false;
+            jumpCount = 0;      // Reset jump count on landing
+            canDoubleJump = false; // Reset double jump ability until next initial jump
+            fallingTimer = 0.0f;  // Reset the timer
 
             // Transition to recovering animation
             isRecovering = true;
             recoveringTimer = recoveringDuration;
             recovering.Reset();
+
+            // Play the landing sound
+            Engine::GetInstance().audio.get()->PlayFx(fallFX);
         }
 
         fallingTimer += dt;
@@ -562,6 +598,8 @@ void Player::HandleJump(float dt) {
             if (fabs(upperVelocity) < 0.5f && fabs(lowerVelocity) < 0.5f) {
                 isFalling = false;
                 isJumping = false;
+                jumpCount = 0;      // Reset jump count if we've been falling too long
+                canDoubleJump = false; // Reset double jump ability
                 fallingTimer = 0.0f;
             }
         }
@@ -570,12 +608,15 @@ void Player::HandleJump(float dt) {
         // Reset falling timer when not falling
         fallingTimer = 0.0f;
     }
+
     // Check if player is falling off a platform without jumping
     if (!isJumping && !isDashing && !isAttacking && !isWhipAttacking && !isRecovering) {
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
         if (verticalVelocity > 1.0f) { // More significant threshold for non-jump falling
             isJumping = true; // Technically in "air" state
             isFalling = true;
+            jumpCount = 1;    // Consider this as first jump so player can use double jump
+            canDoubleJump = doubleJump; // Enable double jump if feature is active
             falling.Reset();
         }
     }
@@ -1166,7 +1207,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 // Force reset both states at the same time
                 isJumping = false;
                 isFalling = false;
-                fallingTimer = 0.0f;  // Reset the timer
+                jumpCount = 0;         // Reset jump count on landing
+                canDoubleJump = false; // Reset double jump ability
+                fallingTimer = 0.0f;   // Reset the timer
 
                 // Transition directly to recovering animation
                 isRecovering = true;
