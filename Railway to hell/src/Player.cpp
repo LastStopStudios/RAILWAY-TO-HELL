@@ -825,7 +825,6 @@ void Player::UpdateWhipAttack(float dt) {
 }
 
 void Player::UpdateMeleeAttack(float dt) {
-
     if (isHurt || isDying) {
         if (isAttacking) {
             isAttacking = false;
@@ -850,36 +849,34 @@ void Player::UpdateMeleeAttack(float dt) {
 
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
-        !isAttacking && !isWhipAttacking && !isDashing && canAttack && !isHurt) {
+        canAttack && !isAttacking && !isWhipAttacking && !isDashing && !isHurt) {
+
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
+
         isAttacking = true;
-        canAttack = false;
-        attackCooldown = 0.5f;
-        meleeAttack.Reset();
+        canAttack = false;           
+        attackCooldown = 1000.0f;       
+        meleeAttack.Reset();          
 
         // Calculate the size of the hitbox to fit the attack sprite.
         int attackWidth = texW * 0.5f;
         int attackHeight = texH * 1.0f;
 
-        b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body
+        b2Vec2 playerCenter = pbodyUpper->body->GetPosition(); // Use upper body
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
 
-        // Hitbox position: in front of the player according to the direction.
         int attackX = facingRight
-            ? centerX + texW / 3 - attackWidth / -3 // right
-            : centerX - texW / 3 - attackWidth / 3;  // left
+            ? centerX + texW / 3 - attackWidth / -3  // right
+			: centerX - texW / 3 - attackWidth / 3;  //left
 
-        // Position the hitbox lower by using a positive value for texH division
-        int attackY = centerY + texH / 7;  // Move hitbox down by half texture height
+        int attackY = centerY + texH / 7; // Move hitbox down by half texture height
 
-        // Delete the previous hitbox if it existed.
         if (attackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
             attackHitbox = nullptr;
         }
 
-        // Create a new hitbox and store dimensions for debugging.
         attackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             attackX, attackY, attackWidth, attackHeight - 64, bodyType::DYNAMIC);
         attackHitbox->ctype = ColliderType::PLAYER_ATTACK;
@@ -896,20 +893,18 @@ void Player::UpdateMeleeAttack(float dt) {
             int centerX = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().x);
             int centerY = METERS_TO_PIXELS(pbodyUpper->body->GetPosition().y);
 
-            // Hitbox position adjusted with the direction corrected.
             int attackX = facingRight
-                ? centerX + texW / 3 - attackHitbox->width / -3// right
-                : centerX - texW / 3  - attackHitbox->width / 3; // left
+                ? centerX + texW / 3 - attackHitbox->width / -3
+                : centerX - texW / 3 - attackHitbox->width / 3;
 
-            // Keep the hitbox consistently positioned lower
-            int attackY = centerY + texH / 7;  // Same offset as in creation
+            int attackY = centerY + texH / 7;
 
             attackHitbox->body->SetTransform(
                 { PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
 
         if (meleeAttack.HasFinished()) {
-            isAttacking = false;
+            isAttacking = false;     
             currentAnimation = &idle;
             idle.Reset();
 
@@ -917,9 +912,11 @@ void Player::UpdateMeleeAttack(float dt) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
                 attackHitbox = nullptr;
             }
+            
         }
     }
 }
+
 
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
