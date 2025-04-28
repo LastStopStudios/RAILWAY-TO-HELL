@@ -106,6 +106,9 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (GetItemType() == "Remember1") {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
+		if (GetItemType() == "Ball") {
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		}
 		break;
 	}
 	case ColliderType::UNKNOWN:

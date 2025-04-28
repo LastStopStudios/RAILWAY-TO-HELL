@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<entities>
-			<player x="2900" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="2877" y="2048" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.03">
 						<frame x="0" y="0" w="64" h="96" />
@@ -112,10 +112,36 @@
 						<frame x="64" y="929" w="64" h="96" />
 						<frame x="128" y="929" w="64" h="96" />
 						<frame x="192" y="929" w="64" h="96" />
-						
 					</wakeup>
 				</animations>
 			</player>
+			<projectiles>
+				<projectile name="ball" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/balll.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+						</idle>
+						<speedingUp loop="false" speed="0.3">
+							<frame x="0" y="32" w="32" h="32" />
+							<frame x="32" y="32" w="32" h="32" />
+						</speedingUp>
+						<moving loop="true" speed="0.2">
+							<frame x="64" y="32" w="32" h="32" />
+							<frame x="96" y="32" w="32" h="32" />
+						</moving>
+						<impact loop="false" speed="0.2">
+							<frame x="0" y="64" w="32" h="32" />
+							<frame x="32" y="64" w="32" h="32" />
+							<frame x="64" y="64" w="32" h="32" />
+							<frame x="96" y="64" w="32" h="32" />
+						</impact>
+					</animations>
+				</projectile>
+			</projectiles>
 			<items>
 				<item name="Whip" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
 					<animations>
@@ -133,6 +159,19 @@
 						</idle>
 					</animations>
 				</item>
+				<item name="Ball" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
 				<item name="Remember1" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
 					<animations>
 						<idle loop="true" speed="0.2">
@@ -144,8 +183,8 @@
 							<frame x="160" y="0" w="32" h="32" />
 							<frame x="192" y="0" w="32" h="32" />
 							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />						
-					</idle>
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
 					</animations>
 				</item>
 				<item name="Door key" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
@@ -160,8 +199,8 @@
 							<frame x="192" y="0" w="32" h="32" />
 							<frame x="224" y="0" w="32" h="32" />
 							<frame x="256" y="0" w="32" h="32" />
-							<frame x="288" y="0" w="32" h="32" />						
-					</idle>
+							<frame x="288" y="0" w="32" h="32" />
+						</idle>
 					</animations>
 				</item>
 				<item name="Dash ability" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1">
@@ -176,8 +215,8 @@
 							<frame x="192" y="0" w="32" h="32" />
 							<frame x="224" y="0" w="32" h="32" />
 							<frame x="0" y="32" w="32" h="32" />
-							<frame x="32" y="32" w="32" h="32" />	
-							<frame x="64" y="32" w="32" h="32" />	
+							<frame x="32" y="32" w="32" h="32" />
+							<frame x="64" y="32" w="32" h="32" />
 						</idle>
 					</animations>
 				</item>
@@ -3001,8 +3040,7 @@
 					</wakeup>
 				</animations>
 			</player>
-			<enemies>
-			</enemies>
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You're on the right track. For now you've reached the end of this vertical slice." />
@@ -3122,7 +3160,7 @@
 							<frame x="192" y="0" w="32" h="32" />
 							<frame x="224" y="0" w="32" h="32" />
 							<frame x="256" y="0" w="32" h="32" />
-							<frame x="288" y="0" w="32" h="32" />	
+							<frame x="288" y="0" w="32" h="32" />
 						</idle>
 					</animations>
 				</item>
@@ -3155,7 +3193,7 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
-						<deactivated loop="false" speed="0.05">>
+						<deactivated loop="false" speed="0.05">&gt;
 							<frame x="164" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="0" y="0" w="82" h="120" />

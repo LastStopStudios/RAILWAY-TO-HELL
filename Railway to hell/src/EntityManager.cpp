@@ -12,6 +12,7 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
+#include "Projectiles.h"
 #include <vector>
 #include <algorithm>
 
@@ -103,6 +104,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::LEVER:
 		entity = new Levers();
+		break;
+	case EntityType::PROJECTILE:
+		entity = new Projectiles();
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();

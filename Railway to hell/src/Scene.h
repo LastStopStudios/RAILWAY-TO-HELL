@@ -13,6 +13,7 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
+#include "Projectiles.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -157,6 +158,7 @@ public:
 	pugi::xml_node itemConfigNode; //mover a private
 	pugi::xml_node whipItemConfigNode;
 	pugi::xml_node doorItemConfigNode;
+	pugi::xml_node ballConfigNode;
 	bool dibujar;
 
 };

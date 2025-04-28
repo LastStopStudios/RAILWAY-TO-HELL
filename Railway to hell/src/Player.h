@@ -70,6 +70,7 @@ private:
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
+	void HandleBallAttack(float dt);
 	void HandlePickup(float dt);
 	void HandleDeath(float dt);
 	void HandleWakeup(float dt);
@@ -225,5 +226,10 @@ private:
 	bool doubleJump = false;       // Whether double jump ability is enabled
 	bool canDoubleJump;    // Whether player can perform a double jump in the current jump sequence
 	int jumpCount;         // Track how many jumps have been performed in sequence
+
+	bool collidingWithEnemy = false; //if is true, player cant ball attack 
+	int ballCounter = 3; // Track how many balls does the player have left
+	float ballCooldown = 3000.0f; // Time until ball recharge
+
 
 };

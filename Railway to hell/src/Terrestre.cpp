@@ -289,12 +289,12 @@ void Terrestre::ResetPath() {
 }
 
 void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
-	switch (physB->ctype)
-	{
-	case ColliderType::PLAYER:
-		LOG("Collided with player - DESTROY");
-		//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-		break;
+    switch (physB->ctype)
+    {
+    case ColliderType::PLAYER:
+        LOG("Collided with player - DESTROY");
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
             lives--;
@@ -316,7 +316,7 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
     }
-        break;
+                                    break;
     case ColliderType::PLAYER_WHIP_ATTACK: {
         if (lives > 0) {
             lives = lives - 2;
@@ -336,25 +336,44 @@ void Terrestre::OnCollision(PhysBody* physA, PhysBody* physB) {
                 pbody->body->SetGravityScale(0.0f); // In case it's falling
             }
         }
-   
-        
-        
+        break;
     }
+    case ColliderType::PROJECTILE: {
+        if (lives > 0) {
+            lives--;
+            if (lives > 0) {
+                currentAnimation = &hurt;
+                hurt.Reset();
+                ishurt = true;
+            }
+            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+                isDying = true;
+                currentAnimation = &die;
+                currentAnimation->Reset();
 
+                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                pbody->body->SetAwake(false);
+                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                pbody->body->SetGravityScale(0.0f);
+
+            }
+        }
         break;
-    case ColliderType::GIRO:
-       giro = !giro;
-       if(vez == 1){
-           Vector2D pos = GetPosition();
-           patrol1 = pos.getX();
-           vez++;
-       }else if (vez == 2) {
-           Vector2D pos = GetPosition();
-           patrol2 = pos.getX();
-           vez++;
-       }
+    }
+    case ColliderType::GIRO: 
+        giro = !giro;
+        if (vez == 1) {
+            Vector2D pos = GetPosition();
+            patrol1 = pos.getX();
+            vez++;
+        }
+        else if (vez == 2) {
+            Vector2D pos = GetPosition();
+            patrol2 = pos.getX();
+            vez++;
+        }
         break;
-	}
+    } 
 }
 
 void Terrestre::OnCollisionEnd(PhysBody* physA, PhysBody* physB)

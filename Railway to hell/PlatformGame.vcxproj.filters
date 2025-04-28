@@ -91,6 +91,9 @@
     <ClCompile Include="src\Elevators.cpp">
       <Filter>Source Filles\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Projectiles.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="src\Elevators.h">
       <Filter>Source Filles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Projectiles.h">
+      <Filter>Source Filles\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
