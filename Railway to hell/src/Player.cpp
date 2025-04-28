@@ -319,6 +319,16 @@ bool Player::Update(float dt)
         // Handle attacks only when not dashing
         if (!isDashing && !isPickingUp && !isDying) {
             UpdateMeleeAttack(dt);
+            if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode) {
+                Projectiles* fireball = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
+                fireball->SetParameters(Engine::GetInstance().scene.get()->ballConfigNode);
+                fireball->Start();
+                Vector2D playerPosition = Engine::GetInstance().scene.get()->GetPlayerPosition();
+
+                playerPosition.setY(playerPosition.getY() - 13);
+
+                fireball->SetPosition(playerPosition);
+            }
         }
         if (!isDashing && !isPickingUp && !isDying && !isJumping && !isFalling && !isRecovering) {
             UpdateWhipAttack(dt);

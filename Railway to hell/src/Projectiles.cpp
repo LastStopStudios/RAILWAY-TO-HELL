@@ -23,6 +23,7 @@ bool Projectiles::Awake() {
 bool Projectiles::Start() {
 
     //initilize textures
+    //texture = Engine::GetInstance().textures.get()->Load("Assets/Sprites/Heroes/Wizzard/BolaDeFuego.png");
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
@@ -30,17 +31,14 @@ bool Projectiles::Start() {
     texH = parameters.attribute("h").as_int();
     texRadius = parameters.attribute("radius").as_int();
 
-    projectileType = parameters.attribute("type").as_string();
-
     //Load animations
-    idle.LoadAnimations(parameters.child("animations").child("idle"));
-    if (projectileType == "arrow") {
-        impact.LoadAnimations(parameters.child("animations").child("impact"));
-    }
+    idle.LoadAnimations(parameters.child("animations").child("moving"));
     currentAnimation = &idle;
 
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texRadius / 2, bodyType::DYNAMIC);
+    // L08 TODO 4: Add a physics to an item - initialize the physics body
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 
+    // L08 TODO 7: Assign collider type
     pbody->ctype = ColliderType::PROJECTILE;
 
     pbody->listener = this;
@@ -48,7 +46,7 @@ bool Projectiles::Start() {
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
-    moveSpeed = 200.5f;
+    moveSpeed = 300.5f;
 
     return true;
 }
@@ -57,72 +55,9 @@ bool Projectiles::Update(float dt)
 {
 
 
-    bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
-
-    if (!isGameplay) {
-
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(0.0f);
-        }
-        return true;
-    }
-    else {
-
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetGravityScale(1.0f);
-        }
-    }
-
-    if (isImpacting && projectileType == "arrow") {
-        currentAnimation->Update();
-
-        if (currentAnimation->HasFinished()) {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-            return true;
-        }
-
-        if (isLookingLeft && !isLookingUp) {
-            Engine::GetInstance().render.get()->DrawTexture(
-                texture,
-                (int)position.getX() - 5,
-                (int)position.getY(),
-                &currentAnimation->GetCurrentFrame(),
-                1.0f,
-                0.0f,
-                INT_MAX,
-                INT_MAX,
-                SDL_FLIP_HORIZONTAL
-            );
-        }
-        else if (!isLookingLeft && !isLookingUp) {
-            Engine::GetInstance().render.get()->DrawTexture(
-                texture,
-                (int)position.getX() + 15,
-                (int)position.getY(),
-                &currentAnimation->GetCurrentFrame(),
-                1.0f,
-                0.0f,
-                INT_MAX,
-                INT_MAX,
-                SDL_FLIP_NONE
-            );
-        }
-
-        return true;
-    }
-
-    float angle = 0.0f;
-    if (isLookingLeft && !isLookingUp) {
-        pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(-moveSpeed), pbody->body->GetLinearVelocity().y));
-    }
-    else if (!isLookingLeft && !isLookingUp) pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(moveSpeed), pbody->body->GetLinearVelocity().y));
-
-    if (isLookingUp) {
-        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, PIXEL_TO_METERS(-moveSpeed)));
-        angle = 270.0f;
-    }
-    else angle = 0.0f;
+    // Actualizar la velocidad del cuerpo físico en Box2D
+    if (isLookingLeft) pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(-moveSpeed), pbody->body->GetLinearVelocity().y));
+    else pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(moveSpeed), pbody->body->GetLinearVelocity().y));
 
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
@@ -132,17 +67,10 @@ bool Projectiles::Update(float dt)
     if (isLookingLeft) {
         flip = SDL_FLIP_HORIZONTAL;
     }
-    if (projectileType == "arrow") {
-        if (isLookingLeft && !isLookingUp) Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 5, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip);
-        if (!isLookingLeft && !isLookingUp) Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 15, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip);
-    }
-    else
-    {
-        if (isLookingLeft && !isLookingUp) Engine::GetInstance().render.get()->DrawTextureScaled(texture, (int)position.getX() - 5, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip);
-        if (!isLookingLeft && !isLookingUp) Engine::GetInstance().render.get()->DrawTextureScaled(texture, (int)position.getX() - 5, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip);
-    }
-    if (isLookingUp) Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, angle, INT_MAX, INT_MAX, flip);
 
+
+    //Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     currentAnimation->Update();
 
     return true;
@@ -156,90 +84,35 @@ bool Projectiles::CleanUp()
 
 
 void Projectiles::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (isImpacting) return;
-
     switch (physB->ctype)
     {
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
-        else {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
     case ColliderType::ITEM:
         LOG("Collision ITEM");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
-        else {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
-    case ColliderType::TERRESTRE:
-        LOG("Collision Terrestre");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
-        else {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
+    case ColliderType::ENEMY:
+        LOG("Collision ENEMY");
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
     case ColliderType::VOLADOR:
-        LOG("Collision volador");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
-        else {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
+        LOG("Collision VOLADOR");
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
+    case ColliderType::CARONTE:
+        LOG("Collision CARONTE");
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
     case ColliderType::BOSS:
         LOG("Collision BOSS");
-        if (projectileType != "arrow") {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-
     case ColliderType::UNKNOWN:
         LOG("Collision UNKNOWN");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
-        else {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        }
-        break;
-
-    case ColliderType::PLAYER:
-        LOG("Collision PLAYER");
-        if (projectileType == "arrow") {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            currentAnimation = &impact;
-            currentAnimation->Reset();
-            isImpacting = true;
-        }
+        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     default:
         break;
@@ -256,6 +129,12 @@ void Projectiles::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     case ColliderType::ITEM:
         LOG("End Collision ITEM");
         break;
+    case ColliderType::ENEMY:
+        LOG("Collision ENEMY");
+        break;
+    case ColliderType::VOLADOR:
+        LOG("Collision VOLADOR");
+        break;
     case ColliderType::UNKNOWN:
         LOG("End Collision UNKNOWN");
         break;
@@ -263,6 +142,9 @@ void Projectiles::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
         break;
     }
 }
+
+
+
 
 void Projectiles::SetPosition(Vector2D pos) {
     pos.setX(pos.getX() + texW / 2);
@@ -279,8 +161,4 @@ Vector2D Projectiles::GetPosition() {
 
 void Projectiles::SetDirection(bool direction) {
     isLookingLeft = direction;
-}
-
-void Projectiles::SetDirectionUp(bool direction) {
-    isLookingUp = direction;
 }
