@@ -70,6 +70,7 @@ private:
 	void HandleDash(b2Vec2& velocity, float dt);
 	void HandleMovement(b2Vec2& velocity);
 	void UpdateWhipAttack(float dt);
+	void HandleBallAttack(float dt);
 	void HandlePickup(float dt);
 	void HandleDeath(float dt);
 	void HandleWakeup(float dt);

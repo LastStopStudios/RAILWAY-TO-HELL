@@ -880,6 +880,16 @@ void Player::UpdateMeleeAttack(float dt) {
     }
 }
 
+void Player::HandleBallAttack(float dt) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode) {
+        Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
+        projectile->SetParameters(Engine::GetInstance().scene.get()->ballConfigNode);
+        projectile->Start();
+        Vector2D playerPosition = Engine::GetInstance().scene.get()->GetPlayerPosition();
+        projectile->SetPosition(playerPosition);
+    }
+}
+
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
     SDL_Texture* originalTexture = texture;

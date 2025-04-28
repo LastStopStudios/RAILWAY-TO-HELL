@@ -17,6 +17,7 @@
 #include "Doors.h"
 #include "Levers.h"
 #include "Elevators.h"
+#include "Projectiles.h"
 #include "Log.h"
 
 SceneLoader::SceneLoader() {

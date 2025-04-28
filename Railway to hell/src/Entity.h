@@ -14,6 +14,7 @@ enum class EntityType
 	DOORS,
 	LEVER,
 	ELEVATORS,
+	PROJECTILE,
 	UNKNOWN
 };
 

@@ -116,6 +116,42 @@
 					</wakeup>
 				</animations>
 			</player>
+			<projectiles>
+				<projectile name="ball" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+							<frame x="288" y="0" w="32" h="32" />
+						</idle>
+						<moving loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+							<frame x="288" y="0" w="32" h="32" />
+						</moving>
+						<impact loop="false" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+						</impact>
+					</animations>
+				</projectile>
+			</projectiles>
 			<items>
 				<item name="Whip" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
 					<animations>

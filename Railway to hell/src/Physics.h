@@ -43,6 +43,7 @@ enum class ColliderType {
 	ATTACKSENSOR,
 	DOORS,
 	LEVER,
+	PROJECTILE,
 	UNKNOWN
 	// ..
 };
