@@ -222,5 +222,9 @@ private:
 	// lives
 	int lives = 10; // for testing try to set it to 3
 
+	bool collidingWithEnemy = false;
+	int ballCounter = 3;
+	float ballCooldown = 3000.0f; // Time until ball recharge
+
 
 };

@@ -32,7 +32,10 @@ bool Projectiles::Start() {
     texRadius = parameters.attribute("radius").as_int();
 
     //Load animations
-    idle.LoadAnimations(parameters.child("animations").child("moving"));
+    idle.LoadAnimations(parameters.child("animations").child("idle"));
+	speedingUpp.LoadAnimations(parameters.child("animations").child("speedingUp"));
+    moving.LoadAnimations(parameters.child("animations").child("moving"));
+	impact.LoadAnimations(parameters.child("animations").child("impact"));
     currentAnimation = &idle;
 
     // L08 TODO 4: Add a physics to an item - initialize the physics body
@@ -53,18 +56,31 @@ bool Projectiles::Start() {
 
 bool Projectiles::Update(float dt)
 {
-
-
-    // Actualizar la velocidad del cuerpo físico en Box2D
-    if (isLookingLeft) pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(-moveSpeed), pbody->body->GetLinearVelocity().y));
-    else pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(moveSpeed), pbody->body->GetLinearVelocity().y));
-
+    if (idle.HasFinished() && speedingUp) {
+        speedingUp = false;
+		currentAnimation = &speedingUpp;
+		moveSpeed = 400.5f;
+    }
+    if (speedingUpp.HasFinished() && !isImpacting) {
+		currentAnimation = &moving;
+    }
+    if (isImpacting) {
+        if (currentAnimation->HasFinished()) {
+            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            return false;
+        }
+    }
+    if (!isImpacting) {
+        // Actualizar la velocidad del cuerpo físico en Box2D
+        if (!isLookingLeft) pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(-moveSpeed), pbody->body->GetLinearVelocity().y));
+        else pbody->body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(moveSpeed), pbody->body->GetLinearVelocity().y));
+    }
     b2Transform pbodyPos = pbody->body->GetTransform();
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
-    if (isLookingLeft) {
+    if (!isLookingLeft) {
         flip = SDL_FLIP_HORIZONTAL;
     }
 
@@ -74,6 +90,13 @@ bool Projectiles::Update(float dt)
     currentAnimation->Update();
 
     return true;
+}
+
+void Projectiles::startImpactAnimation() {
+    pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+    currentAnimation = &impact;
+    currentAnimation->Reset();
+    isImpacting = true;
 }
 
 bool Projectiles::CleanUp()
@@ -88,31 +111,38 @@ void Projectiles::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityMa nager.get()->DestroyEntity(this);
         break;
     case ColliderType::ITEM:
         LOG("Collision ITEM");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-    case ColliderType::ENEMY:
-        LOG("Collision ENEMY");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+    case ColliderType::TERRESTRE:
+        LOG("Collision TERRESTRE");
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::VOLADOR:
         LOG("Collision VOLADOR");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::CARONTE:
         LOG("Collision CARONTE");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::BOSS:
         LOG("Collision BOSS");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::UNKNOWN:
         LOG("Collision UNKNOWN");
-        Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        startImpactAnimation();
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     default:
         break;

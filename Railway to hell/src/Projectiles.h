@@ -40,6 +40,7 @@ public:
 
 	const std::string& GetSpellType() const { return projectileType; }
 
+	void startImpactAnimation();
 
 private:
 	float moveSpeed;
@@ -52,6 +53,8 @@ private:
 	bool isLookingUp = false;
 
 	bool isImpacting = false;
+
+	bool speedingUp = true;
 private:
 
 
@@ -60,7 +63,7 @@ private:
 	const char* texturePath;
 
 	Animation* currentAnimation = nullptr;
-	Animation idle, impact;
+	Animation idle, speedingUpp, moving, impact;
 
 	pugi::xml_node parameters;
 	PhysBody* pbody;

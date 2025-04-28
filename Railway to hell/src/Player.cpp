@@ -233,7 +233,7 @@ bool Player::Start() {
 
     // For testing, temporarily enable whip attack
     WhipAttack = false;
-    facingRight = true;
+    //facingRight = true;
 
     // Set initial animation to wakeup if we haven't woken up yet
     if (isWakingUp && !hasWokenUp) {
@@ -319,19 +319,12 @@ bool Player::Update(float dt)
         // Handle attacks only when not dashing
         if (!isDashing && !isPickingUp && !isDying) {
             UpdateMeleeAttack(dt);
-            if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode) {
-                Projectiles* fireball = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
-                fireball->SetParameters(Engine::GetInstance().scene.get()->ballConfigNode);
-                fireball->Start();
-                Vector2D playerPosition = Engine::GetInstance().scene.get()->GetPlayerPosition();
-
-                playerPosition.setY(playerPosition.getY() - 13);
-
-                fireball->SetPosition(playerPosition);
-            }
         }
         if (!isDashing && !isPickingUp && !isDying && !isJumping && !isFalling && !isRecovering) {
             UpdateWhipAttack(dt);
+        }
+        if (!isDashing && !isPickingUp && !isDying && !collidingWithEnemy) {
+            HandleBallAttack(dt);
         }
         // If jumping, preserve the vertical velocity
         if (isJumping) {
@@ -891,12 +884,25 @@ void Player::UpdateMeleeAttack(float dt) {
 }
 
 void Player::HandleBallAttack(float dt) {
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode) {
+    if (ballCounter < 3) {
+        ballCooldown -= dt;
+        if (ballCooldown <= 0.0f) {
+            ballCounter++;
+            ballCooldown = 3000.0f;
+        }
+    }
+    // need to add if(ballattackanimation.hasfinished) for ball shoot cooldown
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode && ballCounter > 0) {
+        ballCounter--;
         Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
         projectile->SetParameters(Engine::GetInstance().scene.get()->ballConfigNode);
         projectile->Start();
         Vector2D playerPosition = Engine::GetInstance().scene.get()->GetPlayerPosition();
+        //playerPosition.setY(playerPosition.getY() - 13);
+        if (!facingRight) playerPosition.setX(playerPosition.getX() - 50);
+        else playerPosition.setX(playerPosition.getX() + 20);
         projectile->SetPosition(playerPosition);
+        projectile->SetDirection(facingRight);
     }
 }
 
@@ -1104,10 +1110,21 @@ bool Player::CleanUp() {
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-    if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::TERRESTRE) {
-        // Additional enemy hit logic can go here
+    // Logic so that the player cannot shoot if he has the enemy next to him
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
+        collidingWithEnemy = true;
         return;
     }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
+        collidingWithEnemy = true;
+        return;
+    }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
+        collidingWithEnemy = true;
+        return;
+    }
+    // End of the logic
+
     if (physA->ctype == ColliderType::PLAYER_WHIP_ATTACK && physB->ctype == ColliderType::LEVER) {
         Levers* lever = (Levers*)physB->listener;
         if (lever && lever->GetLeverType() == "lever" && !leverOne) {
@@ -1273,6 +1290,19 @@ void Player::DesbloquearSensor(){//unlocks sensors scene change
 void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     // We only process collisions of the player's bodies.
     if (physA != pbodyUpper && physA != pbodyLower) {
+        return;
+    }
+
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
+        collidingWithEnemy = false;
+        return;
+    }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
+        collidingWithEnemy = false;
+        return;
+    }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
+        collidingWithEnemy = false;
         return;
     }
 
