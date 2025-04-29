@@ -858,7 +858,7 @@ void Player::UpdateMeleeAttack(float dt) {
 
         isAttacking = true;
         canAttack = false;           
-        attackCooldown = 1000.0f;       
+        attackCooldown = 500.0f;       
         meleeAttack.Reset();          
 
         // Calculate the size of the hitbox to fit the attack sprite.
@@ -1195,6 +1195,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
 
             }
+			if (item && item->GetItemType() == "Double jump") {
+				doubleJump = true;
+				Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+			}
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);

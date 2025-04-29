@@ -172,6 +172,14 @@
 						</idle>
 					</animations>
 				</item>
+				<item name="Double jump" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="32" h="32" />
+						</idle>
+
+					</animations>
+				</item>
 				<item name="Remember1" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
 					<animations>
 						<idle loop="true" speed="0.2">
