@@ -235,6 +235,9 @@ bool Player::Start() {
     WhipAttack = false;
     facingRight = true;
 
+    //Ice platforms
+    giro = facingRight;
+
     // Set initial animation to wakeup if we haven't woken up yet
     if (isWakingUp && !hasWokenUp) {
         currentAnimation = &wakeupAnim;
@@ -438,7 +441,7 @@ void Player::HandleMovement(b2Vec2& velocity) {
         b = 0;
         antb = 0.59f;
         if (resbalar == true) {//Ice platform
-            if(velocity.x < 0.0f && a < dificultty) {
+            if(velocity.x < 0.0f && a < dificultty && giro == true) {
                 velocity.x = velocity.x - anta;//adding vel to speed up on ice
                 LOG("velocidad izquierda resbalando: %f", velocity.x);
                 a++;
@@ -447,31 +450,32 @@ void Player::HandleMovement(b2Vec2& velocity) {
             }else{
                 velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
                 LOG("velocidad Izquierda: %f", velocity.x);
-                
+                giro = facingRight;
             }
         }else {
-            velocity.x = -0.3f * 16;
-        }
+            velocity.x = -0.3f * 16; 
+            giro = facingRight;
+        }        
         facingRight = false;
-        isWalking = true;        
+        isWalking = true;
     }
 
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         a = 0;
         anta = 0.59f;
         if (resbalar == true) {//Ice platform
-            if (velocity.x > 0.0f && b < dificultty) {
+            if (velocity.x > 0.0f && b < dificultty && giro == false) {
                 velocity.x = velocity.x + antb;//adding vel to speed up on ice
-                LOG("velocidad derecha resbalando: %f", velocity.x);
                 b++;
                 antb = antb - 0.59f;
                 LOG("B: %f", b);
             }else{
                 velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
-                LOG("velocidad derecha: %f", velocity.x);
+                giro = facingRight;
             }                  
         }else{
             velocity.x = 0.3f * 16;
+            giro = facingRight;
         }
         facingRight = true;
         isWalking = true;       

@@ -219,7 +219,7 @@ private:
 	bool leverFour = false;
 
 	//Ice Platforms
-	bool resbalar;
+	bool resbalar, giro;
 	float icev = 5;
 	float a = 0, b = 0, anta = 8.85f, antb = 8.85f, dificultty = 15;
 	// lives
