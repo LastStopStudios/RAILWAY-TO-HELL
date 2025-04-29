@@ -34,19 +34,7 @@
     <ClCompile Include="src\Engine.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiControlButton.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiManager.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="src\Map.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics.cpp">
@@ -94,6 +82,18 @@
     <ClCompile Include="src\Projectiles.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\GuiControlButton.cpp">
+      <Filter>Source Filles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiManager.cpp">
+      <Filter>Source Filles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -135,28 +135,10 @@
     <ClInclude Include="src\Engine.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entity.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControl.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControlButton.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiManager.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="src\Map.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Module.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics.h">
@@ -201,6 +183,24 @@
     <ClInclude Include="src\Projectiles.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
+    <ClInclude Include="src\GuiControl.h">
+      <Filter>Source Filles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlButton.h">
+      <Filter>Source Filles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiManager.h">
+      <Filter>Source Filles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pathfinding.h">
+      <Filter>Source Filles\Engine\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">
@@ -228,6 +228,12 @@
     </Filter>
     <Filter Include="Source Filles\Engine">
       <UniqueIdentifier>{0345ce0b-58d7-4d67-95d1-7c0f5a1be4a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Engine\Gui">
+      <UniqueIdentifier>{6cc908a6-7228-492f-ac17-a34d245704b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Engine\Entities">
+      <UniqueIdentifier>{da4651a5-73b5-4f65-b4ff-a3a6cf752fc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
