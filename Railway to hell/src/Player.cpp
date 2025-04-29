@@ -224,6 +224,7 @@ bool Player::Start() {
  
     //Ice Movement
     giro = facingRight;
+
     // Set initial animation to wakeup if we haven't woken up yet
     if (isWakingUp && !hasWokenUp) {
         currentAnimation = &wakeupAnim;
@@ -411,19 +412,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
         if (facingRight == true) {
             velocity.x = icev; //horizontal velocity on ice rigth
             LOG("velocidad Idle derecha: %f", velocity.x);
-            /*b = 0;
-             LOG("Reset B: % d", b);    */
         }
         else {
             velocity.x = -icev; //horizontal velocity on ice left
             LOG("velocidad idle izquierda: %f", velocity.x);
-            /*a = 0;
-             LOG("reset A: %d", a);*/
         }
-    }
-    else {
+    }else{
         velocity.x = 0; //horizontal velocity
-
     }
 
     auto& engine = Engine::GetInstance();
@@ -460,18 +455,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
             if (resbalar == true) {//Ice platform
                 if (velocity.x < 0.0f && a < dificultty && giro == true) {
                     velocity.x = velocity.x - anta;//adding vel to speed up on ice
-                    LOG("velocidad izquierda resbalando: %f", velocity.x);
                     a++;
                     anta = anta - 0.59f;
-                    LOG("A: %f", a);
-                }
-                else {
+                }else {
                     velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
-                    LOG("velocidad Izquierda: %f", velocity.x);
                     giro = facingRight;
                 }
-            }
-            else {
+            }else{
                 velocity.x = -0.3f * 16;
                 giro = facingRight;
             }
@@ -486,14 +476,11 @@ void Player::HandleMovement(b2Vec2& velocity) {
                     velocity.x = velocity.x + antb;//adding vel to speed up on ice
                     b++;
                     antb = antb - 0.59f;
-                    LOG("B: %f", b);
-                }
-                else {
+                }else{
                     velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                     giro = facingRight;
                 }
-            }
-            else {
+            }else{
                 velocity.x = 0.3f * 16;
                 giro = facingRight;
             }
@@ -509,18 +496,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
         if (resbalar == true) {//Ice platform
             if (velocity.x < 0.0f && a < dificultty && giro == true) {
                 velocity.x = velocity.x - anta;//adding vel to speed up on ice
-                LOG("velocidad izquierda resbalando: %f", velocity.x);
                 a++;
                 anta = anta - 0.59f;
-                LOG("A: %f", a);
-            }
-            else {
+            }else{
                 velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
-                LOG("velocidad Izquierda: %f", velocity.x);
                 giro = facingRight;
             }
-        }
-        else {
+        }else{
             velocity.x = -0.3f * 16;
             giro = facingRight;
         }
@@ -535,14 +517,11 @@ void Player::HandleMovement(b2Vec2& velocity) {
                 velocity.x = velocity.x + antb;//adding vel to speed up on ice
                 b++;
                 antb = antb - 0.59f;
-                LOG("B: %f", b);
-            }
-            else {
+            }else{
                 velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                 giro = facingRight;
             }
-        }
-        else {
+        }else{
             velocity.x = 0.3f * 16;
             giro = facingRight;
         }
@@ -656,13 +635,10 @@ void Player::HandleJump(float dt) {
     if (engine.IsControllerConnected()) {
         SDL_GameController* controller = engine.GetGameController();
         // X button on the controller is SDL_CONTROLLER_BUTTON_X
-        if (engine.IsControllerConnected()) {
-            SDL_GameController* controller = engine.GetGameController();
             // SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
             if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
                 jumpButtonPressed = true;
             }
-        }
     }
 
     // Maintain keyboard compatibility (SPACE key)

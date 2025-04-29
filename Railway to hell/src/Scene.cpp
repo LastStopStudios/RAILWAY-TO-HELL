@@ -175,10 +175,21 @@ bool Scene::Update(float dt)
 		if (introMusicPlaying) {
 			DrawCurrentScene();
 		}
+		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
 			currentState = SceneState::TEXT_SCREEN;
 			skipFirstInput = true;
+		}
+		//Check controller input
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			// SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
+				Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
+				currentState = SceneState::TEXT_SCREEN;
+				skipFirstInput = true;
+			}
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
@@ -193,9 +204,19 @@ bool Scene::Update(float dt)
 		if (textMusicPlaying) {
 			DrawCurrentScene();
 		}
+		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
 			currentState = SceneState::GAMEPLAY;
+		}
+		//Check controller input
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			// SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
+				Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
+				currentState = SceneState::GAMEPLAY;
+			}
 		}
 		break;
 	case SceneState::GAMEPLAY:
