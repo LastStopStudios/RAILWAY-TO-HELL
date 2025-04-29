@@ -221,7 +221,9 @@ bool Player::Start() {
     // For testing, temporarily enable whip attack
     WhipAttack = false;
     //facingRight = true;
-
+ 
+    //Ice Movement
+    giro = facingRight;
     // Set initial animation to wakeup if we haven't woken up yet
     if (isWakingUp && !hasWokenUp) {
         currentAnimation = &wakeupAnim;
@@ -403,9 +405,26 @@ void Player::HandleWakeup(float dt) {
 
 void Player::HandleMovement(b2Vec2& velocity) {
     float verticalVelocity = velocity.y;
-    // Horizontal movement
     isWalking = false;
-    velocity.x = 0; // Reset horizontal velocity
+    // Horizontal movement
+    if (resbalar == true) {//Ice platform
+        if (facingRight == true) {
+            velocity.x = icev; //horizontal velocity on ice rigth
+            LOG("velocidad Idle derecha: %f", velocity.x);
+            /*b = 0;
+             LOG("Reset B: % d", b);    */
+        }
+        else {
+            velocity.x = -icev; //horizontal velocity on ice left
+            LOG("velocidad idle izquierda: %f", velocity.x);
+            /*a = 0;
+             LOG("reset A: %d", a);*/
+        }
+    }
+    else {
+        velocity.x = 0; //horizontal velocity
+
+    }
 
     auto& engine = Engine::GetInstance();
     auto input = engine.input.get();
@@ -436,12 +455,48 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
         // D-pad buttons
         if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
-            velocity.x = -0.3f * 16;
+            b = 0;
+            antb = 0.59f;
+            if (resbalar == true) {//Ice platform
+                if (velocity.x < 0.0f && a < dificultty && giro == true) {
+                    velocity.x = velocity.x - anta;//adding vel to speed up on ice
+                    LOG("velocidad izquierda resbalando: %f", velocity.x);
+                    a++;
+                    anta = anta - 0.59f;
+                    LOG("A: %f", a);
+                }
+                else {
+                    velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
+                    LOG("velocidad Izquierda: %f", velocity.x);
+                    giro = facingRight;
+                }
+            }
+            else {
+                velocity.x = -0.3f * 16;
+                giro = facingRight;
+            }
             facingRight = false;
             isWalking = true;
         }
         if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
-            velocity.x = 0.3f * 16;
+            a = 0;
+            anta = 0.59f;
+            if (resbalar == true) {//Ice platform
+                if (velocity.x > 0.0f && b < dificultty && giro == false) {
+                    velocity.x = velocity.x + antb;//adding vel to speed up on ice
+                    b++;
+                    antb = antb - 0.59f;
+                    LOG("B: %f", b);
+                }
+                else {
+                    velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
+                    giro = facingRight;
+                }
+            }
+            else {
+                velocity.x = 0.3f * 16;
+                giro = facingRight;
+            }
             facingRight = true;
             isWalking = true;
         }
@@ -449,12 +504,48 @@ void Player::HandleMovement(b2Vec2& velocity) {
 
     // Check keyboard input (maintain compatibility)
     if (input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        velocity.x = -0.3f * 16;
+        b = 0;
+        antb = 0.59f;
+        if (resbalar == true) {//Ice platform
+            if (velocity.x < 0.0f && a < dificultty && giro == true) {
+                velocity.x = velocity.x - anta;//adding vel to speed up on ice
+                LOG("velocidad izquierda resbalando: %f", velocity.x);
+                a++;
+                anta = anta - 0.59f;
+                LOG("A: %f", a);
+            }
+            else {
+                velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
+                LOG("velocidad Izquierda: %f", velocity.x);
+                giro = facingRight;
+            }
+        }
+        else {
+            velocity.x = -0.3f * 16;
+            giro = facingRight;
+        }
         facingRight = false;
         isWalking = true;
     }
     if (input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        velocity.x = 0.3f * 16;
+        a = 0;
+        anta = 0.59f;
+        if (resbalar == true) {//Ice platform
+            if (velocity.x > 0.0f && b < dificultty && giro == false) {
+                velocity.x = velocity.x + antb;//adding vel to speed up on ice
+                b++;
+                antb = antb - 0.59f;
+                LOG("B: %f", b);
+            }
+            else {
+                velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
+                giro = facingRight;
+            }
+        }
+        else {
+            velocity.x = 0.3f * 16;
+            giro = facingRight;
+        }
         facingRight = true;
         isWalking = true;
     }

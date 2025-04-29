@@ -154,10 +154,21 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::PLAYER: {
 		
 		if (GetDoorType() == "whip boss door") {
+			// Original keyboard input
 			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 				if (!Activated && Engine::GetInstance().scene.get()->GetPlayer()->returnCanOpenDoor()) {
 					Activated = true;
 					currentAnimation = &activated;
+				}
+			}
+			// Add support for controller Circle button (B in SDL terminology)
+			if (Engine::GetInstance().IsControllerConnected()) {
+				SDL_GameController* controller = Engine::GetInstance().GetGameController();
+				if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+					if (!Activated && Engine::GetInstance().scene.get()->GetPlayer()->returnCanOpenDoor()) {
+						Activated = true;
+						currentAnimation = &activated;
+					}
 				}
 			}
 		}
