@@ -46,6 +46,9 @@ bool Mapa::Update(float dt) {
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_M) == KEY_DOWN){
 		Mostrar = !Mostrar;
+		if(!Mostrar){
+			Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
+		}
 	}
 
 	// Check controller input for jump (X button)
@@ -56,6 +59,9 @@ bool Mapa::Update(float dt) {
 		static bool previousAbuttonPressed = false;
 		if (AbuttonPressed && !previousAbuttonPressed) {
 			Mostrar = !Mostrar;
+			if (!Mostrar) {
+				Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
+			}
 		}
 		previousAbuttonPressed = AbuttonPressed;
 	}
@@ -67,6 +73,7 @@ bool Mapa::PostUpdate()
 {
 	if (Mostrar) {
 		ShowMap();
+		
 	}
 	return true;
 }
@@ -77,6 +84,7 @@ bool Mapa::CleanUp()
 }
 
 void Mapa::ShowMap() {
+	Engine::GetInstance().scene->DialogoOn(); // stop entities
 	int w, h;
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);//Screen size
 	SDL_Rect dstRect = { 0, 0, w, h }; //Position and scale text background
@@ -84,6 +92,6 @@ void Mapa::ShowMap() {
 	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //bring out the current scene
 	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);//pass the scene from where to get the dialogues
 
-	fondo = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto.png "); //Load texture for text background
+	fondo = Engine::GetInstance().textures->Load("Assets/Textures/background/MapBackground.png "); //Load texture for text background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
 }

@@ -202,7 +202,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 	// If the text is fully displayed and the close button is pressed, hide the text and return control to the player
 	if (alltext.length() == displayText.length() && closePressed && Skip == false) {
 		showText = !showText;  // Hide the text
-		Engine::GetInstance().scene->DialogoOff(); // Return control to the player
+		Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
 
 		// If the dialogue was the boss fight dialogue (ID "1")
 		if (lastDialogID == "1") {
