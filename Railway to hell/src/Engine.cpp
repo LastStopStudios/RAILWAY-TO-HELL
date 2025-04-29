@@ -14,6 +14,7 @@
 #include "Physics.h"
 #include "GuiManager.h"
 #include "DialogoM.h"
+#include "Mapa.h"
 #include "SDL2/SDL.h"
 
 // Constructor
@@ -43,6 +44,7 @@ Engine::Engine() {
     entityManager = std::make_shared<EntityManager>();
     guiManager = std::make_shared<GuiManager>();
     dialogoM = std::make_shared<DialogoM>();
+    mapa = std::make_shared<Mapa>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -56,6 +58,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(entityManager));
 	AddModule(std::static_pointer_cast<Module>(guiManager));
     AddModule(std::static_pointer_cast<Module>(dialogoM));
+    AddModule(std::static_pointer_cast<Module>(mapa));
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));

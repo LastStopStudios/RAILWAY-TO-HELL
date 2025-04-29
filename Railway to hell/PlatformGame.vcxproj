@@ -152,6 +152,7 @@
     <ClCompile Include="src\Doors.cpp" />
     <ClCompile Include="src\Elevators.cpp" />
     <ClCompile Include="src\Levers.cpp" />
+    <ClCompile Include="src\Mapa.cpp" />
     <ClCompile Include="src\Projectiles.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="src\Doors.h" />
     <ClInclude Include="src\Elevators.h" />
     <ClInclude Include="src\Levers.h" />
+    <ClInclude Include="src\Mapa.h" />
     <ClInclude Include="src\Projectiles.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />

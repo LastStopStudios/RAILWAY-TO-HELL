@@ -630,7 +630,6 @@ void Player::HandleJump(float dt) {
     float currentVerticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
     auto& engine = Engine::GetInstance();
     bool jumpButtonPressed = false;
-    LOG("Salto Antes pulsar: %d", jumpButtonPressed);
 
     // Check controller input for jump (X button)
     if (engine.IsControllerConnected()) {
@@ -640,7 +639,6 @@ void Player::HandleJump(float dt) {
         static bool previousAbuttonPressed = false;
         if (AbuttonPressed && !previousAbuttonPressed) {
             jumpButtonPressed = true;
-            LOG("Salto mando: %d", jumpButtonPressed);
         }
         previousAbuttonPressed = AbuttonPressed;
     }
@@ -648,7 +646,6 @@ void Player::HandleJump(float dt) {
     // Maintain keyboard compatibility (SPACE key)
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         jumpButtonPressed = true;
-        LOG("Salto teclado: %d", jumpButtonPressed);
     }
 
     // First jump when on ground

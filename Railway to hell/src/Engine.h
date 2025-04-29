@@ -21,6 +21,7 @@ class Map;
 class Physics;
 class GuiManager;
 class DialogoM;
+class Mapa;
 
 class Engine
 {
@@ -109,6 +110,7 @@ public:
 	std::shared_ptr<Physics> physics;
 	std::shared_ptr<GuiManager> guiManager;
 	std::shared_ptr<DialogoM> dialogoM;
+	std::shared_ptr<Mapa> mapa;
 
 
 private:

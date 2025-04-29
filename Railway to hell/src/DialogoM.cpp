@@ -113,7 +113,7 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 		textTexture = nullptr;
 	}
 
-	SDL_Color color = { 255, 255, 255 }; // Decide on the font color
+	SDL_Color color = { 255, 255, 255 }; // Define font color
 	TTF_Font* font = Engine::GetInstance().render->font;
 
 	if (!font) {
