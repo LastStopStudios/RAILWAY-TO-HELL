@@ -630,20 +630,25 @@ void Player::HandleJump(float dt) {
     float currentVerticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
     auto& engine = Engine::GetInstance();
     bool jumpButtonPressed = false;
+    LOG("Salto Antes pulsar: %d", jumpButtonPressed);
 
     // Check controller input for jump (X button)
     if (engine.IsControllerConnected()) {
         SDL_GameController* controller = engine.GetGameController();
-        // X button on the controller is SDL_CONTROLLER_BUTTON_X
-            // SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
-            if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
-                jumpButtonPressed = true;
-            }
+        bool AbuttonPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
+        // Store previous button state to detect when it is newly pressed
+        static bool previousAbuttonPressed = false;
+        if (AbuttonPressed && !previousAbuttonPressed) {
+            jumpButtonPressed = true;
+            LOG("Salto mando: %d", jumpButtonPressed);
+        }
+        previousAbuttonPressed = AbuttonPressed;
     }
 
     // Maintain keyboard compatibility (SPACE key)
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
         jumpButtonPressed = true;
+        LOG("Salto teclado: %d", jumpButtonPressed);
     }
 
     // First jump when on ground
