@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "pugixml.hpp"
+#include "SDL2/SDL.h"
 
 // Modules
 class Window;
@@ -46,6 +47,11 @@ public:
 	float GetDt() const {
 		return dt;
 	}
+
+	// Game Controller methods
+	void InitGameController();
+	bool IsControllerConnected() const { return gameController != nullptr; }
+	SDL_GameController* GetGameController() const { return gameController; }
 
 private:
 
@@ -97,7 +103,7 @@ public:
 	std::shared_ptr<Textures> textures;
 	std::shared_ptr<Audio> audio;
 	std::shared_ptr<Scene> scene;
-	std::shared_ptr<SceneLoader> sceneLoader; 
+	std::shared_ptr<SceneLoader> sceneLoader;
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Physics> physics;
@@ -105,10 +111,12 @@ public:
 	std::shared_ptr<DialogoM> dialogoM;
 
 
-private: 
+private:
+	// Game Controller
+	SDL_GameController* gameController;
 
 	// Delta time
-	float dt; 
+	float dt;
 	//Frames since startup
 	int frames;
 

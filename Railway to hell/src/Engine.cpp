@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iomanip>
 #include "Log.h"
-
 #include "Window.h"
 #include "Input.h"
 #include "Render.h"
@@ -15,6 +14,7 @@
 #include "Physics.h"
 #include "GuiManager.h"
 #include "DialogoM.h"
+#include "SDL2/SDL.h"
 
 // Constructor
 Engine::Engine() {
@@ -59,6 +59,8 @@ Engine::Engine() {
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
+
+    gameController = nullptr;
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }
@@ -121,10 +123,39 @@ bool Engine::Start() {
             break;
         }
     }
-
+    InitGameController();
     LOG("Timer App Start(): %f", timer.ReadMSec());
 
     return result;
+}
+
+void Engine::InitGameController() {
+    // Asegurarse de que el subsistema de Game Controller esté inicializado
+    if (!(SDL_WasInit(SDL_INIT_GAMECONTROLLER))) {
+        if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
+            LOG("Error al inicializar SDL_INIT_GAMECONTROLLER: %s", SDL_GetError());
+            return;
+        }
+    }
+
+    // Comprobar cuántos joysticks/mandos hay conectados
+    int numJoysticks = SDL_NumJoysticks();
+    LOG("Número de joysticks/mandos detectados: %d", numJoysticks);
+
+    // Inicializar el primer mando encontrado
+    gameController = nullptr;
+    for (int i = 0; i < numJoysticks; i++) {
+        if (SDL_IsGameController(i)) {
+            gameController = SDL_GameControllerOpen(i);
+            if (gameController) {
+                LOG("Mando conectado: %s", SDL_GameControllerName(gameController));
+                break;
+            }
+            else {
+                LOG("No se pudo abrir el mando %i: %s", i, SDL_GetError());
+            }
+        }
+    }
 }
 
 // Called each loop iteration
@@ -165,7 +196,10 @@ bool Engine::CleanUp() {
             break;
         }
     }
-
+    if (gameController != nullptr) {
+        SDL_GameControllerClose(gameController);
+        gameController = nullptr;
+    }
     LOG("Timer App CleanUp(): %f", timer.ReadMSec());
 
     return result;

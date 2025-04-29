@@ -139,56 +139,80 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 
 void DialogoM::UpdateTextAnimation(float dt)
 {
-	if (!showText) return;
-
-	textTimer += dt; // Increases the timer
-
+	if (!showText) return;  // If the text is not being shown, exit
+	textTimer += dt; // Increase the timer by the delta time
 	if (textTimer >= textSpeed && alltext.length() != displayText.length())
 	{
-		textTimer = 0.0f; // Reset timer
+		textTimer = 0.0f; // Reset the timer
 		if (Tim == true) {
-			textIndex++;
-		}// Go forward in the text
-		alltext = displayText.substr(0, textIndex); // Gets the new fragment
+			textIndex++;  // Move to the next character in the text
+		}
+		alltext = displayText.substr(0, textIndex); // Get the updated fragment of text
 		if (textIndex < textMaxheigth) {
-			currentText = displayText.substr(0, textIndex); //Gets the new fragment
-			GenerateTextTexture(); // Generate the new texture with the fragment
+			currentText = displayText.substr(0, textIndex);  // Update the current fragment
+			GenerateTextTexture();  // Generate the new texture with the updated fragment
 		}
 		else if (textIndex == textMaxheigth) {
-			Tim = false;
+			Tim = false;  // Stop incrementing textIndex when we reach max text height
 		}
-		if (textIndex >= textMaxheigth && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && Tim == false) {
 
-			int finaltexto = textIndex - textMaxheigth;
+		// Check both the E key and the Circle button on the controller
+		bool advancePressed = Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
+
+		// Check if a controller is connected and if the Circle button is pressed
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+				advancePressed = true;
+			}
+		}
+
+		// If the text reaches max height and the advance button is pressed
+		if (textIndex >= textMaxheigth && advancePressed && Tim == false) {
+			int finaltext = textIndex - textMaxheigth;
 			currentText.clear();
-			currentText = displayText.substr(textMaxheigth, finaltexto); // Gets the new fragment
-			GenerateTextTexture(); //Generate the new texture with the fragment
-			Siguiente = false;//skip loading the other part of the text
-			Tim = true;//activate the text drawing timer
+			currentText = displayText.substr(textMaxheigth, finaltext); // Update the text fragment
+			GenerateTextTexture();  // Generate the new texture with the updated fragment
+			Siguiente = false;  // Prevent the next part of the text from being loaded
+			Tim = true;  // Restart the text drawing timer
 		}
 		else if (textIndex >= textMaxheigth && Siguiente == false) {
-			//Tim = true;
-			int finaltexto = textIndex - textMaxheigth;
-			currentText = displayText.substr(textMaxheigth - 1, finaltexto); // Gets the new fragment
-			GenerateTextTexture(); // Generate the new texture with the fragment
+			int finaltext = textIndex - textMaxheigth;
+			currentText = displayText.substr(textMaxheigth - 1, finaltext); // Get the updated fragment
+			GenerateTextTexture();  // Generate the new texture with the updated fragment
 		}
-
-
 	}
-	if (alltext.length() == displayText.length()) { Skip = false; }//the text has already been skipped, it serves as a control so that it does not skip and close at the same time.
-	
-	if (alltext.length() == displayText.length() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && Skip == false) {
-		showText = !showText;
-		Engine::GetInstance().scene->DialogoOff(); // return control to the player
 
-		// Si el diálogo que se acaba de cerrar era el del boss (ID "1")
+	// Check if the text has already been fully displayed
+	if (alltext.length() == displayText.length()) {
+		Skip = false;  // Don't skip and close the dialogue at the same time
+	}
+
+	// Check both the E key and the Circle button on the controller for closing the dialogue
+	bool closePressed = Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
+
+	// If a controller is connected, check if the Circle button is pressed
+	if (Engine::GetInstance().IsControllerConnected()) {
+		SDL_GameController* controller = Engine::GetInstance().GetGameController();
+		if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+			closePressed = true;
+		}
+	}
+
+	// If the text is fully displayed and the close button is pressed, hide the text and return control to the player
+	if (alltext.length() == displayText.length() && closePressed && Skip == false) {
+		showText = !showText;  // Hide the text
+		Engine::GetInstance().scene->DialogoOff(); // Return control to the player
+
+		// If the dialogue was the boss fight dialogue (ID "1")
 		if (lastDialogID == "1") {
 			bossFightReady = true;
 		}
 
-		ResetText(); // Reset text 
+		ResetText();  // Reset the text system
 	}
 }
+
 
 void DialogoM::XMLToVariable(const std::string& id) {
 	if (!showText || !displayText.empty()) return;

@@ -107,19 +107,7 @@ bool Player::Start() {
         // Reducir la fricción para evitar quedarse pegado a las paredes
         fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
         fixtureLower->SetFriction(0.005f);
-
-        //// Opcional: configurar valores específicos para colisiones laterales
-        //fixtureUpper->SetRestitution(0.5f);  // Un poco de rebote
-        //fixtureLower->SetRestitution(0.5f);
     }
-    // Note on weld joint properties:
-// A weld joint fuses two bodies together at a specified point, preventing relative movement.
-// - stiffness (1000.0f): Controls how rigid the connection is. Higher values create stiffer joints.
-// - damping (0.5f): Reduces oscillation. Higher values make the joint more stable but less responsive.
-// - referenceAngle (0): Maintains the initial relative angle between bodies.
-// - collideConnected (false): Prevents the connected bodies from colliding with each other.
-// This setup creates a character with connected upper and lower body parts that move as one unit.
-
     // Initialize audio effect
     pickCoinFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
@@ -163,7 +151,6 @@ bool Player::Start() {
     auto recoveringNode = parameters.child("animations").child("recoveringJump");
     recoveringTexture = recoveringNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(recoveringNode.attribute("texture").as_string()) : texture;
     
-
     isFalling = false;
     isRecovering = false;
     recoveringTimer = 0.0f;
@@ -208,7 +195,6 @@ bool Player::Start() {
     death.LoadAnimations(parameters.child("animations").child("death"));
     auto deathNode = parameters.child("animations").child("death");
     deathTexture = deathNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(deathNode.attribute("texture").as_string()) : texture;
-
 
     // Wakeup animation 
     wakeupAnim.LoadAnimations(parameters.child("animations").child("wakeup"));
@@ -301,7 +287,7 @@ bool Player::Update(float dt)
         }
 
         // Mutually exclusive action handling
-        if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp && !isDying) {
+        if (!isAttacking && !isWhipAttacking && !isDashing && !isPickingUp && !isDying && !isRecovering) {
             HandleMovement(velocity);
             HandleJump(dt);
         }
@@ -416,21 +402,58 @@ void Player::HandleWakeup(float dt) {
 }
 
 void Player::HandleMovement(b2Vec2& velocity) {
-
     float verticalVelocity = velocity.y;
-
     // Horizontal movement
     isWalking = false;
     velocity.x = 0; // Reset horizontal velocity
 
-    // Apply horizontal movement
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+    auto& engine = Engine::GetInstance();
+    auto input = engine.input.get();
+
+    // Check controller input
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+
+        // Left analog stick horizontal axis (for movement)
+        Sint16 axisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+
+        // Define a dead zone for the analog stick
+        const int JOYSTICK_DEAD_ZONE = 8000;
+
+        if (axisX < -JOYSTICK_DEAD_ZONE) {
+            // Movement proportional to stick tilt
+            float axisValue = abs(axisX) / 32768.0f; // Normalized between 0 and 1
+            velocity.x = -0.3f * 16 * axisValue;
+            facingRight = false;
+            isWalking = true;
+        }
+        else if (axisX > JOYSTICK_DEAD_ZONE) {
+            float axisValue = axisX / 32768.0f; // Normalized between 0 and 1
+            velocity.x = 0.3f * 16 * axisValue;
+            facingRight = true;
+            isWalking = true;
+        }
+
+        // D-pad buttons
+        if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
+            velocity.x = -0.3f * 16;
+            facingRight = false;
+            isWalking = true;
+        }
+        if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
+            velocity.x = 0.3f * 16;
+            facingRight = true;
+            isWalking = true;
+        }
+    }
+
+    // Check keyboard input (maintain compatibility)
+    if (input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         velocity.x = -0.3f * 16;
         facingRight = false;
         isWalking = true;
     }
-
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+    if (input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         velocity.x = 0.3f * 16;
         facingRight = true;
         isWalking = true;
@@ -441,11 +464,24 @@ void Player::HandleMovement(b2Vec2& velocity) {
         velocity.y = verticalVelocity;
     }
 
-    // Vertical movement when W is pressed and god mode is active
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-        if (godMode == true) { 
-            velocity.y = -0.3 * 16;
+    // Vertical movement when W is held or up is pressed on the controller and godMode is active
+    bool upPressed = false;
+
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // Check D-pad up button
+        upPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
+
+        // Check analog stick (if not triggered by D-pad)
+        if (!upPressed) {
+            Sint16 axisY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
+            const int JOYSTICK_DEAD_ZONE = 8000;
+            upPressed = (axisY < -JOYSTICK_DEAD_ZONE);
         }
+    }
+
+    if ((input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || upPressed) && godMode) {
+        velocity.y = -0.3f * 16;
     }
 }
 
@@ -459,18 +495,29 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
             dashCooldown = 0.0f;
         }
     }
-
     bool isOnGround = !isJumping;
+    auto& engine = Engine::GetInstance();
+    bool dashButtonPressed = false;
 
-    
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN &&
-        canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
+    // Check controller input for dash (R1 button)
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // R1 is SDL_CONTROLLER_BUTTON_RIGHTSHOULDER
+        if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+            dashButtonPressed = true;
+        }
+    }
 
+    // Maintain keyboard compatibility (LSHIFT key)
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN) {
+        dashButtonPressed = true;
+    }
+
+    // Dash activation
+    if (dashButtonPressed && canDash && Dash && !isAttacking && !isWhipAttacking && !isDashing) {
         // Check if we still have dashes available
         if (totalDashesAvailable > 0) {
-            
             totalDashesAvailable--; // Reduce the number of available dashes
-
             dash.Reset();
             currentAnimation = &dash;
             texture = dashTexture;
@@ -483,7 +530,7 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
-    // dash recharge
+    // Dash recharge logic
     if (dashRechargeTimer > 0) {
         dashRechargeTimer -= dt;
         if (dashRechargeTimer <= 0.0f) {
@@ -493,12 +540,12 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
         }
     }
 
-    
+    // Start recharge if dashes are available
     if (totalDashesAvailable < maxTotalDashes && dashRechargeTimer <= 0.0f) {
         dashRechargeTimer = dashFullRechargeTime;
     }
 
-   
+    // Handle dash movement
     if (isDashing) {
         velocity.x = dashDirection * dashSpeed;
         dashFrameCount--;
@@ -508,13 +555,32 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
     }
 }
 
+
 void Player::HandleJump(float dt) {
     float currentVerticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
+    auto& engine = Engine::GetInstance();
+    bool jumpButtonPressed = false;
+
+    // Check controller input for jump (X button)
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // X button on the controller is SDL_CONTROLLER_BUTTON_X
+        if (engine.IsControllerConnected()) {
+            SDL_GameController* controller = engine.GetGameController();
+            // SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
+            if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
+                jumpButtonPressed = true;
+            }
+        }
+    }
+
+    // Maintain keyboard compatibility (SPACE key)
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+        jumpButtonPressed = true;
+    }
 
     // First jump when on ground
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN &&
-        !isJumping && !isFalling) {
-
+    if (jumpButtonPressed && !isJumping && !isFalling) {
         // Apply jump force immediately
         float jumpForce = 3.5f;
 
@@ -535,14 +601,12 @@ void Player::HandleJump(float dt) {
         texture = jumpTexture;
     }
     // Double jump when already in air and double jump is enabled
-    else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN &&
-        (isJumping || isFalling) && canDoubleJump && jumpCount < 2) {
-
+    else if (jumpButtonPressed && (isJumping || isFalling) && canDoubleJump && jumpCount < 2) {
         // Cancel current vertical velocity for a consistent second jump height
         pbodyUpper->body->SetLinearVelocity(b2Vec2(pbodyUpper->body->GetLinearVelocity().x, 0));
         pbodyLower->body->SetLinearVelocity(b2Vec2(pbodyLower->body->GetLinearVelocity().x, 0));
 
-        // Apply second jump force (can be different from first jump if desired)
+        // Apply second jump force (can be different from the first jump if desired)
         float doubleJumpForce = 3.0f;
 
         pbodyUpper->body->ApplyLinearImpulseToCenter(b2Vec2(0, -doubleJumpForce), true);
@@ -624,6 +688,7 @@ void Player::HandleJump(float dt) {
         }
     }
 }
+
 
 void Player::HandleSceneSwitching() {
     // Level switching controls
@@ -738,18 +803,14 @@ void Player::HandleDeath(float dt) {
     }
 }
 
-// Correct UpdateWhipAttack() to restart the animation correctly
 void Player::UpdateWhipAttack(float dt) {
-
     if (isHurt || isDying) {
         if (isWhipAttacking) {
             isWhipAttacking = false;
             if (whipAttackHitbox) {
-                
                 Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
                 whipAttackHitbox = nullptr;
             }
-           
             currentAnimation = &idle;
             idle.Reset();
         }
@@ -765,36 +826,51 @@ void Player::UpdateWhipAttack(float dt) {
         }
     }
 
+    auto& engine = Engine::GetInstance();
+    bool whipAttackButtonPressed = false;
+
+    // Check controller input for whip attack (R2 trigger)
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // R2 is SDL_CONTROLLER_AXIS_TRIGGERRIGHT, check if pressed
+        Sint16 rightTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+        // Consider it pressed when the trigger is over 1/4 of its range
+        const int TRIGGER_THRESHOLD = 8000;  // 1/4 of the maximum range (32768)
+        if (rightTrigger > TRIGGER_THRESHOLD) {
+            whipAttackButtonPressed = true;
+        }
+    }
+
+    // Maintain keyboard compatibility (K key)
+    if (engine.input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
+        whipAttackButtonPressed = true;
+    }
+
     // Initiate whip attack only when not dashing, melee attacking, or already whip attacking
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN &&
-        !isWhipAttacking && !isAttacking && !isDashing && canWhipAttack && WhipAttack && !isHurt) {
+    if (whipAttackButtonPressed && !isWhipAttacking && !isAttacking && !isDashing &&
+        canWhipAttack && WhipAttack && !isHurt) {
         // Start whip attack
-        Engine::GetInstance().audio.get()->PlayFx(whipFX);
+        engine.audio.get()->PlayFx(whipFX);
         isWhipAttacking = true;
         canWhipAttack = false;
         whipAttackCooldown = 0.7f;
-
         // Reset the animation instead of recreating it
         whipAttack.Reset();
-
         // Create whip attack hitbox
         int attackWidth = texW * 2.5;
         int attackHeight = texH / 2;
         b2Vec2 playerCenter = pbodyUpper->body->GetPosition();  // Use upper body for attacks
         int centerX = METERS_TO_PIXELS(playerCenter.x);
         int centerY = METERS_TO_PIXELS(playerCenter.y);
-
         // Calculate attack position based on facing direction
         int attackX = facingRight ? centerX + texW / 4 : centerX - texW / 4 - attackWidth / 2;
-        
         // Remove existing whip attack hitbox
         if (whipAttackHitbox) {
-            Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+            engine.physics.get()->DeletePhysBody(whipAttackHitbox);
             whipAttackHitbox = nullptr;
         }
-
         // Create new whip attack hitbox
-        whipAttackHitbox = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+        whipAttackHitbox = engine.physics.get()->CreateRectangleSensor(
             attackX, centerY, attackWidth, attackHeight, bodyType::DYNAMIC);
         whipAttackHitbox->ctype = ColliderType::PLAYER_WHIP_ATTACK;
         whipAttackHitbox->listener = this;
@@ -804,28 +880,25 @@ void Player::UpdateWhipAttack(float dt) {
     if (isWhipAttacking) {
         // Update animation
         whipAttack.Update();
-
         // Update hitbox position
         if (whipAttackHitbox) {
-            //int attackX = facingRight ? position.getX()  : position.getX() + 10;
             int attackX = (int)position.getX() + (facingRight ? 128 : -28);
             int attackY = position.getY() + 10;
             whipAttackHitbox->body->SetTransform({ PIXEL_TO_METERS(attackX), PIXEL_TO_METERS(attackY) }, 0);
         }
-
         // Check if animation finished
         if (whipAttack.HasFinished()) {
             isWhipAttacking = false;
             currentAnimation = &idle;  // Explicitly switch back to idle animation
             texture = idleTexture;
-
             if (whipAttackHitbox) {
-                Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                engine.physics.get()->DeletePhysBody(whipAttackHitbox);
                 whipAttackHitbox = nullptr;
             }
         }
     }
 }
+
 
 void Player::UpdateMeleeAttack(float dt) {
     if (isHurt || isDying) {
@@ -850,18 +923,34 @@ void Player::UpdateMeleeAttack(float dt) {
         }
     }
 
+    auto& engine = Engine::GetInstance();
+    bool attackButtonPressed = false;
+
+    // Check controller input for melee attack (X/Square button)
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // SDL_CONTROLLER_BUTTON_X corresponds to the left button (Square on PlayStation, X on Xbox)
+        if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_X)) {
+            attackButtonPressed = true;
+        }
+    }
+
+    // Maintain keyboard compatibility (J key)
+    if (engine.input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
+        attackButtonPressed = true;
+    }
+
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN &&
-        canAttack && !isAttacking && !isWhipAttacking && !isDashing && !isHurt) {
+    if (attackButtonPressed && canAttack && !isAttacking && !isWhipAttacking && !isDashing && !isHurt) {
 
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
 
         isAttacking = true;
-        canAttack = false;           
-        attackCooldown = 1000.0f;       
-        meleeAttack.Reset();          
+        canAttack = false;
+        attackCooldown = 500.0f;
+        meleeAttack.Reset();
 
-        // Calculate the size of the hitbox to fit the attack sprite.
+        // Calculate the size of the hitbox to fit the attack sprite
         int attackWidth = texW * 0.5f;
         int attackHeight = texH * 1.0f;
 
@@ -871,9 +960,9 @@ void Player::UpdateMeleeAttack(float dt) {
 
         int attackX = facingRight
             ? centerX + texW / 3 - attackWidth / -3  // right
-			: centerX - texW / 3 - attackWidth / 3;  //left
+            : centerX - texW / 3 - attackWidth / 3;  // left
 
-        int attackY = centerY + texH / 7; // Move hitbox down by half texture height
+        int attackY = centerY + texH / 7; // Move hitbox downward by part of the texture height
 
         if (attackHitbox) {
             Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
@@ -907,7 +996,7 @@ void Player::UpdateMeleeAttack(float dt) {
         }
 
         if (meleeAttack.HasFinished()) {
-            isAttacking = false;     
+            isAttacking = false;
             currentAnimation = &idle;
             idle.Reset();
 
@@ -915,7 +1004,6 @@ void Player::UpdateMeleeAttack(float dt) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
                 attackHitbox = nullptr;
             }
-            
         }
     }
 }
@@ -928,20 +1016,45 @@ void Player::HandleBallAttack(float dt) {
             ballCooldown = 3000.0f;
         }
     }
-    // need to add if(ballattackanimation.hasfinished) for ball shoot cooldown
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN && Engine::GetInstance().scene.get()->ballConfigNode && ballCounter > 0) {
+    auto& engine = Engine::GetInstance();
+    bool ballAttackButtonPressed = false;
+
+    // Check controller input for ball attack (L2 trigger)
+    if (engine.IsControllerConnected()) {
+        SDL_GameController* controller = engine.GetGameController();
+        // L2 is SDL_CONTROLLER_AXIS_TRIGGERLEFT, check if it's pressed
+        Sint16 leftTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+        // Consider pressed when the trigger is more than 1/4 pressed
+        const int TRIGGER_THRESHOLD = 8000;  // 1/4 of the max range (32768)
+
+        // Store previous trigger state to detect when it is newly pressed
+        static Sint16 previousLeftTrigger = 0;
+        if (leftTrigger > TRIGGER_THRESHOLD && previousLeftTrigger <= TRIGGER_THRESHOLD) {
+            ballAttackButtonPressed = true;
+        }
+        previousLeftTrigger = leftTrigger;
+    }
+
+    // Maintain keyboard compatibility (L key) - no changes
+    if (engine.input.get()->GetKey(SDL_SCANCODE_L) == KEY_DOWN) {
+        ballAttackButtonPressed = true;
+    }
+
+    // TODO: Add check for ball attack animation completion before allowing next shot
+    if (ballAttackButtonPressed && engine.scene.get()->ballConfigNode && ballCounter > 0) {
         ballCounter--;
-        Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
-        projectile->SetParameters(Engine::GetInstance().scene.get()->ballConfigNode);
+        Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
+        projectile->SetParameters(engine.scene.get()->ballConfigNode);
         projectile->Start();
-        Vector2D playerPosition = Engine::GetInstance().scene.get()->GetPlayerPosition();
-        //playerPosition.setY(playerPosition.getY() - 13);
+        Vector2D playerPosition = engine.scene.get()->GetPlayerPosition();
+        // Adjust horizontal position based on facing direction
         if (!facingRight) playerPosition.setX(playerPosition.getX() - 50);
         else playerPosition.setX(playerPosition.getX() + 20);
         projectile->SetPosition(playerPosition);
         projectile->SetDirection(facingRight);
     }
 }
+
 
 void Player::DrawPlayer() {
     // Store the original texture so we can properly reset it
@@ -1312,8 +1425,22 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::Ascensor() {
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN && TocandoAs == true)
-    {
+    bool useElevator = false;
+
+    // Original keyboard input
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+        useElevator = true;
+    }
+
+    // Add support for controller Circle button (B in SDL terminology)
+    if (Engine::GetInstance().IsControllerConnected()) {
+        SDL_GameController* controller = Engine::GetInstance().GetGameController();
+        if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+            useElevator = true;
+        }
+    }
+
+    if (useElevator && TocandoAs == true) {
         NeedSceneChange = true;
     }
 }
