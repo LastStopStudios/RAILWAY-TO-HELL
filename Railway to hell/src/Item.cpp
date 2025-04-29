@@ -97,6 +97,9 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (GetItemType() == "Dash ability") {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
+		if (GetItemType() == "Double jump") {
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+		}
 		if (GetItemType() == "Whip") {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
