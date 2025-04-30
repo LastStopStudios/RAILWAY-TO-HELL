@@ -33,6 +33,7 @@ bool Enemy::Start() {
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 	DeathValue = parameters.attribute("death").as_int(); 
+	type = parameters.attribute("type").as_int();
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));

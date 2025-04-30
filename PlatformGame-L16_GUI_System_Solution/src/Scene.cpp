@@ -202,6 +202,7 @@ void Scene::LoadState() {
 		// for (auto& enemy : enemyList) 
         for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
             // read XML
+			int xmlType = enemyNode.attribute("type").as_int();
             int xmlDeath = enemyNode.attribute("death").as_int();
             int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
             Vector2D pos(
@@ -211,20 +212,22 @@ void Scene::LoadState() {
 
             // case 1 update position if: death=0 & savedDeath=0 
             if (xmlDeath == 0 && xmlSavedDeath == 0) {
-                if (i < enemyList.size()) {
-                    enemyList[i]->SetPosition(pos);
-                    enemyList[i]->SetAliveInXML(); 
-					enemyList[i]->SetEnabled(true);;
-                    i++;
-                }
+				for (i; i < enemyList.size(); ++i) {
+					if (enemyList[i]->GetType() == xmlType) {
+						enemyList[i]->SetPosition(pos);
+						enemyList[i]->SetAliveInXML();
+						enemyList[i]->SetEnabled(true);;
+					}
+				}
             }
             // case 2 create enemy if: death=0 & savedDeath=1 
             else if (xmlDeath == 1 && xmlSavedDeath == 0) {
-				if (i < enemyList.size()) {
-					enemyList[i]->SetPosition(pos);
-					enemyList[i]->SetAliveInXML();
-					enemyList[i]->SetEnabled(true);;
-					i++;
+				for (i; i < enemyList.size(); ++i) {
+					if (enemyList[i]->GetType() == xmlType) {
+						enemyList[i]->SetPosition(pos);
+						enemyList[i]->SetAliveInXML();
+						enemyList[i]->SetEnabled(true);;
+					}
 				}
             }
 				

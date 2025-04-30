@@ -49,12 +49,15 @@ public:
 
 	bool IsEnabled() const { return isEnabled; }
 
+	int GetType() { return type; }
+
 public:
 	bool pendingDisable = false;
 	int DeathValue = 0;
 	int SavedDeathValue = 0;
 private:
 
+	int type;
 	bool isEnabled = true;
 	SDL_Texture* texture;
 	const char* texturePath;

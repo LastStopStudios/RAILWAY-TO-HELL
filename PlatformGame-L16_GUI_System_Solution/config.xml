@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="MapTemplate.tmx" />
 		<entities>
-			<player x="751" y="687" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
+			<player x="593" y="687" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
 				<animations>
 					<idle loop="true" speed="0.5">
 						<frame x="0" y="0" w="32" h="32" />
@@ -42,7 +42,7 @@
 				</item>
 			</items>
 			<enemies>
-				<enemy name="badguy" death="0" savedDeath="0" x="640" y="671" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true">
+				<enemy name="badguy" death="0" savedDeath="0" x="640" y="671" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />
@@ -57,7 +57,7 @@
 						</idle>
 					</animations>
 				</enemy>
-				<enemy name="badguy2" death="0" savedDeath="0" x="448" y="671" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true">
+				<enemy name="badguy2" death="0" savedDeath="0" x="448" y="671" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="2">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />
@@ -75,8 +75,8 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="01" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "/>
-			<dialog ID="02" TEXT="Tarta de queso con champiñones"/>
+			<dialog ID="01" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
+			<dialog ID="02" TEXT="Tarta de queso con champiñones" />
 		</dialogues>
 	</scene>
 	<scene2>
@@ -140,8 +140,8 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="02" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. "/>
-			<dialog ID="01" TEXT="Tarta de queso con champiñones"/>
+			<dialog ID="02" TEXT="Guerra. La guerra nunca cambia. Cuando el fuego atómico consumió la tierra, aquellos que sobrevivieron lo hicieron en grandes bóvedas subterráneas. Cuando se abrieron, sus habitantes se trasladaron a través de las ruinas del viejo mundo para construir nuevas sociedades, establecer nuevas aldeas, formar tribus. A medida que pasaban las décadas, lo que había sido el suroeste de Estados Unidos se unió bajo la bandera de la Nueva República de California, dedicada a los valores del viejo mundo de la democracia y el estado de derecho. " />
+			<dialog ID="01" TEXT="Tarta de queso con champiñones" />
 		</dialogues>
 	</scene2>
 </config>
