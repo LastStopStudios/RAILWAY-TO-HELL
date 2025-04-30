@@ -127,7 +127,8 @@ void Mapa::LoadMap(){
 	//Scene on screen
 	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //bring out the current scene
 	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);//pass the scene from where to get the dialogues
-
+	//player posiion
+	Vector2D playerpos = Engine::GetInstance().scene->GetPlayerPosition();
 	//Map properties
 	posx = 200;//player position X
 	posy = 200;//player positon Y
@@ -136,6 +137,15 @@ void Mapa::LoadMap(){
 	for (const auto& mapardo : mapardo) { // Iterate through all the maps
 		if (mapardo.escena == scene) { // Check what scene is currently on screen
 			mapaC = mapardo.mapardo; //map to load
+		}
+	}
+
+	for (const auto& zonaspj : zonaspj) { // Iterate through all the maps
+		if (zonaspj.escena == scene) { // Check what scene is currently on screen
+			if(zonaspj.x1 < playerpos.getX() && playerpos.getX() > zonaspj.x2 && playerpos.getY() < zonaspj.y1 && playerpos.getY() > zonaspj.y2) {
+				posx = zonaspj.playerx;
+				posy = zonaspj.playery;
+			}
 		}
 	}
 	
