@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "SDL2/SDL_ttf.h"
 #include "Player.h"
+#include "Mapa.h"
 
 
 DialogoM::DialogoM() : Module()
@@ -80,6 +81,7 @@ void DialogoM::Texto(const std::string& Dialogo) {
 	if (showText) {
 		lastDialogID = Dialogo;  // Guardar el ID del diálogo actual
 		Engine::GetInstance().scene->DialogoOn(); // stop entities
+		Engine::GetInstance().mapa->DialogoOn();//stop map from showing
 		XMLToVariable(Dialogo); // Load corresponding text
 		GenerateTextTexture(); // Generate the initial texture
 	}
@@ -203,6 +205,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 	if (alltext.length() == displayText.length() && closePressed && Skip == false) {
 		showText = !showText;  // Hide the text
 		Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
+		Engine::GetInstance().mapa->DialogoOff(); // Return control to Map
 
 		// If the dialogue was the boss fight dialogue (ID "1")
 		if (lastDialogID == "1") {

@@ -33,43 +33,45 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	struct MapaQueCargar {
-		std::string escena;
-		std::string mapardo;
-	};
-	//list of scenes with their id
-	std::vector<MapaQueCargar> mapardo = {
-		//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
-		{"scene","Assets/Textures/mapa/Mapa.png"},//map for scene
-		{"scene1","Assets/Textures/mapa/Mapa.png"},//map for scene 1
-		{"scene2","Assets/Textures/mapa/Mapa.png"},//map for scene 2
-		{"scene3","Assets/Textures/mapa/Mapa.png"},//map for scene 3
-		{"scene4","Assets/Textures/mapa/Mapa.png"},//map for scene 4
-		{"scene5","Assets/Textures/mapa/Mapa.png"},//map for scene 5
-		{"scene6","Assets/Textures/mapa/Mapa.png"},//map for scene 5
-		{"scene7","Assets/Textures/mapa/Mapa.png"},//map for scene 8
-		{"scene8","Assets/Textures/mapa/Mapa.png"},//map for scene 9
-		{"scene9","Assets/Textures/mapa/Mapa.png"},//map for scene 10
-		{"scene10","Assets/Textures/mapa/Mapa.png"}//map for scene 11
-	};
-
+	//error control
+	void DialogoOn();
+	void DialogoOff();
+	//Player on map
 	struct ZonasPj {
 		std::string escena;
-		int x1;// firts X of the zone
-		int x2; // second X of the zone
-		int y1; // first Y of the zone
-		int y2; //second Y of the zone
-		int playerx;//Player icon X position
-		int playery;//Player icon Y position
+		float x1;// firts X of the zone smaller than player position
+		float x2; // second X of the zone bigger than player position
+		float y1; // first Y of the zone smaller than player position
+		float y2; //second Y of the zone bigger than player position
+		float playerx;//Player's icon X position
+		float playery;//Player's icon Y position
 	};
 	//list of scenes with their id
 	std::vector<ZonasPj> zonaspj = {
 		//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
-		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the map
-		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 2 of the map
-		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 3 of the map
-		{"scene",0, 2000,  0, 2000, 200, 200},//Zone 4 of the map
-		{"scene",0, 2000,  0, 2000, 200, 200},//Zone 5 of the map
+		{"scene", 0, 2506.67, 0, 2320.0, 200, 200},//Zone 1 of the scene
+		{"scene", 2530.67, 3827.00, 10.00, 2317.33, 400, 200},//Zone 2 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 3 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 4 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 5 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 6 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 7 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 8 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 9 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 10 of the scene
+		{"scene", 0, 2000, 0, 2000, 200, 200},//Zone 11 of the scene
+		{"scene2", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 2
+		{"scene2", 0, 2000, 0, 2000, 200, 200},//Zone 2 of the scene 2
+		{"scene3", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 3
+		{"scene3", 0, 2000, 0, 2000, 200, 200},//Zone 2 of the scene 3
+		{"scene4", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 4
+		{"scene5", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 5
+		{"scene6", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 6
+		{"scene7", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 7
+		{"scene8", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 8
+		{"scene9", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 9
+		{"scene10", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 10
+		{"scene11", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 11
 	};
 
 private:
@@ -79,6 +81,7 @@ private:
 
 public:
 	bool Mostrar;
+	bool dialogoOn = false;
 
 private:
 	//Textures
@@ -88,11 +91,10 @@ private:
 	SDL_Texture* cobertura = nullptr;//Black texture
 
 	std::string scene = "";//what scene is now loading
-	std::string mapaC = "";//map to show
 	std::string pjposition = "";//what scene is now loading
-	std::string Zona;//zone of the map where the player is
+	std::string Zona = "";//zone of the map where the player is
 
-	int posx, posy;// playerposition
+	float posx, posy;// playerposition
 	int w, h;// screen size
 	
 
