@@ -35,6 +35,7 @@ bool Boss::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
+	enemyID = parameters.attribute("name").as_string();
     ref = parameters.attribute("ID").as_string();
 
     //Load animations
@@ -415,11 +416,30 @@ void Boss::SetDeathInXML()
         return;
     }
 
-    pugi::xml_node bossNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for boss in the XML");
@@ -446,11 +466,30 @@ void Boss::SetAliveInXML()
         return;
     }
 
-    pugi::xml_node bossNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for boss in the XML");
@@ -477,11 +516,30 @@ void Boss::SetSavedDeathToDeathInXML()
         return;
     }
 
-    pugi::xml_node bossNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for boss in the XML");
@@ -509,14 +567,33 @@ void Boss::SetSavedDeathToAliveInXML()
         return;
     }
 
-    pugi::xml_node bossNode = doc.child("config")
-        .child("scene")
-        .child("entities")
-        .child("enemies")
-        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
-        LOG("Could not find the node for boss in the XML");
+        LOG("Could not find the node for item in the XML");
         return;
     }
 

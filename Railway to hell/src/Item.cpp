@@ -29,6 +29,8 @@ bool Item::Start() {
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 	itemType = parameters.attribute("name").as_string();
+	ref = parameters.attribute("ref").as_string();
+	enemyID = parameters.attribute("name").as_string();
 
 
 	//Load animations
@@ -68,6 +70,14 @@ bool Item::Update(float dt)
 		}
 	}
 
+    if (!IsEnabled()) return true;
+
+    if (pendingDisable) {
+        SetEnabled(false);
+        pendingDisable = false;
+        SetDeathInXML();
+    }
+
 	//Add a physics to an item - update the position of the object from the physics.  
 	if (pbody == nullptr) {
 		LOG("Enemy pbody is null!");
@@ -85,6 +95,214 @@ bool Item::Update(float dt)
 	return true;
 }
 
+void Item::SetDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node itemNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+    if (!itemNode) {
+        LOG("Could not find the node for item in the XML");
+        return;
+    }
+
+    itemNode.attribute("death").set_value(1); // 1 item is picked
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for item");
+    }
+    DeathValue = 1;
+}
+
+void Item::SetAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for item in the XML");
+		return;
+	}
+
+    itemNode.attribute("death").set_value(0); // 0 items is not picked
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for item");
+    }
+    DeathValue = 0;
+}
+
+void Item::SetSavedDeathToDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for item in the XML");
+		return;
+	}
+
+    itemNode.attribute("savedDeath").set_value(1); // 1 item is picked
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for item");
+    }
+
+    SavedDeathValue = 1;
+}
+
+void Item::SetSavedDeathToAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for item in the XML");
+		return;
+	}
+
+    itemNode.attribute("savedDeath").set_value(0); // 0 item is not picked
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for item");
+    }
+
+    SavedDeathValue = 0;
+}
+
+void Item::SetEnabled(bool active) {
+    isEnabled = active;
+    pbody->body->SetEnabled(active);
+    pbody->body->SetAwake(active);
+}
+
 void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 	if (physA->ctype == ColliderType::PLAYER_ATTACK && physB->ctype == ColliderType::ENEMY) {
 		// Additional enemy hit logic can go here
@@ -95,22 +313,28 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLAYER: {
 		if (GetItemType() == "Dash ability") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Double jump") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Whip") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Door key") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Remember1") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		if (GetItemType() == "Ball") {
-			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            pendingDisable = true;
+			//Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		break;
 	}
@@ -128,6 +352,12 @@ void Item::SetPosition(Vector2D pos) {
 	pos.setY(pos.getY() + texH / 2);
 	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
 	pbody->body->SetTransform(bodyPos, 0);
+}
+
+Vector2D Item::GetPosition() {
+	b2Vec2 bodyPos = pbody->body->GetTransform().p;
+	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+	return pos;
 }
 
 bool Item::CleanUp()

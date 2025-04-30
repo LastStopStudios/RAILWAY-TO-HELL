@@ -312,6 +312,11 @@ bool Scene::CleanUp()
 		introTextoTexture = nullptr;
 	}
 
+	for (auto& item : itemList) {
+		item->SetAliveInXML();
+		item->SetSavedDeathToAliveInXML();
+	}
+
 	for (auto& boss : bossList) {
 
 		boss->SetAliveInXML();
@@ -359,13 +364,53 @@ void Scene::LoadState() {
 	player->SetPosition(playerPos);
 
 	//enemies
+	pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+	if (itemsNode) {
+		// for (auto& enemy : enemyList) 
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			// read XML
+			std::string xmlRef = itemNode.attribute("ref").as_string();
+			int xmlDeath = itemNode.attribute("death").as_int();
+			int xmlSavedDeath = itemNode.attribute("savedDeath").as_int();
+			Vector2D pos(
+				itemNode.attribute("x").as_int(),
+				itemNode.attribute("y").as_int()
+			);
+
+			// case 1 update position if: death=0 & savedDeath=0 
+			if (xmlDeath == 0 && xmlSavedDeath == 0) {
+				for (int i = 0; i < itemList.size(); ++i) {
+					if (itemList[i]->GetRef() == xmlRef) {
+						itemList[i]->SetPosition(pos);
+						//itemList[i]->SetAliveInXML();
+						itemList[i]->SetEnabled(true);;
+					}
+				}
+			}
+			// case 2 create enemy if: death=0 & savedDeath=1 
+			else if (xmlDeath == 1 && xmlSavedDeath == 0) {
+				for (int i = 0; i < itemList.size(); ++i) {
+					if (itemList[i]->GetRef() == xmlRef) {
+						itemList[i]->SetPosition(pos);
+						itemList[i]->SetAliveInXML();
+						itemList[i]->SetEnabled(true);;
+					}
+				}
+			}
+
+			// case 3 do nothing if: death=1 & savedDeath=1
+		}
+	}
+
+
+
+	//enemies
 	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
 	if (enemiesNode) {
-		int i = 0;
 		// for (auto& enemy : enemyList) 
 		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
 			// read XML
-			std::string xmlRef = enemyNode.attribute("ID").as_string();
+			std::string xmlRef = enemyNode.attribute("ref").as_string();
 			int xmlDeath = enemyNode.attribute("death").as_int();
 			int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
 			Vector2D pos(
@@ -375,17 +420,17 @@ void Scene::LoadState() {
 
 			// case 1 update position if: death=0 & savedDeath=0 
 			if (xmlDeath == 0 && xmlSavedDeath == 0) {
-				for (i; i < bossList.size(); ++i) {
+				for (int i = 0; i < bossList.size(); ++i) {
 					if (bossList[i]->GetRef() == xmlRef) {
 						bossList[i]->SetPosition(pos);
-						bossList[i]->SetAliveInXML();
+						//bossList[i]->SetAliveInXML();
 						bossList[i]->SetEnabled(true);;
 					}
 				}
 			}
 			// case 2 create enemy if: death=0 & savedDeath=1 
 			else if (xmlDeath == 1 && xmlSavedDeath == 0) {
-				for (i; i < bossList.size(); ++i) {
+				for (int i = 0; i < bossList.size(); ++i) {
 					if (bossList[i]->GetRef() == xmlRef) {
 						bossList[i]->SetPosition(pos);
 						bossList[i]->SetAliveInXML();
@@ -447,6 +492,24 @@ void Scene::SaveState() {
 	//Player position
 	sceneNode.child("entities").child("player").attribute("x").set_value(player->GetPosition().getX());
 	sceneNode.child("entities").child("player").attribute("y").set_value(player->GetPosition().getY());
+
+	//items
+	pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+	if (!itemList.empty()) {
+		int i = 0;
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			if (i < itemList.size()) {
+				std::string enemyID = itemNode.attribute("name").as_string();
+				if (itemList[i]->DeathValue == 0) {
+					itemNode.attribute("x").set_value(itemList[i]->GetPosition().getX());
+					itemNode.attribute("y").set_value(itemList[i]->GetPosition().getY());
+				}
+				else itemNode.attribute("savedDeath").set_value(1);
+				i++;
+			}
+
+		}
+	}
 
 	//enemies
 	pugi::xml_node bossesNode = sceneNode.child("entities").child("enemies");

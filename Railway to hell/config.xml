@@ -143,7 +143,7 @@
 				</projectile>
 			</projectiles>
 			<items>
-				<item name="Whip" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
+				<item name="Whip" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -159,7 +159,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2">
+				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -172,15 +172,14 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Double jump" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2">
+				<item name="Double jump" death="0" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
 						</idle>
-
 					</animations>
 				</item>
-				<item name="Remember1" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
+				<item name="Remember1" death="0" savedDeath="0" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -195,7 +194,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Door key" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1">
+				<item name="Door key" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Key.png" gravity="true" ID="1" ref="doorKey_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -211,7 +210,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1">
+				<item name="Dash ability" death="0" savedDeath="0" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1" ref="dash_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3156,7 +3155,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2">
+				<item name="Whip" death="0" savedDeath="0" x="250" y="692" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
