@@ -41,11 +41,39 @@ public:
 
 	void TriggerBossDialog();
 
+	// Load & save 
+
+	void SetDeathInXML();
+
+	void SetAliveInXML();
+
+	void SetSavedDeathToDeathInXML(); // at the moment its not being used
+
+	void SetSavedDeathToAliveInXML();
+
+	void SetEnabled(bool active);
+
+	bool IsEnabled() const { return isEnabled; }
+
+	std::string GetRef() { return ref; }
+
 public:
-	
+
+	// Load & save 
+	bool pendingDisable = false;
+	int DeathValue = 0;
+	int SavedDeathValue = 0;
+
+	// death
 	int a = 0;
 	int kill = 1;
 private:
+	// Load & save
+	std::string enemyID;
+	std::string ref;
+	bool isEnabled = true;
+
+	// Boss logic
 	float initialWalkTimer = 0.0f;
 	bool initialWalkComplete = false;
 	const float initialWalkDuration = 4.0f; // duration in seconds

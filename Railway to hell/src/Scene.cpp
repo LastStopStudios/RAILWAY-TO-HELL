@@ -311,6 +311,14 @@ bool Scene::CleanUp()
 		Engine::GetInstance().textures->UnLoad(introTextoTexture);
 		introTextoTexture = nullptr;
 	}
+
+	for (auto& boss : bossList) {
+
+		boss->SetAliveInXML();
+		boss->SetSavedDeathToAliveInXML();
+
+	}
+
 	return true;
 }
 
@@ -326,23 +334,69 @@ void Scene::LoadState() {
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
-	if(result == NULL)
+	if (result == NULL)
 	{
 		LOG("Could not load file. Pugi error: %s", result.description());
 		return;
 	}
+	pugi::xml_node sceneNode;
 
-	pugi::xml_node sceneNode = loadFile.child("config").child("scene");
-
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	if (currentScene == 1) {
+		sceneNode = loadFile.child("config").child("scene");
+	}
+	if (currentScene == 2) {
+		sceneNode = loadFile.child("config").child("scene2");
+	}
+	if (currentScene == 3) {
+		sceneNode = loadFile.child("config").child("scene3");
+	}
 	//Read XML and restore information
 
 	//Player position
 	Vector2D playerPos = Vector2D(sceneNode.child("entities").child("player").attribute("x").as_int(),
-								  sceneNode.child("entities").child("player").attribute("y").as_int());
+		sceneNode.child("entities").child("player").attribute("y").as_int());
 	player->SetPosition(playerPos);
 
 	//enemies
-	// ...
+	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+	if (enemiesNode) {
+		int i = 0;
+		// for (auto& enemy : enemyList) 
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			// read XML
+			std::string xmlRef = enemyNode.attribute("ID").as_string();
+			int xmlDeath = enemyNode.attribute("death").as_int();
+			int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
+			Vector2D pos(
+				enemyNode.attribute("x").as_int(),
+				enemyNode.attribute("y").as_int()
+			);
+
+			// case 1 update position if: death=0 & savedDeath=0 
+			if (xmlDeath == 0 && xmlSavedDeath == 0) {
+				for (i; i < bossList.size(); ++i) {
+					if (bossList[i]->GetRef() == xmlRef) {
+						bossList[i]->SetPosition(pos);
+						bossList[i]->SetAliveInXML();
+						bossList[i]->SetEnabled(true);;
+					}
+				}
+			}
+			// case 2 create enemy if: death=0 & savedDeath=1 
+			else if (xmlDeath == 1 && xmlSavedDeath == 0) {
+				for (i; i < bossList.size(); ++i) {
+					if (bossList[i]->GetRef() == xmlRef) {
+						bossList[i]->SetPosition(pos);
+						bossList[i]->SetAliveInXML();
+						bossList[i]->SetEnabled(true);;
+					}
+				}
+			}
+
+			// case 3 do nothing if: death=1 & savedDeath=1
+		}
+	}
 
 }
 
@@ -375,7 +429,18 @@ void Scene::SaveState() {
 		return;
 	}
 
-	pugi::xml_node sceneNode = loadFile.child("config").child("scene");
+	pugi::xml_node sceneNode;
+
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	if (currentScene == 1) {
+		sceneNode = loadFile.child("config").child("scene");
+	}
+	if (currentScene == 2) {
+		sceneNode = loadFile.child("config").child("scene2");
+	}
+	if (currentScene == 3) {
+		sceneNode = loadFile.child("config").child("scene3");
+	}
 
 	//Save info to XML 
 
@@ -384,7 +449,22 @@ void Scene::SaveState() {
 	sceneNode.child("entities").child("player").attribute("y").set_value(player->GetPosition().getY());
 
 	//enemies
-	// ...
+	pugi::xml_node bossesNode = sceneNode.child("entities").child("enemies");
+	if (!bossList.empty()) {
+		int i = 0;
+		for (pugi::xml_node bossNode : bossesNode.children("enemy")) {
+			if (i < bossList.size()) {
+				std::string enemyID = bossNode.attribute("name").as_string();
+				if (bossList[i]->DeathValue == 0) {
+					bossNode.attribute("x").set_value(bossList[i]->GetPosition().getX());
+					bossNode.attribute("y").set_value(bossList[i]->GetPosition().getY());
+				}
+				else bossNode.attribute("savedDeath").set_value(1);
+				i++;
+			}
+
+		}
+	}
 
 	//Saves the modifications to the XML 
 	loadFile.save_file("config.xml");

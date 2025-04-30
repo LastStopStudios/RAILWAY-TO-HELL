@@ -35,6 +35,7 @@ bool Boss::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
+    ref = parameters.attribute("ID").as_string();
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -137,9 +138,8 @@ void Boss::TriggerBossDialog() {
 
 bool Boss::Update(float dt)
 {
-    if (pendingToDelete) {
-        return true;
-    }
+    if (!IsEnabled()) return true;
+
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
@@ -215,9 +215,10 @@ bool Boss::Update(float dt)
             item->Start();
             Vector2D pos(position.getX() + texW, position.getY());
             item->SetPosition(pos);
-            deathTimer += dt;
-            if (deathTimer >= deathDelay) {
-                pendingToDelete = true;
+            if (pendingDisable) {
+                SetEnabled(false);
+                pendingDisable = false;
+                SetDeathInXML();
             }
         }
 
@@ -405,6 +406,140 @@ void Boss::Matar() {//eliminating the enemy once dead
     }
 }
 
+void Boss::SetDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode = doc.child("config")
+        .child("scene")
+        .child("entities")
+        .child("enemies")
+        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("death").set_value(1); // 1 enemy is death
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+    DeathValue = 1;
+}
+
+void Boss::SetAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode = doc.child("config")
+        .child("scene")
+        .child("entities")
+        .child("enemies")
+        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("death").set_value(0); // 0 enemy is alive
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+    DeathValue = 0;
+}
+
+void Boss::SetSavedDeathToDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode = doc.child("config")
+        .child("scene")
+        .child("entities")
+        .child("enemies")
+        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("savedDeath").set_value(1); // 1 enemy is death
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+
+    SavedDeathValue = 1;
+}
+
+void Boss::SetSavedDeathToAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode = doc.child("config")
+        .child("scene")
+        .child("entities")
+        .child("enemies")
+        .find_child_by_attribute("enemy", "name", enemyID.c_str());
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("savedDeath").set_value(0); // 0 enemy is alive
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+
+    SavedDeathValue = 0;
+}
+
+void Boss::SetEnabled(bool active) {
+    isEnabled = active;
+    pbodyUpper->body->SetEnabled(active);
+    pbodyUpper->body->SetAwake(active);
+    pbodyLower->body->SetEnabled(active);
+    pbodyLower->body->SetEnabled(active);
+}
+
 bool Boss::CleanUp()
 {
     // First delete all physics bodies
@@ -484,7 +619,6 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 ishurt = true;
                 currentAnimation = &hurt;
                 hurt.Reset();
-
                 // Add cleanup when getting hurt
                 if (isAttacking) {
                     isAttacking = false;
@@ -495,6 +629,8 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 }
             }
             else if (lives <= 0 && !isDying) {
+
+                pendingDisable = true;
                 // Same cleanup for death case
                 if (isAttacking) {
                     isAttacking = false;
@@ -527,6 +663,9 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 hurt.Reset();
             }
             else if (lives <= 0 && !isDead) {
+
+                pendingDisable = true;
+
                 isDead = true;
                 currentAnimation = &die;
                 a = 1;
