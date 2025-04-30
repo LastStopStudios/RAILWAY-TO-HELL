@@ -44,6 +44,16 @@ bool Mapa::PreUpdate()
 // Called each loop iteration
 bool Mapa::Update(float dt) {
 
+	if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+	{
+		return true;
+	}
+
+	if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
+		Engine::GetInstance().scene->ResetSkipInput();
+		return true;
+	}
+
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_M) == KEY_DOWN){
 		Mostrar = !Mostrar;
 		LoadMap();
@@ -103,10 +113,12 @@ bool Mapa::CleanUp()
 void Mapa::ShowMap() {
 	SDL_Rect dstRect = { 0, 0, w, h }; //Position and scale of background and map texture
 	SDL_Rect dstRect2 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRect3 = { 500,200, 500, 500 }; //Position and scale of the black texture to covern unknown zones of the map
 
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);
+	SDL_RenderCopy(Engine::GetInstance().render->renderer, cobertura, nullptr, &dstRect3);
 }
 
 void Mapa::LoadMap(){
@@ -121,9 +133,9 @@ void Mapa::LoadMap(){
 	posy = 200;//player positon Y
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);//Screen size
 
-	for (const auto& mapardo : mapardo) { // Iterate through all scenes
-		if (mapardo.escena == scene) { // Check where the player needs to go
-			mapaC = mapardo.mapardo; // map to load
+	for (const auto& mapardo : mapardo) { // Iterate through all the maps
+		if (mapardo.escena == scene) { // Check what scene is currently on screen
+			mapaC = mapardo.mapardo; //map to load
 		}
 	}
 	
@@ -133,5 +145,6 @@ void Mapa::LoadMap(){
 	//Textures to load
 	fondo = Engine::GetInstance().textures->Load("Assets/Textures/mapa/MapBackground.png "); //Load texture for map background
 	mapa = Engine::GetInstance().textures->Load(mapaC.c_str()); //Load texture for map
-	pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png "); //Load texture for character
+	cobertura = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Cobertura.png"); //Load black texture to cover unknow parts of the map
+	pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 }
