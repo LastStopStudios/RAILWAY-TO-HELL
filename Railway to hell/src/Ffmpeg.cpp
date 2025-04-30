@@ -13,7 +13,9 @@ Ffmpeg::Ffmpeg(bool enabled) : Module()
 {
     name = "cutsceneplayer";
     audioIndex = -1;
+    streamIndex = -1;
     swr = nullptr;
+    currentVideoPath = "";
 }
 
 Ffmpeg::~Ffmpeg()
@@ -30,49 +32,146 @@ bool Ffmpeg::Awake()
 
 bool Ffmpeg::Start()
 {
-    // File path of the video to be played
-    const char* file = "Assets/Videos/test.mp4";
+    LOG("Loading CutscenePlayer");
 
-    // Allocate memory for the format context
-    formatContext = avformat_alloc_context();
-
-    // Open the input video file with FFMPEG
-    if (avformat_open_input(&formatContext, file, NULL, NULL) < 0) {
-        printf("Failed to open input file");
-        avformat_close_input(&formatContext);
-        avformat_free_context(formatContext);
-        return true;
-    }
-
-    // Find input stream information
-    if (avformat_find_stream_info(formatContext, NULL) < 0) {
-        printf("Failed to find input stream information");
-        avformat_close_input(&formatContext);
-        avformat_free_context(formatContext);
-        return true;
-    }
-
-    // Dump format information
-    av_dump_format(formatContext, 0, file, 0);
-
-    // Open codec context for video and audio streams
-    OpenCodecContext(&streamIndex);                     // Funcion para abrir audio y video
-
-    // Create SDL texture for rendering video frames
-    renderTexture = SDL_CreateTexture(Engine::GetInstance().render.get()->renderer, SDL_PIXELFORMAT_YV12,
-        SDL_TEXTUREACCESS_STREAMING, videoCodecContext->width, videoCodecContext->height);
-    if (!renderTexture) {
-        printf("Failed to create texture - %s\n", SDL_GetError());
-        return true;
-    }
-
-    // Set up SDL rectangle for video rendering
-    renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
+    // Inicializa variables pero no carga ningún video todavía
+    formatContext = nullptr;
+    videoCodecContext = nullptr;
+    audioCodecContext = nullptr;
+    renderTexture = nullptr;
 
     // Set the module state to running
     running = true;
     return true;
 }
+
+bool Ffmpeg::LoadVideo(const char* videoPath)
+{
+    // Si el video ya está cargado, no hacemos nada
+    if (currentVideoPath == videoPath && formatContext != nullptr) {
+        return false;  // Ya está cargado, éxito
+    }
+
+    // Cierra cualquier video abierto previamente
+    CloseCurrentVideo();
+
+    // Guarda la ruta actual
+    currentVideoPath = videoPath;
+
+    LOG("Loading video: %s", videoPath);
+
+    // Allocate memory for the format context
+    formatContext = avformat_alloc_context();
+
+    // Open the input video file with FFMPEG
+    if (avformat_open_input(&formatContext, videoPath, NULL, NULL) < 0) {
+        LOG("Failed to open input file: %s", videoPath);
+        avformat_close_input(&formatContext);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
+        return true;  // Error
+    }
+
+    // Find input stream information
+    if (avformat_find_stream_info(formatContext, NULL) < 0) {
+        LOG("Failed to find input stream information");
+        avformat_close_input(&formatContext);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
+        return true;  // Error
+    }
+
+    // Dump format information
+    av_dump_format(formatContext, 0, videoPath, 0);
+
+    // Open codec context for video and audio streams
+    if (OpenCodecContext(&streamIndex)) {
+        LOG("Failed to open codec contexts");
+        CloseCurrentVideo();
+        return true;  // Error
+    }
+
+    // Create SDL texture for rendering video frames
+    renderTexture = SDL_CreateTexture(Engine::GetInstance().render.get()->renderer, SDL_PIXELFORMAT_YV12,
+        SDL_TEXTUREACCESS_STREAMING, videoCodecContext->width, videoCodecContext->height);
+    if (!renderTexture) {
+        LOG("Failed to create texture - %s\n", SDL_GetError());
+        CloseCurrentVideo();
+        return true;  // Error
+    }
+
+    // Set up SDL rectangle for video rendering
+    renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
+
+    return false;  // Success
+}
+
+void Ffmpeg::CloseCurrentVideo()
+{
+    // Cierra audio
+    if (audioDevice != 0) {
+        SDL_CloseAudioDevice(audioDevice);
+        audioDevice = 0;
+    }
+
+    // Libera el resampler de audio si existe
+    if (swr) {
+        swr_free(&swr);
+        swr = nullptr;
+    }
+
+    // Libera el contexto de codec de video
+    if (videoCodecContext) {
+        avcodec_free_context(&videoCodecContext);
+        videoCodecContext = nullptr;
+    }
+
+    // Libera el contexto de codec de audio
+    if (audioCodecContext) {
+        avcodec_free_context(&audioCodecContext);
+        audioCodecContext = nullptr;
+    }
+
+    // Cierra y libera el formato
+    if (formatContext) {
+        avformat_close_input(&formatContext);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
+    }
+
+    // Destruye la textura
+    if (renderTexture) {
+        SDL_DestroyTexture(renderTexture);
+        renderTexture = nullptr;
+    }
+
+    // Limpia el buffer de audio
+    while (!audioBuffer.empty()) {
+        AVPacket pkt = audioBuffer.front();
+        av_packet_unref(&pkt);
+        audioBuffer.pop();
+    }
+
+    // Resetea los índices
+    streamIndex = -1;
+    audioIndex = -1;
+
+    // Limpia la ruta
+    currentVideoPath = "";
+}
+
+// Sobrecarga de ConvertPixels para usar con rutas
+bool Ffmpeg::ConvertPixels(const char* videoPath)
+{
+    // Cargar el video si no es el actual
+    if (LoadVideo(videoPath)) {
+        return true;  // Error al cargar el video
+    }
+
+    // Usa la versión original de ConvertPixels con los índices actualizados
+    return ConvertPixels(streamIndex, audioIndex);
+}
+
 bool Ffmpeg::OpenCodecContext(int* index)
 {
     // Find video stream in the file
@@ -338,6 +437,18 @@ void Ffmpeg::ProcessAudio()
 }
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
+    // Verificar si tenemos un formatContext válido
+    if (!formatContext || !videoCodecContext) {
+        LOG("No video loaded or invalid codec context. Load a video first.");
+        return true;  // Error
+    }
+
+    // Si el video actual es el default pero llamaron con índices diferentes, actualiza los índices
+    if (videoIndex != streamIndex || audioIndex != this->audioIndex) {
+        LOG("Warning: Called ConvertPixels with different indices than loaded video");
+        // Podríamos manejar este caso de diferentes formas, aquí usamos los índices proporcionados
+    }
+
     LOG("ConvertPixels called with videoIndex=%d, audioIndex=%d", videoIndex, audioIndex);
 
     // Master clock for synchronization
@@ -604,6 +715,8 @@ bool Ffmpeg::CleanUp()
     SDL_DestroyTexture(renderTexture);
     SDL_DestroyTexture(texture1);
     SDL_DestroyTexture(texture2);
+
+    CloseCurrentVideo();
 
     return true;
 }

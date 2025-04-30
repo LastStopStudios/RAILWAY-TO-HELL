@@ -197,11 +197,9 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
-
-		Engine::GetInstance().ffmpeg->ConvertPixels(
-			Engine::GetInstance().ffmpeg->streamIndex,
-			Engine::GetInstance().ffmpeg->audioIndex  // Cambia audioStreamIndex a audioIndex
-		);
+		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test6.mp4");
+		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test2.mp4");
+		currentState = SceneState::GAMEPLAY;
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)

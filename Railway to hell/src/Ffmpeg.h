@@ -44,6 +44,8 @@ public:
 	bool OpenAudioCodecContext(int index);
 	void ProcessAudioFrame(AVFrame* frame);
 	bool ConvertPixels(int videoIndex, int audioIndex);
+	bool ConvertPixels(const char* videoPath);
+	bool LoadVideo(const char* videoPath);
 	bool AllocImage(AVFrame* dstFrame);
 	void RenderCutscene();
 	void ProcessAudio();
@@ -72,5 +74,9 @@ public:
 	bool isHover2 = false;
 
 	std::queue<AVPacket> audioBuffer;
+
+private:
+	std::string currentVideoPath;
+	void CloseCurrentVideo();
 
 };
