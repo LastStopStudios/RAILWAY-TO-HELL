@@ -113,12 +113,41 @@ bool Mapa::CleanUp()
 void Mapa::ShowMap() {
 	SDL_Rect dstRect = { 0, 0, w, h }; //Position and scale of background and map texture
 	SDL_Rect dstRect2 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRect3 = { 500,200, 200, 200 }; //Position and scale of the black texture to covern unknown zones of the map
+	
 
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);//render map
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);//render character icon
-	//SDL_RenderCopy(Engine::GetInstance().render->renderer, cobertura, nullptr, &dstRect3);//render black rectangle do more to cover the map 
+	for (const auto& negro : negro)// Iterate through all the maps
+	{
+		if (!negro.visible) {
+			SDL_Rect dstRect3 = { negro.px, negro.py, negro.tmx, negro.tmy }; //Position and scale of the black texture to covern unknown zones of the map
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, cobertura, nullptr, &dstRect3);//render black rectangle do more to cover the map 
+		}
+	}
+	
+}
+
+void Mapa::CoverXML() {
+	pugi::xml_document loadFile;
+	pugi::xml_node sceneNode = loadFile.child("config");
+	i = 1;
+	for (i = 1; i < 2; i++)// Iterate through all the maps
+	{
+		LOG("Entro al for");
+		std::string escena = (i == 1) ? "scene" : "scene" + std::to_string(i);//pass the scene from where to get the dialogues
+		pugi::xml_node sceneNodes = sceneNode.child(escena.c_str()).child("visibility");
+
+		LOG("XML %d", sceneNodes.attribute("accessed").as_bool());
+		bool visible = sceneNodes.attribute("accessed").as_bool();	
+		for (size_t i = 0; i < negro.size(); ++i) {
+			if (negro[i].escena == escena) { // Check what scene is currently on screen
+				negro[i].visible = visible;
+
+			}
+		}
+	}
+	
 }
 
 void Mapa::LoadMap(){
@@ -146,6 +175,8 @@ void Mapa::LoadMap(){
 			}
 		}
 	}
+
+	CoverXML(); //needs fixing
 
 	//Textures to load
 	fondo = Engine::GetInstance().textures->Load("Assets/Textures/mapa/MapBackground.png "); //Load texture for map background

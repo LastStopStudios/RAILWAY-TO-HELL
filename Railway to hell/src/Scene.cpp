@@ -293,10 +293,9 @@ bool Scene::PostUpdate()
 	return ret;
 }
 
-void Scene::EntrarBoss() { BossBattle = true; LOG("Entra al Boss"); }
+void Scene::EntrarBoss() { BossBattle = true;}
 
-void Scene::SalirBoss() { BossBattle = false; LOG("Sale del Boss");
-}
+void Scene::SalirBoss() { BossBattle = false;}
 
 // Called before quitting
 bool Scene::CleanUp()

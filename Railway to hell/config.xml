@@ -16,6 +16,7 @@
 	</window>
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
+		<visibility accessed="true"/>
 		<entities>
 			<player x="2877" y="2048" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -2949,6 +2950,7 @@
 	</scene>
 	<scene2>
 		<map path="Assets/Maps/" name="IE1L1.tmx" />
+		<visibility accessed="false"/>
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3056,6 +3058,7 @@
 	</scene2>
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
+		<visibility accessed="false"/>
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>

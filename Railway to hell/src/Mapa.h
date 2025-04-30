@@ -36,6 +36,10 @@ public:
 	//error control
 	void DialogoOn();
 	void DialogoOff();
+
+	//XML
+	void CoverXML();
+
 	//Player on map
 	struct ZonasPj {
 		std::string escena;
@@ -74,6 +78,21 @@ public:
 		{"scene11", 0, 2000, 0, 2000, 200, 200},//Zone 1 of the scene 11
 	};
 
+	//black
+	struct Negro {
+		std::string escena;
+		float px;// firts X of the zone smaller than player position
+		float py; // second X of the zone bigger than player position
+		float tmx; // first Y of the zone smaller than player position
+		float tmy; //second Y of the zone bigger than player position
+		bool visible;
+	};
+
+	std::vector<Negro> negro = {
+		{"scene", 500, 200, 200, 200, true},
+		{"scene2", 1000, 500, 200, 200, false}
+	};
+
 private:
 	// Private methods
 	void ShowMap();
@@ -95,10 +114,7 @@ private:
 	std::string Zona = "";//zone of the map where the player is
 
 	float posx, posy;// playerposition
-	int w, h;// screen size
-	
-
-
+	int w, h, i = 1;// screen size
 
 };
 

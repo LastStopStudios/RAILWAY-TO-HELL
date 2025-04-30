@@ -86,7 +86,9 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         player->SetPosition(Vector2D(x, y));
         player->ResetDoorAndLeverStates();
     }
+    VisibilityScene(sceneNode);
     LoadEnemiesItems(sceneNode);
+    
 }
 
 void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
@@ -281,4 +283,16 @@ void SceneLoader::FadeOut(float speed, bool loadscene, int level, int x, int y) 
 
         SDL_Delay(10);   
     }
+}
+
+void SceneLoader::VisibilityScene(pugi::xml_node sceneNode) {//player goes to another scene
+
+    pugi::xml_node visible = sceneNode.child("visibility"); //search if the scene have been visited
+    if (!visible) {
+        return;
+    }
+    if (!visible.attribute("accessed").as_bool()) {// if it's not the firts time
+        visible.attribute("accessed").set_value(true); //scene have been visited
+    }
+   
 }
