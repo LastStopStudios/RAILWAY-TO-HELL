@@ -94,7 +94,9 @@
     <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mapa.cpp" />
+    <ClCompile Include="src\Mapa.cpp">
+      <Filter>Source Filles\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -202,7 +204,9 @@
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mapa.h" />
+    <ClInclude Include="src\Mapa.h">
+      <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">

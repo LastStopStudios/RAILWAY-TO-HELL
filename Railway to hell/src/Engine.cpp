@@ -16,6 +16,7 @@
 #include "DialogoM.h"
 #include "Mapa.h"
 #include "SDL2/SDL.h"
+#include "Ffmpeg.h"
 
 // Constructor
 Engine::Engine() {
@@ -45,6 +46,7 @@ Engine::Engine() {
     guiManager = std::make_shared<GuiManager>();
     dialogoM = std::make_shared<DialogoM>();
     mapa = std::make_shared<Mapa>();
+    ffmpeg = std::make_shared<Ffmpeg>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -59,7 +61,7 @@ Engine::Engine() {
 	AddModule(std::static_pointer_cast<Module>(guiManager));
     AddModule(std::static_pointer_cast<Module>(dialogoM));
     AddModule(std::static_pointer_cast<Module>(mapa));
-
+    AddModule(std::static_pointer_cast<Module>(ffmpeg));
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
 

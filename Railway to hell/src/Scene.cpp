@@ -18,6 +18,7 @@
 #include "DialogoM.h"
 #include "Volador.h"
 #include "Elevators.h"
+#include "Ffmpeg.h"
 
 Scene::Scene() : Module()
 {
@@ -143,6 +144,9 @@ bool Scene::Start()
 	Engine::GetInstance().render.get()->camera.x = 0;
 	Engine::GetInstance().render.get()->camera.y = 0;
 
+	Engine::GetInstance().ffmpeg->Awake();
+	Engine::GetInstance().ffmpeg->Start(); 
+
 	//Draw player
 	dibujar = false;
 
@@ -194,16 +198,10 @@ bool Scene::Update(float dt)
 		break;
 	case SceneState::TEXT_SCREEN:
 
-		if (!textMusicPlaying) {
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Nothing.ogg", 1.0f);
-			textMusicPlaying = true;
-			introMusicPlaying = false;
-			currentMusic = "text";
-			Engine::GetInstance().sceneLoader->FadeOut(2.5, false);// Animation speed (FadeOut)
-		}
-		if (textMusicPlaying) {
-			DrawCurrentScene();
-		}
+		Engine::GetInstance().ffmpeg->ConvertPixels(
+			Engine::GetInstance().ffmpeg->streamIndex,
+			Engine::GetInstance().ffmpeg->audioIndex  // Cambia audioStreamIndex a audioIndex
+		);
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
