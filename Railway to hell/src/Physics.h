@@ -36,6 +36,7 @@ enum class ColliderType {
 	DIALOGOS,
 	SENSOR,
 	ASCENSORES,
+	ABYSS,
 	ASCENSOR,
 	GIRO,
 	BOSS,

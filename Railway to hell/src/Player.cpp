@@ -1492,6 +1492,29 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
+    case ColliderType::ABYSS: 
+		touchingAbyss = true;
+        if (lives > 0 && !isDying) {
+            isHurt = true;
+            hurted = false;
+            lives--;
+            // Usar coordenadas absolutas simples sin cálculos complejos
+            float safeX = 500.0f;  // Ajusta estos valores según tu nivel
+            float safeY = 300.0f;
+
+            // Usar directamente la función de transformación del Box2D para evitar problemas
+            b2Vec2 safePosition = b2Vec2(PIXEL_TO_METERS(safeX), PIXEL_TO_METERS(safeY));
+            pbodyUpper->body->SetTransform(safePosition, 0);
+
+            // Posición del cuerpo inferior un poco más abajo
+            b2Vec2 lowerSafePosition = b2Vec2(PIXEL_TO_METERS(safeX), PIXEL_TO_METERS(safeY + texH / 3));
+            pbodyLower->body->SetTransform(lowerSafePosition, 0);
+
+            // Detener cualquier velocidad
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+        }
+		break;
     case ColliderType::UNKNOWN:
         break;
     }
@@ -1545,6 +1568,7 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
+
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         // If we're not in a jump or falling state, we might be starting to fall
@@ -1571,6 +1595,10 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DIALOGOS:
         physB->Salio = true;
         break;
+
+	case ColliderType::ABYSS:
+		touchingAbyss = false;
+		break;
     }
 }
 

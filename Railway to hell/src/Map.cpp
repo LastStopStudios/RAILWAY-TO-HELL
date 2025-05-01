@@ -230,7 +230,8 @@ bool Map::Load(std::string path, std::string fileName)
 		   {"Dialogos", 3},
 		   {"Ascensores", 4},
            {"Giro", 5},
-           {"Ice", 6}
+           {"Ice", 6},
+           { "Abyss", 7 }
         };
         float x = 0.0f;
         float y = 0.0f;
@@ -300,7 +301,11 @@ bool Map::Load(std::string path, std::string fileName)
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORMICE;
                     break;
-                
+				case 7: // Abyss (take away a life)
+					rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::ABYSS;
+                   
+					break;
                 default: // Platforms
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::PLATFORM;

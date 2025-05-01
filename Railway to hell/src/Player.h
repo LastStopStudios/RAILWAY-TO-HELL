@@ -236,5 +236,6 @@ private:
 	int ballCounter = 3; // Track how many balls does the player have left
 	float ballCooldown = 3000.0f; // Time until ball recharge
 
+	bool touchingAbyss = false; //if player touches the abyss, he hurt
 
 };
