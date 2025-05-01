@@ -130,6 +130,8 @@ void Mapa::ShowMap() {
 
 void Mapa::CoverXML() {
 	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
 	pugi::xml_node sceneNode = loadFile.child("config");
 	i = 1;
 	for (i = 1; i < 2; i++)// Iterate through all the maps
