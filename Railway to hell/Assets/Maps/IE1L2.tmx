@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="297">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="303">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -93779,7 +93779,6 @@
   </object>
  </objectgroup>
  <objectgroup id="12" name="Colisiones">
-  <object id="177" x="3168" y="225.576" width="32" height="734.667"/>
   <object id="281" x="639.727" y="223.606" width="32" height="734.667"/>
   <object id="180" x="1280" y="1152" width="1280" height="32"/>
   <object id="181" x="1280" y="1184" width="32" height="736"/>
@@ -93793,8 +93792,6 @@
   <object id="287" x="2083.33" y="231.333" width="158" height="149.879"/>
   <object id="288" x="2303.33" y="228.667" width="416.667" height="91.2121"/>
   <object id="289" x="2819.33" y="229.333" width="220.667" height="186.545"/>
-  <object id="290" x="2714.61" y="312.446" width="56.2219" height="144.847" rotation="315.297"/>
-  <object id="296" x="2280.22" y="274.84" width="56.2219" height="72.3019" rotation="59.5547"/>
   <object id="294" x="3074" y="228.667" width="93.3333" height="153.879"/>
   <object id="293" x="3040.67" y="228.667" width="32.6667" height="187.212"/>
   <object id="219" x="1312" y="1728" width="1216" height="192"/>
@@ -93813,6 +93810,10 @@
   <object id="247" x="2934.33" y="576.333" width="192" height="32"/>
   <object id="249" x="1696" y="832" width="320" height="96"/>
   <object id="261" x="2209" y="545" width="191" height="32"/>
+  <object id="297" x="2720" y="320" width="32" height="32"/>
+  <object id="298" x="2752" y="352" width="32" height="32"/>
+  <object id="299" x="2784" y="384" width="32" height="32"/>
+  <object id="302" x="2240" y="320" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="14" name="Sensores" visible="0">
   <object id="178" x="640" y="256" width="32" height="704">
