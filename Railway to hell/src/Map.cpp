@@ -231,7 +231,7 @@ bool Map::Load(std::string path, std::string fileName)
 		   {"Ascensores", 4},
            {"Giro", 5},
            {"Ice", 6},
-           { "Abyss", 7 }
+           { "Abyss", 7}
         };
         float x = 0.0f;
         float y = 0.0f;
