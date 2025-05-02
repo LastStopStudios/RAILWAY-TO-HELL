@@ -47,8 +47,8 @@ public:
 	{"DT2L1E2",3,700,600,true,false},
 	{"DT2L1E1",2,3082,720,true,false},
 	{"DE1L1T2",1,690,2137,true,false},
-	{"DE2L1BOSS1",3,1381,1573,true,true},
-	{"BOSS1DE2L1",3,2624,704,true,false},
+	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator fist floor first boss
+	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	};
 	//elevator control
 	bool TocandoAs = false;

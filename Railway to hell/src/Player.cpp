@@ -774,6 +774,10 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
         hasDied = false;
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
+        Engine::GetInstance().sceneLoader->LoadScene(4, 766, 429, false, false);
+        hasDied = false;
+    }
     // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
         DesbloquearSensor();
