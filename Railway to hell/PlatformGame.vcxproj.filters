@@ -94,7 +94,18 @@
     <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mapa.cpp" />
+    <ClCompile Include="src\Mapa.cpp">
+      <Filter>Source Filles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicPiece.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicPuzzle.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicLevers.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -202,7 +213,18 @@
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mapa.h" />
+    <ClInclude Include="src\Mapa.h">
+      <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicPiece.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicPuzzle.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicLevers.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">
@@ -236,6 +258,9 @@
     </Filter>
     <Filter Include="Source Filles\Engine\Entities">
       <UniqueIdentifier>{da4651a5-73b5-4f65-b4ff-a3a6cf752fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Game\Mosaic">
+      <UniqueIdentifier>{84a4253d-39c7-416d-9e51-91c5117b28bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
