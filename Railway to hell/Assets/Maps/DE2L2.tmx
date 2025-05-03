@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="306">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="307">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -93761,7 +93761,7 @@
   <object id="272" x="3168" y="544" width="32" height="160"/>
  </objectgroup>
  <objectgroup id="27" name="Dialogos" visible="0"/>
- <objectgroup id="12" name="Colisiones">
+ <objectgroup id="12" name="Colisiones" visible="0">
   <object id="202" x="672" y="160" width="2496" height="160"/>
   <object id="292" x="3008" y="544" width="160" height="96"/>
   <object id="299" x="1408" y="512" width="1120" height="32"/>
@@ -93772,5 +93772,11 @@
   <object id="304" x="2304" y="704" width="512" height="96"/>
   <object id="305" x="2112" y="736" width="192" height="96"/>
  </objectgroup>
- <objectgroup id="14" name="Sensores" visible="0"/>
+ <objectgroup id="14" name="Sensores" visible="0">
+  <object id="306" x="640" y="192" width="32" height="448">
+   <properties>
+    <property name="Sensor" value="DE2L2DT2L2"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

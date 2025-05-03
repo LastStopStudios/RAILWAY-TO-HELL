@@ -43,10 +43,30 @@ public:
 	//list of scenes with their id
 	std::vector<EscenaQueCargar> escenas = {
 	//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
-	{"DE2L1T2",1,10114,2122,true,false},
-	{"DT2L1E2",3,700,600,true,false},
-	{"DT2L1E1",2,3082,720,true,false},
-	{"DE1L1T2",1,690,2137,true,false},
+	{"DT2L1EC",6,0,0,true,false},
+	{"DT2L1DE2L1",3,700,600,true,false},
+	{"DT2L1DTL1L2",7,186,2006,true,false},
+	{"IE1L1IT1L1",10,146,4400,true,false},
+	{"DE2L1DT2L1",1,10114,2122,true,false},
+	{"DE2L2DT2L2",8,10113,3296,true,false},
+	{"IE1L2IT1L2",11,261,3211,true,false},
+	{"ECDT2L1",1,690,2137,true,false},
+	{"ECIT1L1",10,10128,2048,true,false},
+	{"ECDT2L2",8,775,2532,true,false},
+	{"ECIT1L2",11,9812,1680,true,false},
+	{"DTL1L2DT2L1",1,5561,5984,true,false},
+	{"DTL1L2DT2L2",8,7818,2564,true,false},
+	{"DT2L2EC",6,0,0,true,false},
+	{"DT2L2DTL1L2",7,3731,2302,true,false},
+	{"DT2L2DE2L2",4,724,422,true,false},
+	{"ITL1L2IT1L1",10,3962,2610,true,false},
+	{"ITL1L2IT1L2",11,4697,5570,true,false},
+	{"IT1L1EC",6,0,0,true,false},
+	{"IT1L1IE1L1",2,3097,729,true,false},
+	{"IT1L1ITL1L2",9,3740,4000,true,false},
+	{"IT1L2EC",6,0,0,true,false},
+	{"IT1L2IE1L2",5,3123,665,true,false},
+	{"IT1L2ITL1L2",9,140,4308,true,false},
 	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator fist floor first boss
 	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	};
