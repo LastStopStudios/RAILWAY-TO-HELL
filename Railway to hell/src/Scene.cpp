@@ -97,6 +97,11 @@ bool Scene::Awake()
 			enemy->SetParameters(enemyNode);
 			enemyList.push_back(enemy);
 		}
+		if (type == "amego") {
+			Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::EXPLOSIVO);
+			enemy->SetParameters(enemyNode);
+			enemyList.push_back(enemy);
+		}
 		if (type == "volador") {
 			Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
 			volador->SetParameters(enemyNode);
