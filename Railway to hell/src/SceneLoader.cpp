@@ -303,6 +303,7 @@ void SceneLoader::VisibilityScene(pugi::xml_node sceneNode) {//player goes to an
     }
     if (!visible.attribute("accessed").as_bool()) {// if it's not the firts time
         visible.attribute("accessed").set_value(true); //scene have been visited
-        loadFile.save_file("config.xml");
-    }   
+       
+    }  
+    loadFile.save_file("config.xml");
 }

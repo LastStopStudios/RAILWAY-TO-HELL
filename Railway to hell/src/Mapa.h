@@ -90,16 +90,16 @@ public:
 
 	std::vector<Negro> negro = {
 		{"scene", 500, 200, 200, 200, true},//covering scene 1
-		{"scene2", 1000, 500, 200, 200, false},//covering scene 2
-		{"scene3", 1000, 500, 200, 200, false},//covering scene 3
-		{"scene4", 1000, 500, 200, 200, false},//covering scene 4
-		{"scene5", 1000, 500, 200, 200, false},//covering scene 5
-		{"scene6", 1000, 500, 200, 200, false},//covering scene 6
-		{"scene7", 1000, 500, 200, 200, false},//covering scene 7
-		{"scene8", 1000, 500, 200, 200, false},//covering scene 8
-		{"scene9", 1000, 500, 200, 200, false},//covering scene 9
-		{"scene10", 1000, 500, 200, 200, false},//covering scene 10
-		{"scene11", 1000, 500, 200, 200, false},//covering scene 11
+		{"scene2", 1000, 500, 200, 200, false}//covering scene 2
+		//{"scene3", 1000, 500, 200, 200, false},//covering scene 3
+		//{"scene4", 1000, 500, 200, 200, false},//covering scene 4
+		//{"scene5", 1000, 500, 200, 200, false},//covering scene 5
+		//{"scene6", 1000, 500, 200, 200, false},//covering scene 6
+		//{"scene7", 1000, 500, 200, 200, false},//covering scene 7
+		//{"scene8", 1000, 500, 200, 200, false},//covering scene 8
+		//{"scene9", 1000, 500, 200, 200, false},//covering scene 9
+		//{"scene10", 1000, 500, 200, 200, false},//covering scene 10
+		//{"scene11", 1000, 500, 200, 200, false},//covering scene 11
 	};
 
 private:

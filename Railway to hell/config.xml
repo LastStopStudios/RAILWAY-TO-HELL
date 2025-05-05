@@ -16,7 +16,7 @@
 	</window>
 	<scene>
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
-		<visibility accessed="true"/>
+		<visibility accessed="true" />
 		<entities>
 			<player x="2877" y="2048" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -338,7 +338,7 @@
 				</lever>
 			</levers>
 			<enemies>
-				<enemy name="spider" x="0" y="0" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="200" y="800" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -356,8 +356,8 @@
 							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
 						<die loop="false" speed="0.15">
-							<frame x="0"   y="128" w="96" h="96" />
-							<frame x="96"  y="128" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
 							<frame x="192" y="128" w="96" h="96" />
 							<frame x="288" y="128" w="96" h="96" />
 							<frame x="384" y="128" w="96" h="96" />
@@ -366,9 +366,7 @@
 							<frame x="672" y="128" w="96" h="96" />
 							<frame x="768" y="128" w="96" h="96" />
 							<frame x="864" y="128" w="96" h="96" />
-							
 						</die>
-
 					</animations>
 				</enemy>
 				<enemy name="badguy1" x="4378" y="2186" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
@@ -2982,7 +2980,7 @@
 	</scene>
 	<scene2>
 		<map path="Assets/Maps/" name="IE1L1.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3090,7 +3088,7 @@
 	</scene2>
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3513,7 +3511,7 @@
 	</scene3>
 	<scene4>
 		<map path="Assets/Maps/" name="DE2L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3622,10 +3620,8 @@
 					</animations>
 				</item>
 			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -3633,7 +3629,7 @@
 	</scene4>
 	<scene5>
 		<map path="Assets/Maps/" name="IE1L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3733,12 +3729,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -3746,7 +3739,7 @@
 	</scene5>
 	<scene6>
 		<map path="Assets/Maps/" name="EC.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3846,12 +3839,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -3859,7 +3849,7 @@
 	</scene6>
 	<scene7>
 		<map path="Assets/Maps/" name="DTL1L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -3959,12 +3949,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -3972,7 +3959,7 @@
 	</scene7>
 	<scene8>
 		<map path="Assets/Maps/" name="DT2L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4072,12 +4059,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -4085,7 +4069,7 @@
 	</scene8>
 	<scene9>
 		<map path="Assets/Maps/" name="ITL1L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4185,12 +4169,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -4198,7 +4179,7 @@
 	</scene9>
 	<scene10>
 		<map path="Assets/Maps/" name="IT1L1.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4298,12 +4279,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -4311,7 +4289,7 @@
 	</scene10>
 	<scene11>
 		<map path="Assets/Maps/" name="IT1L2.tmx" />
-		<visibility accessed="false"/>
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4411,12 +4389,9 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items>
-			</items>
-			<elevators>
-			</elevators>
-			<enemies>
-			</enemies>
+			<items />
+			<elevators />
+			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
