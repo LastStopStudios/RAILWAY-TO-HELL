@@ -172,6 +172,8 @@ bool Explosivo::Update(float dt)
 
                 if (distanceToPlayer == TikingDistance) { cigarro = true; }//start counting to explote
 
+                if (distanceToPlayer >= 20) { cigarro = false; explosiveTimer = 0.0f; }//Reset timer since player is far away
+
                 // Reset and calculate path to player
                 pathfinding->ResetPath(enemyTilePos);
 
