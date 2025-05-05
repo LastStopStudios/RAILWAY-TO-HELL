@@ -42,10 +42,15 @@ public:
 	//bool dialogo = true;
 	float texIsDeath;
 
-	int lives = 2;
+	int lives = 1;
 	//Death control
 	int a = 0;
 	int kill = 1;
+
+	//explosive control
+	bool cigarro = false, exploto = false;
+	float explosiveTimer = 0.0f;
+	const float Ivolo = 5.0f;
 private:
 	// Update logic
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
@@ -81,8 +86,5 @@ private:
 	bool ishurt = false;
 	//Patroling Control 
 	int vez, patrol1, patrol2;
-
-	//explosive control
-	bool cigarro = false;
 
 };

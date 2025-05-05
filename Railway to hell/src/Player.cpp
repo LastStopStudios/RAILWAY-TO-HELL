@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "SceneLoader.h"
 #include "dialogoM.h"
+#include "Explosivo.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -1344,6 +1345,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
         collidingWithEnemy = true;
+        return;
+    }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::AMEGO) {
+        collidingWithEnemy = true;
+       /* if () {//logica daño por explosion
+            isHurt = true;
+            lives--;
+        }*/
         return;
     }
     // End of the logic

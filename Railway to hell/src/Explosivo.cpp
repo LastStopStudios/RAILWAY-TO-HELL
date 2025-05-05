@@ -89,7 +89,22 @@ bool Explosivo::Update(float dt)
     }
 
     if(cigarro == true){
-    
+        explosiveTimer += dt;
+        if (explosiveTimer >= Ivolo) {
+            exploto = true;
+        }
+        if (exploto == true) {
+            isDying = true;
+            currentAnimation = &die;
+            currentAnimation->Reset();
+
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            pbody->body->SetAwake(false);
+            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+            pbody->body->SetGravityScale(0.0f);
+            cigarro = false;
+        }//llamada al player para hacer daño siesta dentro de la colision 
+        //Engine::GetInstance().entityManager->dialogo == false
     }
 
     if (isDying || isDead) {
