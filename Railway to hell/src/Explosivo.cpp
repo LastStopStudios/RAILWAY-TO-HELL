@@ -88,6 +88,10 @@ bool Explosivo::Update(float dt)
         }
     }
 
+    if(cigarro == true){
+    
+    }
+
     if (isDying || isDead) {
         // Ensure that there is no movement during death
         if (pbody != nullptr && pbody->body != nullptr) {
@@ -123,9 +127,10 @@ bool Explosivo::Update(float dt)
 
         // Constants to adjust enemy behavior
         const float DETECTION_DISTANCE = 200.0f;
-        const float CHASE_SPEED = 50.0f;
+        const float CHASE_SPEED = 90.0f;
         const float PATROL_SPEED = 30.0f;
         const int MAX_PATHFINDING_ITERATIONS = 50;
+        const int TikingDistance = 10;
 
         // Get current positions
         enemyPos = GetPosition();
@@ -149,6 +154,8 @@ bool Explosivo::Update(float dt)
             if (distanceToPlayer <= DETECTION_DISTANCE)
             {
                 isChasing = true;
+
+                if (distanceToPlayer == TikingDistance) { cigarro = true; }//start counting to explote
 
                 // Reset and calculate path to player
                 pathfinding->ResetPath(enemyTilePos);

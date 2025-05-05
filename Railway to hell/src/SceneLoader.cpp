@@ -292,6 +292,10 @@ void SceneLoader::FadeOut(float speed, bool loadscene, int level, int x, int y) 
 }
 
 void SceneLoader::VisibilityScene(pugi::xml_node sceneNode) {//player goes to another scene
+    pugi::xml_document loadFile;
+    if (!loadFile.load_file("config.xml")) {
+        return;
+    }
 
     pugi::xml_node visible = sceneNode.child("visibility"); //search if the scene have been visited
     if (!visible) {
@@ -299,5 +303,6 @@ void SceneLoader::VisibilityScene(pugi::xml_node sceneNode) {//player goes to an
     }
     if (!visible.attribute("accessed").as_bool()) {// if it's not the firts time
         visible.attribute("accessed").set_value(true); //scene have been visited
+        loadFile.save_file("config.xml");
     }   
 }

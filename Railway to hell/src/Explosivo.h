@@ -82,4 +82,7 @@ private:
 	//Patroling Control 
 	int vez, patrol1, patrol2;
 
+	//explosive control
+	bool cigarro = false;
+
 };
