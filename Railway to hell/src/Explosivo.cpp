@@ -108,6 +108,11 @@ bool Explosivo::Update(float dt)
         //Engine::GetInstance().entityManager->dialogo == false
     }
 
+    if (exploto == true && toco == true) {
+        Engine::GetInstance().scene->hitearPlayer();
+        exploto = false;
+    }
+
     if (isDying || isDead) {
         // Ensure that there is no movement during death
         if (pbody != nullptr && pbody->body != nullptr) {
@@ -146,7 +151,7 @@ bool Explosivo::Update(float dt)
         const float CHASE_SPEED = 190.0f;
         const float PATROL_SPEED = 50.0f;
         const int MAX_PATHFINDING_ITERATIONS = 50;
-        const int TikingDistance = 100;
+        const int TikingDistance = 60;
 
         // Get current positions
         enemyPos = GetPosition();
@@ -320,9 +325,7 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
     case ColliderType::PLAYER:
         LOG("Collided with player - DESTROY");
-        if(exploto == true){
-            Engine::GetInstance().scene->hitearPlayer();
-        }
+        toco = true;
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK: {
@@ -411,6 +414,7 @@ void Explosivo::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
+        toco = false;
         break;
     }
 }

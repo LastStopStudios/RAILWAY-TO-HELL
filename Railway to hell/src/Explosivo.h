@@ -48,7 +48,7 @@ public:
 	int kill = 1;
 
 	//explosive control
-	bool cigarro = false, exploto = false;
+	bool cigarro = false, exploto = false, toco = false;
 	float explosiveTimer = 0.0f;
 	const float Ivolo = 15.0f; //DO NOT TOUCH, if timer is higher when enemy explotes game crash
 private:
