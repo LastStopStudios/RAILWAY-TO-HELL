@@ -42,6 +42,7 @@ bool Item::Start() {
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::ITEM;
 
+	pbody->listener = this;
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
@@ -74,12 +75,12 @@ bool Item::Update(float dt)
 bool Item::CleanUp()
 {
 	// Explicitly destroy the physics body if it exists
-	//if (pbody != nullptr)
-	//{
-	//	// Make sure to tell the physics system to destroy this body
-	//	Engine::GetInstance().physics->DeletePhysBody(pbody);
-	//	pbody = nullptr;
-	//}
+	if (pbody != nullptr)
+	{
+		// Make sure to tell the physics system to destroy this body
+		Engine::GetInstance().physics->DeletePhysBody(pbody);
+		pbody = nullptr;
+	}
 	return true;
 }
 

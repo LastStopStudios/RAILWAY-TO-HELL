@@ -41,6 +41,7 @@ bool Scene::Awake()
 	{
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 		item->SetParameters(itemNode);
+		itemList.push_back(item);
 	}
 
 	// Create a enemy using the entity manager 
@@ -304,8 +305,18 @@ void Scene::SaveState() {
 		return;
 	}
 
-	pugi::xml_node sceneNode = loadFile.child("config").child("scene");
+	pugi::xml_node sceneNode;
 
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	if (currentScene == 1) {
+		sceneNode = loadFile.child("config").child("scene");
+	}
+	if (currentScene == 2) {
+		sceneNode = loadFile.child("config").child("scene2");
+	}
+	if (currentScene == 3) {
+		sceneNode = loadFile.child("config").child("scene3");
+	}
 	//Save info to XML 
 
 	//Player position
