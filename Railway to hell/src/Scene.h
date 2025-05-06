@@ -67,6 +67,9 @@ public:
 	void BloquearSensor();
 	void DesbloquearSensor();
 
+	//hitPlayer
+	void hitearPlayer();
+
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
