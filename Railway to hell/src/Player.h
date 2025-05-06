@@ -79,6 +79,8 @@ public:
 	//Dialog control
 	void DialogoOn() { dialogo = true;}//stop player
 	void DialogoOff() { dialogo = false;}//return control player
+	//health
+	void hit();
 
 private:
 	// Private methods

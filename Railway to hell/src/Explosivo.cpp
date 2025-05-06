@@ -320,6 +320,9 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
     {
     case ColliderType::PLAYER:
         LOG("Collided with player - DESTROY");
+        if(exploto == true){
+            Engine::GetInstance().scene->hitearPlayer();
+        }
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK: {

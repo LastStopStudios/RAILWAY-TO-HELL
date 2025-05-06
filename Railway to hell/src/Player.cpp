@@ -1580,6 +1580,15 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         collidingWithEnemy = false;
         return;
     }
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::AMEGO) {
+        collidingWithEnemy = false;
+        if (isHurt) {
+            isHurt = false;
+            hasHurtStarted = false;
+            hurted = false;
+        }
+        return;
+    }
 
 
     switch (physB->ctype) {
@@ -1634,4 +1643,8 @@ Vector2D Player::GetPosition() {
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
     return pos;
+}
+void Player::hit(){
+    isHurt = true;
+    lives--;
 }

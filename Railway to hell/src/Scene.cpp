@@ -350,24 +350,23 @@ void Scene::LoadState() {
 	// ...
 
 }
+//Dialogs
+void Scene::DialogoOn() {Engine::GetInstance().entityManager->DialogoOn();}
 
-void Scene::DialogoOn() {
-	Engine::GetInstance().entityManager->DialogoOn();
-}
-
-void Scene::DialogoOff(){
-	Engine::GetInstance().entityManager->DialogoOff();
-}
-
+void Scene::DialogoOff(){Engine::GetInstance().entityManager->DialogoOff();}
+//block sensor
 void Scene::DesbloquearSensor(){
 	player->DesbloquearSensor();
 	Engine::GetInstance().entityManager->AscensorOn();
 }
-
 void Scene::BloquearSensor() {
 	player->BloquearSensor();
 	Engine::GetInstance().entityManager->AscensorOff();
 }
+
+//hit player
+void Scene::hitearPlayer() {player->hit();}
+
 
 void Scene::SaveState() {
 
