@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="MapTemplate.tmx" />
 		<entities>
-			<player x="593" y="687" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
+			<player x="545" y="687" w="32" h="32" texture="Assets/Textures/player/Idle.png" gravity="true">
 				<animations>
 					<idle loop="true" speed="0.5">
 						<frame x="0" y="0" w="32" h="32" />
@@ -107,7 +107,7 @@
 				</item>
 			</items>
 			<enemies>
-				<enemy name="badguy" x="248" y="350" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true">
+				<enemy death="0" savedDeath="0" name="badguy" x="248" y="350" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />
@@ -122,7 +122,7 @@
 						</idle>
 					</animations>
 				</enemy>
-				<enemy name="badguy2" x="260" y="500" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true">
+				<enemy death="0" savedDeath="0" name="badguy2" x="260" y="500" w="32" h="32" texture="Assets/Textures/enemy/Idle.png" gravity="true" type="2">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />

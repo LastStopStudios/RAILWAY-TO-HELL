@@ -138,7 +138,7 @@ bool Enemy::Update(float dt)
 
 bool Enemy::CleanUp()
 {
-	//Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+	Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 	return true;
 }
 
@@ -172,11 +172,30 @@ void Enemy::SetDeathInXML()
 		return;
 	}
 
-	pugi::xml_node enemyNode = doc.child("config")
-		.child("scene")
-		.child("entities")
-		.child("enemies")
-		.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	pugi::xml_node enemyNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		enemyNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		enemyNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		enemyNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
 	
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -203,11 +222,31 @@ void Enemy::SetAliveInXML()
 		return;
 	}
 
-	pugi::xml_node enemyNode = doc.child("config")
-		.child("scene")
-		.child("entities")
-		.child("enemies")
-		.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	pugi::xml_node enemyNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		enemyNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		enemyNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		enemyNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -234,11 +273,30 @@ void Enemy::SetSavedDeathToDeathInXML()
 		return;
 	}
 
-	pugi::xml_node enemyNode = doc.child("config")
-		.child("scene")
-		.child("entities")
-		.child("enemies")
-		.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	pugi::xml_node enemyNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		enemyNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		enemyNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		enemyNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");
@@ -266,11 +324,30 @@ void Enemy::SetSavedDeathToAliveInXML()
 		return;
 	}
 
-	pugi::xml_node enemyNode = doc.child("config")
-		.child("scene")
-		.child("entities")
-		.child("enemies")
-		.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	pugi::xml_node enemyNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		enemyNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		enemyNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		enemyNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("enemies")
+			.find_child_by_attribute("enemy", "name", enemyID.c_str());
+	}
 
 	if (!enemyNode) {
 		LOG("Could not find the node for enemy in the XML");

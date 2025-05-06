@@ -74,7 +74,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
         Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
         enemy->SetParameters(enemyNode);
-        enemysList.push_back(enemy);
+        Engine::GetInstance().scene->enemyList.push_back(enemy);
     }
 
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
@@ -83,17 +83,17 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         {
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(itemNode);
-            itemsList.push_back(item);  // Now using the member variable
+            Engine::GetInstance().scene->itemList.push_back(item);  // Now using the member variable
         }
     }
 
     // Initialize enemies
-    for (auto enemy : enemysList) {
+    for (auto enemy : Engine::GetInstance().scene->enemyList) {
         enemy->Start();
     }
 
     // Initialize items
-    for (auto item : itemsList) {
+    for (auto item : Engine::GetInstance().scene->itemList) {
         item->Start();
     } 
 }
@@ -118,8 +118,8 @@ void SceneLoader::UnLoadEnemiesItems() {
     }
 
     // Clear your local tracking list
-    enemysList.clear();
-    itemsList.clear(); 
+    Engine::GetInstance().scene->enemyList.clear();
+    Engine::GetInstance().scene->itemList.clear(); 
 }
 void SceneLoader::SetCurrentScene(int level)
 {

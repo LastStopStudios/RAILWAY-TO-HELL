@@ -162,7 +162,6 @@ bool Scene::CleanUp()
 
 		enemy->SetAliveInXML();
 		enemy->SetSavedDeathToAliveInXML();
-
 	}
 
 	return true;
@@ -186,8 +185,18 @@ void Scene::LoadState() {
 		return;
 	}
 
-	pugi::xml_node sceneNode = loadFile.child("config").child("scene");
+	pugi::xml_node sceneNode;
 
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	if (currentScene == 1) {
+		sceneNode = loadFile.child("config").child("scene");
+	}
+	if (currentScene == 2) {
+		sceneNode = loadFile.child("config").child("scene2");
+	}
+	if (currentScene == 3) {
+		sceneNode = loadFile.child("config").child("scene3");
+	}
 	//Read XML and restore information
 
 	//Player position
@@ -198,7 +207,6 @@ void Scene::LoadState() {
 	//enemies
 	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
 	if (enemiesNode) {
-		int i = 0;
 		// for (auto& enemy : enemyList) 
         for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
             // read XML
@@ -212,17 +220,17 @@ void Scene::LoadState() {
 
             // case 1 update position if: death=0 & savedDeath=0 
             if (xmlDeath == 0 && xmlSavedDeath == 0) {
-				for (i; i < enemyList.size(); ++i) {
+				for (int i=0; i < enemyList.size(); ++i) {
 					if (enemyList[i]->GetType() == xmlType) {
 						enemyList[i]->SetPosition(pos);
-						enemyList[i]->SetAliveInXML();
-						enemyList[i]->SetEnabled(true);;
+						//enemyList[i]->SetAliveInXML();
+						//enemyList[i]->SetEnabled(true);;
 					}
 				}
             }
-            // case 2 create enemy if: death=0 & savedDeath=1 
+            // case 2 create enemy if: death=1 & savedDeath=1 
             else if (xmlDeath == 1 && xmlSavedDeath == 0) {
-				for (i; i < enemyList.size(); ++i) {
+				for (int i=0; i < enemyList.size(); ++i) {
 					if (enemyList[i]->GetType() == xmlType) {
 						enemyList[i]->SetPosition(pos);
 						enemyList[i]->SetAliveInXML();
