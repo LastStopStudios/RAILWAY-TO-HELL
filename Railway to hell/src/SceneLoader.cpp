@@ -108,9 +108,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         }
 
         if (type == "amego") {
-            Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::EXPLOSIVO);
-            enemy->SetParameters(enemyNode);
-            Engine::GetInstance().scene->GetEnemyList().push_back(enemy);
+            Explosivo* explo = (Explosivo*)Engine::GetInstance().entityManager->CreateEntity(EntityType::EXPLOSIVO);
+            explo->SetParameters(enemyNode);
+            Engine::GetInstance().scene->GetExploList().push_back(explo);
         }
 
         if (type == "volador") {
@@ -178,6 +178,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
         enemy->Start();
     }
+    for (auto enemy : Engine::GetInstance().scene->GetExploList()) {
+        enemy->Start();
+    }
     for (auto enemy : Engine::GetInstance().scene->GetVoladorList()) { 
         enemy->Start();
     }
@@ -215,7 +218,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -226,7 +229,8 @@ void SceneLoader::UnLoadEnemiesItems() {
     }
 
     // Clear your local tracking list
-    Engine::GetInstance().scene->GetEnemyList().clear(); 
+    Engine::GetInstance().scene->GetEnemyList().clear();
+    Engine::GetInstance().scene->GetExploList().clear();
     Engine::GetInstance().scene->GetVoladorList().clear(); 
     Engine::GetInstance().scene->GetBossList().clear();
 	Engine::GetInstance().scene->GetCaronteList().clear();

@@ -50,7 +50,7 @@ public:
 	//explosive control
 	bool cigarro = false, exploto = false;
 	float explosiveTimer = 0.0f;
-	const float Ivolo = 5.0f;
+	const float Ivolo = 15.0f;
 private:
 	// Update logic
 	SDL_RendererFlip flip = SDL_FLIP_NONE;

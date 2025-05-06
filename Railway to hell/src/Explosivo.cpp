@@ -90,6 +90,7 @@ bool Explosivo::Update(float dt)
 
     if(cigarro == true){
         explosiveTimer += dt;
+        LOG("Timer: %f", explosiveTimer);
         if (explosiveTimer >= Ivolo) {
             exploto = true;
         }
@@ -103,7 +104,7 @@ bool Explosivo::Update(float dt)
             // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             pbody->body->SetGravityScale(0.0f);
             cigarro = false;
-        }//llamada al player para hacer daño siesta dentro de la colision 
+        }//llamada al player para hacer daño si esta dentro de la colision 
         //Engine::GetInstance().entityManager->dialogo == false
     }
 
@@ -141,11 +142,11 @@ bool Explosivo::Update(float dt)
     if (Engine::GetInstance().entityManager->dialogo == false) {
 
         // Constants to adjust enemy behavior
-        const float DETECTION_DISTANCE = 200.0f;
-        const float CHASE_SPEED = 90.0f;
-        const float PATROL_SPEED = 30.0f;
+        const float DETECTION_DISTANCE = 250.0f;
+        const float CHASE_SPEED = 190.0f;
+        const float PATROL_SPEED = 50.0f;
         const int MAX_PATHFINDING_ITERATIONS = 50;
-        const int TikingDistance = 10;
+        const int TikingDistance = 100;
 
         // Get current positions
         enemyPos = GetPosition();
@@ -169,10 +170,14 @@ bool Explosivo::Update(float dt)
             if (distanceToPlayer <= DETECTION_DISTANCE)
             {
                 isChasing = true;
+                LOG("Distance: %f", distanceToPlayer);
 
-                if (distanceToPlayer == TikingDistance) { cigarro = true; }//start counting to explote
+                if (distanceToPlayer < TikingDistance) {
+                    LOG("Tiking: %s", cigarro);
+                    cigarro = true;
+                }//start counting to explote
 
-                if (distanceToPlayer >= 20) { cigarro = false; explosiveTimer = 0.0f; }//Reset timer since player is far away
+                if (distanceToPlayer >= 240) { cigarro = false; exploto = false; explosiveTimer = 0.0f; }//Reset timer since player is far away
 
                 // Reset and calculate path to player
                 pathfinding->ResetPath(enemyTilePos);
@@ -212,10 +217,6 @@ bool Explosivo::Update(float dt)
                     // Adjust speed according to direction
                     velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
 
-                    // Fine-tune speed when close to target
-                    if (fabs(moveX) < 5.0f) {
-                        velocityX *= 0.5f;
-                    }
                 }
             }
 

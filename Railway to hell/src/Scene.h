@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Player.h"
 #include "Terrestre.h"
+#include "Explosivo.h"
 #include <vector>
 #include "GuiControlButton.h"
 #include "SDL2/SDL_ttf.h"
@@ -83,6 +84,7 @@ public:
 	}
 
 	std::vector<Terrestre*> enemyList;
+	std::vector<Explosivo*> explosivoList;
 	std::vector<Volador*> voladorList; 
 	std::vector<Boss*> bossList;
 	std::vector<Item*> itemList;
@@ -92,6 +94,7 @@ public:
 	std::vector<Elevators*> elevatorList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
+	std::vector<Explosivo*>& GetExploList() { return explosivoList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
 	std::vector<Boss*>& GetBossList() { return bossList; }
 	std::vector<Item*>& GetItemList() { return itemList; }

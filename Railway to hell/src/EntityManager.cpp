@@ -91,6 +91,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::TERRESTRE:
 		entity = new Terrestre();
 		break;
+	case EntityType::EXPLOSIVO:
+		entity = new Explosivo();
+		break;
 	case EntityType::VOLADOR:
 		entity = new Volador();
 		break;
