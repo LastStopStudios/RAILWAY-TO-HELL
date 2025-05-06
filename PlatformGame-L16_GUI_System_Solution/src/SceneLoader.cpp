@@ -72,18 +72,26 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
     // Create enemies
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
-        Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
-        enemy->SetParameters(enemyNode);
-        Engine::GetInstance().scene->enemyList.push_back(enemy);
+        int deathValue = enemyNode.attribute("death").as_int();
+		int deathXMLValue = enemyNode.attribute("savedDeath").as_int();
+        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+            Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
+            enemy->SetParameters(enemyNode);
+            Engine::GetInstance().scene->enemyList.push_back(enemy);
+        }
     }
 
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
     if (itemsNode) {
         for (pugi::xml_node itemNode = itemsNode.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
         {
-            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-            item->SetParameters(itemNode);
-            Engine::GetInstance().scene->itemList.push_back(item);  // Now using the member variable
+            int deathValue = itemNode.attribute("death").as_int();
+            int deathXMLValue = itemNode.attribute("savedDeath").as_int();
+            if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+                Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+                item->SetParameters(itemNode);
+                Engine::GetInstance().scene->itemList.push_back(item);  // Now using the member variable
+            }
         }
     }
 
