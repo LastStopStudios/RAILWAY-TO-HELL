@@ -34,12 +34,20 @@ public:
 
 
 private:
+	void LoadTUi();//loads textures of the UI
+	void renderUI();//renders UI
 
 
 public:
-
+	bool dialogoOn = false;
 
 private:
+	//Textures
+	SDL_Texture* vida = nullptr;//health texture
+	SDL_Texture* stamina = nullptr;//stamina texture (Dash)
+
+	float posx, posy, posx2, posy2;// renders position
+	int w, h, w2, h2;// renders size
 	
 
 };

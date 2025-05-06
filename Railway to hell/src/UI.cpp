@@ -52,7 +52,6 @@ bool UI::Update(float dt) {
 		Engine::GetInstance().scene->ResetSkipInput();
 		return true;
 	}
-	//if (dialogoOn) { return true; }
 	
 
 	return true;
@@ -66,6 +65,29 @@ bool UI::PostUpdate()
 
 bool UI::CleanUp()
 {
-	
+	if (vida != nullptr) {
+		Engine::GetInstance().textures->UnLoad(vida);//Unload text background
+		vida = nullptr;
+	}
+	if (stamina != nullptr) {
+		Engine::GetInstance().textures->UnLoad(stamina);//Unload text background
+		stamina = nullptr;
+	}
 	return true;
 }
+
+void UI::LoadTUi()
+{
+	//vida = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load life of the player
+	//stamina = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load stamina of the player
+}
+
+void UI::renderUI()
+{
+	SDL_Rect dstRect = { posx,posy, w, h }; //Position and scale character health
+	SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character stamina
+
+	SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+	SDL_RenderCopy(Engine::GetInstance().render->renderer, stamina, nullptr, &dstRect2);//render  character health
+}
+

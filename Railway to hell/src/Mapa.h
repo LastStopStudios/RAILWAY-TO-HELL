@@ -122,8 +122,8 @@ private:
 	std::string pjposition = "";//what scene is now loading
 	std::string Zona = "";//zone of the map where the player is
 
-	float posx, posy;// playerposition
-	int w, h, i = 1;// screen size
+	float posx, posy;// icon player position
+	int w, h, i = 1;//renders size
 
 };
 
