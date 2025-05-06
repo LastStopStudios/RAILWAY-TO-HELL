@@ -175,6 +175,7 @@
     <ClCompile Include="src\SceneLoader.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\UI.cpp" />
     <ClCompile Include="src\Vector2D.cpp" />
     <ClCompile Include="src\Volador.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\SceneLoader.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\UI.h" />
     <ClInclude Include="src\Vector2D.h" />
     <ClInclude Include="src\Volador.h" />
     <ClInclude Include="src\Window.h" />
