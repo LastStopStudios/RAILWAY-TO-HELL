@@ -27,6 +27,9 @@ public:
     // Set the puzzle this lever belongs to
     void SetPuzzle(MosaicPuzzle* puzzle);
 
+    void AddTargetPiece(int pieceId);
+    const std::vector<int>& GetTargetPieceIds() const;
+
 private:
     SDL_Texture* texture;
     Animation idle;
@@ -37,8 +40,7 @@ private:
     bool activated;
     int texW, texH;
 
-    // The ID of the mosaic piece that this lever controls
-    int targetPieceId;
+    std::vector<int> targetPieceIds;
 
     // Reference to the puzzle this lever belongs to
     MosaicPuzzle* puzzleRef;

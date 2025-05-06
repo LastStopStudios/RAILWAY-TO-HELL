@@ -8,7 +8,7 @@
 #include "Log.h"
 #include "Physics.h"
 
-MosaicPiece::MosaicPiece() : Entity(EntityType::ITEM), currentRotation(0), correctRotation(0), pieceId(0)
+MosaicPiece::MosaicPiece() : Entity(EntityType::ITEM), currentRotation(0), correctRotation(0), pieceId(0), pieceType(0)
 {
 }
 
@@ -26,6 +26,7 @@ bool MosaicPiece::Start() {
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
     pieceId = parameters.attribute("piece_id").as_int();
+    pieceType = parameters.attribute("piece_type").as_int(0);
 
     // Load the correct rotation for this piece
     correctRotation = parameters.attribute("correct_rotation").as_int();
@@ -33,14 +34,9 @@ bool MosaicPiece::Start() {
     // Randomly set the initial rotation (0-3)
     currentRotation = rand() % 4;
 
-    // Load animations
-    rotation0.LoadAnimations(parameters.child("animations").child("rotation0"));
-    rotation90.LoadAnimations(parameters.child("animations").child("rotation90"));
-    rotation180.LoadAnimations(parameters.child("animations").child("rotation180"));
-    rotation270.LoadAnimations(parameters.child("animations").child("rotation270"));
-
-    // Set initial animation
-    currentAnim = *GetCurrentRotationAnim();
+    // Load single animation
+    idle.LoadAnimations(parameters.child("animations").child("idle"));
+    currentAnim = idle;
 
     // Add a physics body - initialize the physics body
     pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
@@ -69,12 +65,35 @@ bool MosaicPiece::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
 
-    // Draw the mosaic piece with the current rotation
-    Engine::GetInstance().render.get()->DrawTexture(
+    // Get the current animation frame
+    SDL_Rect frame = currentAnim.GetCurrentFrame();
+
+    // Convert rotation index to angle in degrees
+    double angle = currentRotation * 90.0;
+
+    // Si tu motor no tiene DrawTextureEx, puedes usar esta alternativa con SDL_RenderCopyEx directamente
+    SDL_Rect destRect;
+    destRect.x = (int)position.getX();
+    destRect.y = (int)position.getY();
+    destRect.w = texW;
+    destRect.h = texH;
+
+    SDL_Point center;
+    center.x = texW / 2;
+    center.y = texH / 2;
+
+    // Obtener el renderer desde el motor
+    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
+
+    // Dibujar con rotación
+    SDL_RenderCopyEx(
+        renderer,
         texture,
-        (int)position.getX(),
-        (int)position.getY(),
-        &GetCurrentRotationAnim()->GetCurrentFrame()
+        &frame,         // Source rectangle (frame de animación)
+        &destRect,      // Destination rectangle
+        angle,          // Angle in degrees
+        &center,        // Pivot point (center of the image)
+        SDL_FLIP_NONE   // No flip
     );
 
     currentAnim.Update();
@@ -102,14 +121,8 @@ bool MosaicPiece::CleanUp()
 
 void MosaicPiece::Rotate()
 {
-    // Rotate 90 degrees clockwise
     currentRotation = (currentRotation + 1) % 4;
-
-    // Update the current animation based on new rotation
-    currentAnim = *GetCurrentRotationAnim();
-
-    // Play rotation sound if needed
-    Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
+   // Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
 }
 
 bool MosaicPiece::IsCorrectRotation() const
@@ -120,15 +133,4 @@ bool MosaicPiece::IsCorrectRotation() const
 int MosaicPiece::GetRotation() const
 {
     return currentRotation;
-}
-
-Animation* MosaicPiece::GetCurrentRotationAnim()
-{
-    switch (currentRotation) {
-    case 0: return &rotation0;
-    case 1: return &rotation90;
-    case 2: return &rotation180;
-    case 3: return &rotation270;
-    default: return &rotation0;
-    }
 }

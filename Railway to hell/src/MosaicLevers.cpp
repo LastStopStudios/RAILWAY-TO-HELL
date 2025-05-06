@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "Log.h"
 
-MosaicLever::MosaicLever() : Entity(EntityType::LEVER), activated(false), targetPieceId(0), puzzleRef(nullptr), activationCooldown(1.0f), cooldownTimer(0.0f)
+MosaicLever::MosaicLever() : Entity(EntityType::LEVER), activated(false), puzzleRef(nullptr), activationCooldown(1.0f), cooldownTimer(0.0f)
 {
 
 }
@@ -26,8 +26,25 @@ bool MosaicLever::Start() {
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
-    // Get the target piece ID from parameters
-    targetPieceId = parameters.attribute("target_piece_id").as_int();
+    int firstTargetId = parameters.attribute("target_piece_id").as_int();
+    if (firstTargetId > 0) {
+        targetPieceIds.push_back(firstTargetId);
+    }
+
+    // Comprobar si hay piezas adicionales en el formato "target_piece_id_2", "target_piece_id_3", etc.
+    for (int i = 2; i <= 5; i++) { 
+        std::string attrName = "target_piece_id_" + std::to_string(i);
+        pugi::xml_attribute attr = parameters.attribute(attrName.c_str());
+        if (attr) {
+            int additionalTargetId = attr.as_int();
+            if (additionalTargetId > 0) {
+                targetPieceIds.push_back(additionalTargetId);
+            }
+        }
+        else {
+            break; // Si no encontramos el atributo, salimos del bucle
+        }
+    }
 
     // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -123,18 +140,33 @@ void MosaicLever::Activate()
     // Play activation sound
     Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/lever_activate.wav"));
 
-    // Rotate the target piece if puzzle reference exists
+    // Rotate all target pieces if puzzle reference exists
     if (puzzleRef != nullptr) {
-        puzzleRef->RotatePiece(targetPieceId);
+        for (int pieceId : targetPieceIds) {
+            puzzleRef->RotatePiece(pieceId);
+        }
     }
     else {
         LOG("Error: MosaicLever has no puzzle reference!");
     }
 }
 
+void MosaicLever::AddTargetPiece(int pieceId)
+{
+    if (pieceId > 0) {
+        targetPieceIds.push_back(pieceId);
+    }
+}
+
+const std::vector<int>& MosaicLever::GetTargetPieceIds() const
+{
+    return targetPieceIds;
+}
+
+// Reemplazar el método GetTargetPieceId() (opcional, para compatibilidad)
 int MosaicLever::GetTargetPieceId() const
 {
-    return targetPieceId;
+    return targetPieceIds.empty() ? 0 : targetPieceIds[0];
 }
 
 void MosaicLever::SetPuzzle(MosaicPuzzle* puzzle)

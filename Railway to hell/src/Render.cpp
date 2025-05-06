@@ -296,3 +296,37 @@ bool Render::DrawText(const char* text, int posx, int posy, int w, int h) const
 	return true;
 }
 
+void Render::DrawTextureEx(SDL_Texture* texture, int x, int y, SDL_Rect* section, int pivotX, int pivotY, double angle)
+{
+	if (texture == nullptr) return;
+
+	// Usar 1 como escala por defecto o la escala que usas en tu motor
+	int scale = 1;
+
+	SDL_Rect rect;
+
+	// Si tu motor tiene cámara, usa algo como esto en su lugar:
+	rect.x = (int)(camera.x) + x;
+	rect.y = (int)(camera.y) + y;
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	// Definir el punto de pivote para la rotación
+	SDL_Point pivot;
+	pivot.x = pivotX * scale;
+	pivot.y = pivotY * scale;
+
+	// Dibujar con rotación
+	SDL_RenderCopyEx(renderer, texture, section, &rect, angle, &pivot, SDL_FLIP_NONE);
+}
