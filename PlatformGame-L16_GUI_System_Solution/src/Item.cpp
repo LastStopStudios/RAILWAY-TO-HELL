@@ -23,11 +23,14 @@ bool Item::Awake() {
 bool Item::Start() {
 
 	//initilize textures
+	enemyID = parameters.attribute("name").as_string();
 	texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 	position.setX(parameters.attribute("x").as_int());
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
+	DeathValue = parameters.attribute("death").as_int();
+	type = parameters.attribute("type").as_int();
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -47,6 +50,12 @@ bool Item::Start() {
 
 bool Item::Update(float dt)
 {
+	if (!IsEnabled()) return true;
+	if (pendingDisable) {
+		SetEnabled(false);
+		pendingDisable = false;
+		SetDeathInXML();
+	}
 	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 	if (pbody == nullptr) {
 		LOG("Enemy pbody is null!");
@@ -65,11 +74,255 @@ bool Item::Update(float dt)
 bool Item::CleanUp()
 {
 	// Explicitly destroy the physics body if it exists
-	if (pbody != nullptr)
-	{
-		// Make sure to tell the physics system to destroy this body
-		Engine::GetInstance().physics->DeletePhysBody(pbody);
-		pbody = nullptr;
-	}
+	//if (pbody != nullptr)
+	//{
+	//	// Make sure to tell the physics system to destroy this body
+	//	Engine::GetInstance().physics->DeletePhysBody(pbody);
+	//	pbody = nullptr;
+	//}
 	return true;
+}
+
+void Item::SetDeathInXML()
+{
+	// Load XML
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	itemNode.attribute("death").set_value(1); // 1 enemy is death
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for enemy");
+	}
+	DeathValue = 1;
+}
+
+void Item::SetAliveInXML()
+{
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+
+	if (!itemNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	itemNode.attribute("death").set_value(0); // 0 enemy is alive
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for");
+	}
+	DeathValue = 0;
+}
+
+void Item::SetSavedDeathToDeathInXML()
+{
+	// Load XML
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("items", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	itemNode.attribute("savedDeath").set_value(1); // 1 enemy is death
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for enemy");
+	}
+
+	SavedDeathValue = 1;
+}
+
+void Item::SetSavedDeathToAliveInXML()
+{
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for enemy in the XML");
+		return;
+	}
+
+	itemNode.attribute("savedDeath").set_value(0); // 0 enemy is alive
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for");
+	}
+
+	SavedDeathValue = 0;
+}
+
+void Item::SetEnabled(bool active) {
+	isEnabled = active;
+	pbody->body->SetEnabled(active);
+	pbody->body->SetAwake(active);
+}
+
+void Item::SetPosition(Vector2D pos) {
+	pos.setX(pos.getX() + texH / 2);
+	pos.setY(pos.getY() + texH / 2);
+	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+	pbody->body->SetTransform(bodyPos, 0);
+}
+
+void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		LOG("Collided with player - DESTROY");
+		pendingDisable = true;
+		break;
+	}
+}
+
+Vector2D Item::GetPosition() {
+	b2Vec2 bodyPos = pbody->body->GetTransform().p;
+	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+	pos.setX(pos.getX() - texH / 2);
+	pos.setY(pos.getY() - texH / 2);
+	return pos;
+}
+
+void Item::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
+{
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		LOG("Collision player");
+		break;
+	}
 }

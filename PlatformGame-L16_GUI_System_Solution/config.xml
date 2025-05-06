@@ -33,7 +33,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="coin" x="200" y="672" w="32" h="32" texture="Assets/Textures/goldCoin.png" gravity="true">
+				<item name="coin" death="1" savedDeath="0" x="200" y="672" w="32" h="32" texture="Assets/Textures/goldCoin.png" gravity="true" type="1">
 					<animations>
 						<idle loop="true" speed="0.5">
 							<frame x="0" y="0" w="32" h="32" />
