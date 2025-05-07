@@ -559,18 +559,24 @@ void Scene::SaveState() {
 	if (!bossList.empty()) {
 		int i = 0;
 		for (pugi::xml_node bossNode : bossesNode.children("enemy")) {
-			if (i < bossList.size()) {
-				std::string type = bossNode.attribute("type").as_string();
-				if (type == "boss") {
+			std::string type = bossNode.attribute("type").as_string();
+			if (type == "boss") {
+				if (i < bossList.size()) {
+					std::string xmlRef = bossNode.attribute("ref").as_string();
 					if (bossList[i]->DeathValue == 0) {
-						bossNode.attribute("x").set_value(bossList[i]->GetPosition().getX());
-						bossNode.attribute("y").set_value(bossList[i]->GetPosition().getY());
+						for (int i = 0; i < bossList.size(); ++i) {
+							if (bossList[i]->GetRef() == xmlRef) {
+								bossNode.attribute("x").set_value(bossList[i]->GetPosition().getX());
+								bossNode.attribute("y").set_value(bossList[i]->GetPosition().getY());
+							}
+						}
+
 					}
 					else bossNode.attribute("savedDeath").set_value(1);
-				}
-				i++;
-			}
 
+					i++;
+				}
+			}
 		}
 	}
 
