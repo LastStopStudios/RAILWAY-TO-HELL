@@ -29,7 +29,7 @@ bool UI::Awake()
 //Called before the first frame
 bool UI::Start()
 {
-
+	LoadTUi();
 	return true;
 }
 
@@ -53,7 +53,7 @@ bool UI::Update(float dt) {
 		return true;
 	}
 	
-
+	renderUI();
 	return true;
 }
 
@@ -69,6 +69,18 @@ bool UI::CleanUp()
 		Engine::GetInstance().textures->UnLoad(vida);//Unload text background
 		vida = nullptr;
 	}
+	if (vida2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(vida2);//Unload text background
+		vida2 = nullptr;
+	}
+	if (Evida != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Evida);//Unload text background
+		Evida = nullptr;
+	}
+	if (Evida2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Evida2);//Unload text background
+		Evida2 = nullptr;
+	}
 	if (amo != nullptr) {
 		Engine::GetInstance().textures->UnLoad(amo);//Unload text background
 		amo = nullptr;
@@ -78,24 +90,48 @@ bool UI::CleanUp()
 
 void UI::LoadTUi()
 {
-	//vida = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load life of the player
-	//amo = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load stamina of the player
+	vida = Engine::GetInstance().textures->Load("Assets/Textures/UI/Health_Segment_A.png"); //Load life of the player
+	vida2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Health_Segment_B.png"); //Load life of the player
+	Evida2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Health_Background_B.png"); //Load life of the player
+	Evida = Engine::GetInstance().textures->Load("Assets/Textures/UI/Health_Background_A.png"); //Load Empty life of the player
+	//amo = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load stamina of the player
+	//boss = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load life of the player
 
-	if(figth){/*boss = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load life of the player*/}
 }
 
 void UI::renderUI()
 {
 	SDL_Rect dstRect = { posx,posy, w, h }; //Position and scale character health
-	SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character Amo
+	SDL_Rect dstRect2 = { posx2,posy, w, h }; //Position and scale character health
+	SDL_Rect dstRect3 = { posx3,posy, w, h }; //Position and scale character health
+	//SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character Amo
 
-	SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
-	SDL_RenderCopy(Engine::GetInstance().render->renderer, amo, nullptr, &dstRect2);//render  character health
+	switch (vidap)
+	{
+	case 1:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect2);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect3);//render  character health
+		break;
+	case 2:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect3);//render  character healthv
+		break;
+	case 3:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect3);//render  character health
+		break;
+	}
+	
+	//SDL_RenderCopy(Engine::GetInstance().render->renderer, amo, nullptr, &dstRect2);//render  character health
 }
 
 void UI::Boss()
 {
 	SDL_Rect dstRect2 = { posxb,posyb, wb, hb }; //Position and scale Boss health
+	//if(figth){/*boss = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load life of the player*/}
 	
 }
 

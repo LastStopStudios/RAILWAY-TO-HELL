@@ -11,6 +11,7 @@
 #include "SceneLoader.h"
 #include "dialogoM.h"
 #include "Explosivo.h"
+#include "UI.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -370,7 +371,8 @@ bool Player::Update(float dt)
     DrawPlayer();
 
     HandleSceneSwitching();
-
+    //UI Lives
+    Engine::GetInstance().ui->vidap = lives;
     return true;
 }
 

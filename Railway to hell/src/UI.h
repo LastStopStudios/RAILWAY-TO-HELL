@@ -42,15 +42,19 @@ private:
 public:
 	bool dialogoOn = false;
 	bool figth = false;
+	int vidap;
 
 private:
 	//Textures
 	SDL_Texture* vida = nullptr;//health texture
+	SDL_Texture* Evida = nullptr;//Empty health texture
+	SDL_Texture* vida2 = nullptr;//health texture
+	SDL_Texture* Evida2 = nullptr;//Empty health texturev
 	SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	SDL_Texture* boss = nullptr;//stamina texture (Dash)
 
-	float posx, posy, posx2, posy2, posxb, posyb;// renders position
-	int w, h, w2, h2, wb, hb;// renders size
+	float posx = 0, posy = 0, posx2=20, posx3 = 40, posxb, posyb;// renders position
+	int w=30, h=20, w2, h2, wb, hb;// renders size
 	
 
 };
