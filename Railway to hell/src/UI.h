@@ -36,18 +36,21 @@ public:
 private:
 	void LoadTUi();//loads textures of the UI
 	void renderUI();//renders UI
+	void Boss();//Only if there is a boss figth
 
 
 public:
 	bool dialogoOn = false;
+	bool figth = false;
 
 private:
 	//Textures
 	SDL_Texture* vida = nullptr;//health texture
-	SDL_Texture* stamina = nullptr;//stamina texture (Dash)
+	SDL_Texture* amo = nullptr;//stamina texture (Dash)
+	SDL_Texture* boss = nullptr;//stamina texture (Dash)
 
-	float posx, posy, posx2, posy2;// renders position
-	int w, h, w2, h2;// renders size
+	float posx, posy, posx2, posy2, posxb, posyb;// renders position
+	int w, h, w2, h2, wb, hb;// renders size
 	
 
 };

@@ -79,15 +79,24 @@ bool UI::CleanUp()
 void UI::LoadTUi()
 {
 	//vida = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load life of the player
-	//stamina = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load stamina of the player
+	//amo = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load stamina of the player
+
+	if(figth){/*boss = Engine::GetInstance().textures->Load("Assets/Textures/ "); //Load life of the player*/}
 }
 
 void UI::renderUI()
 {
 	SDL_Rect dstRect = { posx,posy, w, h }; //Position and scale character health
-	SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character stamina
+	SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character Amo
 
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
-	SDL_RenderCopy(Engine::GetInstance().render->renderer, stamina, nullptr, &dstRect2);//render  character health
+	SDL_RenderCopy(Engine::GetInstance().render->renderer, amo, nullptr, &dstRect2);//render  character health
 }
+
+void UI::Boss()
+{
+	SDL_Rect dstRect2 = { posxb,posyb, wb, hb }; //Position and scale Boss health
+	
+}
+
 
