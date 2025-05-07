@@ -122,14 +122,14 @@
 
 			<!-- Piezas del mosaico -->
 			<mosaicPieces>
-				<mosaicPiece name="mosaic_piece_1" x="3200" y="2050" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_1" x="3072" y="1952" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="64" h="64" />
 						</idle>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_2" x="3264" y="2050" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza2.png" piece_id="2" piece_type="1" correct_rotation="1" gravity="false">
+				<mosaicPiece name="mosaic_piece_2" x="3200" y="1952" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza2.png" piece_id="2" piece_type="1" correct_rotation="1" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="64" h="64" />
@@ -154,7 +154,7 @@
 
 			<!-- Palancas que controlan las piezas del mosaico -->
 			<mosaicLevers>
-				<mosaicLever name="mosaic_lever_1" x="3150" y="2200" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" gravity="false">
+				<mosaicLever name="mosaic_lever_1" x="3072" y="2080" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />
