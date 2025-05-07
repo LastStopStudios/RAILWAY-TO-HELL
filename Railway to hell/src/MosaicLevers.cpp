@@ -108,8 +108,8 @@ bool MosaicLever::Update(float dt)
 }
 
 void MosaicLever::OnCollision(PhysBody* physA, PhysBody* physB) {
-    // We only care about player whip attacks or player interaction
-    if (physB->ctype == ColliderType::PLAYER_WHIP_ATTACK || physB->ctype == ColliderType::PLAYER) {
+    // We only care about player melee attacks
+    if (physB->ctype == ColliderType::PLAYER_ATTACK) {
         // Check if we can activate (not in cooldown)
         if (cooldownTimer <= 0.0f && !activated) {
             Activate();
