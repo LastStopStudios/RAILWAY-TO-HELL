@@ -52,9 +52,11 @@ private:
 	SDL_Texture* Evida2 = nullptr;//Empty health texturev
 	SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	SDL_Texture* boss = nullptr;//stamina texture (Dash)
-
-	float posx = 0, posy = 0, posx2=20, posx3 = 40, posxb, posyb;// renders position
-	int w=30, h=20, w2, h2, wb, hb;// renders size
+	//UI sizes
+	int w = 30, h = 20, w2, h2, wb, hb;
+	//UI positions
+	float posy = 0, posx = 0, posx2=20, posx3 = 40, posx4 = 60, posx5 = 80, posxb, posyb;// renders position
+	
 	
 
 };

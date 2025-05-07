@@ -104,6 +104,8 @@ void UI::renderUI()
 	SDL_Rect dstRect = { posx,posy, w, h }; //Position and scale character health
 	SDL_Rect dstRect2 = { posx2,posy, w, h }; //Position and scale character health
 	SDL_Rect dstRect3 = { posx3,posy, w, h }; //Position and scale character health
+	SDL_Rect dstRect4 = { posx4,posy, w, h }; //Position and scale character health
+	SDL_Rect dstRect5 = { posx5,posy, w, h }; //Position and scale character health
 	//SDL_Rect dstRect2 = { posx2,posy2, w2, h2 }; //Position and scale character Amo
 
 	switch (vidap)
@@ -112,16 +114,36 @@ void UI::renderUI()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect2);//render  character health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect3);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect4);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect4);//render  character health
 		break;
 	case 2:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect3);//render  character healthv
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect3);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect4);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect5);//render  character health
 		break;
 	case 3:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect3);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect4);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect5);//render  character health
+		break;
+	case 4:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect3);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect4);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida2, nullptr, &dstRect5);//render  character health
+		break;
+	case 5:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida, nullptr, &dstRect);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect2);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect3);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect4);//render  character health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vida2, nullptr, &dstRect5);//render  character health
 		break;
 	}
 	

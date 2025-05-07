@@ -242,7 +242,7 @@ private:
 	bool leverFour = false;
 
 	// lives
-	int lives = 3; // for testing try to set it to 3
+	int lives = 5; // for testing try to set it to 3
 
 	//Ice platform
 	bool resbalar, giro;
