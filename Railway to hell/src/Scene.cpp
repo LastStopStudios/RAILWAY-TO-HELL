@@ -53,6 +53,7 @@ bool Scene::Awake()
 		else {
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 		item->SetParameters(itemNode);
+		//item->SetAliveInXML();
 		itemList.push_back(item);
 		}
 
@@ -312,17 +313,55 @@ bool Scene::CleanUp()
 		introTextoTexture = nullptr;
 	}
 
-	for (auto& item : itemList) {
-		item->SetAliveInXML();
-		item->SetSavedDeathToAliveInXML();
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+	if (result == NULL)
+	{
+		LOG("Could not load file. Pugi error: %s", result.description());
+		return false;
 	}
 
-	for (auto& boss : bossList) {
+	pugi::xml_node sceneNode;
+	int maxScenes = 3;
+	for (int i = 0; i < 2; ++i) {
+		if (i == 0) sceneNode = loadFile.child("config").child("scene");
+		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
+		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
 
-		boss->SetAliveInXML();
-		boss->SetSavedDeathToAliveInXML();
+		//item
+		pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
 
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			itemNode.attribute("death").set_value(0);
+			itemNode.attribute("savedDeath").set_value(0);
+		}
+
+		//enemies
+		pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			std::string type = enemyNode.attribute("type").as_string();
+			if (type == "boss") {
+				enemyNode.attribute("death").set_value(0);
+				enemyNode.attribute("savedDeath").set_value(0);
+			}
+		}
 	}
+
+	loadFile.save_file("config.xml");
+
+	//for (auto& item : itemList) {
+	//	item->SetAliveInXML();
+	//	item->SetSavedDeathToAliveInXML();
+	//}
+
+	//for (auto& boss : bossList) {
+
+	//	boss->SetAliveInXML();
+	//	boss->SetSavedDeathToAliveInXML();
+
+	//}
 
 	return true;
 }
@@ -410,36 +449,39 @@ void Scene::LoadState() {
 		// for (auto& enemy : enemyList) 
 		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
 			// read XML
-			std::string xmlRef = enemyNode.attribute("ref").as_string();
-			int xmlDeath = enemyNode.attribute("death").as_int();
-			int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
-			Vector2D pos(
-				enemyNode.attribute("x").as_int(),
-				enemyNode.attribute("y").as_int()
-			);
+			std::string type = enemyNode.attribute("type").as_string();
+			if (type == "boss") {
+				std::string xmlRef = enemyNode.attribute("ref").as_string();
+				int xmlDeath = enemyNode.attribute("death").as_int();
+				int xmlSavedDeath = enemyNode.attribute("savedDeath").as_int();
+				Vector2D pos(
+					enemyNode.attribute("x").as_int(),
+					enemyNode.attribute("y").as_int()
+				);
 
-			// case 1 update position if: death=0 & savedDeath=0 
-			if (xmlDeath == 0 && xmlSavedDeath == 0) {
-				for (int i = 0; i < bossList.size(); ++i) {
-					if (bossList[i]->GetRef() == xmlRef) {
-						bossList[i]->SetPosition(pos);
-						//bossList[i]->SetAliveInXML();
-						bossList[i]->SetEnabled(true);;
+				// case 1 update position if: death=0 & savedDeath=0 
+				if (xmlDeath == 0 && xmlSavedDeath == 0) {
+					for (int i = 0; i < bossList.size(); ++i) {
+						if (bossList[i]->GetRef() == xmlRef) {
+							bossList[i]->SetPosition(pos);
+							//bossList[i]->SetAliveInXML();
+							//bossList[i]->SetEnabled(true);;
+						}
 					}
 				}
-			}
-			// case 2 create enemy if: death=0 & savedDeath=1 
-			else if (xmlDeath == 1 && xmlSavedDeath == 0) {
-				for (int i = 0; i < bossList.size(); ++i) {
-					if (bossList[i]->GetRef() == xmlRef) {
-						bossList[i]->SetPosition(pos);
-						bossList[i]->SetAliveInXML();
-						bossList[i]->SetEnabled(true);;
+				// case 2 create enemy if: death=0 & savedDeath=1 
+				else if (xmlDeath == 1 && xmlSavedDeath == 0) {
+					for (int i = 0; i < bossList.size(); ++i) {
+						if (bossList[i]->GetRef() == xmlRef) {
+							bossList[i]->SetPosition(pos);
+							bossList[i]->SetAliveInXML();
+							bossList[i]->SetEnabled(true);;
+						}
 					}
 				}
-			}
 
-			// case 3 do nothing if: death=1 & savedDeath=1
+				// case 3 do nothing if: death=1 & savedDeath=1
+			}
 		}
 	}
 
@@ -500,11 +542,12 @@ void Scene::SaveState() {
 		for (pugi::xml_node itemNode : itemsNode.children("item")) {
 			if (i < itemList.size()) {
 				std::string enemyID = itemNode.attribute("name").as_string();
-				if (itemList[i]->DeathValue == 0) {
-					itemNode.attribute("x").set_value(itemList[i]->GetPosition().getX());
-					itemNode.attribute("y").set_value(itemList[i]->GetPosition().getY());
-				}
-				else itemNode.attribute("savedDeath").set_value(1);
+				//if (itemList[i]->DeathValue == 0) {
+				//	itemNode.attribute("x").set_value(itemList[i]->GetPosition().getX());
+				//	itemNode.attribute("y").set_value(itemList[i]->GetPosition().getY());
+				//}
+				//else 
+				itemNode.attribute("savedDeath").set_value(1);
 				i++;
 			}
 
@@ -517,12 +560,14 @@ void Scene::SaveState() {
 		int i = 0;
 		for (pugi::xml_node bossNode : bossesNode.children("enemy")) {
 			if (i < bossList.size()) {
-				std::string enemyID = bossNode.attribute("name").as_string();
-				if (bossList[i]->DeathValue == 0) {
-					bossNode.attribute("x").set_value(bossList[i]->GetPosition().getX());
-					bossNode.attribute("y").set_value(bossList[i]->GetPosition().getY());
+				std::string type = bossNode.attribute("type").as_string();
+				if (type == "boss") {
+					if (bossList[i]->DeathValue == 0) {
+						bossNode.attribute("x").set_value(bossList[i]->GetPosition().getX());
+						bossNode.attribute("y").set_value(bossList[i]->GetPosition().getY());
+					}
+					else bossNode.attribute("savedDeath").set_value(1);
 				}
-				else bossNode.attribute("savedDeath").set_value(1);
 				i++;
 			}
 

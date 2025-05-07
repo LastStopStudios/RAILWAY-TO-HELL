@@ -36,7 +36,7 @@ bool Boss::Start() {
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 	enemyID = parameters.attribute("name").as_string();
-    ref = parameters.attribute("ID").as_string();
+    ref = parameters.attribute("ref").as_string();
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
