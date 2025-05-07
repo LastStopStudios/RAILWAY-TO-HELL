@@ -77,6 +77,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
             Enemy* enemy = (Enemy*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ENEMY);
             enemy->SetParameters(enemyNode);
+            enemy->SetAliveInXML();
             Engine::GetInstance().scene->enemyList.push_back(enemy);
         }
     }
@@ -90,6 +91,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
             if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
                 Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
                 item->SetParameters(itemNode);
+                item->SetAliveInXML();
                 Engine::GetInstance().scene->itemList.push_back(item);  // Now using the member variable
             }
         }

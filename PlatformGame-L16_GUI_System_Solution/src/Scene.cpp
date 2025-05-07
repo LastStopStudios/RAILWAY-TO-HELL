@@ -157,18 +157,51 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
-	
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
-	for (auto& enemy : enemyList) {
-
-		enemy->SetAliveInXML();
-		enemy->SetSavedDeathToAliveInXML();
+	if (result == NULL)
+	{
+		LOG("Could not load file. Pugi error: %s", result.description());
+		return false;
 	}
 
-	for (auto& item : itemList) {
-		item->SetAliveInXML();
-		item->SetSavedDeathToAliveInXML();
+	pugi::xml_node sceneNode;
+	int maxScenes = 2;
+	for (int i = 0; i < 2; ++i) {
+		if (i == 0) sceneNode = loadFile.child("config").child("scene");
+		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
+		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
+
+		//item
+		pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			itemNode.attribute("death").set_value(0);
+			itemNode.attribute("savedDeath").set_value(0);
+		}
+
+		//enemies
+		pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			enemyNode.attribute("death").set_value(0);
+			enemyNode.attribute("savedDeath").set_value(0);
+		}
 	}
+
+	loadFile.save_file("config.xml");
+
+	//for (auto& enemy : enemyList) {
+
+	//	enemy->SetAliveInXML();
+	//	enemy->SetSavedDeathToAliveInXML();
+	//}
+
+	//for (auto& item : itemList) {
+	//	item->SetAliveInXML();
+	//	item->SetSavedDeathToAliveInXML();
+	//}
 
 	return true;
 }
