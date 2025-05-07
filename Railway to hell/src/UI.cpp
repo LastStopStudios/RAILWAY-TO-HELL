@@ -69,9 +69,9 @@ bool UI::CleanUp()
 		Engine::GetInstance().textures->UnLoad(vida);//Unload text background
 		vida = nullptr;
 	}
-	if (stamina != nullptr) {
-		Engine::GetInstance().textures->UnLoad(stamina);//Unload text background
-		stamina = nullptr;
+	if (amo != nullptr) {
+		Engine::GetInstance().textures->UnLoad(amo);//Unload text background
+		amo = nullptr;
 	}
 	return true;
 }
