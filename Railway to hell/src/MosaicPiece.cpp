@@ -21,6 +21,14 @@ bool MosaicPiece::Awake() {
 bool MosaicPiece::Start() {
     // Initialize textures
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+    if (texture != nullptr) {
+        int w, h;
+        SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+        LOG("Texture loaded successfully. Dimensions: %d x %d", w, h);
+    }
+    else {
+        LOG("Failed to load texture!");
+    }
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
@@ -46,13 +54,30 @@ bool MosaicPiece::Start() {
         bodyType::STATIC);
 
     pbody->listener = this;
-    pbody->ctype = ColliderType::ITEM;
+    pbody->ctype = ColliderType::MOSAIC_PIECE;
 
     return true;
 }
 
 bool MosaicPiece::Update(float dt)
 {
+    // Dibujar la textura con rotación
+    double angle = currentRotation * 90.0; // Convertir la rotación (0-3) a ángulos (0, 90, 180, 270)
+
+    // Usando la firma correcta: DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, 
+    // float speed, double angle, int pivotX, int pivotY, SDL_RendererFlip flip)
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,                // Textura
+        (int)position.getX(),   // Posición X
+        (int)position.getY(),   // Posición Y
+        nullptr,                // Sin sección específica (textura completa)
+        1.0f,                   // Velocidad normal
+        angle,                  // Ángulo de rotación
+        texW / 2,               // Punto de pivote X (centro de la textura)
+        texH / 2,               // Punto de pivote Y (centro de la textura)
+        SDL_FLIP_NONE           // Sin voltear la imagen
+    );
+
     if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
     {
         return true;
@@ -65,38 +90,6 @@ bool MosaicPiece::Update(float dt)
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
 
-    // Get the current animation frame
-    SDL_Rect frame = currentAnim.GetCurrentFrame();
-
-    // Convert rotation index to angle in degrees
-    double angle = currentRotation * 90.0;
-
-    // Si tu motor no tiene DrawTextureEx, puedes usar esta alternativa con SDL_RenderCopyEx directamente
-    SDL_Rect destRect;
-    destRect.x = (int)position.getX();
-    destRect.y = (int)position.getY();
-    destRect.w = texW;
-    destRect.h = texH;
-
-    SDL_Point center;
-    center.x = texW / 2;
-    center.y = texH / 2;
-
-    // Obtener el renderer desde el motor
-    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
-
-    // Dibujar con rotación
-    SDL_RenderCopyEx(
-        renderer,
-        texture,
-        &frame,         // Source rectangle (frame de animación)
-        &destRect,      // Destination rectangle
-        angle,          // Angle in degrees
-        &center,        // Pivot point (center of the image)
-        SDL_FLIP_NONE   // No flip
-    );
-
-    currentAnim.Update();
     return true;
 }
 
@@ -121,8 +114,12 @@ bool MosaicPiece::CleanUp()
 
 void MosaicPiece::Rotate()
 {
+    int oldRotation = currentRotation;
     currentRotation = (currentRotation + 1) % 4;
-   // Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
+    LOG("MosaicPiece: Pieza ID %d rotando de %d a %d grados", pieceId, oldRotation * 90, currentRotation * 90);
+
+    // Reproducir sonido de rotación
+    Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
 }
 
 bool MosaicPiece::IsCorrectRotation() const

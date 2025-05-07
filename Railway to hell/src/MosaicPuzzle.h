@@ -30,6 +30,10 @@ public:
     // Event triggered when puzzle is solved
     void OnPuzzleSolved();
 
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+    }
+
 private:
     std::vector<MosaicPiece*> pieces;
     bool solved;

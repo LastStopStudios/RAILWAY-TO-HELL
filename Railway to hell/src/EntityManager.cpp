@@ -115,7 +115,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new MosaicPiece();
 		break;
 	case EntityType::MOSAIC_LEVER:
-		entity = new MosaicPiece();
+		entity = new MosaicLever();
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();

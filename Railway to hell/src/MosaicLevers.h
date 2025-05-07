@@ -30,6 +30,10 @@ public:
     void AddTargetPiece(int pieceId);
     const std::vector<int>& GetTargetPieceIds() const;
 
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+    }
+
 private:
     SDL_Texture* texture;
     Animation idle;

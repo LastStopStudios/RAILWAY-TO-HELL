@@ -16,8 +16,8 @@ bool MosaicPuzzle::Awake() {
 
 bool MosaicPuzzle::Start() {
     // Load sound effects
-    solveFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("solve_fx").as_string("Assets/Audio/Fx/puzzle_solved.wav"));
-    rotateFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("rotate_fx").as_string("Assets/Audio/Fx/piece_rotate.wav"));
+    //solveFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("solve_fx").as_string("Assets/Audio/Fx/puzzle_solved.wav"));
+    //rotateFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("rotate_fx").as_string("Assets/Audio/Fx/piece_rotate.wav"));
 
     return true;
 }
@@ -72,10 +72,9 @@ bool MosaicPuzzle::IsSolved() const
 MosaicPiece* MosaicPuzzle::GetPieceById(int id)
 {
     for (auto piece : pieces) {
-        // Need to use getter method as pieceId is private
         if (piece != nullptr) {
-            // Assuming we have a GetPieceId() method or we can access by other means
-            if (piece->name == "mosaic_piece_" + std::to_string(id)) {
+            if (piece->GetPieceId() == id ||
+                piece->name == "mosaic_piece_" + std::to_string(id)) {
                 return piece;
             }
         }
@@ -97,5 +96,5 @@ void MosaicPuzzle::OnPuzzleSolved()
     Engine::GetInstance().audio.get()->PlayFx(solveFxId);
 
     // Here you can add logic to trigger events when the puzzle is solved
-    // For example, open a door, reveal a hidden item, etc.
+    // For example, open a doors...
 }

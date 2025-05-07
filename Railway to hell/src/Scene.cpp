@@ -81,6 +81,20 @@ bool Scene::Awake()
 		leverList.push_back(lever);
 	}
 
+	for (pugi::xml_node leversMosaicNode = configParameters.child("entities").child("mosaicLevers").child("mosaicLever"); leversMosaicNode; leversMosaicNode = leversMosaicNode.next_sibling("mosaicLever"))
+	{
+		MosaicLever* lever = (MosaicLever*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_LEVER);
+		lever->SetParameters(leversMosaicNode);
+		mosaicLeversList.push_back(lever);
+	}
+
+	for (pugi::xml_node piecesMosaicNode = configParameters.child("entities").child("mosaicPieces").child("mosaicPiece"); piecesMosaicNode; piecesMosaicNode = piecesMosaicNode.next_sibling("mosaicPiece"))
+	{
+		MosaicPiece* piece = (MosaicPiece*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_PIECE);
+		piece->SetParameters(piecesMosaicNode);
+		mosaicPiecesList.push_back(piece);
+	}
+
 	for (pugi::xml_node elevatorNode = configParameters.child("entities").child("elevators").child("elevator"); elevatorNode; elevatorNode = elevatorNode.next_sibling("elevator"))
 	{
 		Elevators* elevator = (Elevators*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ELEVATORS);

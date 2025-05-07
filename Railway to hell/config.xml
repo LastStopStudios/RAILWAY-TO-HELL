@@ -154,7 +154,7 @@
 
 			<!-- Palancas que controlan las piezas del mosaico -->
 			<mosaicLevers>
-				<mosaicLever name="mosaic_lever_1" x="3072" y="2080" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" gravity="false">
+				<mosaicLever name="mosaic_lever_1" x="3072" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />

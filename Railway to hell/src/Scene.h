@@ -14,6 +14,9 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
+#include "MosaicLevers.h"
+#include "MosaicPiece.h"
+#include "MosaicPuzzle.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -90,6 +93,8 @@ public:
 	std::vector<Doors*> doorList;
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
+	std::vector<MosaicLever*> mosaicLeversList;
+	std::vector<MosaicPiece*> mosaicPiecesList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
@@ -99,6 +104,8 @@ public:
 	std::vector<Doors*>& GetDoorsList() { return doorList; }
 	std::vector<Levers*>& GetLeversList() { return leverList; }
 	std::vector<Elevators*>& GetElevatorsList() { return elevatorList; }
+	std::vector<MosaicLever*>& GetMosaicLeversList() { return mosaicLeversList; }
+	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

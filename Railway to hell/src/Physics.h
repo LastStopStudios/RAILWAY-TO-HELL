@@ -46,6 +46,8 @@ enum class ColliderType {
 	DOORS,
 	LEVER,
 	PROJECTILE,
+	MOSAIC_PIECE,
+	MOSAIC_LEVER,
 	UNKNOWN
 	// ..
 };

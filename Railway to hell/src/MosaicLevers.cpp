@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "Log.h"
 
-MosaicLever::MosaicLever() : Entity(EntityType::LEVER), activated(false), puzzleRef(nullptr), activationCooldown(1.0f), cooldownTimer(0.0f)
+MosaicLever::MosaicLever() : Entity(EntityType::MOSAIC_LEVER), activated(false), puzzleRef(nullptr), activationCooldown(1.0f), cooldownTimer(0.0f)
 {
 
 }
@@ -32,7 +32,7 @@ bool MosaicLever::Start() {
     }
 
     // Comprobar si hay piezas adicionales en el formato "target_piece_id_2", "target_piece_id_3", etc.
-    for (int i = 2; i <= 5; i++) { 
+    for (int i = 2; i <= 5; i++) {
         std::string attrName = "target_piece_id_" + std::to_string(i);
         pugi::xml_attribute attr = parameters.attribute(attrName.c_str());
         if (attr) {
@@ -59,7 +59,7 @@ bool MosaicLever::Start() {
         bodyType::KINEMATIC);
 
     pbody->listener = this;
-    pbody->ctype = ColliderType::LEVER;
+    pbody->ctype = ColliderType::MOSAIC_LEVER;
 
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) {
@@ -79,6 +79,12 @@ bool MosaicLever::Update(float dt)
     // Update the cooldown timer
     if (cooldownTimer > 0.0f) {
         cooldownTimer -= dt;
+
+        // Si el timer ha llegado a cero y la animación de activación ya terminó, 
+        // pero la palanca sigue activada, reseteamos para permitir una nueva activación
+        if (cooldownTimer <= 0.0f && activated && currentAnimation == &idle) {
+            activated = false;
+        }
     }
 
     // Update position from physics
@@ -101,9 +107,8 @@ bool MosaicLever::Update(float dt)
     // Reset the animation if it completed a cycle and we're showing the activation animation
     if (currentAnimation == &lever_activated && lever_activated.HasFinished()) {
         currentAnimation = &idle;
-        activated = false;
+        // No reseteamos activated aquí para mantener el cooldown
     }
-
     return true;
 }
 
@@ -118,7 +123,7 @@ void MosaicLever::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void MosaicLever::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    // Nothing to do here
+
 }
 
 bool MosaicLever::CleanUp()
@@ -135,6 +140,7 @@ void MosaicLever::Activate()
 {
     activated = true;
     currentAnimation = &lever_activated;
+    lever_activated.Reset(); // Asegurarse que la animación empieza desde el principio
     cooldownTimer = activationCooldown;
 
     // Play activation sound
@@ -163,7 +169,6 @@ const std::vector<int>& MosaicLever::GetTargetPieceIds() const
     return targetPieceIds;
 }
 
-// Reemplazar el método GetTargetPieceId() (opcional, para compatibilidad)
 int MosaicLever::GetTargetPieceId() const
 {
     return targetPieceIds.empty() ? 0 : targetPieceIds[0];

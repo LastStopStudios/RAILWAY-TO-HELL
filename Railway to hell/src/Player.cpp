@@ -1470,6 +1470,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::LEVER: {
         break;
     }
+    case ColliderType::MOSAIC_PIECE: {
+        break;
+    }
+    case ColliderType::MOSAIC_LEVER: {
+        break;
+    }
     case ColliderType::SENSOR:
         NeedSceneChange = true;
         for (const auto& escena : escenas) { // Iterate through all scenes

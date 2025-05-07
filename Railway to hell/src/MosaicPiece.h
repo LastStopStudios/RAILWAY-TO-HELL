@@ -30,9 +30,15 @@ public:
     // Get piece ID
     int GetPieceId() const { return pieceId; }
 
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+    }
+
 private:
     SDL_Texture* texture;
     PhysBody* pbody;
+
+    Animation* currentAnimation = nullptr;
 
     // Dimensions
     int texW, texH;
