@@ -59,6 +59,7 @@ bool Mapa::Update(float dt) {
 		if (Mostrar) { LoadMap(); }
 		if(!Mostrar){
 			Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
+			CleanUp();
 		}
 	}
 
@@ -134,7 +135,7 @@ void Mapa::CoverXML() {
 
 	pugi::xml_node sceneNode = loadFile.child("config");
 	i = 1;
-	for (i = 1; i < 2; i++)// Iterate through all the maps
+	for (i = 1; i < 11; i++)// Iterate through all the maps
 	{
 		LOG("Entro al for");
 		std::string escena = (i == 1) ? "scene" : "scene" + std::to_string(i);//pass the scene from where to get the dialogues

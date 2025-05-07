@@ -89,7 +89,7 @@ public:
 	};
 
 	std::vector<Negro> negro = {
-		{"scene", 500, 200, 200, 200, true},//covering scene 1
+		{"scene", 500, 200, 200, 200, false},//covering scene 1
 		{"scene2", 1000, 500, 200, 200, false}//covering scene 2
 		//{"scene3", 1000, 500, 200, 200, false},//covering scene 3
 		//{"scene4", 1000, 500, 200, 200, false},//covering scene 4

@@ -39,6 +39,6 @@ private:
 	void LoadEnemiesItems(pugi::xml_node sceneNode);
 	void UnLoadEnemiesItems();
 	//Scene visibility on map
-	void VisibilityScene(pugi::xml_node sceneNode);
+	void VisibilityScene(int level);
 };
 

@@ -48,6 +48,7 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
     }*/
     UnLoadEnemiesItems();
     SetCurrentScene(level);
+    VisibilityScene(level);
     DrawScene(level, x, y);
 	//if (fade == true) {
 	//	FadeOut(1.0f, true, level, x, y); // Animation speed (FadeOut)
@@ -86,7 +87,6 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         player->SetPosition(Vector2D(x, y));
         player->ResetDoorAndLeverStates();
     }
-    VisibilityScene(sceneNode);
     LoadEnemiesItems(sceneNode);
     
 }
@@ -295,19 +295,27 @@ void SceneLoader::FadeOut(float speed, bool loadscene, int level, int x, int y) 
     }
 }
 
-void SceneLoader::VisibilityScene(pugi::xml_node sceneNode) {//player goes to another scene
+void SceneLoader::VisibilityScene(int level) {//player goes to another scene
     pugi::xml_document loadFile;
     if (!loadFile.load_file("config.xml")) {
         return;
     }
-
+    pugi::xml_node configNode = loadFile.child("config");
+    if (!configNode) {
+        return;
+    }
+    std::string sceneName = (level == 1) ? "scene" : "scene" + std::to_string(level);
+    pugi::xml_node sceneNode = configNode.child(sceneName.c_str());
+    if (!sceneNode) {
+        return;
+    }
     pugi::xml_node visible = sceneNode.child("visibility"); //search if the scene have been visited
     if (!visible) {
         return;
     }
-    if (!visible.attribute("accessed").as_bool()) {// if it's not the firts time
-        visible.attribute("accessed").set_value(true); //scene have been visited
-       
-    }  
+    if (visible.attribute("accessed").as_bool()) {// if it's not the firts time
+        visible.attribute("accessed").set_value(true); //scene have been visited       
+    }
+    visible.attribute("accessed").set_value(true); //scene have been visited 
     loadFile.save_file("config.xml");
 }
