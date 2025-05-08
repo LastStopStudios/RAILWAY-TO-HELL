@@ -313,6 +313,8 @@ bool Scene::CleanUp()
 		introTextoTexture = nullptr;
 	}
 
+	player->ResetToInitPosition();
+
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
 

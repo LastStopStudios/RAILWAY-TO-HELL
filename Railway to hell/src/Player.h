@@ -60,6 +60,12 @@ public:
 	void DialogoOn() { dialogo = true;}//stop player
 	void DialogoOff() { dialogo = false;}//return control player
 
+public:
+	void ResetToInitPosition();
+	void SaveInitialPosition();
+	float Scene1InitX, Scene1InitY;
+	float Scene2InitX, Scene2InitY;
+	float Scene3InitX, Scene3InitY;
 private:
 	// Private methods
 	void DrawPlayer();
