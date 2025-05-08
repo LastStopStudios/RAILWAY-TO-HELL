@@ -8,7 +8,7 @@
 		<vsync value="false" />
 	</render>
 	<window>
-		<resolution width="1280" height="768" scale="1" />
+		<resolution width="1280" height="768" scale="2" />
 		<fullscreen value="false" />
 		<borderless value="false" />
 		<resizable value="false" />
@@ -122,7 +122,7 @@
 
 			<!-- Piezas del mosaico -->
 			<mosaicPieces>
-				<mosaicPiece name="mosaic_piece_1" x="3072" y="1952" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_1" x="2944" y="1824" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="64" h="64" />
@@ -154,7 +154,7 @@
 
 			<!-- Palancas que controlan las piezas del mosaico -->
 			<mosaicLevers>
-				<mosaicLever name="mosaic_lever_1" x="3072" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" target_piece_id_2="3" gravity="false">
+				<mosaicLever name="mosaic_lever_1" x="3072" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" target_piece_id_2="2" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />
@@ -165,7 +165,7 @@
 						</lever_activated>
 					</animations>
 				</mosaicLever>
-				<mosaicLever name="mosaic_lever_2" x="3250" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="2" gravity="false">
+				<mosaicLever name="mosaic_lever_2" x="3250" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="3" target_piece_id_2="2" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />
@@ -176,7 +176,7 @@
 						</lever_activated>
 					</animations>
 				</mosaicLever>
-				<mosaicLever name="mosaic_lever_3" x="3350" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="3" target_piece_id_2="1" gravity="false">
+				<mosaicLever name="mosaic_lever_3" x="3350" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="3" target_piece_id_2="4" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />
@@ -187,7 +187,7 @@
 						</lever_activated>
 					</animations>
 				</mosaicLever>
-				<mosaicLever name="mosaic_lever_4" x="3450" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="4" target_piece_id_2="2" gravity="false">
+				<mosaicLever name="mosaic_lever_4" x="3450" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="4" target_piece_id_2="1" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />

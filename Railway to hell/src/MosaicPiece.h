@@ -51,7 +51,7 @@ private:
 
     // Rotation states
     int currentRotation;  // 0=0, 1=90, 2=180, 3=270
-    int correctRotation;  // The rotation needed to solve the puzzle
+    int correctRotation = 0;  // The rotation needed to solve the puzzle
 
     // Identifier for this piece
     int pieceId;
