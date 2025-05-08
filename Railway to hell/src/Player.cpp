@@ -1510,25 +1510,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ABYSS: 
 		touchingAbyss = true;
         if (lives > 0 && !isDying) {
-            isHurt = true;
-            hurted = false;
-            lives--;
-            // Usar coordenadas absolutas simples sin cálculos complejos
-            float safeX = 500.0f;  // Ajusta estos valores según tu nivel
-            float safeY = 300.0f;
+            hit();
 
-            // Usar directamente la función de transformación del Box2D para evitar problemas
-            b2Vec2 safePosition = b2Vec2(PIXEL_TO_METERS(safeX), PIXEL_TO_METERS(safeY));
-            pbodyUpper->body->SetTransform(safePosition, 0);
-
-            // Posición del cuerpo inferior un poco más abajo
-            b2Vec2 lowerSafePosition = b2Vec2(PIXEL_TO_METERS(safeX), PIXEL_TO_METERS(safeY + texH / 3));
-            pbodyLower->body->SetTransform(lowerSafePosition, 0);
-
-            // Detener cualquier velocidad
-            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
         }
+   
 		break;
     case ColliderType::UNKNOWN:
         break;
