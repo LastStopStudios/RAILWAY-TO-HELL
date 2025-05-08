@@ -333,6 +333,10 @@ bool Scene::CleanUp()
 		pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
 
 		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			std::string name = itemNode.attribute("name").as_string();
+			if (name == "Whip") {
+				itemNode.attribute("created").set_value(false);
+			}
 			itemNode.attribute("death").set_value(0);
 			itemNode.attribute("savedDeath").set_value(0);
 		}

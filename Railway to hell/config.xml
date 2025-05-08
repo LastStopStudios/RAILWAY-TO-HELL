@@ -143,7 +143,7 @@
 				</projectile>
 			</projectiles>
 			<items>
-				<item name="Whip" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item">
+				<item name="Whip" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item" created="false">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3155,7 +3155,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Whip" death="0" savedDeath="0" x="2045" y="1648" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item">
+				<item name="Whip" death="0" savedDeath="0" x="1861" y="1620" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item" created="false">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />

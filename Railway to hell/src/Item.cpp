@@ -297,6 +297,101 @@ void Item::SetSavedDeathToAliveInXML()
     SavedDeathValue = 0;
 }
 
+void Item::SetCreatedTrueInXML() {
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for item in the XML");
+		return;
+	}
+
+	itemNode.attribute("created").set_value(true); // true item is created
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for item");
+	}
+
+}
+
+void Item::SetCreatedFalseInXML() {
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node itemNode;
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+	if (currentScene == 1) {
+		itemNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 2) {
+		itemNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 3) {
+		itemNode = doc.child("config")
+			.child("scene3")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+
+	if (!itemNode) {
+		LOG("Could not find the node for item in the XML");
+		return;
+	}
+
+	itemNode.attribute("created").set_value(false); // false item is not created
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for item");
+	}
+}
+
 void Item::SetEnabled(bool active) {
     isEnabled = active;
     pbody->body->SetEnabled(active);

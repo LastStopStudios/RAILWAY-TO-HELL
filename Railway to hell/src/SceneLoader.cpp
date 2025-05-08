@@ -135,12 +135,14 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         {
             int deathValue = itemNode.attribute("death").as_int();
             int deathXMLValue = itemNode.attribute("savedDeath").as_int();
-
-            if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
-                Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-                item->SetParameters(itemNode);
-                item->SetAliveInXML();
-                Engine::GetInstance().scene->GetItemList().push_back(item);
+			bool createdXMLValue = itemNode.attribute("created").as_bool();
+            if (createdXMLValue) {
+                if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+                    Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+                    item->SetParameters(itemNode);
+                    item->SetAliveInXML();
+                    Engine::GetInstance().scene->GetItemList().push_back(item);
+                }
             }
         }
     }

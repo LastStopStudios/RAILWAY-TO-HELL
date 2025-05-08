@@ -46,6 +46,10 @@ public:
 
 	void SetSavedDeathToAliveInXML();
 
+	void SetCreatedTrueInXML();
+
+	void SetCreatedFalseInXML();
+
 	void SetEnabled(bool active);
 
 	bool IsEnabled() const { return isEnabled; }

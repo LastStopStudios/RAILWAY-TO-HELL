@@ -219,6 +219,7 @@ bool Boss::Update(float dt)
             Vector2D pos(position.getX() + texW, position.getY());
             item->SetPosition(pos);
             item->SavePosition("Whip");
+            item->SetCreatedTrueInXML();
             
             if (pendingDisable) {
                 SetEnabled(false);
