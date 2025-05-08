@@ -144,7 +144,7 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
-
+	Boss* boss;
 	//background music statement
 	int musicaFondoId = -1;
 

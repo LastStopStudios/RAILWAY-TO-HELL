@@ -37,6 +37,8 @@ bool Boss::Start() {
     texH = parameters.attribute("h").as_int();
 	enemyID = parameters.attribute("name").as_string();
     ref = parameters.attribute("ref").as_string();
+    initX = parameters.attribute("x").as_int();
+    initY = parameters.attribute("y").as_int();
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -680,6 +682,48 @@ void Boss::ResetPath() {
     pathfinding->ResetPath(tilePos);
 }
 
+void Boss::ResetPosition() {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+    if (result == NULL)
+    {
+        LOG("Could not load file. Pugi error: %s", result.description());
+        return;
+    }
+
+    pugi::xml_node sceneNode;
+
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+    if (currentScene == 1) {
+        sceneNode = loadFile.child("config").child("scene");
+    }
+    if (currentScene == 2) {
+        sceneNode = loadFile.child("config").child("scene2");
+    }
+    if (currentScene == 3) {
+        sceneNode = loadFile.child("config").child("scene3");
+    }
+
+    //bosses
+    pugi::xml_node bossesNode = sceneNode.child("entities").child("bosses");
+    if (!Engine::GetInstance().scene.get()->bossList.empty()) {
+        for (pugi::xml_node bossNode : bossesNode.children("boss")) {
+            std::string xmlRef = bossNode.attribute("ref").as_string();
+            for (const auto& boss : Engine::GetInstance().scene.get()->bossList) {
+                if (boss->GetRef() == xmlRef) {
+                        bossNode.attribute("x").set_value(initX);
+                        bossNode.attribute("y").set_value(initY);
+                }
+            }
+        }
+    }
+
+    //Saves the modifications to the XML 
+    loadFile.save_file("config.xml");
+    
+}
+
 void Boss::SavePosition(std::string name) {
     // Save the current position of the boss in the XML file
     pugi::xml_document doc;
@@ -745,6 +789,8 @@ void Boss::SavePosition(std::string name) {
 void Boss::ResetLives() {
     lives = 12;
 	currentAnimation = &idle;
+    if(isDying) isDying = false;
+    if(isDead) isDead = false;
 }
 
 // Fix for hurt animation in OnCollision

@@ -61,7 +61,13 @@ public:
 
 	void ResetLives();
 
+	void ResetPosition();
+
 	int GetCurrentLives() { return lives; }
+
+	int GetInitX() { return initX; }
+
+	int GetInitY() { return initY; }
 public:
 
 	// Load & save 
@@ -101,6 +107,8 @@ private:
 	SDL_Texture* texture;
 	const char* texturePath;
 	int texW, texH;
+
+	int initX, initY;
 
 	pugi::xml_node parameters;
 
