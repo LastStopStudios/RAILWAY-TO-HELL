@@ -216,6 +216,8 @@ bool Boss::Update(float dt)
             item->Start();
             Vector2D pos(position.getX() + texW, position.getY());
             item->SetPosition(pos);
+            item->SavePosition("Whip");
+            
             if (pendingDisable) {
                 SetEnabled(false);
                 pendingDisable = false;
@@ -647,26 +649,28 @@ bool Boss::CleanUp()
 }
 
 void Boss::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    float adjustment = 3.95;
 
-    // Calculate the current offset between upper and lower bodies
-    b2Vec2 upperPos = pbodyUpper->body->GetPosition();
-    b2Vec2 lowerPos = pbodyLower->body->GetPosition();
-    b2Vec2 offset = lowerPos - upperPos;
+    // Establish upper body position
+    pos.setX(pos.getX());
+    pos.setY(pos.getY() + texH / 3 + adjustment);
+    b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    pbodyUpper->body->SetTransform(upperPos, 0);
 
-    // Set position for upper body
-    pbodyUpper->body->SetTransform(bodyPos, 0);
-
-    // Set position for lower body, maintaining the same offset
-    pbodyLower->body->SetTransform(bodyPos + offset, 0);
+    // Establish lower body position
+    Vector2D lowerPos = pos;
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);
+    b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
+    pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Boss::GetPosition() {
+    float adjustment = 3.95;
+
     // We use the upper body for position tracking
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+    pos.setY(pos.getY() - texH / 3 + adjustment);
     return pos;
 }
 
@@ -674,6 +678,73 @@ void Boss::ResetPath() {
     Vector2D pos = GetPosition();
     Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
     pathfinding->ResetPath(tilePos);
+}
+
+void Boss::SavePosition(std::string name) {
+    // Save the current position of the boss in the XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node sceneNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        sceneNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        sceneNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        sceneNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!sceneNode) {
+        LOG("Could not find the node for item in the XML");
+        return;
+    }
+
+    //Save info to XML 
+
+    //boss
+    pugi::xml_node bossesNode = sceneNode.child("entities").child("bosses");
+    if (!Engine::GetInstance().scene.get()->bossList.empty()) {
+        int i = 0;
+        for (pugi::xml_node bossNode : bossesNode.children("boss")) {
+            if (i < Engine::GetInstance().scene.get()->bossList.size()) {
+                std::string enemyID = bossNode.attribute("name").as_string();
+                if (enemyID == name) {
+                    bossNode.attribute("x").set_value(Engine::GetInstance().scene.get()->bossList[i]->GetPosition().getX());
+                    bossNode.attribute("y").set_value(Engine::GetInstance().scene.get()->bossList[i]->GetPosition().getY());
+                }
+                i++;
+            }
+
+        }
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+}
+
+void Boss::ResetLives() {
+    lives = 12;
+	currentAnimation = &idle;
 }
 
 // Fix for hurt animation in OnCollision

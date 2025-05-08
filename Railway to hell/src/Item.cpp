@@ -360,6 +360,53 @@ Vector2D Item::GetPosition() {
 	return pos;
 }
 
+void Item::SavePosition(std::string name) {
+
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+	if (result == NULL)
+	{
+		LOG("Could not load file. Pugi error: %s", result.description());
+		return;
+	}
+
+	pugi::xml_node sceneNode;
+
+	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	if (currentScene == 1) {
+		sceneNode = loadFile.child("config").child("scene");
+	}
+	if (currentScene == 2) {
+		sceneNode = loadFile.child("config").child("scene2");
+	}
+	if (currentScene == 3) {
+		sceneNode = loadFile.child("config").child("scene3");
+	}
+
+	//Save info to XML 
+
+	//items
+	pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+	if (!Engine::GetInstance().scene.get()->itemList.empty()) {
+		int i = 0;
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			if (i < Engine::GetInstance().scene.get()->itemList.size()) {
+				std::string enemyID = itemNode.attribute("name").as_string();
+				if (enemyID == name) {
+					itemNode.attribute("x").set_value(Engine::GetInstance().scene.get()->itemList[i]->GetPosition().getX());
+					itemNode.attribute("y").set_value(Engine::GetInstance().scene.get()->itemList[i]->GetPosition().getY());
+				}
+				i++;
+			}
+
+		}
+	}
+
+	//Saves the modifications to the XML 
+	loadFile.save_file("config.xml");
+}
+
 bool Item::CleanUp()
 {
 

@@ -52,6 +52,8 @@ public:
 
 	std::string GetRef() { return ref; }
 
+	void SavePosition(std::string name);
+
 public:
 
 	// Load & save 

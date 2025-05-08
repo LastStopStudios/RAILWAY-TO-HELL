@@ -57,6 +57,11 @@ public:
 
 	std::string GetRef() { return ref; }
 
+	void SavePosition(std::string name);
+
+	void ResetLives();
+
+	int GetCurrentLives() { return lives; }
 public:
 
 	// Load & save 

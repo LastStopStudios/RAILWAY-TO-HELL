@@ -771,7 +771,7 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 700 , 600, false, false);
         hasDied = false;
     }
     // unlocks sensors
@@ -1575,22 +1575,26 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::SetPosition(Vector2D pos) {
+    int adjustment = 2;
     // Establish upper body position
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 3);  // Locate at one third of the total height.
+    pos.setX(pos.getX() );
+    pos.setY(pos.getY() + texH /3 + adjustment);  
     b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
     pbodyUpper->body->SetTransform(upperPos, 0);
 
     // Establish lower body position
     Vector2D lowerPos = pos;
-    lowerPos.setY(pos.getY() + texH / 3);  // One third lower than the upper
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);  
     b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
     pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Player::GetPosition() {
+    int adjustment = 2;
+
     // Use upper body position as a reference
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+	pos.setY(pos.getY() - texH / 3 + adjustment);  
     return pos;
 }
