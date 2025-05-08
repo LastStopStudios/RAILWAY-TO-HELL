@@ -1,21 +1,29 @@
-#pragma once
+#ifndef __MOSAIC_PUZZLE_H__
+#define __MOSAIC_PUZZLE_H__
 
-#include <vector>
-#include "Entity.h"
 #include "MosaicPiece.h"
+#include <vector>
 
-class MosaicPuzzle : public Entity
+// This is a manager class
+class MosaicPuzzle
 {
 public:
     MosaicPuzzle();
     virtual ~MosaicPuzzle();
 
-    bool Awake() override;
-    bool Start() override;
-    bool Update(float dt) override;
-    bool CleanUp() override;
+    // Initialize the puzzle
+    bool Initialize();
 
-    // Rotate a specific piece by its ID
+    // Update logic
+    bool Update(float dt);
+
+    // Clean up resources
+    bool CleanUp();
+
+    // Add a piece to the puzzle
+    void AddPiece(MosaicPiece* piece);
+
+    // Rotate a specific piece by ID
     void RotatePiece(int pieceId);
 
     // Check if the puzzle is solved
@@ -24,23 +32,20 @@ public:
     // Get a piece by its ID
     MosaicPiece* GetPieceById(int id);
 
-    // Add a new piece to the puzzle
-    void AddPiece(MosaicPiece* piece);
-
-    // Event triggered when puzzle is solved
+    // Event when the puzzle is solved
     void OnPuzzleSolved();
 
-    void SetParameters(pugi::xml_node parameters) {
-        this->parameters = parameters;
-    }
+public:
+    // Sound effect IDs
+    int solveFxId;
+    int rotateFxId;
 
 private:
+    // List of pieces that make up this puzzle
     std::vector<MosaicPiece*> pieces;
+
+    // Flag to track if the puzzle has been solved
     bool solved;
-
-    // Sound effects
-    unsigned int solveFxId;
-    unsigned int rotateFxId;
-
-    pugi::xml_node parameters;
 };
+
+#endif // __MOSAIC_PUZZLE_H__

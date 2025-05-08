@@ -95,6 +95,7 @@ public:
 	std::vector<Elevators*> elevatorList;
 	std::vector<MosaicLever*> mosaicLeversList;
 	std::vector<MosaicPiece*> mosaicPiecesList;
+	std::vector<MosaicPuzzle*> mosaicPuzzleList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
@@ -106,6 +107,7 @@ public:
 	std::vector<Elevators*>& GetElevatorsList() { return elevatorList; }
 	std::vector<MosaicLever*>& GetMosaicLeversList() { return mosaicLeversList; }
 	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }
+	std::vector<MosaicPuzzle*>& GetMosaicPuzzleList() { return mosaicPuzzleList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

@@ -4,21 +4,15 @@
 #include "Log.h"
 #include "Scene.h"
 
-MosaicPuzzle::MosaicPuzzle() : Entity(EntityType::UNKNOWN), solved(false)
+MosaicPuzzle::MosaicPuzzle() : solved(false), solveFxId(0), rotateFxId(0)
 {
 }
 
-MosaicPuzzle::~MosaicPuzzle() {}
-
-bool MosaicPuzzle::Awake() {
-    return true;
+MosaicPuzzle::~MosaicPuzzle()
+{
 }
 
-bool MosaicPuzzle::Start() {
-    // Load sound effects
-    //solveFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("solve_fx").as_string("Assets/Audio/Fx/puzzle_solved.wav"));
-    //rotateFxId = Engine::GetInstance().audio.get()->LoadFx(parameters.attribute("rotate_fx").as_string("Assets/Audio/Fx/piece_rotate.wav"));
-
+bool MosaicPuzzle::Initialize() {
     return true;
 }
 
@@ -49,7 +43,11 @@ void MosaicPuzzle::RotatePiece(int pieceId)
     MosaicPiece* piece = GetPieceById(pieceId);
     if (piece != nullptr) {
         piece->Rotate();
-        Engine::GetInstance().audio.get()->PlayFx(rotateFxId);
+
+        // Play rotation sound effect if valid
+        if (rotateFxId > 0) {
+            Engine::GetInstance().audio.get()->PlayFx(rotateFxId);
+        }
 
         // Check if the puzzle is solved after rotation
         if (IsSolved() && !solved) {
@@ -60,6 +58,11 @@ void MosaicPuzzle::RotatePiece(int pieceId)
 
 bool MosaicPuzzle::IsSolved() const
 {
+    // If there are no pieces, the puzzle can't be solved
+    if (pieces.empty()) {
+        return false;
+    }
+
     // Check if all pieces are in their correct rotation
     for (auto piece : pieces) {
         if (!piece->IsCorrectRotation()) {
@@ -86,6 +89,7 @@ void MosaicPuzzle::AddPiece(MosaicPiece* piece)
 {
     if (piece != nullptr) {
         pieces.push_back(piece);
+        LOG("MosaicPuzzle: Added piece ID %d", piece->GetPieceId());
     }
 }
 
@@ -93,8 +97,12 @@ void MosaicPuzzle::OnPuzzleSolved()
 {
     solved = true;
     LOG("Mosaic puzzle solved!");
-    Engine::GetInstance().audio.get()->PlayFx(solveFxId);
+
+    // Play solve sound effect if valid
+    if (solveFxId > 0) {
+        Engine::GetInstance().audio.get()->PlayFx(solveFxId);
+    }
 
     // Here you can add logic to trigger events when the puzzle is solved
-    // For example, open a doors...
+    // For example, open doors 
 }
