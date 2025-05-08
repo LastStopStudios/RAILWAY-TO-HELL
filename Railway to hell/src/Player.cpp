@@ -1458,7 +1458,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurt = true;
-            lives--;
+            lives = lives-2;
 			// Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;

@@ -3088,7 +3088,7 @@
 	</scene2>
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
-		<visibility accessed="false" />
+		<visibility accessed="true" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
