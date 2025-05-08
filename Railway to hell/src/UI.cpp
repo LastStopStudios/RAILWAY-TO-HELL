@@ -158,12 +158,12 @@ void UI::Boss1()
 {
 	//SDL_Rect dstRect2 = { posxb,posyb, wb, hb }; //Position and scale Boss health
 	//if(figth){/*boss = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load life of the player*/}
-	SDL_Rect dstRect = { bposx,posy2, w, h }; //Position and scale character health
-	SDL_Rect dstRect2 = { bposx2,posy2, w, h }; //Position and scale character health
-	SDL_Rect dstRect3 = { bposx3,posy2, w, h }; //Position and scale character health
-	SDL_Rect dstRect4 = { bposx4,posy2, w, h }; //Position and scale character health
-	SDL_Rect dstRect5 = { bposx5,posy2, w, h }; //Position and scale character health
-	SDL_Rect dstRect6 = { bposx6,posy2, w, h }; //Position and scale character health
+	SDL_Rect dstRect = { bposx,posy2, wb, hb}; //Position and scale character health
+	SDL_Rect dstRect2 = { bposx2,posy2, wb, hb }; //Position and scale character health
+	SDL_Rect dstRect3 = { bposx3,posy2, wb, hb }; //Position and scale character health
+	SDL_Rect dstRect4 = { bposx4,posy2, wb, hb }; //Position and scale character health
+	SDL_Rect dstRect5 = { bposx5,posy2, wb, hb }; //Position and scale character health
+	SDL_Rect dstRect6 = { bposx6,posy2, wb, hb }; //Position and scale character health
 	switch (vidab)
 	{
 	case 1:

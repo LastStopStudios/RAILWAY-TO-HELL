@@ -54,10 +54,10 @@ private:
 	SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	SDL_Texture* boss = nullptr;//stamina texture (Dash)
 	//UI sizes
-	int w = 30, h = 20, w2, h2, wb, hb;
+	int w = 30, h = 20, w2, h2, wb=60, hb = 40;
 	//UI positions
 	float posy = 0, posx = 0, posx2=20, posx3 = 40, posx4 = 60, posx5 = 80, posxb, posyb;// renders player position
-	float posy2 = 400, bposx = 0, bposx2 = 20, bposx3 = 40, bposx4 = 60, bposx5 = 80, bposx6 = 100;//render boss 1 position
+	float posy2 = 700, bposx = 500, bposx2 = 540, bposx3 = 580, bposx4 = 620, bposx5 = 660, bposx6 = 700;//render boss 1 position
 	
 	
 
