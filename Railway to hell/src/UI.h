@@ -36,13 +36,14 @@ public:
 private:
 	void LoadTUi();//loads textures of the UI
 	void renderUI();//renders UI
-	void Boss();//Only if there is a boss figth
+	void PJs(); //render player lives
+	void Boss1();//Only if there is a boss figth
 
 
 public:
 	bool dialogoOn = false;
 	bool figth = false;
-	int vidap;
+	int vidap, vidab;
 
 private:
 	//Textures
@@ -55,7 +56,8 @@ private:
 	//UI sizes
 	int w = 30, h = 20, w2, h2, wb, hb;
 	//UI positions
-	float posy = 0, posx = 0, posx2=20, posx3 = 40, posx4 = 60, posx5 = 80, posxb, posyb;// renders position
+	float posy = 0, posx = 0, posx2=20, posx3 = 40, posx4 = 60, posx5 = 80, posxb, posyb;// renders player position
+	float posy2 = 400, bposx = 0, bposx2 = 20, bposx3 = 40, bposx4 = 60, bposx5 = 80, bposx6 = 100;//render boss 1 position
 	
 	
 

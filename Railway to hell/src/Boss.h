@@ -91,7 +91,7 @@ private:
 	bool canAttack = true;
 
 	// lives for the boss
-	int lives = 12; // for testing try to set it to 2
+	int lives = 6; // for testing try to set it to 2
 
 	int offsetX;
 	bool isDying = false;
@@ -103,6 +103,9 @@ private:
 	bool battleStarted = false;
 
 	bool ishurt = false;
+
+	//one hit colision
+	bool Hiteado = false;
 	
 };
 

@@ -287,6 +287,8 @@ bool Player::Update(float dt)
             HandleDeath(dt);
         }
         if (hasDied) {
+            //UI Lives
+            Engine::GetInstance().ui->figth = false;
             HandleSceneSwitching();
 			return true;
         }
@@ -872,7 +874,7 @@ void Player::HandleDeath(float dt) {
 		hasDied = true;
         isDying = false;
 		hasDeathStarted = false;
-        lives = 3;
+        lives = 5;
 		isWakingUp = true;
 		currentAnimation = &wakeupAnim;
 		wakeupAnim.Reset();
@@ -1421,9 +1423,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once
+            if (physB->ID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UI Lives
+                Engine::GetInstance().ui->figth = true;
+            }
             NeedDialogue = true;
             Id = physB->ID;
             physB->Salio = true;
+           
 
         }
         return;

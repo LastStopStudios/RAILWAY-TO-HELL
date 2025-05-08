@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "EntityManager.h"
 #include "DialogoM.h"
+#include "UI.h"
 
 
 Boss::Boss() : Entity(EntityType::BOSS)
@@ -225,10 +226,16 @@ bool Boss::Update(float dt)
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
+        //UI Lives
+        Engine::GetInstance().ui->figth = false;
+
         // When dying, don't process any other logic
         return true;
     }
-
+    if (Engine::GetInstance().ui->figth == true) {
+        //UI Lives
+        Engine::GetInstance().ui->vidab = lives;
+    }
 
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
@@ -389,7 +396,8 @@ bool Boss::Update(float dt)
     );
 
     currentAnimation->Update();
-
+    
+    
     // pathfinding drawing
     pathfinding->DrawPath();
     pathfinding->ResetPath(enemyTilePos);
@@ -470,80 +478,84 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physA != pbodyUpper && physA != pbodyLower) {
         return;
     }
-
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
         // Player collision handling
         break;
 
-    case ColliderType::PLAYER_ATTACK: {
-        if (lives > 0) {
-            lives--;
+    case ColliderType::PLAYER_ATTACK:
+        if (Hiteado == false) {
+            Hiteado = true;
             if (lives > 0) {
-                ishurt = true;
-                currentAnimation = &hurt;
-                hurt.Reset();
+                lives = lives - 1;
+                if (lives > 0) {
+                    ishurt = true;
+                    currentAnimation = &hurt;
+                    hurt.Reset();
 
-                // Add cleanup when getting hurt
-                if (isAttacking) {
-                    isAttacking = false;
-                    if (area != nullptr) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(area);
-                        area = nullptr;
+                    // Add cleanup when getting hurt
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (area != nullptr) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                            area = nullptr;
+                        }
                     }
                 }
-            }
-            else if (lives <= 0 && !isDying) {
-                // Same cleanup for death case
-                if (isAttacking) {
-                    isAttacking = false;
-                    if (area != nullptr) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(area);
-                        area = nullptr;
+                else if (lives <= 0 && !isDying) {
+                    // Same cleanup for death case
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (area != nullptr) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(area);
+                            area = nullptr;
+                        }
                     }
+                    isDying = true;
+                    currentAnimation = &die;
+                    currentAnimation->Reset();
+                    // Stop both bodies
+                    pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                    // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
+                     // Engine::GetInstance().audio.get()->PlayFx(deathFx);
                 }
-                isDying = true;
-                currentAnimation = &die;
-                currentAnimation->Reset();
-
-                // Stop both bodies
-                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-               // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
-                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
             }
         }
-    }
-                                    break;
+        break; 
 
-    case ColliderType::PLAYER_WHIP_ATTACK: {
-        if (lives > 0) {
-            lives -= 1;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
+    case ColliderType::PLAYER_WHIP_ATTACK:
+        if(Hiteado == false){
+            Hiteado = true;
+
             if (lives > 0) {
-                ishurt = true;
-                currentAnimation = &hurt;
-                hurt.Reset();
-            }
-            else if (lives <= 0 && !isDead) {
-                isDead = true;
-                currentAnimation = &die;
-                a = 1;
-                Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-                Engine::GetInstance().dialogoM->Texto("2");//text after boss death 
+                lives = lives - 2;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
+                if (lives > 0) {
+                    ishurt = true;
+                    currentAnimation = &hurt;
+                    hurt.Reset();
+                }
+                else if (lives <= 0 && !isDead) {
+                    isDead = true;
+                    currentAnimation = &die;
+                    a = 1;
+                    Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
+                    Engine::GetInstance().dialogoM->Texto("2");//text after boss death 
 
-                // Stop both bodies
-                pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    // Stop both bodies
+                    pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 
-                // Disable gravity on both bodies
-                pbodyUpper->body->SetGravityScale(0.0f);
-                pbodyLower->body->SetGravityScale(0.0f);
+                    // Disable gravity on both bodies
+                    pbodyUpper->body->SetGravityScale(0.0f);
+                    pbodyLower->body->SetGravityScale(0.0f);
+                }
             }
         }
-    }
-                                         break;
+        break;
+                                  
     }
 }
 
@@ -557,6 +569,12 @@ void Boss::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
+        break;
+    case ColliderType::PLAYER_WHIP_ATTACK:
+        Hiteado = false;
+        break;
+    case ColliderType::PLAYER_ATTACK:
+        Hiteado = false;
         break;
     }
 }

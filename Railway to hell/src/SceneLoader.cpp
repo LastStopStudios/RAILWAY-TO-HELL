@@ -313,7 +313,7 @@ void SceneLoader::VisibilityScene(int level) {//player goes to another scene
     if (!visible) {
         return;
     }
-    if (visible.attribute("accessed").as_bool()) {// if it's not the firts time
+    if (visible.attribute("accessed").as_bool()) {
         visible.attribute("accessed").set_value(true); //scene have been visited       
     }
     visible.attribute("accessed").set_value(true); //scene have been visited 
