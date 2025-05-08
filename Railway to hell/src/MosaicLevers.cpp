@@ -31,7 +31,7 @@ bool MosaicLever::Start() {
         targetPieceIds.push_back(firstTargetId);
     }
 
-    // Comprobar si hay piezas adicionales en el formato "target_piece_id_2", "target_piece_id_3", etc.
+    // Check for additional target pieces in the format "target_piece_id_2", "target_piece_id_3", etc.
     for (int i = 2; i <= 5; i++) {
         std::string attrName = "target_piece_id_" + std::to_string(i);
         pugi::xml_attribute attr = parameters.attribute(attrName.c_str());
@@ -42,7 +42,7 @@ bool MosaicLever::Start() {
             }
         }
         else {
-            break; // Si no encontramos el atributo, salimos del bucle
+            break; // If the attribute is not found, exit the loop
         }
     }
 
@@ -80,9 +80,8 @@ bool MosaicLever::Update(float dt)
     if (cooldownTimer > 0.0f) {
         cooldownTimer -= dt;
 
-        // Si el timer ha llegado a cero y la animación de activación ya terminó, 
-        // pero la palanca sigue activada, reseteamos para permitir una nueva activación
-        if (cooldownTimer <= 0.0f && activated && currentAnimation == &idle) {
+        // If the timer reached zero, allow a new activation
+        if (cooldownTimer <= 0.0f) {
             activated = false;
         }
     }
@@ -107,7 +106,11 @@ bool MosaicLever::Update(float dt)
     // Reset the animation if it completed a cycle and we're showing the activation animation
     if (currentAnimation == &lever_activated && lever_activated.HasFinished()) {
         currentAnimation = &idle;
-        // No reseteamos activated aquí para mantener el cooldown
+
+        // If cooldown is already over, also reset activation
+        if (cooldownTimer <= 0.0f) {
+            activated = false;
+        }
     }
     return true;
 }
@@ -140,7 +143,7 @@ void MosaicLever::Activate()
 {
     activated = true;
     currentAnimation = &lever_activated;
-    lever_activated.Reset(); // Asegurarse que la animación empieza desde el principio
+    lever_activated.Reset(); // Make sure the animation starts from the beginning
     cooldownTimer = activationCooldown;
 
     // Play activation sound
