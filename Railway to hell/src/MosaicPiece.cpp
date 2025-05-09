@@ -44,13 +44,13 @@ bool MosaicPiece::Start() {
         currentRotation = 1; // 90 degrees
         break;
     case 2:
-        currentRotation = 2; // 180 degrees
+        currentRotation = 1; // 180 degrees
         break;
     case 3:
         currentRotation = 1; // 90 degrees
         break;
     case 4:
-        currentRotation = 3; // 270 degrees
+        currentRotation = 1; // 270 degrees
         break;
     }
     // Load idle animation
@@ -126,8 +126,9 @@ bool MosaicPiece::CleanUp()
 void MosaicPiece::Rotate()
 {
     int oldRotation = currentRotation;
-    currentRotation = (currentRotation + 1);
-    LOG("MosaicPiece: Piece ID %d rotating from %d to %d degrees", pieceId, oldRotation, currentRotation);
+    // Increment rotation and wrap around using modulo 4 (0, 1, 2, 3)
+    currentRotation = (currentRotation + 1) % 4;
+    LOG("MosaicPiece: Piece ID %d rotating from %d to %d degrees", pieceId, oldRotation * 90, currentRotation * 90);
 
     // Play rotation sound
     //Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
@@ -135,7 +136,7 @@ void MosaicPiece::Rotate()
 
 bool MosaicPiece::IsCorrectRotation() const
 {
-    return currentRotation == correctRotation;
+    return (currentRotation % 4) == (correctRotation % 4);
 }
 
 int MosaicPiece::GetRotation() const
