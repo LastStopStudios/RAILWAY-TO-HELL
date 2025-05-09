@@ -272,20 +272,37 @@ bool Scene::PostUpdate()
 	
 	SceneState currentState = GetCurrentState();
 	if (currentState == SceneState::GAMEPLAY) {
-		if(BossBattle == false){
+		// Definimos el factor de zoom aquí para usarlo en ambos casos
+		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
+
+		if (BossBattle == false) {
 			//Camera follows player
-			Engine::GetInstance().render.get()->camera.x = player->position.getX() * -1.0f + 340.0f;
-			Engine::GetInstance().render.get()->camera.y = player->position.getY() * -1.0f + 485.0f;
-		}else if(BossBattle == true){
+			int window_width, window_height;
+			Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
+
+			// Centro de la pantalla (la mitad del ancho y alto)
+			int center_x = window_width / 2;
+			int center_y = window_height / 2;
+
+			Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x;
+			Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
+		}
+		else if (BossBattle == true) {
 			//Camera for Boss Battle
 			for (const auto& Bosses : Bosses) { // Iterate through all scenes
 				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {//scene id equals scene we are
-					Engine::GetInstance().render.get()->camera.x = - Bosses.x;// position X of the camera
-					Engine::GetInstance().render.get()->camera.y = - Bosses.y;// position Y of the camera
+					// Aplicamos el factor de escala a las coordenadas del jefe
+					Engine::GetInstance().render.get()->camera.x = (int)(-Bosses.x * TEXTURE_SIZE_MULTIPLIER) + 100;
+					Engine::GetInstance().render.get()->camera.y = (int)(-Bosses.y * TEXTURE_SIZE_MULTIPLIER) - 140;
+
+					// Opcionalmente, podemos añadir un ajuste central como en el caso del jugador
+					int window_width, window_height;
+					Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
+					int center_x = window_width / 2;
+					int center_y = window_height / 2;
 				}
 			}
 		}
-		
 	}
 
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
