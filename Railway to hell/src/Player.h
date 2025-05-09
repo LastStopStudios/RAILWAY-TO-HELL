@@ -5,6 +5,8 @@
 #include "Box2D/Box2D.h"
 #include "Animation.h"
 #include <vector>
+#include <chrono>
+#include <thread>
 
 struct SDL_Texture;
 
@@ -97,6 +99,7 @@ private:
 	void HandleDeath(float dt);
 	void HandleWakeup(float dt);
 	void Idle();
+	void HitWcooldown(float dt);
 private:
 	// Public properties
 	SDL_Texture* texture = NULL;
@@ -242,7 +245,7 @@ private:
 	bool leverFour = false;
 
 	// lives
-	int lives = 5; // for testing try to set it to 3
+	int lives = 5;
 
 	//Ice platform
 	bool resbalar, giro;
@@ -259,5 +262,10 @@ private:
 	float ballCooldown = 3000.0f; // Time until ball recharge
 
 	bool touchingAbyss = false; //if player touches the abyss, he hurt
+
+	//colliding with enemies
+	std::chrono::time_point<std::chrono::steady_clock> lastHitTime;
+	bool tocado = false;//controls cooldown
+	float hitCooldown = 3000.0f;// 3 seconds
 
 };

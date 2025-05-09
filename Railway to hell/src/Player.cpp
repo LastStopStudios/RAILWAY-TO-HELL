@@ -320,6 +320,7 @@ bool Player::Update(float dt)
         if (!isDashing && !isPickingUp && !isDying && !collidingWithEnemy) {
             HandleBallAttack(dt);
         }
+        if (tocado == true) { HitWcooldown(dt);}
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
@@ -1341,10 +1342,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     // Logic so that the player cannot shoot if he has the enemy next to him
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
         collidingWithEnemy = true;
+        if (tocado == false) { hit(); }
+        tocado = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
         collidingWithEnemy = true;
+        if (tocado == false) { hit(); }
+        tocado = true;        
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
@@ -1353,10 +1358,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::AMEGO) {
         collidingWithEnemy = true;
-       /* if () {//logica daño por explosion
-            isHurt = true;
-            lives--;
-        }*/
         return;
     }
     // End of the logic
@@ -1563,10 +1564,12 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
         collidingWithEnemy = false;
+        tocado = false;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
         collidingWithEnemy = false;
+        tocado = false;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
@@ -1640,4 +1643,16 @@ Vector2D Player::GetPosition() {
 void Player::hit(){
     isHurt = true;
     lives--;
+}
+
+
+void Player::HitWcooldown(float dt) {
+    hitCooldown -= dt;
+    if (hitCooldown <= 0.0f) {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+            isHurt = true;
+            lives--;
+            hitCooldown = 3000.0f;
+        }   
+    }
 }
