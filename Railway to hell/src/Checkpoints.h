@@ -29,7 +29,9 @@ public:
 
 	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	void setActivatedToTrue();
+	void setActivatedToTrue(int scene);
+
+	void setToActivatedAnim();
 
 public:
 
@@ -40,6 +42,7 @@ public:
 private:
 
 	std::string enemyID;
+	bool activatedXML = false;
 
 	SDL_Texture* texture;
 	const char* texturePath;

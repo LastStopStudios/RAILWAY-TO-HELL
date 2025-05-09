@@ -349,6 +349,13 @@ bool Scene::CleanUp()
 		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
 		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
 
+		//checkpoints
+		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
+
+		for (pugi::xml_node checkpointNode : checkpointsNode.children("checkpoint")) {
+			checkpointNode.attribute("activated").set_value(false);
+		}
+
 		//item
 		pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
 

@@ -28,18 +28,20 @@ bool Checkpoints::Start() {
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
 	enemyID = parameters.attribute("name").as_string();
+	activatedXML = parameters.attribute("activated").as_bool();
 
 	checkpointFX = Engine::GetInstance().audio.get()->LoadFx("Assets/SFX/Uso/checkpoint_activated_2.wav");
 	Engine::GetInstance().scene->AddToMusic(checkpointFX);
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
-	activating.LoadAnimations(parameters.child("animations").child("activating"));
 	activated.LoadAnimations(parameters.child("animations").child("activated"));
-	currentAnimation = &idle;
+	if (!activatedXML) {
+		currentAnimation = &idle;
+	}
 
 	// L08 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW - 32, texH, bodyType::STATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
 
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::CHECKPOINT;
@@ -71,8 +73,6 @@ bool Checkpoints::Update(float dt)
 		}
 	}
 
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
-	if (activating.HasFinished()) currentAnimation = &activated;
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
@@ -84,7 +84,7 @@ bool Checkpoints::Update(float dt)
 	return true;
 }
 
-void Checkpoints::setActivatedToTrue() {
+void Checkpoints::setActivatedToTrue(int scene) {
 	// Load XML file
 	pugi::xml_document doc;
 	if (!doc.load_file("config.xml")) {
@@ -92,48 +92,62 @@ void Checkpoints::setActivatedToTrue() {
 		return;
 	}
 
-	pugi::xml_node itemNode;
-	int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+	pugi::xml_node checkpointNode;
 
-	if (currentScene == 1) {
-		itemNode = doc.child("config")
+	if (scene == 1) {
+		checkpointNode = doc.child("config")
 			.child("scene")
 			.child("entities")
-			.child("items")
-			.find_child_by_attribute("item", "name", enemyID.c_str());
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
 	}
-	else if (currentScene == 2) {
-		itemNode = doc.child("config")
+	else if (scene == 2) {
+		checkpointNode = doc.child("config")
 			.child("scene2")
 			.child("entities")
-			.child("items")
-			.find_child_by_attribute("item", "name", enemyID.c_str());
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
 	}
-	else if (currentScene == 3) {
-		itemNode = doc.child("config")
+	else if (scene == 3) {
+		checkpointNode = doc.child("config")
 			.child("scene3")
-			.child("entities")
-			.find_child_by_attribute("item", "name", enemyID.c_str());
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
 	}
 
-	if (!itemNode) {
-		LOG("Could not find the node for item in the XML");
+	if (!checkpointNode) {
+		LOG("Could not find the node for checkpoint in the XML");
 		return;
 	}
 
-	itemNode.attribute("created").set_value(true); // true item is created
+	checkpointNode.attribute("activated").set_value(true); // set to true
 
 	if (!doc.save_file("config.xml")) {
 		LOG("Error saving config.xml");
 	}
 	else {
-		LOG("death status updated in the XML for item");
+		LOG("death status updated in the XML for checkpoint");
 	}
 
 }
 
+void Checkpoints::setToActivatedAnim() {
+	activatedXML = parameters.attribute("activated").as_bool();
+
+	if (activatedXML) {
+		isActivated = true;
+		currentAnimation = &activated;
+	}
+}
+
 bool Checkpoints::CleanUp()
 {
+
+	if (pbody != nullptr) {
+		texture = nullptr;
+		Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+		pbody = nullptr;
+	}
 	return true;
 }
 
@@ -143,10 +157,12 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::PLAYER:
 
 		if (!isActivated) {
+			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
 			Engine::GetInstance().audio.get()->PlayFx(checkpointFX);
 			isActivated = true;
-			currentAnimation = &activating;
+			currentAnimation = &activated;
 		}
 
 		break;

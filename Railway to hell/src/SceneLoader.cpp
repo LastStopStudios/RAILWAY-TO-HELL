@@ -87,10 +87,10 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         player->SetPosition(Vector2D(x, y));
         player->ResetDoorAndLeverStates();
     }
-    LoadEnemiesItems(sceneNode);
+    LoadEnemiesItems(sceneNode, level);
 }
 
-void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
+void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 
     pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
     if (!enemiesNode) {
@@ -135,12 +135,19 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         for (pugi::xml_node checkpointNode = checkpointsNode.child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
         {
             bool activatedXMLValue = checkpointNode.attribute("activated").as_bool();
-            if (activatedXMLValue) {
-
-                    Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
-                    checkpoint->SetParameters(checkpointNode);
-                    Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
+			if (activatedXMLValue) { // if activated then create the checkpoint activated
+                Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                checkpoint->SetParameters(checkpointNode);
+				checkpoint->setActivatedToTrue(scene);
+                checkpoint->setToActivatedAnim();
+                Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
             }
+			else { // else create the checkpoint not activated
+				Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+				checkpoint->SetParameters(checkpointNode);
+				Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
+			}
+
         }
     }
 
@@ -151,7 +158,18 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
             int deathValue = itemNode.attribute("death").as_int();
             int deathXMLValue = itemNode.attribute("savedDeath").as_int();
 			bool createdXMLValue = itemNode.attribute("created").as_bool();
-            if (createdXMLValue) {
+			std::string name = itemNode.attribute("name").as_string();
+            if (name == "Whip") {
+                if (createdXMLValue) {
+                    if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+                        Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+                        item->SetParameters(itemNode);
+                        item->SetAliveInXML();
+                        Engine::GetInstance().scene->GetItemList().push_back(item);
+                    }
+                }
+            }
+            else {
                 if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
                     Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
                     item->SetParameters(itemNode);
