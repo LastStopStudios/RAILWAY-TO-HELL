@@ -95,6 +95,9 @@
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Mapa.cpp" />
+    <ClCompile Include="src\Checkpoints.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -203,6 +206,9 @@
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Mapa.h" />
+    <ClInclude Include="src\Checkpoints.h">
+      <Filter>Source Filles\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">

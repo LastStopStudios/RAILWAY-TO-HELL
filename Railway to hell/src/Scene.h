@@ -14,6 +14,8 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
+#include "Checkpoints.h"
+
 
 struct SDL_Texture;
 enum class SceneState
@@ -90,6 +92,7 @@ public:
 	std::vector<Doors*> doorList;
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
+	std::vector<Checkpoints*> checkpointList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Volador*>& GetVoladorList() { return voladorList; } 
@@ -99,6 +102,7 @@ public:
 	std::vector<Doors*>& GetDoorsList() { return doorList; }
 	std::vector<Levers*>& GetLeversList() { return leverList; }
 	std::vector<Elevators*>& GetElevatorsList() { return elevatorList; }
+	std::vector<Checkpoints*>& GetCheckpointsList() { return checkpointList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

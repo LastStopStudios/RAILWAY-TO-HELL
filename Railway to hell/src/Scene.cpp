@@ -59,6 +59,24 @@ bool Scene::Awake()
 
 	}
 
+	for (pugi::xml_node checkpointNode = configParameters.child("entities").child("checkpoints").child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
+	{
+		std::string type = checkpointNode.attribute("name").as_string(); 
+
+		if (type == "beta") {
+			//checkpointBetaConfigNode = checkpointNode;
+		}
+		else if (type == "aplha") {
+			//checkpointAlphaConfigNode = checkpointNode;
+		}
+		else {
+			Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+			checkpoint->SetParameters(checkpointNode);
+			checkpointList.push_back(checkpoint);
+		}
+
+	}
+
 	for (pugi::xml_node projectileNode = configParameters.child("entities").child("projectiles").child("projectile"); projectileNode; projectileNode = projectileNode.next_sibling("projectile"))
 	{
 		std::string type = projectileNode.attribute("name").as_string();

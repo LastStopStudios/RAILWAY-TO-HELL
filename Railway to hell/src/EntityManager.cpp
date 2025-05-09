@@ -13,6 +13,7 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
+#include "Checkpoints.h"
 #include <vector>
 #include <algorithm>
 
@@ -107,6 +108,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PROJECTILE:
 		entity = new Projectiles();
+		break;
+	case EntityType::CHECKPOINT:
+		entity = new Checkpoints();
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();

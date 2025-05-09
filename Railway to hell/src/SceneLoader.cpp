@@ -18,6 +18,7 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
+#include "Checkpoints.h"
 #include "Log.h"
 
 SceneLoader::SceneLoader() {
@@ -129,6 +130,20 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 		}
     }
 
+    pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
+    if (checkpointsNode) {
+        for (pugi::xml_node checkpointNode = checkpointsNode.child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
+        {
+            bool activatedXMLValue = checkpointNode.attribute("activated").as_bool();
+            if (activatedXMLValue) {
+
+                    Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
+                    checkpoint->SetParameters(checkpointNode);
+                    Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
+            }
+        }
+    }
+
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
     if (itemsNode) {
         for (pugi::xml_node itemNode = itemsNode.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
@@ -204,6 +219,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
 		lever->Start();
 	}
+    for (auto checkpoint : Engine::GetInstance().scene->GetCheckpointsList()) {
+        checkpoint->Start();
+    }
     // Initialize elevators
     for (auto elevator : Engine::GetInstance().scene->GetElevatorsList()) {
         elevator->Start();
@@ -220,7 +238,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::ELEVATORS) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -239,6 +257,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 	Engine::GetInstance().scene->GetLeversList().clear();
     Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
+    Engine::GetInstance().scene->GetCheckpointsList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {
