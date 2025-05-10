@@ -284,7 +284,7 @@ bool Scene::PostUpdate()
 			int center_x = window_width / 2;
 			int center_y = window_height / 2;
 
-			Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x;
+			Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
 			Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
 		}
 		else if (BossBattle == true) {

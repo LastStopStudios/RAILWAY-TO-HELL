@@ -67,7 +67,7 @@ private:
 	float textSpeed = 5.0f;     // Writing speed (seconds between letters)
 	float Skip = true; //Skip texts | Now only closes texts
 	//Margins and position of dialogs and backgrounds
-	int textMaxWidth = 580; // Maximum width before jumping out of line
+	int textMaxWidth = 400; // Maximum width before jumping out of line
 	int textMaxheigth = 352; //Maximum length before the dialog break
 	int h, w;
 	int width, height;
