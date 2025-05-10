@@ -129,7 +129,7 @@ bool Scene::Update(float dt)
 		int center_x = window_width / 2;
 		int center_y = window_height / 2;
 		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
-		Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
+		Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 70;
 		Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
 
 		//Implement a method that repositions the player in the map with a mouse click
