@@ -10,6 +10,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "Player.h"
 #include "Mapa.h"
+#include "UI.h"
 
 
 DialogoM::DialogoM() : Module()
@@ -208,8 +209,9 @@ void DialogoM::UpdateTextAnimation(float dt)
 		Engine::GetInstance().mapa->DialogoOff(); // Return control to Map
 
 		// If the dialogue was the boss fight dialogue (ID "1")
-		if (lastDialogID == "1") {
+		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UI Lives
 			bossFightReady = true;
+			Engine::GetInstance().ui->figth = true;//show boss1 health
 		}
 
 		ResetText();  // Reset the text system

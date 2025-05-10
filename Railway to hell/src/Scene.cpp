@@ -132,8 +132,8 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//Cargar Texturas splash screen
-	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen.png");
-	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto.png");
+	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen2.png");
+	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto2.png"); //png reescale to 853 X 512 to work with camera zoom
 	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
@@ -438,7 +438,7 @@ void Scene::DrawCurrentScene()
 	case SceneState::INTRO_SCREEN:
 		if (introScreenTexture != nullptr)
 		{
-			Engine::GetInstance().render->DrawTexture(introScreenTexture, 0, 0);
+			Engine::GetInstance().render->DrawTexture(introScreenTexture, -50, 0);
 		}
 		break;
 	case SceneState::TEXT_SCREEN:

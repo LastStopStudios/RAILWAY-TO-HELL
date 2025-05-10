@@ -1424,14 +1424,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once
-            if (physB->ID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UI Lives
-                Engine::GetInstance().ui->figth = true;
-            }
             NeedDialogue = true;
             Id = physB->ID;
-            physB->Salio = true;
-           
-
+            physB->Salio = true;   
         }
         return;
     }

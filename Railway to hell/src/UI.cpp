@@ -43,6 +43,11 @@ bool UI::PreUpdate()
 // Called each loop iteration
 bool UI::Update(float dt) {
 
+	return true;
+}
+
+bool UI::PostUpdate()
+{
 	if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
 	{
 		return true;
@@ -52,14 +57,8 @@ bool UI::Update(float dt) {
 		Engine::GetInstance().scene->ResetSkipInput();
 		return true;
 	}
-	
-	renderUI();
-	return true;
-}
 
-bool UI::PostUpdate()
-{
-	
+	renderUI();
 	return true;
 }
 
