@@ -42,16 +42,16 @@ bool MosaicPiece::Start() {
 
     switch (pieceId) {
     case 1:
-        currentRotation = 1; // 90 degrees
+        currentRotation = 0; // 0 degrees
         break;
     case 2:
-        currentRotation = 1; // 180 degrees
-        break;
-    case 3:
         currentRotation = 1; // 90 degrees
         break;
+    case 3:
+        currentRotation = 2; // 180 degrees
+        break;
     case 4:
-        currentRotation = 1; // 270 degrees
+        currentRotation =3; // 270 degrees
         break;
     }
 
