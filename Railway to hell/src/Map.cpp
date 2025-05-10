@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include "SceneLoader.h"
 
+#define TEXTURE_SIZE_MULTIPLIER 1.5f
+
 Map::Map() : Module(), mapLoaded(false)
 {
     name = "map";
@@ -39,20 +41,27 @@ bool Map::Update(float dt)
     if (mapLoaded) {
         for (const auto& mapLayer : mapData.layers) {
             if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
-                // Get camera position and dimensions without parallax (for debugging)
+                // Get camera position and dimensions
                 int camX = Engine::GetInstance().render->camera.x;
                 int camY = Engine::GetInstance().render->camera.y;
                 int camW = Engine::GetInstance().render->camera.w;
                 int camH = Engine::GetInstance().render->camera.h;
 
-                // Calculate which tiles are visible in the camera view
-                // Convert camera position to tile coordinates (notice we use absolute value)
-                int startTileX = abs(camX) / mapData.tileWidth;
-                int startTileY = abs(camY) / mapData.tileHeight;
+                // Scale factor from render
+                float scaleFactor = TEXTURE_SIZE_MULTIPLIER;
+
+                // Adjust tile dimensions for scaling
+                int scaledTileWidth = mapData.tileWidth * scaleFactor;
+                int scaledTileHeight = mapData.tileHeight * scaleFactor;
+
+                // Convert camera position to tile coordinates
+                // Divide by scaled tile dimensions to get the correct tile index
+                int startTileX = abs(camX) / scaledTileWidth;
+                int startTileY = abs(camY) / scaledTileHeight;
 
                 // Calculate how many tiles fit in the camera view
-                int tilesWide = (camW / mapData.tileWidth) + 2; // Add extra tiles for partial visibility
-                int tilesHigh = (camH / mapData.tileHeight) + 2;
+                int tilesWide = (camW / scaledTileWidth) + 2; // Add extra tiles for partial visibility
+                int tilesHigh = (camH / scaledTileHeight) + 2;
 
                 // Calculate end points
                 int endTileX = startTileX + tilesWide;
@@ -64,10 +73,6 @@ bool Map::Update(float dt)
                 if (startTileX < 0) startTileX = 0;
                 if (startTileY < 0) startTileY = 0;
 
-                // Debug output (remove in production)
-                // SDL_Log("Camera: %d,%d,%d,%d | Tiles: %d,%d to %d,%d", 
-                //         camX, camY, camW, camH, startTileX, startTileY, endTileX, endTileY);
-
                 // Draw only tiles in view
                 for (int x = startTileX; x < endTileX; x++) {
                     for (int y = startTileY; y < endTileY; y++) {
@@ -78,8 +83,8 @@ bool Map::Update(float dt)
                             if (tileSet != nullptr) {
                                 SDL_Rect tileRect = tileSet->GetRect(gid);
                                 Vector2D worldPos = MapToWorld(x, y);
+                                // The DrawTexture method will handle the scaling internally
                                 Engine::GetInstance().render->DrawTexture(tileSet->texture, worldPos.getX(), worldPos.getY(), &tileRect);
-
                             }
                         }
                     }
@@ -87,7 +92,7 @@ bool Map::Update(float dt)
             }
         }
     }
-    //LOG("Tiles rendereizadas: %d de %d posibles", tilesRendered, mapData.width * mapData.height); To prove that frustum culling works
+    //LOG("Tiles rendered: %d out of %d possible", tilesRendered, mapData.width * mapData.height);
     return ret;
 }
 
