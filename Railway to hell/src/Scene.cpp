@@ -21,7 +21,7 @@
 Scene::Scene() : Module()
 {
 	name = "scene";
-	currentState = SceneState::INTRO_SCREEN;
+	currentState = SceneState::GAMEPLAY;
 }
 
 // Destructor
@@ -121,8 +121,16 @@ bool Scene::Update(float dt)
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
 
-		Engine::GetInstance().render.get()->camera.y = (Engine::GetInstance().window->height - 550 - player->position.getY() * 0.5);
-		Engine::GetInstance().render.get()->camera.x = (Engine::GetInstance().window->width - 1150 - player->position.getX() * 0.5);
+		//Camera follows player
+		int window_width, window_height;
+		Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
+
+		// Centro de la pantalla (la mitad del ancho y alto)
+		int center_x = window_width / 2;
+		int center_y = window_height / 2;
+		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
+		Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
+		Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
 
 		//Implement a method that repositions the player in the map with a mouse click
 

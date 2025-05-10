@@ -440,7 +440,7 @@ void Player::DrawPlayer() {
     Engine::GetInstance().render.get()->DrawTexture(
         texture,                    // Current texture based on state
         position.getX() - offsetX,  // X position with offset for flipping
-        position.getY(),            // Y position
+        position.getY() - 10,            // Y position
         &frame,                     // Current animation frame
         1.0f,                       // Scale factor
         0.0,                        // No rotation

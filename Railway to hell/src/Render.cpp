@@ -4,295 +4,336 @@
 #include "Log.h"
 
 #define VSYNC true
+#define TEXTURE_SIZE_MULTIPLIER 1.5f  // Factor para hacer las texturas m?s grandes
 
 Render::Render() : Module()
 {
-	name = "render";
-	background.r = 0;
-	background.g = 0;
-	background.b = 0;
-	background.a = 0;
+    name = "render";
+    background.r = 0;
+    background.g = 0;
+    background.b = 0;
+    background.a = 0;
 }
 
 // Destructor
 Render::~Render()
-{}
+{
+}
 
 // Called before render is available
 bool Render::Awake()
 {
-	LOG("Create SDL rendering context");
-	bool ret = true;
+    LOG("Create SDL rendering context");
+    bool ret = true;
 
-	Uint32 flags = SDL_RENDERER_ACCELERATED;
+    Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	//L05 TODO 5 - Load the configuration of the Render module
-	if (configParameters.child("vsync").attribute("value").as_bool() == true) {
-		flags |= SDL_RENDERER_PRESENTVSYNC;
-		LOG("Using vsync");
-	}
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    //Load the configuration of the Render module
+    if (configParameters.child("vsync").attribute("value").as_bool() == true) {
+        flags |= SDL_RENDERER_PRESENTVSYNC;
+        LOG("Using vsync");
+    }
+    int scale = Engine::GetInstance().window.get()->GetScale();
 
-	SDL_Window* window = Engine::GetInstance().window.get()->window;
-	renderer = SDL_CreateRenderer(window, -1, flags);
+    SDL_Window* window = Engine::GetInstance().window.get()->window;
+    renderer = SDL_CreateRenderer(window, -1, flags);
 
-	if(renderer == NULL)
-	{
-		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
-		ret = false;
-	}
-	else
-	{
-		camera.w = Engine::GetInstance().window.get()->width * scale;
-		camera.h = Engine::GetInstance().window.get()->height * scale;
-		camera.x = 0;
-		camera.y = 0;
-	}
+    if (renderer == NULL)
+    {
+        LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
+        ret = false;
+    }
+    else
+    {
+        camera.w = Engine::GetInstance().window.get()->width * scale;
+        camera.h = Engine::GetInstance().window.get()->height * scale;
+        camera.x = 0;
+        camera.y = 0;
+    }
 
-	//initialise the SDL_ttf library
-	TTF_Init();
+    //initialise the SDL_ttf library
+    TTF_Init();
 
-	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/arial/Inter_28pt-Regular.ttf", 25);
+    //load a font into memory
+    font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 14);
 
-	return ret;
+    return ret;
 }
 
-// Called before the first frame
+//Called before the first frame
 bool Render::Start()
 {
-	LOG("render start");
-	// back background
-	SDL_RenderGetViewport(renderer, &viewport);
-	return true;
+    LOG("render start");
+    // back background
+    SDL_RenderGetViewport(renderer, &viewport);
+    return true;
 }
 
 // Called each loop iteration
 bool Render::PreUpdate()
 {
-	SDL_RenderClear(renderer);
-	return true;
+    SDL_RenderClear(renderer);
+    return true;
 }
 
 bool Render::Update(float dt)
 {
-	return true;
+    return true;
 }
 
 bool Render::PostUpdate()
 {
-	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
-	SDL_RenderPresent(renderer);
-	return true;
+    SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+    SDL_RenderPresent(renderer);
+    return true;
 }
 
 // Called before quitting
 bool Render::CleanUp()
 {
-	LOG("Destroying SDL render");
-	SDL_DestroyRenderer(renderer);
-	return true;
+    LOG("Destroying SDL render");
+    SDL_DestroyRenderer(renderer);
+    return true;
 }
 
 void Render::SetBackgroundColor(SDL_Color color)
 {
-	background = color;
+    background = color;
 }
 
 void Render::SetViewPort(const SDL_Rect& rect)
 {
-	SDL_RenderSetViewport(renderer, &rect);
+    SDL_RenderSetViewport(renderer, &rect);
 }
 
 void Render::ResetViewPort()
 {
-	SDL_RenderSetViewport(renderer, &viewport);
+    SDL_RenderSetViewport(renderer, &viewport);
 }
 
-// Blit to screen
 bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY, SDL_RendererFlip flip) const
 {
-	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    bool ret = true;
 
-	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+    SDL_Rect rect;
 
-	if(section != NULL)
-	{
-		rect.w = section->w;
-		rect.h = section->h;
-	}
-	else
-	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-	}
+    // Apply scaling to both position and texture size
+    // Scale the x and y coordinates by TEXTURE_SIZE_MULTIPLIER
+    rect.x = (int)(camera.x * speed) + (int)(x * TEXTURE_SIZE_MULTIPLIER);
+    rect.y = (int)(camera.y * speed) + (int)(y * TEXTURE_SIZE_MULTIPLIER);
 
-	rect.w *= scale;
-	rect.h *= scale;
+    if (section != NULL)
+    {
+        rect.w = section->w;
+        rect.h = section->h;
+    }
+    else
+    {
+        SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    }
 
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
+    // Scale the texture size
+    rect.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
+    rect.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
 
-	if(pivotX != INT_MAX && pivotY != INT_MAX)
-	{
-		pivot.x = pivotX;
-		pivot.y = pivotY;
-		p = &pivot;
-	}
+    SDL_Point* p = NULL;
+    SDL_Point pivot;
 
-	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
-	{
-		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
-		ret = false;
-	}
+    if (pivotX != INT_MAX && pivotY != INT_MAX)
+    {
+        // Scale the pivot point too
+        pivot.x = (int)(pivotX * TEXTURE_SIZE_MULTIPLIER);
+        pivot.y = (int)(pivotY * TEXTURE_SIZE_MULTIPLIER);
+        p = &pivot;
+    }
 
-	return ret;
+    if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+    {
+        LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+        ret = false;
+    }
+
+    return ret;
 }
+// Similar changes should be applied to DrawTextureWithFlip:
 
 bool Render::DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
-	float speed, double angle, int pivotX, int pivotY,
-	SDL_RendererFlip flip) const
+    float speed, double angle, int pivotX, int pivotY,
+    SDL_RendererFlip flip) const
 {
-	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    bool ret = true;
 
-	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+    SDL_Rect rect;
 
-	if (section != NULL)
-	{
-		rect.w = section->w;
-		rect.h = section->h;
-	}
-	else
-	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-	}
+    // Apply scaling to both position and texture size
+    rect.x = (int)(camera.x * speed) + (int)(x * TEXTURE_SIZE_MULTIPLIER);
+    rect.y = (int)(camera.y * speed) + (int)(y * TEXTURE_SIZE_MULTIPLIER);
 
-	rect.w *= scale;
-	rect.h *= scale;
+    if (section != NULL)
+    {
+        rect.w = section->w;
+        rect.h = section->h;
+    }
+    else
+    {
+        SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    }
 
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
+    // Scale the texture size
+    rect.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
+    rect.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
 
-	if (pivotX != INT_MAX && pivotY != INT_MAX)
-	{
-		pivot.x = pivotX;
-		pivot.y = pivotY;
-		p = &pivot;
-	}
+    SDL_Point* p = NULL;
+    SDL_Point pivot;
 
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
-	{
-		LOG("Cannot blit to screen. SDL_RenderCopyEx error: %s", SDL_GetError());
-		ret = false;
-	}
+    if (pivotX != INT_MAX && pivotY != INT_MAX)
+    {
+        // Scale the pivot point too
+        pivot.x = (int)(pivotX * TEXTURE_SIZE_MULTIPLIER);
+        pivot.y = (int)(pivotY * TEXTURE_SIZE_MULTIPLIER);
+        p = &pivot;
+    }
 
-	return ret;
+    if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+    {
+        LOG("Cannot blit to screen. SDL_RenderCopyEx error: %s", SDL_GetError());
+        ret = false;
+    }
+
+    return ret;
 }
 
+// Modified DrawRectangle method to properly scale positions and dimensions
 bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
-	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    bool ret = true;
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-	SDL_Rect rec(rect);
-	if(use_camera)
-	{
-		rec.x = (int)(camera.x + rect.x * scale);
-		rec.y = (int)(camera.y + rect.y * scale);
-		rec.w *= scale;
-		rec.h *= scale;
-	}
+    SDL_Rect rec;
+    if (use_camera)
+    {
+        // Scale both position and dimensions
+        rec.x = (int)(camera.x + rect.x * TEXTURE_SIZE_MULTIPLIER);
+        rec.y = (int)(camera.y + rect.y * TEXTURE_SIZE_MULTIPLIER);
+        rec.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
+        rec.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
+    }
+    else
+    {
+        // Scale both position and dimensions
+        rec.x = (int)(rect.x * TEXTURE_SIZE_MULTIPLIER);
+        rec.y = (int)(rect.y * TEXTURE_SIZE_MULTIPLIER);
+        rec.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
+        rec.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
+    }
 
-	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
+    int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 
-	if(result != 0)
-	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
-	}
+    if (result != 0)
+    {
+        LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+        ret = false;
+    }
 
-	return ret;
+    return ret;
 }
 
+// Modified DrawLine method to properly scale positions
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
-	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    bool ret = true;
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-	int result = -1;
+    int result = -1;
 
-	if(use_camera)
-		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
-	else
-		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
+    // Scale all position coordinates
+    if (use_camera)
+    {
+        result = SDL_RenderDrawLine(renderer,
+            (int)(camera.x + x1 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(camera.y + y1 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(camera.x + x2 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(camera.y + y2 * TEXTURE_SIZE_MULTIPLIER));
+    }
+    else
+    {
+        result = SDL_RenderDrawLine(renderer,
+            (int)(x1 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(y1 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(x2 * TEXTURE_SIZE_MULTIPLIER),
+            (int)(y2 * TEXTURE_SIZE_MULTIPLIER));
+    }
 
-	if(result != 0)
-	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
-	}
+    if (result != 0)
+    {
+        LOG("Cannot draw line to screen. SDL_RenderDrawLine error: %s", SDL_GetError());
+        ret = false;
+    }
 
-	return ret;
+    return ret;
 }
 
+// Modified DrawCircle method to properly scale positions and radius
 bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
-	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+    bool ret = true;
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-	int result = -1;
-	SDL_Point points[360];
+    int result = -1;
+    SDL_Point points[360];
 
-	float factor = (float)M_PI / 180.0f;
+    float factor = (float)M_PI / 180.0f;
 
-	for(int i = 0; i < 360; ++i)
-	{
-		points[i].x = (int)(x * scale + camera.x) + (int)(radius * cos(i * factor));
-		points[i].y = (int)(y * scale + camera.y) + (int)(radius * sin(i * factor));
-	}
+    // Scale both position and radius
+    int scaled_x = (int)(x * TEXTURE_SIZE_MULTIPLIER);
+    int scaled_y = (int)(y * TEXTURE_SIZE_MULTIPLIER);
+    int scaled_radius = (int)(radius * TEXTURE_SIZE_MULTIPLIER);
 
-	result = SDL_RenderDrawPoints(renderer, points, 360);
+    for (int i = 0; i < 360; ++i)
+    {
+        points[i].x = (int)(scaled_x + (use_camera ? camera.x : 0)) + (int)(scaled_radius * cos(i * factor));
+        points[i].y = (int)(scaled_y + (use_camera ? camera.y : 0)) + (int)(scaled_radius * sin(i * factor));
+    }
 
-	if(result != 0)
-	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
-	}
+    result = SDL_RenderDrawPoints(renderer, points, 360);
 
-	return ret;
+    if (result != 0)
+    {
+        LOG("Cannot draw circle to screen. SDL_RenderDrawPoints error: %s", SDL_GetError());
+        ret = false;
+    }
+
+    return ret;
 }
 
 bool Render::DrawText(const char* text, int posx, int posy, int w, int h) const
 {
+    SDL_Color color = { 255, 255, 255 };
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	SDL_Color color = { 255, 255, 255 };
-	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    int texW = 0;
+    int texH = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
 
-	int texW = 0;
-	int texH = 0;
-	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-	SDL_Rect dstrect = { posx, posy, w, h };
+    // Escalamos solo el tama?o, manteniendo la posici?n original
+    SDL_Rect dstrect = {
+        posx,
+        posy,
+        (int)(w * TEXTURE_SIZE_MULTIPLIER),
+        (int)(h * TEXTURE_SIZE_MULTIPLIER)
+    };
 
-	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+    SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 
-	SDL_DestroyTexture(texture);
-	SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
 
-	return true;
+    return true;
 }
-
