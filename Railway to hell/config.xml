@@ -211,7 +211,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1">
+				<item name="Dash ability" x="6630" y="4106" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -338,7 +338,7 @@
 				</lever>
 			</levers>
 			<enemies>
-				<enemy name="spider" x="200" y="800" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="6114" y="1930" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -369,7 +369,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="badguy1" x="4378" y="2186" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="7261" y="2178" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -380,1856 +380,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy2" x="5184" y="2000" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy3" x="5976" y="1750" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy4y5" x="6262" y="1972" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy5y4" x="5934" y="1968" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy6" x="5793" y="2188" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy7" x="6142" y="2182" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6360" y="2448" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6755" y="2161" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6050" y="2760" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6756" y="2765" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6500" y="3218" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6737" y="3476" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6295" y="3474" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6041" y="3704" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6466" y="3710" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7170" y="4167" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7605" y="4484" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="7170" y="4442" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="6145" y="4466" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5526" y="4445" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5294" y="4445" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4836" y="4018" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4096" y="4061" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4118" y="4438" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4197" y="4672" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4569" y="4896" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4284" y="4892" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4304" y="5190" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4556" y="5200" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4757" y="5453" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4549" y="5936" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="4928" y="5940" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="5369" y="5969" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="3164" y="4172" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2856" y="4433" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2550" y="4316" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2010" y="4412" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1762" y="4398" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1392" y="4385" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1106" y="4409" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="754" y="4388" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1711" y="4119" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1846" y="3680" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2084" y="3463" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1177" y="3296" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1457" y="3278" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2018" y="3219" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1807" y="2959" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1541" y="2932" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1288" y="2839" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1918" y="2744" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="2073" y="2660" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="1392" y="2541" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8164" y="3975" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8308" y="4444" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8656" y="4444" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8960" y="4466" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9335" y="4408" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9294" y="3673" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8516" y="3665" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9297" y="3450" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8736" y="3274" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="7952" y="2173" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2240,56 +411,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9294" y="3156" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="9294" y="2672" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="7367" y="4464" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2300,56 +442,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9294" y="2418" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="9294" y="2213" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="2004" y="4452" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2360,56 +473,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8558" y="2980" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8861" y="2788" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="4837" y="4037" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2420,56 +504,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="8699" y="2626" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8416" y="2148" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="spider" x="4904" y="5994" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2480,56 +535,27 @@
 							<frame x="320" y="0" w="64" h="64" />
 							<frame x="384" y="0" w="64" h="64" />
 							<frame x="448" y="0" w="64" h="64" />
+							<frame x="512" y="0" w="64" h="64" />
+							<frame x="576" y="0" w="64" h="64" />
 						</idle>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
-						</die>
 						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
+							<frame x="0" y="64" w="64" h="64" />
 						</hurt>
-					</animations>
-				</enemy>
-				<enemy name="badguy" x="9213" y="1896" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-							<frame x="320" y="0" w="64" h="64" />
-							<frame x="384" y="0" w="64" h="64" />
-							<frame x="448" y="0" w="64" h="64" />
-						</idle>
 						<die loop="false" speed="0.15">
-							<frame x="0" y="64" w="96" h="96" />
-							<frame x="96" y="64" w="96" h="96" />
-							<frame x="192" y="64" w="96" h="96" />
-							<frame x="288" y="64" w="96" h="96" />
-							<frame x="384" y="64" w="96" h="96" />
-							<frame x="480" y="64" w="96" h="96" />
-							<frame x="576" y="64" w="96" h="96" />
-							<frame x="672" y="64" w="96" h="96" />
-							<frame x="768" y="64" w="96" h="96" />
-							<frame x="864" y="64" w="96" h="96" />
-							<frame x="960" y="64" w="96" h="96" />
+							<frame x="0" y="128" w="96" h="96" />
+							<frame x="96" y="128" w="96" h="96" />
+							<frame x="192" y="128" w="96" h="96" />
+							<frame x="288" y="128" w="96" h="96" />
+							<frame x="384" y="128" w="96" h="96" />
+							<frame x="480" y="128" w="96" h="96" />
+							<frame x="576" y="128" w="96" h="96" />
+							<frame x="672" y="128" w="96" h="96" />
+							<frame x="768" y="128" w="96" h="96" />
+							<frame x="864" y="128" w="96" h="96" />
 						</die>
-						<hurt loop="hurt" speed="0.05">
-							<frame x="0" y="160" w="64" h="64" />
-						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8928" y="1385" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy1" x="4480" y="2160" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2559,7 +585,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="9304" y="1385" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy2" x="7662" y="2149" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2589,7 +615,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8994" y="1165" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy3" x="6568" y="3470" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2619,7 +645,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8566" y="1165" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy4" x="8950" y="4464" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2649,7 +675,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="9444" y="675" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy5" x="4421" y="4904" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2679,7 +705,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="badguy" x="8964" y="588" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
+				<enemy name="badguy5" x="1153" y="4466" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2709,7 +735,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="HellBat1" x="6046" y="2368" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat1" x="7246" y="2063" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2736,7 +762,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat2" x="6741" y="2368" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat2" x="7869" y="2059" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2763,7 +789,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat3" x="6782" y="3968" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat3" x="1351" y="3256" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
@@ -2790,115 +816,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="HellBat4" x="5476" y="4096" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
-				<enemy name="HellBat5" x="4829" y="4224" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
-				<enemy name="HellBat6" x="4346" y="5472" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
-				<enemy name="HellBat7" x="2508" y="4128" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
-				<enemy name="HellBat8" x="8832" y="1600" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
+				<enemy name="HellBat4" x="1712" y="2566" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
