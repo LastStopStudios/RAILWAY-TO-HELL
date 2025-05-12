@@ -1513,10 +1513,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
         if (checkpoint) {
 
-            if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1") { // todo
-                Dash = true;
+            if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1" && !checkpoint->GetActivitatedXML()) { 
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-
+                LOG("A");
+                return;
             }
         }
         return;

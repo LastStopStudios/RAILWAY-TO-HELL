@@ -218,6 +218,7 @@ private:
 	// items booleans
 	bool Dash = false;
 	bool WhipAttack = false;
+
 	// door and lever booleans
 	bool canOpenDoor = false;
 	bool leverOne = false;
@@ -241,6 +242,8 @@ private:
 	bool collidingWithEnemy = false; //if is true, player cant ball attack 
 	int ballCounter = 3; // Track how many balls does the player have left
 	float ballCooldown = 3000.0f; // Time until ball recharge
+
+
 
 
 };

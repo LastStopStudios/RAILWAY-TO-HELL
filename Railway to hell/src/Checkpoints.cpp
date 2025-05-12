@@ -162,7 +162,7 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::PLAYER:
 
-		if (!isActivated) {
+		if (!isActivated && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
 			setActivatedToTrue(currentscene);

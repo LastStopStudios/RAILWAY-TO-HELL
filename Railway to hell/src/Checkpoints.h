@@ -33,7 +33,9 @@ public:
 
 	void setToActivatedAnim();
 
-	//std::string GetCheckpointType() { return enemyID; } //todo
+	std::string GetCheckpointType() { return enemyID; } 
+
+	bool GetActivitatedXML() { return activatedXML; }
 
 public:
 
