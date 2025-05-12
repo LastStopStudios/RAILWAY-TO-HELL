@@ -1508,6 +1508,20 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+        Checkpoints* checkpoint = (Checkpoints*)physB->listener;
+
+        if (checkpoint) {
+
+            if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1") { // todo
+                Dash = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+
+            }
+        }
+        return;
+    }
+
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once
             NeedDialogue = true;

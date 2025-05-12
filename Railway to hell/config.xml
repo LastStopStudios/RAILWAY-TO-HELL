@@ -116,7 +116,7 @@
 				</animations>
 			</player>
 			<checkpoints>
-				<checkpoint name="checkpoint1" x="2977" y="2048" w="32" h="32" texture="Assets/Textures/checkpoint/temporal_checkpoint.png" gravity="false" activated="true">
+				<checkpoint name="checkpoint1" x="2977" y="2048" w="32" h="32" texture="Assets/Textures/checkpoint/temporal_checkpoint.png" gravity="false" activated="false">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -180,7 +180,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" death="1" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
+				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -193,7 +193,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Double jump" death="1" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
+				<item name="Double jump" death="0" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />

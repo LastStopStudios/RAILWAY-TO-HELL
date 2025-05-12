@@ -33,6 +33,8 @@ public:
 
 	void setToActivatedAnim();
 
+	//std::string GetCheckpointType() { return enemyID; } //todo
+
 public:
 
 	bool isPicked = false;

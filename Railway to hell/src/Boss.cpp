@@ -18,6 +18,7 @@ Boss::Boss() : Entity(EntityType::BOSS)
 }
 
 Boss::~Boss() {
+	CleanUp();
     delete pathfinding;
     if (area != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(area);
@@ -646,8 +647,10 @@ bool Boss::CleanUp()
     // Make sure textures are properly released
     // We don't need to destroy the texture as it's managed elsewhere
     // Just set our pointer to null to avoid double deletion issues
-    texture = nullptr;
-
+    if (texture != nullptr) {
+		Engine::GetInstance().textures.get()->UnLoad(texture);
+        texture = nullptr;
+    }
     return true;
 }
 

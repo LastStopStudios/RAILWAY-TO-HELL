@@ -13,7 +13,9 @@ Checkpoints::Checkpoints() : Entity(EntityType::CHECKPOINT)
 {
 }
 
-Checkpoints::~Checkpoints() {}
+Checkpoints::~Checkpoints() {
+	CleanUp();
+}
 
 bool Checkpoints::Awake() {
 	return true;
@@ -50,6 +52,7 @@ bool Checkpoints::Start() {
 
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
+
 
 	return true;
 }
@@ -142,9 +145,12 @@ void Checkpoints::setToActivatedAnim() {
 
 bool Checkpoints::CleanUp()
 {
+	if (texture != nullptr) {
+		Engine::GetInstance().textures.get()->UnLoad(texture);
+		texture = nullptr;
+	}
 
 	if (pbody != nullptr) {
-		texture = nullptr;
 		Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
 		pbody = nullptr;
 	}
@@ -157,6 +163,7 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::PLAYER:
 
 		if (!isActivated) {
+			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
 			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
