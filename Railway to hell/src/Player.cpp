@@ -1345,14 +1345,13 @@ bool Player::CleanUp() {
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     // Logic so that the player cannot shoot if he has the enemy next to him
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
+        LOG("TOCANDO");
         collidingWithEnemy = true;
-        if (tocado == false) { hit(); }
         tocado = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
         collidingWithEnemy = true;
-        if (tocado == false) { hit(); }
         tocado = true;        
         return;
     }
@@ -1564,6 +1563,8 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
         collidingWithEnemy = false;
         tocado = false;
+        LOG("DEJO DE TOCAR");
+        //first = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
@@ -1646,12 +1647,21 @@ void Player::hit(){
 
 
 void Player::HitWcooldown(float dt) {
-    hitCooldown -= dt;
-    if (hitCooldown <= 0.0f) {
-        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurt = true;
-            lives--;
-            hitCooldown = 3000.0f;
-        }   
-    }
+
+  if (first == true) {
+        isHurt = true;
+        lives--;
+        first = false;
+  }
+  else {
+      hitCooldown -= dt;
+      if (hitCooldown <= 0.0f) {
+          if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+              isHurt = true;
+              lives--;
+              hitCooldown = 3000.0f;
+          }
+      }
+  }
+    
 }
