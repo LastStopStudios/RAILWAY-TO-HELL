@@ -269,12 +269,6 @@ private:
 
 	//colliding with enemies
 	std::chrono::time_point<std::chrono::steady_clock> lastHitTime;
-	bool tocado = false;//controls cooldown
-	bool first = true;
-	float hitCooldown = 3000.0f;// 3 seconds
-	float initialHitCooldown = 0.0f; // Temporizador después del primer golpe
-	float continuousHitTimer = 0.0f; // Temporizador entre daños continuos
-
 	bool isTouchingEnemy = false;
 	bool wasTouchingEnemy = false;
 	float damageCooldown = 0.0f;
