@@ -272,5 +272,13 @@ private:
 	bool tocado = false;//controls cooldown
 	bool first = true;
 	float hitCooldown = 3000.0f;// 3 seconds
+	float initialHitCooldown = 0.0f; // Temporizador después del primer golpe
+	float continuousHitTimer = 0.0f; // Temporizador entre daños continuos
+
+	bool isTouchingEnemy = false;
+	bool wasTouchingEnemy = false;
+	float damageCooldown = 0.0f;
+	const float DAMAGE_COOLDOWN_TIME = 1.0f; // 1 segundo entre daños
+
 
 };

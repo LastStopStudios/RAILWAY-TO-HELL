@@ -320,7 +320,8 @@ bool Player::Update(float dt)
         if (!isDashing && !isPickingUp && !isDying && !collidingWithEnemy) {
             HandleBallAttack(dt);
         }
-        if (tocado == true) { HitWcooldown(dt);}
+        HitWcooldown(dt);
+   
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
@@ -1347,12 +1348,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
         LOG("TOCANDO");
         collidingWithEnemy = true;
-        tocado = true;
+        isTouchingEnemy = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
         collidingWithEnemy = true;
-        tocado = true;        
+        isTouchingEnemy = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
@@ -1562,14 +1563,14 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
         collidingWithEnemy = false;
-        tocado = false;
+        isTouchingEnemy = false;
         LOG("DEJO DE TOCAR");
         //first = true;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::VOLADOR) {
         collidingWithEnemy = false;
-        tocado = false;
+        isTouchingEnemy = false;
         return;
     }
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::BOSS) {
@@ -1647,21 +1648,19 @@ void Player::hit(){
 
 
 void Player::HitWcooldown(float dt) {
+    // update latest status
+    wasTouchingEnemy = isTouchingEnemy;
 
-  if (first == true) {
-        isHurt = true;
-        lives--;
-        first = false;
-  }
-  else {
-      hitCooldown -= dt;
-      if (hitCooldown <= 0.0f) {
-          if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-              isHurt = true;
-              lives--;
-              hitCooldown = 3000.0f;
-          }
-      }
-  }
-    
+    // Reduce cooldown
+    if (damageCooldown > 0.0f) {
+        damageCooldown -= dt;
+    }
+    if (isTouchingEnemy && damageCooldown <= 0.0f && !isHurt && !isDying) {
+        hit();
+        damageCooldown = DAMAGE_COOLDOWN_TIME;
+    }
+    //Reset status if contact is lost
+    if (!isTouchingEnemy && wasTouchingEnemy) {
+        damageCooldown = 0.0f;
+    }
 }
