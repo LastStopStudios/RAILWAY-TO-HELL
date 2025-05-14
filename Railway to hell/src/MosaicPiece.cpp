@@ -95,6 +95,10 @@ bool MosaicPiece::Update(float dt)
             LOG("Rotation animation finished for piece %d", pieceId);
             isRotating = false;
             currentAnim = &idle;
+            int oldRotation = currentRotation;
+            // Increment rotation and wrap around using modulo 4 (0, 1, 2, 3)
+            currentRotation = (currentRotation + 1) % 4;
+            LOG("MosaicPiece: Piece ID %d rotating from %d to %d degrees", pieceId, oldRotation * 90, currentRotation * 90);
         }
         else {
             currentAnim = &rotating;
@@ -167,11 +171,6 @@ bool MosaicPiece::CleanUp()
 
 void MosaicPiece::Rotate()
 {
-    int oldRotation = currentRotation;
-    // Increment rotation and wrap around using modulo 4 (0, 1, 2, 3)
-    currentRotation = (currentRotation + 1) % 4;
-    LOG("MosaicPiece: Piece ID %d rotating from %d to %d degrees", pieceId, oldRotation * 90, currentRotation * 90);
-
     // Inicia la animación de rotación
     isRotating = true;
     rotating.Reset();
