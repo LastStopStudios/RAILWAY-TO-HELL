@@ -31,11 +31,17 @@ public:
 
 	void setActivatedToTrue(int scene);
 
+	void setActivatedToFalse();
+
 	void setToActivatedAnim();
+
+	void setToIdleAnim();
 
 	std::string GetCheckpointType() { return enemyID; } 
 
 	bool GetActivitatedXML() { return activatedXML; }
+
+	void ResetOthersCheckpoints();
 
 public:
 
@@ -43,10 +49,14 @@ public:
 
 	bool isActivated = false;
 
+	bool pendingToChangeAnim = false;
+
+
 private:
 
 	std::string enemyID;
 	bool activatedXML = false;
+	int sceneForThisCheckpoint = 0;
 
 	SDL_Texture* texture;
 	const char* texturePath;

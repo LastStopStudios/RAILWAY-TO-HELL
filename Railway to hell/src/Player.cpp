@@ -1508,19 +1508,19 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
-    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
-        Checkpoints* checkpoint = (Checkpoints*)physB->listener;
+    //if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+    //    Checkpoints* checkpoint = (Checkpoints*)physB->listener;
 
-        if (checkpoint) {
+    //    if (checkpoint) {
 
-            if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1" && !checkpoint->GetActivitatedXML()) { 
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                LOG("A");
-                return;
-            }
-        }
-        return;
-    }
+    //        if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1" && !checkpoint->GetActivitatedXML()) { 
+    //            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+    //            LOG("A");
+    //            return;
+    //        }
+    //    }
+    //    return;
+    //}
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once

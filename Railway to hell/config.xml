@@ -116,7 +116,26 @@
 				</animations>
 			</player>
 			<checkpoints>
-				<checkpoint name="checkpoint1" x="2977" y="2048" w="32" h="32" texture="Assets/Textures/checkpoint/temporal_checkpoint.png" gravity="false" activated="false">
+				<checkpoint name="checkpoint1" x="2977" y="2048" w="32" h="32" texture="Assets/Textures/checkpoint/temporal_checkpoint.png" gravity="false" activated="false" scene="1">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+						</idle>
+						<activated loop="true" speed="0.2">
+							<frame x="0" y="32" w="32" h="32" />
+							<frame x="32" y="32" w="32" h="32" />
+							<frame x="64" y="32" w="32" h="32" />
+							<frame x="96" y="32" w="32" h="32" />
+							<frame x="128" y="32" w="32" h="32" />
+							<frame x="160" y="32" w="32" h="32" />
+							<frame x="192" y="32" w="32" h="32" />
+						</activated>
+					</animations>
+				</checkpoint>
+				<checkpoint name="checkpoint2" x="3077" y="2048" w="32" h="32" texture="Assets/Textures/checkpoint/temporal_checkpoint.png" gravity="false" activated="false" scene="1">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />

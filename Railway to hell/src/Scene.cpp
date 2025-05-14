@@ -344,7 +344,7 @@ bool Scene::CleanUp()
 
 	pugi::xml_node sceneNode;
 	int maxScenes = 3;
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < maxScenes; ++i) {
 		if (i == 0) sceneNode = loadFile.child("config").child("scene");
 		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
 		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
@@ -353,6 +353,7 @@ bool Scene::CleanUp()
 		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
 
 		for (pugi::xml_node checkpointNode : checkpointsNode.children("checkpoint")) {
+			checkpointNode.attribute("pendingToChangeAnim").set_value(false);
 			checkpointNode.attribute("activated").set_value(false);
 		}
 

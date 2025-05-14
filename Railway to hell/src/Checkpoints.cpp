@@ -31,8 +31,10 @@ bool Checkpoints::Start() {
 	texH = parameters.attribute("h").as_int();
 	enemyID = parameters.attribute("name").as_string();
 	activatedXML = parameters.attribute("activated").as_bool();
+	sceneForThisCheckpoint = parameters.attribute("scene").as_int();
 
-	checkpointFX = Engine::GetInstance().audio.get()->LoadFx("Assets/SFX/Uso/checkpoint_activated_2.wav");
+	checkpointFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+
 	Engine::GetInstance().scene->AddToMusic(checkpointFX);
 
 	//Load animations
@@ -42,10 +44,10 @@ bool Checkpoints::Start() {
 		currentAnimation = &idle;
 	}
 
-	// L08 TODO 4: Add a physics to an item - initialize the physics body
+    // Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
 
-	// L08 TODO 7: Assign collider type
+	// Assign collider type
 	pbody->ctype = ColliderType::CHECKPOINT;
 
 	pbody->listener = this;
@@ -76,7 +78,8 @@ bool Checkpoints::Update(float dt)
 		}
 	}
 
-
+	setToIdleAnim();
+	
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
@@ -134,6 +137,53 @@ void Checkpoints::setActivatedToTrue(int scene) {
 
 }
 
+void Checkpoints::setActivatedToFalse() {
+	// Load XML file
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	pugi::xml_node checkpointNode;
+	if (sceneForThisCheckpoint == 1) {
+		checkpointNode = doc.child("config")
+			.child("scene")
+			.child("entities")
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
+	}
+	else if (sceneForThisCheckpoint == 2) {
+		checkpointNode = doc.child("config")
+			.child("scene2")
+			.child("entities")
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
+	}
+	else if (sceneForThisCheckpoint == 3) {
+		checkpointNode = doc.child("config")
+			.child("scene3")
+			.child("checkpoints")
+			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
+	}
+
+	if (!checkpointNode) {
+		LOG("Could not find the node for checkpoint in the XML");
+		return;
+	}
+
+	checkpointNode.attribute("activated").set_value(false); // set to false
+
+	doc.save_file("config.xml");
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+	else {
+		LOG("death status updated in the XML for checkpoint");
+	}
+}
+
 void Checkpoints::setToActivatedAnim() {
 	activatedXML = parameters.attribute("activated").as_bool();
 
@@ -142,6 +192,53 @@ void Checkpoints::setToActivatedAnim() {
 		currentAnimation = &activated;
 	}
 }
+
+void Checkpoints::setToIdleAnim() {
+
+	if (pendingToChangeAnim) {
+		pendingToChangeAnim = false;
+		isActivated = false;
+		currentAnimation = &idle;
+		setActivatedToFalse();
+	}
+
+}
+
+void Checkpoints::ResetOthersCheckpoints() {
+
+	pugi::xml_document loadFile;
+
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+	if (result == NULL)
+	{
+		LOG("Could not load file. Pugi error: %s", result.description());
+		return;
+	}
+
+	pugi::xml_node sceneNode;
+	
+	int maxScenes = 3;
+
+	for (int i = 0; i < maxScenes; ++i) {
+		if (i == 0) sceneNode = loadFile.child("config").child("scene");
+		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
+		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
+		//checkpoints
+		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
+
+		for (pugi::xml_node checkpointNode : checkpointsNode.children("checkpoint")) {
+			for (int i = 0; i < Engine::GetInstance().scene.get()->checkpointList.size(); ++i) {
+
+				if (enemyID != Engine::GetInstance().scene.get()->checkpointList[i]->GetCheckpointType()) {
+					Engine::GetInstance().scene.get()->checkpointList[i]->pendingToChangeAnim = true;
+				}
+			}
+		}
+	}
+}
+
+
 
 bool Checkpoints::CleanUp()
 {
@@ -162,7 +259,10 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::PLAYER:
 
+		setToIdleAnim();
+
 		if (!isActivated && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
 			setActivatedToTrue(currentscene);
