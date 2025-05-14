@@ -104,6 +104,7 @@ private:
 	void HandleWakeup(float dt);
 	void Idle();
 	void HitWcooldown(float dt);
+	void Abyss();
 private:
 	// Public properties
 	SDL_Texture* texture = NULL;
@@ -265,8 +266,8 @@ private:
 	int ballCounter = 3; // Track how many balls does the player have left
 	float ballCooldown = 3000.0f; // Time until ball recharge
 
-	bool touchingAbyss = false; //if player touches the abyss, he hurt
-
+	
+	bool isFallingInAbyss = false; //if player touches the abyss
 	//colliding with enemies
 	std::chrono::time_point<std::chrono::steady_clock> lastHitTime;
 	bool isTouchingEnemy = false;
@@ -277,5 +278,7 @@ private:
 	bool tocado = false;//Enemy collides with player
 	bool first = true;// first time colision
 	float hitCooldown = 2000.0f;// 2 seconds cooldown timer
+
+
 
 };

@@ -1,3 +1,4 @@
+
 #include "Player.h"
 #include "Engine.h"
 #include "Textures.h"
@@ -338,9 +339,8 @@ bool Player::Update(float dt)
             Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Call the corresponding dialogue line
             NeedDialogue = false;
         }
-
+        Abyss();
         Ascensor();
-
         // Apply the velocity to both bodies
         pbodyUpper->body->SetLinearVelocity(velocity);
         pbodyLower->body->SetLinearVelocity(velocity);
@@ -1520,10 +1520,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::ABYSS: 
-		touchingAbyss = true;
-        if (lives > 0 && !isDying) {
-            hit();
-
+		
+        if (!isFallingInAbyss) {
+            hit(); 
+            isFallingInAbyss = true;
         }
    
 		break;
@@ -1551,6 +1551,30 @@ void Player::Ascensor() {
     if (useElevator && TocandoAs == true) {
         NeedSceneChange = true;
     }
+}
+void Player:: Abyss()
+{
+   
+    if (hurt.HasFinished()) {
+        hurted = true;
+        isHurt = false;
+        hasHurtStarted = false;
+        currentAnimation = &idle;
+        idle.Reset();
+
+        if (isFallingInAbyss) {
+           
+            NeedSceneChange = true;
+            sceneToLoad = 1;
+            Playerx = 2777;
+            Playery = 2048;
+            Fade = true;
+            BossCam = false;
+
+            isFallingInAbyss = false; 
+        }
+    }
+   
 }
 
 void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
@@ -1627,7 +1651,12 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         break;
 
 	case ColliderType::ABYSS:
-		touchingAbyss = false;
+        isFallingInAbyss = false;
+        hurted = true;
+        isHurt = false;
+        hasHurtStarted = false;
+        currentAnimation = &idle;
+        idle.Reset();
 		break;
     }
 }
