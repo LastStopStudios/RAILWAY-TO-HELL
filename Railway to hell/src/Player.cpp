@@ -1674,12 +1674,24 @@ void Player::HitWcooldown(float dt) {
                     hit();
                     hitCooldown = 2000.0f;
                 }
-            }       
-          // if(isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted){ hurt.Reset(); isHurt = false;  hurted = false;}           
+                //hurted = false;
+                //isHurt = false;
+            }    
+          // if(isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted){ hurt.Reset(); isHurt = false;  hurted = false;}         
+            if (hurt.HasFinished() && hurted) {
+                // Reset to idle
+                hurted = false;
+                isHurt = false;
+                hasHurtStarted = false;
+            }
         }
     }
     else {
-        first = true;
+      // first = true;
+        /*hurted = false;
+        isHurt = false;
+        hasHurtStarted = false;*/
+       // hurted = false;
        // if (isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted) { hurt.Reset(); isHurt = false;  hurted = false; }
     }
    
