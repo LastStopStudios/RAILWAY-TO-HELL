@@ -1568,7 +1568,7 @@ void Player:: Abyss()
             sceneToLoad = 1;
             Playerx = 2777;
             Playery = 2048;
-            Fade = true;
+            Fade = false;
             BossCam = false;
 
             isFallingInAbyss = false; 
