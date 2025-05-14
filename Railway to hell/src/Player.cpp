@@ -1672,13 +1672,15 @@ void Player::HitWcooldown(float dt) {
             if (hitCooldown <= 0.0f) {
                 if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
                     hit();
-                    hitCooldown = 3000.0f;
+                    hitCooldown = 2000.0f;
                 }
-            }
+            }       
+          // if(isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted){ hurt.Reset(); isHurt = false;  hurted = false;}           
         }
     }
     else {
         first = true;
+       // if (isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted) { hurt.Reset(); isHurt = false;  hurted = false; }
     }
    
     

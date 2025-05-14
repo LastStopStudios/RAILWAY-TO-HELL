@@ -276,7 +276,6 @@ private:
 
 	bool tocado = false;//Enemy collides with player
 	bool first = true;// first time colision
-	float hitCooldown = 3000.0f;// cooldown timer
-
+	float hitCooldown = 2000.0f;// 2 seconds cooldown timer
 
 };
