@@ -274,5 +274,9 @@ private:
 	float damageCooldown = 0.0f;
 	const float DAMAGE_COOLDOWN_TIME = 1.0f; // 1 segundo entre daños
 
+	bool tocado = false;//Enemy collides with player
+	bool first = true;// first time colision
+	float hitCooldown = 3000.0f;// cooldown timer
+
 
 };
