@@ -47,16 +47,20 @@ public:
 
 private:
 	//Textures
+	//Full
 	SDL_Texture* vida = nullptr;//health texture
 	SDL_Texture* Evida = nullptr;//Empty health texture
+	SDL_Texture* vidapl = nullptr;//health texture
+	//Empty
 	SDL_Texture* vida2 = nullptr;//health texture
+	SDL_Texture* vidapl2 = nullptr;//health texture
 	SDL_Texture* Evida2 = nullptr;//Empty health texturev
 	SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	SDL_Texture* boss = nullptr;//stamina texture (Dash)
 	//UI sizes
-	int w = 30, h = 20, w2, h2, wb=60, hb = 40;
+	int w = 40, h = 40, w2, h2, wb=60, hb = 40;
 	//UI positions
-	float posy = 0, posx = 0, posx2=20, posx3 = 40, posx4 = 60, posx5 = 80, posxb, posyb;// renders player position
+	float posy = 0, posx = 0, posx2=30, posx3 = 60, posx4 = 90, posx5 = 120, posxb, posyb;// renders player position
 	float posy2 = 700, bposx = 500, bposx2 = 540, bposx3 = 580, bposx4 = 620, bposx5 = 660, bposx6 = 700;//render boss 1 position
 	
 	
