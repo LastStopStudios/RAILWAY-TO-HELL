@@ -35,8 +35,10 @@ public:
 	int currentScene;
 	
 private:
-	void LoadEnemiesItems(pugi::xml_node sceneNode, int scene = -1);
-	void UnLoadEnemiesItems();	
+	//Load and unload
+	void LoadEnemiesItems(pugi::xml_node sceneNode);
+	void UnLoadEnemiesItems();
+	//Scene visibility on map
 	void VisibilityScene(int level);
 };
 

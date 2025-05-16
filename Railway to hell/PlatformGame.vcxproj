@@ -148,7 +148,6 @@
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Boss.cpp" />
     <ClCompile Include="src\Caronte.cpp" />
-    <ClCompile Include="src\Checkpoints.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
     <ClCompile Include="src\Doors.cpp" />
     <ClCompile Include="src\Elevators.cpp" />
@@ -187,7 +186,6 @@
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Boss.h" />
     <ClInclude Include="src\Caronte.h" />
-    <ClInclude Include="src\Checkpoints.h" />
     <ClInclude Include="src\DialogoM.h" />
     <ClInclude Include="src\Doors.h" />
     <ClInclude Include="src\Elevators.h" />

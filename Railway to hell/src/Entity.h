@@ -16,7 +16,6 @@ enum class EntityType
 	LEVER,
 	ELEVATORS,
 	PROJECTILE,
-	CHECKPOINT,
 	UNKNOWN
 };
 

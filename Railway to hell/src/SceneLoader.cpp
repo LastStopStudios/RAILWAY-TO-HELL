@@ -18,7 +18,6 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
-#include "Checkpoints.h"
 #include "Log.h"
 
 SceneLoader::SceneLoader() {
@@ -88,10 +87,11 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         player->SetPosition(Vector2D(x, y));
         player->ResetDoorAndLeverStates();
     }
-    LoadEnemiesItems(sceneNode, level);
+    LoadEnemiesItems(sceneNode);
+    
 }
 
-void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
+void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 
     pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
     if (!enemiesNode) {
@@ -100,8 +100,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
         std::string type = enemyNode.attribute("type").as_string();
-        int deathValue = enemyNode.attribute("death").as_int();
-        int deathXMLValue = enemyNode.attribute("savedDeath").as_int();
 
         if (type == "rastrero") {
             Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
@@ -121,14 +119,11 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
             Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
         }
 
-        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
-            if (type == "boss") {
-                Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
-                boss->SetParameters(enemyNode);
-                boss->SetAliveInXML();
-                Engine::GetInstance().scene->GetBossList().push_back(boss);
-            }
-        }
+		if (type == "boss") {
+			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
+			boss->SetParameters(enemyNode);
+			Engine::GetInstance().scene->GetBossList().push_back(boss);
+		}
         
 		if (type == "guardian") {
 			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
@@ -137,53 +132,13 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 		}
     }
 
-    pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
-    if (checkpointsNode) {
-        for (pugi::xml_node checkpointNode = checkpointsNode.child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
-        {
-            bool activatedXMLValue = checkpointNode.attribute("activated").as_bool();
-			if (activatedXMLValue) { // if activated then create the checkpoint activated
-                Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
-                checkpoint->SetParameters(checkpointNode);
-				checkpoint->setActivatedToTrue(scene);
-                checkpoint->setToActivatedAnim();
-                Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
-            }
-			else { // else create the checkpoint not activated
-				Checkpoints* checkpoint = (Checkpoints*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CHECKPOINT);
-				checkpoint->SetParameters(checkpointNode);
-				Engine::GetInstance().scene->GetCheckpointsList().push_back(checkpoint);
-			}
-
-        }
-    }
-
     pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
     if (itemsNode) {
         for (pugi::xml_node itemNode = itemsNode.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
         {
-            int deathValue = itemNode.attribute("death").as_int();
-            int deathXMLValue = itemNode.attribute("savedDeath").as_int();
-			bool createdXMLValue = itemNode.attribute("created").as_bool();
-			std::string name = itemNode.attribute("name").as_string();
-            if (name == "Whip") {
-                if (createdXMLValue) {
-                    if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
-                        Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-                        item->SetParameters(itemNode);
-                        item->SetAliveInXML();
-                        Engine::GetInstance().scene->GetItemList().push_back(item);
-                    }
-                }
-            }
-            else {
-                if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
-                    Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-                    item->SetParameters(itemNode);
-                    item->SetAliveInXML();
-                    Engine::GetInstance().scene->GetItemList().push_back(item);
-                }
-            }
+            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+            item->SetParameters(itemNode);
+			Engine::GetInstance().scene->GetItemList().push_back(item);
         }
     }
 
@@ -247,9 +202,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
 		lever->Start();
 	}
-    for (auto checkpoint : Engine::GetInstance().scene->GetCheckpointsList()) {
-        checkpoint->Start();
-    }
     // Initialize elevators
     for (auto elevator : Engine::GetInstance().scene->GetElevatorsList()) {
         elevator->Start();
@@ -266,7 +218,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::ITEM || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::ELEVATORS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -286,7 +238,6 @@ void SceneLoader::UnLoadEnemiesItems() {
 	Engine::GetInstance().scene->GetLeversList().clear();
     Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
-    Engine::GetInstance().scene->GetCheckpointsList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {
