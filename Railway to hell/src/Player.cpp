@@ -91,9 +91,17 @@ bool Player::Start() {
     whipAttackCooldown = 0.0f;
     whipAttackHitbox = nullptr;
 
+    // Initialize double jump variables
+    doubleJump = false;  // Player doesn't have double jump ability at start
+    canDoubleJump = false;
+    jumpCount = 0;
+
     // Para pruebas, habilitar temporalmente el ataque whip
     // Elimina esta línea cuando quieras que el jugador tenga que recoger el item primero
     WhipAttack = true;
+
+    // Para pruebas, puedes habilitar temporalmente el doble salto
+    // doubleJump = true;
 
     facingRight = true;
 
@@ -233,13 +241,24 @@ void Player::HandleDash(b2Vec2& velocity, float dt) {
 }
 
 void Player::HandleJump() {
-    // Jump control
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !isJumping) {
-        pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
-        isJumping = true;
+    // Double jump control
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+        if (!isJumping) {
+            // First jump
+            pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce), true);
+            isJumping = true;
+            jumpCount = 1;
+            canDoubleJump = doubleJump; // Enable double jump if player has the ability
+        }
+        else if (canDoubleJump && jumpCount < 2) {
+            // Second jump (double jump)
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0)); // Reset vertical velocity
+            pbody->body->ApplyLinearImpulseToCenter(b2Vec2(0, -jumpForce * 0.8f), true); // Slightly weaker second jump
+            jumpCount = 2;
+            canDoubleJump = false;
+        }
     }
 }
-
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
@@ -466,6 +485,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
         isJumping = false;
+        jumpCount = 0;       // Reset jump count when touching the ground
+        canDoubleJump = doubleJump; // Re-enable double jump if player has the ability
         break;
     case ColliderType::ITEM: {
         Item* item = (Item*)physB->listener;
@@ -477,13 +498,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             WhipAttack = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
+        if (item && item->GetItemType() == "Double Jump") {
+            doubleJump = true;  // Enable double jump ability when collecting the item
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+        }
         if (item && item->GetItemType() == "Door key") {
             canOpenDoor = true;
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
     }
-
-        break;
+                           break;
     case ColliderType::SENSOR:
         LOG("SENSOR COLLISION DETECTED");
         LOG("Sensor ID: %s", physB->sensorID.c_str());

@@ -98,6 +98,10 @@ private:
 	SDL_Texture* attackTexture = nullptr;  // Attack visual
 	bool facingRight = true;     // Direction facing (true=right)
 
+	bool doubleJump = false;    // Whether double jump ability is enabled
+	bool canDoubleJump = false; // Whether player can perform a double jump in the current jump sequence
+	int jumpCount = 0;          // Track how many jumps have been performed in sequence
+
 	// Whip attack properties
 	Animation whipAttack;
 	PhysBody* whipAttackHitbox = nullptr;
