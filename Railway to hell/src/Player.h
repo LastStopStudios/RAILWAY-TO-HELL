@@ -88,6 +88,12 @@ public:
 	//health
 	void hit();
 
+public:
+	void ResetToInitPosition();
+	void SaveInitialPosition();
+	float Scene1InitX, Scene1InitY;
+	float Scene2InitX, Scene2InitY;
+	float Scene3InitX, Scene3InitY;
 private:
 	// Private methods
 	void DrawPlayer();
@@ -242,6 +248,7 @@ private:
 	// items booleans
 	bool Dash = false;
 	bool WhipAttack = false;
+
 	// door and lever booleans
 	bool canOpenDoor = false;
 	bool leverOne = false;
@@ -278,6 +285,8 @@ private:
 	bool tocado = false;//Enemy collides with player
 	bool first = true;// first time colision
 	float hitCooldown = 2000.0f;// 2 seconds cooldown timer
+
+
 
 
 

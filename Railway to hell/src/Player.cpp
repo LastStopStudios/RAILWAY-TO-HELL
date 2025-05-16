@@ -42,9 +42,11 @@ bool Player::Start() {
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
-    texW = parameters.attribute("w").as_int();
+    texW = parameters.attribute("w").as_int();  
     texH = parameters.attribute("h").as_int();
     idleTexture = texture;  // Default texture
+
+    SaveInitialPosition();
 
     // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -778,7 +780,7 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 700 , 600, false, false);
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
@@ -1322,6 +1324,108 @@ void Player::DrawPlayer() {
     */
 }
 
+void Player::ResetToInitPosition() {
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node playerNode;
+
+    for (int i = 0; i < 3; ++i) {
+        if (i == 0) {
+            playerNode = doc.child("config")
+                .child("scene")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene1InitX);
+			playerNode.attribute("y").set_value(Scene1InitY);
+        }
+        else if (i == 1) {
+            playerNode = doc.child("config")
+                .child("scene2")
+                .child("entities")
+                .child("player");
+			playerNode.attribute("x").set_value(Scene2InitX);
+			playerNode.attribute("y").set_value(Scene2InitY);
+        }
+        else if (i == 2) {
+            playerNode = doc.child("config")
+                .child("scene3")
+                .child("entities")
+                .child("player");
+			playerNode.attribute("x").set_value(Scene3InitX);
+			playerNode.attribute("y").set_value(Scene3InitY);
+        }
+    }
+
+    if (!playerNode) {
+        LOG("Could not find the node for player in the XML");
+        return;
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for player");
+    }
+
+}
+void Player::SaveInitialPosition() {
+
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node playerNode;
+
+    for (int i = 0; i < 3; ++i) {
+        if (i == 0) {
+            playerNode = doc.child("config")
+                .child("scene")
+                .child("entities")
+                .child("player");
+            Scene1InitX = playerNode.attribute("x").as_float();
+            Scene1InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 1) {
+            playerNode = doc.child("config")
+                .child("scene2")
+                .child("entities")
+                .child("player");
+            Scene2InitX = playerNode.attribute("x").as_float();
+            Scene2InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 2) {
+            playerNode = doc.child("config")
+                .child("scene3")
+                .child("entities")
+                .child("player");
+            Scene3InitX = playerNode.attribute("x").as_float();
+            Scene3InitY = playerNode.attribute("y").as_float();
+        }
+    }
+
+    if (!playerNode) {
+        LOG("Could not find the node for player in the XML");
+        return;
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for player");
+    }
+
+}
+
 bool Player::CleanUp() {
     LOG("Cleanup player");
 
@@ -1431,6 +1535,20 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         return;
     }
+
+    //if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+    //    Checkpoints* checkpoint = (Checkpoints*)physB->listener;
+
+    //    if (checkpoint) {
+
+    //        if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1" && !checkpoint->GetActivitatedXML()) { 
+    //            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+    //            LOG("A");
+    //            return;
+    //        }
+    //    }
+    //    return;
+    //}
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once
@@ -1662,23 +1780,27 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::SetPosition(Vector2D pos) {
+    int adjustment = 2;
     // Establish upper body position
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 3);  // Locate at one third of the total height.
+    pos.setX(pos.getX() );
+    pos.setY(pos.getY() + texH /3 + adjustment);  
     b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
     pbodyUpper->body->SetTransform(upperPos, 0);
 
     // Establish lower body position
     Vector2D lowerPos = pos;
-    lowerPos.setY(pos.getY() + texH / 3);  // One third lower than the upper
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);  
     b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
     pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Player::GetPosition() {
+    int adjustment = 2;
+
     // Use upper body position as a reference
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+	pos.setY(pos.getY() - texH / 3 + adjustment);  
     return pos;
 }
 void Player::hit(){

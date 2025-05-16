@@ -103,6 +103,9 @@
     <ClCompile Include="src\UI.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Checkpoints.cpp">
+      <Filter>Source Filles\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -218,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="src\UI.h">
       <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Checkpoints.h">
+      <Filter>Source Filles\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

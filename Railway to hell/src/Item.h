@@ -24,6 +24,8 @@ public:
 
 	void SetPosition(Vector2D pos);
 
+	Vector2D GetPosition();
+
 	bool CleanUp();
 
 	void SetParameters(pugi::xml_node parameters) {
@@ -34,11 +36,44 @@ public:
 
 	const std::string& GetItemType() const { return itemType; }
 
+	// Load & save 
+
+	void SetDeathInXML();
+
+	void SetAliveInXML();
+
+	void SetSavedDeathToDeathInXML(); // at the moment its not being used
+
+	void SetSavedDeathToAliveInXML();
+
+	void SetCreatedTrueInXML();
+
+	void SetCreatedFalseInXML();
+
+	void SetEnabled(bool active);
+
+	bool IsEnabled() const { return isEnabled; }
+
+	std::string GetRef() { return ref; }
+
+	void SavePosition(std::string name);
+
 public:
+
+	// Load & save 
+	bool pendingDisable = false;
+	int DeathValue = 0;
+	int SavedDeathValue = 0;
+
 
 	bool isPicked = false;
 
 private:
+
+	// Load & save
+	std::string enemyID;
+	std::string ref;
+	bool isEnabled = true;
 
 	SDL_Texture* texture;
 	const char* texturePath;

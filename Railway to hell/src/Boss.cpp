@@ -19,6 +19,7 @@ Boss::Boss() : Entity(EntityType::BOSS)
 }
 
 Boss::~Boss() {
+	CleanUp();
     delete pathfinding;
     if (area != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(area);
@@ -36,6 +37,10 @@ bool Boss::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
+	enemyID = parameters.attribute("name").as_string();
+    ref = parameters.attribute("ref").as_string();
+    initX = parameters.attribute("x").as_int();
+    initY = parameters.attribute("y").as_int();
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -138,9 +143,8 @@ void Boss::TriggerBossDialog() {
 
 bool Boss::Update(float dt)
 {
-    if (pendingToDelete) {
-        return true;
-    }
+    if (!IsEnabled()) return true;
+
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
@@ -216,9 +220,13 @@ bool Boss::Update(float dt)
             item->Start();
             Vector2D pos(position.getX() + texW, position.getY());
             item->SetPosition(pos);
-            deathTimer += dt;
-            if (deathTimer >= deathDelay) {
-                pendingToDelete = true;
+            item->SavePosition("Whip");
+            item->SetCreatedTrueInXML();
+            
+            if (pendingDisable) {
+                SetEnabled(false);
+                pendingDisable = false;
+                SetDeathInXML();
             }
         }
 
@@ -413,6 +421,216 @@ void Boss::Matar() {//eliminating the enemy once dead
     }
 }
 
+void Boss::SetDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("death").set_value(1); // 1 enemy is death
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+    DeathValue = 1;
+}
+
+void Boss::SetAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("death").set_value(0); // 0 enemy is alive
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+    DeathValue = 0;
+}
+
+void Boss::SetSavedDeathToDeathInXML()
+{
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!bossNode) {
+        LOG("Could not find the node for boss in the XML");
+        return;
+    }
+
+    bossNode.attribute("savedDeath").set_value(1); // 1 enemy is death
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+
+    SavedDeathValue = 1;
+}
+
+void Boss::SetSavedDeathToAliveInXML()
+{
+    // Load XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node bossNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        bossNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        bossNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        bossNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!bossNode) {
+        LOG("Could not find the node for item in the XML");
+        return;
+    }
+
+    bossNode.attribute("savedDeath").set_value(0); // 0 enemy is alive
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for boss");
+    }
+
+    SavedDeathValue = 0;
+}
+
+void Boss::SetEnabled(bool active) {
+    isEnabled = active;
+    pbodyUpper->body->SetEnabled(active);
+    pbodyUpper->body->SetAwake(active);
+    pbodyLower->body->SetEnabled(active);
+    pbodyLower->body->SetEnabled(active);
+}
+
 bool Boss::CleanUp()
 {
     // First delete all physics bodies
@@ -437,32 +655,36 @@ bool Boss::CleanUp()
     // Make sure textures are properly released
     // We don't need to destroy the texture as it's managed elsewhere
     // Just set our pointer to null to avoid double deletion issues
-    texture = nullptr;
-
+    if (texture != nullptr) {
+		Engine::GetInstance().textures.get()->UnLoad(texture);
+        texture = nullptr;
+    }
     return true;
 }
 
 void Boss::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    float adjustment = 3.95;
 
-    // Calculate the current offset between upper and lower bodies
-    b2Vec2 upperPos = pbodyUpper->body->GetPosition();
-    b2Vec2 lowerPos = pbodyLower->body->GetPosition();
-    b2Vec2 offset = lowerPos - upperPos;
+    // Establish upper body position
+    pos.setX(pos.getX());
+    pos.setY(pos.getY() + texH / 3 + adjustment);
+    b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    pbodyUpper->body->SetTransform(upperPos, 0);
 
-    // Set position for upper body
-    pbodyUpper->body->SetTransform(bodyPos, 0);
-
-    // Set position for lower body, maintaining the same offset
-    pbodyLower->body->SetTransform(bodyPos + offset, 0);
+    // Establish lower body position
+    Vector2D lowerPos = pos;
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);
+    b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
+    pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Boss::GetPosition() {
+    float adjustment = 3.95;
+
     // We use the upper body for position tracking
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+    pos.setY(pos.getY() - texH / 3 + adjustment);
     return pos;
 }
 
@@ -470,6 +692,117 @@ void Boss::ResetPath() {
     Vector2D pos = GetPosition();
     Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
     pathfinding->ResetPath(tilePos);
+}
+
+void Boss::ResetPosition() {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+    if (result == NULL)
+    {
+        LOG("Could not load file. Pugi error: %s", result.description());
+        return;
+    }
+
+    pugi::xml_node sceneNode;
+
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+    if (currentScene == 1) {
+        sceneNode = loadFile.child("config").child("scene");
+    }
+    if (currentScene == 2) {
+        sceneNode = loadFile.child("config").child("scene2");
+    }
+    if (currentScene == 3) {
+        sceneNode = loadFile.child("config").child("scene3");
+    }
+
+    //bosses
+    pugi::xml_node bossesNode = sceneNode.child("entities").child("bosses");
+    if (!Engine::GetInstance().scene.get()->bossList.empty()) {
+        for (pugi::xml_node bossNode : bossesNode.children("boss")) {
+            std::string xmlRef = bossNode.attribute("ref").as_string();
+            for (const auto& boss : Engine::GetInstance().scene.get()->bossList) {
+                if (boss->GetRef() == xmlRef) {
+                        bossNode.attribute("x").set_value(initX);
+                        bossNode.attribute("y").set_value(initY);
+                }
+            }
+        }
+    }
+
+    //Saves the modifications to the XML 
+    loadFile.save_file("config.xml");
+    
+}
+
+void Boss::SavePosition(std::string name) {
+    // Save the current position of the boss in the XML file
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node sceneNode;
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (currentScene == 1) {
+        sceneNode = doc.child("config")
+            .child("scene")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 2) {
+        sceneNode = doc.child("config")
+            .child("scene2")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 3) {
+        sceneNode = doc.child("config")
+            .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+
+    if (!sceneNode) {
+        LOG("Could not find the node for item in the XML");
+        return;
+    }
+
+    //Save info to XML 
+
+    //boss
+    pugi::xml_node bossesNode = sceneNode.child("entities").child("bosses");
+    if (!Engine::GetInstance().scene.get()->bossList.empty()) {
+        int i = 0;
+        for (pugi::xml_node bossNode : bossesNode.children("boss")) {
+            if (i < Engine::GetInstance().scene.get()->bossList.size()) {
+                std::string enemyID = bossNode.attribute("name").as_string();
+                if (enemyID == name) {
+                    bossNode.attribute("x").set_value(Engine::GetInstance().scene.get()->bossList[i]->GetPosition().getX());
+                    bossNode.attribute("y").set_value(Engine::GetInstance().scene.get()->bossList[i]->GetPosition().getY());
+                }
+                i++;
+            }
+
+        }
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+}
+
+void Boss::ResetLives() {
+    lives = 12;
+	currentAnimation = &idle;
+    if(isDying) isDying = false;
+    if(isDead) isDead = false;
 }
 
 // Fix for hurt animation in OnCollision
