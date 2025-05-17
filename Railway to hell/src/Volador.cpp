@@ -131,7 +131,7 @@ bool Volador::Update(float dt) {
         }
 
         // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + 64, (int)position.getY() + 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         // When dying, don't process any other logic
