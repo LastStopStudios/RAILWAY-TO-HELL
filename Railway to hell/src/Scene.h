@@ -128,11 +128,14 @@ public:
 		int id;
 		float x;
 		float y;
+		// Nuevos límites para la cámara en el eje X
+		float leftBoundary;   // Límite izquierdo de la cámara
+		float rightBoundary;  // Límite derecho de la cámara
 	};
 	//list of boss fights with their id
 	std::vector<Bosses> Bosses = {
-	//scene to which it goes, x (590) from camera, y (415) from camera
-	{3, 1282.73, 1151.67}
+		//scene to which it goes, x from camera, y from camera, leftBoundary, rightBoundary
+		{3, 1270, 1195, 1270, 1710.0f}
 	};
 	//camera control
 	void EntrarBoss();

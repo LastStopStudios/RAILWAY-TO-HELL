@@ -56,7 +56,6 @@ bool Scene::Awake()
 		item->SetParameters(itemNode);
 		itemList.push_back(item);
 		}
-
 	}
 
 	for (pugi::xml_node projectileNode = configParameters.child("entities").child("projectiles").child("projectile"); projectileNode; projectileNode = projectileNode.next_sibling("projectile"))
@@ -274,43 +273,58 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	
+
 	SceneState currentState = GetCurrentState();
 	if (currentState == SceneState::GAMEPLAY) {
-		// Definimos el factor de zoom aquí para usarlo en ambos casos
+		// Define the zoom factor here to use it in both cases
 		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
 
+		// Get window dimensions
+		int window_width, window_height;
+		Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
+		int center_x = window_width / 2;
+		int center_y = window_height / 2;
+
 		if (BossBattle == false) {
-			//Camera follows player
-			int window_width, window_height;
-			Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
-
-			// Centro de la pantalla (la mitad del ancho y alto)
-			int center_x = window_width / 2;
-			int center_y = window_height / 2;
-
+			// Camera follows the player
 			Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
 			Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
 		}
 		else if (BossBattle == true) {
-			//Camera for Boss Battle
-			for (const auto& Bosses : Bosses) { // Iterate through all scenes
-				if (Bosses.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {//scene id equals scene we are
-					// Aplicamos el factor de escala a las coordenadas del jefe
-					Engine::GetInstance().render.get()->camera.x = (int)(-Bosses.x * TEXTURE_SIZE_MULTIPLIER) + 100;
-					Engine::GetInstance().render.get()->camera.y = (int)(-Bosses.y * TEXTURE_SIZE_MULTIPLIER) - 140;
+			// Camera for Boss Battle - with limits on X axis
+			for (const auto& boss : Bosses) { // Iterate through all boss scenes
+				if (boss.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) { // If current scene matches a boss scene
+					// Keep Y fixed for the boss battle
+					Engine::GetInstance().render.get()->camera.y = (int)(-boss.y * TEXTURE_SIZE_MULTIPLIER) - 140;
 
-					// Opcionalmente, podemos añadir un ajuste central como en el caso del jugador
-					int window_width, window_height;
-					Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
-					int center_x = window_width / 2;
-					int center_y = window_height / 2;
+					// For X, follow the player but with boundaries
+					float playerX = player->position.getX();
+
+					// Calculate the desired camera position based on the player
+					int desiredCameraX = (int)((playerX * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
+
+					// Define camera boundaries on the X axis (adjust these values as needed)
+					int leftLimit = (int)(-boss.leftBoundary * TEXTURE_SIZE_MULTIPLIER);
+					int rightLimit = (int)(-boss.rightBoundary * TEXTURE_SIZE_MULTIPLIER);
+
+					// Apply the boundaries
+					if (desiredCameraX > leftLimit) {
+						desiredCameraX = leftLimit;
+					}
+					if (desiredCameraX < rightLimit) {
+						desiredCameraX = rightLimit;
+					}
+
+					// Assign the limited position
+					Engine::GetInstance().render.get()->camera.x = desiredCameraX;
+					break;
 				}
 			}
 		}
 	}
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		LoadState();
@@ -320,7 +334,6 @@ bool Scene::PostUpdate()
 
 	return ret;
 }
-
 void Scene::EntrarBoss() { BossBattle = true;}
 
 void Scene::SalirBoss() { BossBattle = false;}

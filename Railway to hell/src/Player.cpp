@@ -785,6 +785,10 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().sceneLoader->LoadScene(4, 766, 429, false, false);
         hasDied = false;
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go boss2
+        Engine::GetInstance().sceneLoader->LoadScene(5, 1056, 640, false, false);
+        hasDied = false;
+    }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
         Engine::GetInstance().sceneLoader->LoadScene(6, 1929, 622, false, false);
         hasDied = false;
