@@ -100,6 +100,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::BOSS:
 		entity = new Boss();
 		break;
+	case EntityType::BUFON:
+		entity = new Boss();
+		break;
 	case EntityType::CARONTE:
 		entity = new Caronte();
 		break;

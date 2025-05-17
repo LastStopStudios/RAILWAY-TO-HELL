@@ -113,6 +113,11 @@ bool Scene::Awake()
 			boss->SetParameters(enemyNode);
 			bossList.push_back(boss);
 		}
+		if (type == "bufon") {
+			Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
+			bufon->SetParameters(enemyNode);
+			bufonList.push_back(bufon);
+		}
 		if (type == "guardian") {
 			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
 			caronte->SetParameters(enemyNode);

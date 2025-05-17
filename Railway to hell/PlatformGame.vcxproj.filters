@@ -10,19 +10,10 @@
     <ClCompile Include="src\Log.cpp">
       <Filter>Source Filles\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Boss.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Item.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Player.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Terrestre.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Volador.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene.cpp">
@@ -67,9 +58,6 @@
     <ClCompile Include="src\Render.cpp">
       <Filter>Source Filles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Caronte.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Doors.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
@@ -91,9 +79,6 @@
     <ClCompile Include="src\Pathfinding.cpp">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Explosivo.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Elevators.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
@@ -102,6 +87,24 @@
     </ClCompile>
     <ClCompile Include="src\UI.cpp">
       <Filter>Source Filles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Boss.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bufón.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Caronte.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Explosivo.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Terrestre.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Volador.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,19 +123,10 @@
     <ClInclude Include="Point.h">
       <Filter>Source Filles\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Boss.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Item.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Terrestre.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Volador.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene.h">
@@ -177,9 +171,6 @@
     <ClInclude Include="src\Render.h">
       <Filter>Source Filles\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Caronte.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Doors.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
@@ -207,9 +198,6 @@
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Filles\Engine\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Explosivo.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Elevators.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
@@ -218,6 +206,24 @@
     </ClInclude>
     <ClInclude Include="src\UI.h">
       <Filter>Source Filles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Boss.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Bufón.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Caronte.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Explosivo.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Terrestre.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Volador.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +258,9 @@
     </Filter>
     <Filter Include="Source Filles\Engine\Entities">
       <UniqueIdentifier>{da4651a5-73b5-4f65-b4ff-a3a6cf752fc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Game\Enemies">
+      <UniqueIdentifier>{733877f0-7311-4568-af93-465d7de7318c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

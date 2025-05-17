@@ -16,6 +16,7 @@ enum class EntityType
 	LEVER,
 	ELEVATORS,
 	PROJECTILE,
+	BUFON,
 	UNKNOWN
 };
 

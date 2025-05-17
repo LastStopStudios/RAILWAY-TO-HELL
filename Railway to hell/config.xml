@@ -1674,9 +1674,104 @@
 					</wakeup>
 				</animations>
 			</player>
+			<enemies>
+				<enemy name="bufon" x="2112" y="672" w="192" h="192" texture="Assets/Textures/bosses/Bufon.png" gravity="false" type="bufon">
+					<animations>
+						<idle loop="true" speed="0.15">
+							<frame x="0" y="0" w="192" h="192" />
+							<frame x="192" y="0" w="192" h="192" />
+							<frame x="384" y="0" w="192" h="192" />
+							<frame x="576" y="0" w="192" h="192" />
+							<frame x="768" y="0" w="192" h="192" />
+							<frame x="960" y="0" w="192" h="192" />
+							<frame x="1344" y="0" w="192" h="192" />
+							<frame x="1536" y="0" w="192" h="192" />
+						</idle>
+						<hurt loop="false" speed="0.05">
+							<frame x="0" y="64" w="64" h="64" />
+						</hurt>
+						<die loop="false" speed="0.15">
+							<frame x="0" y="704" w="256" h="256" />
+							<frame x="256" y="704" w="256" h="256" />
+							<frame x="512" y="704" w="256" h="256" />
+							<frame x="768" y="704" w="256" h="256" />
+							<frame x="1024" y="704" w="256" h="256" />
+							<frame x="1280" y="704" w="256" h="256" />
+							<frame x="1536" y="704" w="256" h="256" />
+							<frame x="1792" y="704" w="256" h="256" />
+							<frame x="2048" y="704" w="256" h="256" />
+							<frame x="2304" y="704" w="256" h="256" />
+							<frame x="2560" y="704" w="256" h="256" />
+							<frame x="2816" y="704" w="256" h="256" />
+							<frame x="3072" y="704" w="256" h="256" />
+						</die>
+						<disparoR loop="false" speed="0.15">
+							<frame x="0" y="192" w="256" h="256" />
+							<frame x="256" y="192" w="256" h="256" />
+							<frame x="512" y="192" w="256" h="256" />
+							<frame x="768" y="192" w="256" h="256" />
+							<frame x="1024" y="192" w="256" h="256" />
+							<frame x="1280" y="192" w="256" h="256" />
+							<frame x="1536" y="192" w="256" h="256" />
+							<frame x="1792" y="192" w="256" h="256" />
+							<frame x="2048" y="192" w="256" h="256" />
+							<frame x="2304" y="192" w="256" h="256" />
+						</disparoR>
+						<disparoG loop="false" speed="0.15">
+							<frame x="0" y="448" w="256" h="256" />
+							<frame x="256" y="448" w="256" h="256" />
+							<frame x="512" y="448" w="256" h="256" />
+							<frame x="768" y="448" w="256" h="256" />
+							<frame x="1024" y="448" w="256" h="256" />
+							<frame x="1280" y="448" w="256" h="256" />
+							<frame x="1536" y="448" w="256" h="256" />
+							<frame x="1792" y="448" w="256" h="256" />
+							<frame x="2048" y="448" w="256" h="256" />
+							<frame x="2304" y="448" w="256" h="256" />
+							<frame x="2560" y="448" w="256" h="256" />
+							<frame x="2816" y="448" w="256" h="256" />
+							<frame x="3072" y="448" w="256" h="256" />
+							<frame x="3328" y="448" w="256" h="256" />
+							<frame x="3584" y="448" w="256" h="256" />
+							<frame x="3840" y="448" w="256" h="256" />
+							<frame x="4096" y="448" w="256" h="256" />
+						</disparoG>
+						<salto loop="false" speed="0.15">
+							<frame x="0" y="960" w="256" h="256" />
+							<frame x="256" y="960" w="256" h="256" />
+							<frame x="512" y="960" w="256" h="256" />
+							<frame x="768" y="960" w="256" h="256" />
+							<frame x="1024" y="960" w="256" h="256" />
+							<frame x="1280" y="960" w="256" h="256" />
+							<frame x="1536" y="960" w="256" h="256" />
+							<frame x="1792" y="960" w="256" h="256" />
+							<frame x="2048" y="960" w="256" h="256" />
+							<frame x="2304" y="960" w="256" h="256" />
+							<frame x="2560" y="960" w="256" h="256" />
+							<frame x="2816" y="960" w="256" h="256" />
+							<frame x="3072" y="960" w="256" h="256" />
+							<frame x="3328" y="960" w="256" h="256" />
+							<frame x="3584" y="960" w="256" h="256" />
+							<frame x="3840" y="960" w="256" h="256" />
+							<frame x="4096" y="960" w="256" h="256" />
+							<frame x="4352" y="960" w="256" h="256" />
+							<frame x="4608" y="960" w="256" h="256" />
+							<frame x="4864" y="960" w="256" h="256" />
+							<frame x="5120" y="960" w="256" h="256" />
+							<frame x="5376" y="960" w="256" h="256" />
+							<frame x="5632" y="960" w="256" h="256" />
+						</salto>
+						<hurt loop="true" speed="0.15">
+							<frame x="0" y="1216" w="192" h="192" />
+							<frame x="192" y="1216" w="192" h="192" />
+							<frame x="384" y="1216" w="192" h="192" />
+							<frame x="576" y="1216" w="192" h="192" />
+						</hurt>
+					</animations>
+				</enemy>
+			</enemies >
 			<items />
 			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />

@@ -19,6 +19,7 @@
 #include "Elevators.h"
 #include "Projectiles.h"
 #include "Log.h"
+#include "Bufón.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -120,11 +121,15 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         }
 
 		if (type == "boss") {
-			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
-			boss->SetParameters(enemyNode);
-			Engine::GetInstance().scene->GetBossList().push_back(boss);
+			Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
+			bufon->SetParameters(enemyNode);
+			Engine::GetInstance().scene->GetBufonList().push_back(bufon);
 		}
-        
+        if (type == "bufon") {
+            Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
+            boss->SetParameters(enemyNode);
+            Engine::GetInstance().scene->GetBossList().push_back(boss);
+        }
 		if (type == "guardian") {
 			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);
 			caronte->SetParameters(enemyNode);
@@ -172,8 +177,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         }
     }
 
-
-
     // Initialize enemies
     for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
         enemy->Start();
@@ -206,7 +209,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
     for (auto elevator : Engine::GetInstance().scene->GetElevatorsList()) {
         elevator->Start();
     }
-
+    for (auto bufon : Engine::GetInstance().scene->GetBufonList()) {
+        bufon->Start();
+    }
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
@@ -218,7 +223,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -238,6 +243,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 	Engine::GetInstance().scene->GetLeversList().clear();
     Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
+    Engine::GetInstance().scene->GetBufonList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {

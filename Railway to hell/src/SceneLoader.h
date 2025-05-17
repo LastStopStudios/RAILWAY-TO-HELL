@@ -18,7 +18,8 @@ class Pathfinding;
 class EntityManager;
 class Item;
 class Caronte;
-
+class Bufon;
+class Volador;
 
 
 class SceneLoader 
