@@ -51,6 +51,11 @@ private:
 	Animation idle, die, hurt;
 	Animation* currentAnimation = nullptr;
 
+	// Player detection variables
+	float detectionDistance;  // How many tiles away to detect the player
+	Vector2D enemyPos;        // Current position of the bufon
+	bool playerDetected = false;  // Flag indicating if player is detected
+
 	// Función auxiliar para obtener el número total de frames
 	int GetTotalFrames() const;
 	// Función auxiliar para obtener el índice del frame actual

@@ -56,8 +56,8 @@
  <tileset firstgid="49" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
- <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="23288" columns="284">
-  <image source="atlas_backgrounds.png" width="9088" height="2624"/>
+ <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="29536" columns="284">
+  <image source="atlas_backgrounds.png" width="9088" height="3328"/>
  </tileset>
  <layer id="5" name="Collisions" width="120" height="60" visible="0">
   <properties>
@@ -86540,7 +86540,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="7" name="Navigation" width="120" height="60" visible="0">
+ <layer id="7" name="Navigation" width="120" height="60">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -88532,8 +88532,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
-   <tile gid="49"/>
+   <tile/>
+   <tile/>
    <tile gid="49"/>
    <tile gid="49"/>
    <tile gid="49"/>
@@ -88625,15 +88625,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -88675,6 +88668,13 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="49"/>
    <tile gid="49"/>
    <tile gid="49"/>
@@ -88879,16 +88879,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -88905,6 +88900,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="49"/>
    <tile gid="49"/>
    <tile gid="49"/>
@@ -88999,7 +88999,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89008,7 +89007,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -89044,6 +89043,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="49"/>
    <tile/>
    <tile/>
@@ -89119,7 +89119,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89128,7 +89127,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
    <tile/>
    <tile/>
    <tile/>
@@ -89164,6 +89162,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="49"/>
    <tile/>
    <tile/>
@@ -89236,9 +89236,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
-   <tile gid="49"/>
-   <tile gid="49"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -89356,7 +89356,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -89476,7 +89476,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="49"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>

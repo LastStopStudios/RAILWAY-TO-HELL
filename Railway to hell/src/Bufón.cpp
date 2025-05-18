@@ -1,3 +1,4 @@
+
 #include "Boss.h"
 #include "Engine.h"
 #include "Textures.h"
@@ -18,7 +19,10 @@ Bufon::Bufon() : Entity(EntityType::BUFON)
 }
 
 Bufon::~Bufon() {
-
+    if (pathfinding != nullptr) {
+        delete pathfinding;
+        pathfinding = nullptr;
+    }
 }
 
 bool Bufon::Awake() {
@@ -54,6 +58,9 @@ bool Bufon::Start() {
     pathfinding = new Pathfinding();
     ResetPath();
 
+    // Initialize detection distance
+    detectionDistance = 50.0f;  // Distance in tiles to detect player
+
     return true;
 }
 
@@ -62,6 +69,34 @@ bool Bufon::Update(float dt) {
     if (currentAnimation != nullptr) {
         currentAnimation->Update();
     }
+
+    // Get enemy position
+    enemyPos = GetPosition();
+    Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
+
+    // Get player position
+    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
+
+    // Calculate the distance between the enemy and the player
+    float dx = playerTilePos.getX() - enemyTilePos.getX();
+    float dy = playerTilePos.getY() - enemyTilePos.getY();
+    float distanceToPlayer = sqrt(dx * dx + dy * dy);  // Euclidean distance
+
+    // Check if player is within detection range
+    if (distanceToPlayer <= detectionDistance) {
+        LOG("HOLI");
+        // Add your detection behavior here
+    }
+
+    // Always reset the path before propagating
+    pathfinding->ResetPath(enemyTilePos);
+
+    // Generate path to player using A* algorithm
+    pathfinding->PropagateAStar(SQUARED);
+
+    // Draw the path (after it has been calculated)
+    pathfinding->DrawPath();
 
     // Update sprite position based on the physical body position
     position.setX(METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - texW / 2);
