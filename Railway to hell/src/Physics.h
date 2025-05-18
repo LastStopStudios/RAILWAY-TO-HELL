@@ -47,6 +47,8 @@ enum class ColliderType {
 	DOORS,
 	LEVER,
 	PROJECTILE,
+	BUFON,
+	BUFON_ATTACK,
 	UNKNOWN
 	// ..
 };

@@ -23,6 +23,9 @@ public:
 
 	bool CleanUp();
 
+	// Método para dibujar el Bufón en pantalla
+	void Draw();
+
 	void SetParameters(pugi::xml_node parameters) {
 		this->parameters = parameters;
 	}
@@ -47,4 +50,9 @@ private:
 	SDL_Texture* texture;
 	Animation idle, die, hurt;
 	Animation* currentAnimation = nullptr;
+
+	// Función auxiliar para obtener el número total de frames
+	int GetTotalFrames() const;
+	// Función auxiliar para obtener el índice del frame actual
+	int GetCurrentFrameId() const;
 };

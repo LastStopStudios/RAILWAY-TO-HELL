@@ -21,7 +21,6 @@ class Caronte;
 class Bufon;
 class Volador;
 
-
 class SceneLoader 
 {
 public:

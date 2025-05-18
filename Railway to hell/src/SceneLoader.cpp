@@ -121,14 +121,15 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
         }
 
 		if (type == "boss") {
-			Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
-			bufon->SetParameters(enemyNode);
-			Engine::GetInstance().scene->GetBufonList().push_back(bufon);
-		}
-        if (type == "bufon") {
+			
             Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
             boss->SetParameters(enemyNode);
             Engine::GetInstance().scene->GetBossList().push_back(boss);
+		}
+        if (type == "bufon") {
+            Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
+			bufon->SetParameters(enemyNode);
+			Engine::GetInstance().scene->GetBufonList().push_back(bufon);
         }
 		if (type == "guardian") {
 			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);

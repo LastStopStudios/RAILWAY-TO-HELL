@@ -57,6 +57,7 @@ bool Explosivo::Start() {
     kill = 1;
     return true;
 }
+
 bool Explosivo::Update(float dt)
 {
     // Don't process logic if we're not in GAMEPLAY mode
