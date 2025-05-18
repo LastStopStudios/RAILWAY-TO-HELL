@@ -1664,6 +1664,9 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
     case ColliderType::DIALOGOS:
         physB->Salio = true;
         break;
+    case ColliderType::PLATFORMICE:
+        resbalar = false;//Ice platform
+        break;
 
 	case ColliderType::ABYSS:
         isFallingInAbyss = false;

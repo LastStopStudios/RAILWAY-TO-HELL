@@ -253,7 +253,7 @@ private:
 	//Ice platform
 	bool resbalar, giro;
 	float icev = 5;
-	float a = 0, b = 0, anta = 8.85f, antb = 8.85f, dificultty = 15;
+	float a = 0, b = 0, anta = 500.00f, antb = 500.f, dificultty = 20 ;
 
 	//double jump
 	bool doubleJump = false;       // Whether double jump ability is enabled
