@@ -266,7 +266,6 @@ bool Player::Update(float dt)
         DrawPlayer();
         return true;
     }
- 
     if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
@@ -306,7 +305,7 @@ bool Player::Update(float dt)
         }
 
 		// Handle hurt animation
-        HandleHurt(dt);
+        HandleHurt(dt);  
         if (changeMusicCaronte) {
             Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
             changeMusicCaronte = false;
@@ -322,7 +321,6 @@ bool Player::Update(float dt)
             HandleBallAttack(dt);
         }
         HitWcooldown(dt);
-   
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
@@ -813,6 +811,15 @@ void Player::HandleSceneSwitching() {
     }
 }
 void Player::HandleHurt(float dt) {
+    if (isHurtDelayed) {
+        currentHurtDelay += dt;
+        if (currentHurtDelay >= hurtDelay) {
+            isHurt = true;
+            lives = lives - 2;
+            isHurtDelayed = false;
+        }
+        return; // Salimos para no procesar la animación hasta que termine el retraso
+    }
     // Check if the player is hurt
     if (isHurt && !isDying) {
         if (!hasHurtStarted) {
@@ -1473,8 +1480,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurt = true;
-            lives = lives-2;
+            isHurtDelayed = true; 
+            currentHurtDelay = 0.0f; 
+
 			// Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;

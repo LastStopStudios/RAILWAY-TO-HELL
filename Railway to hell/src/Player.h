@@ -276,4 +276,11 @@ private:
 	bool tocado = false;//Enemy collides with player
 	bool first = true;// first time colision
 	float hitCooldown = 2000.0f;// 2 seconds cooldown timer
+
+	// Delay time in seconds before damage animation (0,5s)
+	float hurtDelay = 500.0f;      
+	float currentHurtDelay = 0.0f; 
+	bool isHurtDelayed = false;  
+
+
 };
