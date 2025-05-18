@@ -86,14 +86,21 @@ bool Bufon::Update(float dt) {
     // Check if player is within detection range
     if (distanceToPlayer <= detectionDistance) {
         LOG("HOLI");
-        // Add your detection behavior here
+        
     }
 
     // Always reset the path before propagating
     pathfinding->ResetPath(enemyTilePos);
 
+    // Always propagate A* algorithm to calculate path to player
+    int maxIterations = 100;
+    int iterations = 0;
+
     // Generate path to player using A* algorithm
-    pathfinding->PropagateAStar(SQUARED);
+    while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
+        pathfinding->PropagateAStar(SQUARED);
+        iterations++;
+    }
 
     // Draw the path (after it has been calculated)
     pathfinding->DrawPath();
