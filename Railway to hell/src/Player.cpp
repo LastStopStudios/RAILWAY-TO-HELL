@@ -1531,6 +1531,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
+    case ColliderType::PLATFORMICE:
+        resbalar = true;//Ice platform
+        break;
     case ColliderType::ABYSS: 
 		
         if (!isFallingInAbyss) {
