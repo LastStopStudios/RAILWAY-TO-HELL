@@ -19,7 +19,7 @@
 #include "Elevators.h"
 #include "Projectiles.h"
 #include "Log.h"
-#include "Bufón.h"
+#include "Bufon.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -89,7 +89,7 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         player->ResetDoorAndLeverStates();
     }
     LoadEnemiesItems(sceneNode);
-    
+
 }
 
 void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
@@ -107,7 +107,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
             enemy->SetParameters(enemyNode);
             Engine::GetInstance().scene->GetEnemyList().push_back(enemy); 
         }
-
         if (type == "amego") {
             Explosivo* explo = (Explosivo*)Engine::GetInstance().entityManager->CreateEntity(EntityType::EXPLOSIVO);
             explo->SetParameters(enemyNode);
@@ -119,7 +118,6 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
             volador->SetParameters(enemyNode);
             Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
         }
-
 		if (type == "boss") {
 			
             Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
@@ -147,7 +145,46 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 			Engine::GetInstance().scene->GetItemList().push_back(item);
         }
     }
+    // MOSAIC
+    pugi::xml_node mosaicPiecesNode = sceneNode.child("entities").child("mosaicPieces");
+    if (mosaicPiecesNode) {
+        for (pugi::xml_node mosaicPieceNode = mosaicPiecesNode.child("mosaicPiece"); mosaicPieceNode; mosaicPieceNode = mosaicPieceNode.next_sibling("mosaicPiece"))
+        {
+            MosaicPiece* piece = (MosaicPiece*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_PIECE);
+            piece->SetParameters(mosaicPieceNode);
+            Engine::GetInstance().scene->GetMosaicPiecesList().push_back(piece);
+        }
+    }
+    pugi::xml_node mosaicLeversNode = sceneNode.child("entities").child("mosaicLevers");
+    if (mosaicLeversNode) {
+        for (pugi::xml_node mosaicLeverNode = mosaicLeversNode.child("mosaicLever"); mosaicLeverNode; mosaicLeverNode = mosaicLeverNode.next_sibling("mosaicLever"))
+        {
+            MosaicLever* lever = (MosaicLever*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_LEVER);
+            lever->SetParameters(mosaicLeverNode);
+            Engine::GetInstance().scene->GetMosaicLeversList().push_back(lever);
+        }
+    }
+    pugi::xml_node mosaicPuzzleNode = sceneNode.child("entities").child("mosaicPuzzle");
+    if (mosaicPuzzleNode) {
+        // Create the mosaic puzzle
+        MosaicPuzzle* puzzle = new MosaicPuzzle();
 
+        // Set sound effect IDs if provided in the XML
+        if (mosaicPuzzleNode.attribute("solve_fx_id")) {
+            puzzle->solveFxId = mosaicPuzzleNode.attribute("solve_fx_id").as_int();
+        }
+        if (mosaicPuzzleNode.attribute("rotate_fx_id")) {
+            puzzle->rotateFxId = mosaicPuzzleNode.attribute("rotate_fx_id").as_int();
+        }
+
+        // Initialize the puzzle
+        puzzle->Initialize();
+
+        // Add puzzle to the scene's puzzle list
+        Engine::GetInstance().scene->GetMosaicPuzzleList().push_back(puzzle);
+    }
+    SetupMosaicPuzzle();
+    //
     pugi::xml_node doorsNode = sceneNode.child("entities").child("doors");
     if (doorsNode) {
         for (pugi::xml_node doorNode = doorsNode.child("door"); doorNode; doorNode = doorNode.next_sibling("door"))
@@ -202,6 +239,14 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode) {
 	for (auto door : Engine::GetInstance().scene->GetDoorsList()) {
 		door->Start();
 	}
+    // Initialize mosaic
+    for (auto pieces : Engine::GetInstance().scene->GetMosaicPiecesList()) {
+        pieces->Start();
+    }
+    for (auto levers : Engine::GetInstance().scene->GetMosaicLeversList()) {
+        levers->Start();
+    }
+
     // Initialize levers
 	for (auto lever : Engine::GetInstance().scene->GetLeversList()) {
 		lever->Start();
@@ -224,7 +269,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON || entity->type == EntityType::MOSAIC_LEVER || entity->type == EntityType::MOSAIC_PIECE || entity->type == EntityType::MOSAIC_PUZZLE) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -245,6 +290,9 @@ void SceneLoader::UnLoadEnemiesItems() {
     Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
     Engine::GetInstance().scene->GetBufonList().clear();
+    Engine::GetInstance().scene->GetMosaicPiecesList().clear();
+    Engine::GetInstance().scene->GetMosaicLeversList().clear();
+    Engine::GetInstance().scene->GetMosaicPuzzleList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {
@@ -300,6 +348,31 @@ void SceneLoader::FadeOut(float speed, bool loadscene, int level, int x, int y) 
 
         SDL_Delay(10);   
     }
+}
+
+void SceneLoader::SetupMosaicPuzzle() {
+    // Get the puzzle from the scene
+    auto& puzzleList = Engine::GetInstance().scene->GetMosaicPuzzleList();
+    if (puzzleList.empty()) {
+        LOG("Error: No MosaicPuzzle found when setting up the puzzle!");
+        return;
+    }
+
+    MosaicPuzzle* puzzle = puzzleList[0];
+
+    // Add all pieces to the puzzle
+    for (auto piece : Engine::GetInstance().scene->GetMosaicPiecesList()) {
+        puzzle->AddPiece(piece);
+    }
+
+    // Set the puzzle reference for all levers
+    for (auto lever : Engine::GetInstance().scene->GetMosaicLeversList()) {
+        lever->SetPuzzle(puzzle);
+    }
+
+    LOG("Mosaic puzzle setup complete: %d pieces and %d levers connected",
+        Engine::GetInstance().scene->GetMosaicPiecesList().size(),
+        Engine::GetInstance().scene->GetMosaicLeversList().size());
 }
 
 void SceneLoader::VisibilityScene(int level) {//player goes to another scene

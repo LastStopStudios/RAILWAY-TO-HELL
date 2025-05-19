@@ -769,7 +769,7 @@ void Player::HandleSceneSwitching() {
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 || hasDied && currentLvl == 1) {//go to scene 1
         Engine::GetInstance().sceneLoader->LoadScene(1, 2900, 2079, false, false);
-		hasDied = false;    
+        hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {//go to scene 2
         Engine::GetInstance().sceneLoader->LoadScene(2, 3082, 720, false, false);
@@ -787,29 +787,34 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().sceneLoader->LoadScene(5, 1056, 640, false, false);
         hasDied = false;
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_8) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go boss2
+        Engine::GetInstance().sceneLoader->LoadScene(10, 2400, 768, false, false);
+        hasDied = false;
+    }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
         Engine::GetInstance().sceneLoader->LoadScene(6, 1929, 622, false, false);
         hasDied = false;
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN ) {//Open Puzzle Doors
-        Engine::GetInstance().scene->SetOpenDoors();
-    }
-    // unlocks sensors
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
-        DesbloquearSensor();
-        Engine::GetInstance().entityManager->AscensorOn();
-    }
-    //Debug Level Design
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) { //Move the player to the start position tunel scene
-        int debugXLevelDesign = 2893;
-        int debugYLevelDesign = 2048;
-        Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
-        SetPosition(debugPos);
-    }
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) { //Move the player yo de dash item
-        int debugXLevelDesignInitialPositionOfLevel = 6600;
-        int debugYLevelDesignInitialPositionOfLevel = 4426;
-        Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
-        SetPosition(debugPos);
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {//Open Puzzle Doors
+            Engine::GetInstance().scene->SetOpenDoors();
+        }
+        // unlocks sensors
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
+            DesbloquearSensor();
+            Engine::GetInstance().entityManager->AscensorOn();
+        }
+        //Debug Level Design
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) { //Move the player to the start position tunel scene
+            int debugXLevelDesign = 2893;
+            int debugYLevelDesign = 2048;
+            Vector2D debugPos(debugXLevelDesign, debugYLevelDesign);
+            SetPosition(debugPos);
+        }
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) { //Move the player yo de dash item
+            int debugXLevelDesignInitialPositionOfLevel = 6600;
+            int debugYLevelDesignInitialPositionOfLevel = 4426;
+            Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
+            SetPosition(debugPos);
+        }
     }
 }
 void Player::HandleHurt(float dt) {
@@ -1711,7 +1716,6 @@ void Player::hit(){
     isHurt = true;
     lives--;
 }
-
 
 void Player::HitWcooldown(float dt) {
 

@@ -5,6 +5,9 @@
 #include "Item.h"
 #include "Doors.h"
 #include "Levers.h"
+#include "MosaicLevers.h"
+#include "MosaicPiece.h"
+#include "MosaicPuzzle.h"
 #include "Elevators.h"
 #include "Entity.h"
 #include "Engine.h"
@@ -20,7 +23,9 @@ class Item;
 class Caronte;
 class Bufon;
 class Volador;
-
+class MosaicPiece;
+class MosaicLever;
+class MosaicPuzzle;
 class SceneLoader 
 {
 public:
@@ -40,5 +45,6 @@ private:
 	void UnLoadEnemiesItems();
 	//Scene visibility on map
 	void VisibilityScene(int level);
+	void SetupMosaicPuzzle();
 };
 

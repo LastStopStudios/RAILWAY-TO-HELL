@@ -15,7 +15,7 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
-#include "Buf�n.h"
+#include "Bufon.h"
 #include "MosaicLevers.h"
 #include "MosaicPiece.h"
 #include "MosaicPuzzle.h"
@@ -27,6 +27,7 @@ enum class SceneState
 	TEXT_SCREEN,
 	GAMEPLAY
 };
+
 class Scene : public Module
 {
 public:

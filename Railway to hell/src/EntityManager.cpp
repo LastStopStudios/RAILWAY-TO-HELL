@@ -235,7 +235,6 @@ bool EntityManager::PostUpdate() {
 			entitiesToRemove.push_back(entity);
 			continue;
 		}
-
 		ret = entity->PostUpdate();
 	}
 

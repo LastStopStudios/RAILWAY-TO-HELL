@@ -91,7 +91,7 @@
     <ClCompile Include="src\Boss.cpp">
       <Filter>Source Filles\Game\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="src\Bufón.cpp">
+    <ClCompile Include="src\Bufon.cpp">
       <Filter>Source Filles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Caronte.cpp">
@@ -105,6 +105,15 @@
     </ClCompile>
     <ClCompile Include="src\Volador.cpp">
       <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicLevers.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicPiece.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MosaicPuzzle.cpp">
+      <Filter>Source Filles\Game\Mosaic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,7 +219,7 @@
     <ClInclude Include="src\Boss.h">
       <Filter>Source Filles\Game\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\Bufón.h">
+    <ClInclude Include="src\Bufon.h">
       <Filter>Source Filles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Caronte.h">
@@ -224,6 +233,15 @@
     </ClInclude>
     <ClInclude Include="src\Volador.h">
       <Filter>Source Filles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicLevers.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicPiece.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MosaicPuzzle.h">
+      <Filter>Source Filles\Game\Mosaic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +279,9 @@
     </Filter>
     <Filter Include="Source Filles\Game\Enemies">
       <UniqueIdentifier>{733877f0-7311-4568-af93-465d7de7318c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Filles\Game\Mosaic">
+      <UniqueIdentifier>{9a768c47-c11a-450d-8208-151da05b7865}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

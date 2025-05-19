@@ -81,49 +81,6 @@ bool Scene::Awake()
 		leverList.push_back(lever);
 	}
 
-	for (pugi::xml_node piecesMosaicNode = configParameters.child("entities").child("mosaicPieces").child("mosaicPiece");
-		piecesMosaicNode;
-		piecesMosaicNode = piecesMosaicNode.next_sibling("mosaicPiece"))
-	{
-		MosaicPiece* piece = (MosaicPiece*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_PIECE);
-		piece->SetParameters(piecesMosaicNode);
-		mosaicPiecesList.push_back(piece);
-	}
-
-	// Create the puzzle manager 
-	MosaicPuzzle* puzzle = new MosaicPuzzle();
-	mosaicPuzzleList.push_back(puzzle);
-
-	// Load sound effects for the puzzle
-	pugi::xml_node puzzleMosaicNode = configParameters.child("entities").child("mosaicPuzzle");
-	int solveFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/puzzle_solved.wav");
-	int rotateFxId = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav");
-
-	if (puzzleMosaicNode) {
-		solveFxId = Engine::GetInstance().audio.get()->LoadFx(puzzleMosaicNode.attribute("solve_fx").as_string("Assets/Audio/Fx/puzzle_solved.wav"));
-		rotateFxId = Engine::GetInstance().audio.get()->LoadFx(puzzleMosaicNode.attribute("rotate_fx").as_string("Assets/Audio/Fx/piece_rotate.wav"));
-	}
-
-	// Store the sound effect IDs in the puzzle
-	puzzle->solveFxId = solveFxId;
-	puzzle->rotateFxId = rotateFxId;
-
-	// Add all pieces to the puzzle
-	for (auto piece : mosaicPiecesList) {
-		puzzle->AddPiece(piece);
-	}
-
-	// Now create levers and connect them to the puzzle
-	for (pugi::xml_node leversMosaicNode = configParameters.child("entities").child("mosaicLevers").child("mosaicLever");
-		leversMosaicNode;
-		leversMosaicNode = leversMosaicNode.next_sibling("mosaicLever"))
-	{
-		MosaicLever* lever = (MosaicLever*)Engine::GetInstance().entityManager->CreateEntity(EntityType::MOSAIC_LEVER);
-		lever->SetParameters(leversMosaicNode);
-		lever->SetPuzzle(puzzle);  // Set the puzzle reference for the lever
-		mosaicLeversList.push_back(lever);
-	}
-
 	for (pugi::xml_node elevatorNode = configParameters.child("entities").child("elevators").child("elevator"); elevatorNode; elevatorNode = elevatorNode.next_sibling("elevator"))
 	{
 		Elevators* elevator = (Elevators*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ELEVATORS);

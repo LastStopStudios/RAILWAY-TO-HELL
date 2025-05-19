@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "DialogoM.h"
 #include "UI.h"
+#include "Bufon.h"
 
 Bufon::Bufon() : Entity(EntityType::BUFON)
 {
