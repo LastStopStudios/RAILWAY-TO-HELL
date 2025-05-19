@@ -94,15 +94,6 @@ public:
 	float Scene1InitX, Scene1InitY;
 	float Scene2InitX, Scene2InitY;
 	float Scene3InitX, Scene3InitY;
-	float Scene4InitX, Scene4InitY;
-	float Scene5InitX, Scene5InitY;
-	float Scene6InitX, Scene6InitY;
-	float Scene7InitX, Scene7InitY;
-	float Scene8InitX, Scene8InitY;
-	float Scene9InitX, Scene9InitY;
-	float Scene10InitX, Scene10InitY;
-	float Scene11InitX, Scene11InitY;
-
 private:
 	// Private methods
 	void DrawPlayer();
@@ -120,7 +111,6 @@ private:
 	void Idle();
 	void HitWcooldown(float dt);
 	void Abyss();
-	void ResetPlayerPosition();
 private:
 	// Public properties
 	SDL_Texture* texture = NULL;

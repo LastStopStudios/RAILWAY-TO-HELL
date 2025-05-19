@@ -120,58 +120,6 @@ void Checkpoints::setActivatedToTrue(int scene) {
 			.child("checkpoints")
 			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
 	}
-	else if (scene == 4) {
-		checkpointNode = doc.child("config")
-			.child("scene4")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 5) {
-		checkpointNode = doc.child("config")
-			.child("scene5")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 6) {
-		checkpointNode = doc.child("config")
-			.child("scene6")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 7) {
-		checkpointNode = doc.child("config")
-			.child("scene7")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 8) {
-		checkpointNode = doc.child("config")
-			.child("scene8")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 9) {
-		checkpointNode = doc.child("config")
-			.child("scene9")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 10) {
-		checkpointNode = doc.child("config")
-			.child("scene10")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (scene == 11) {
-		checkpointNode = doc.child("config")
-			.child("scene11")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
 
 	if (!checkpointNode) {
 		LOG("Could not find the node for checkpoint in the XML");
@@ -215,58 +163,6 @@ void Checkpoints::setActivatedToFalse() {
 	else if (sceneForThisCheckpoint == 3) {
 		checkpointNode = doc.child("config")
 			.child("scene3")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 4) {
-		checkpointNode = doc.child("config")
-			.child("scene4")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 5) {
-		checkpointNode = doc.child("config")
-			.child("scene5")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 6) {
-		checkpointNode = doc.child("config")
-			.child("scene6")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 7) {
-		checkpointNode = doc.child("config")
-			.child("scene7")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 8) {
-		checkpointNode = doc.child("config")
-			.child("scene8")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 9) {
-		checkpointNode = doc.child("config")
-			.child("scene9")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 10) {
-		checkpointNode = doc.child("config")
-			.child("scene10")
-			.child("entities")
-			.child("checkpoints")
-			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
-	}
-	else if (sceneForThisCheckpoint == 11) {
-		checkpointNode = doc.child("config")
-			.child("scene11")
 			.child("checkpoints")
 			.find_child_by_attribute("checkpoint", "name", enemyID.c_str());
 	}
@@ -322,20 +218,12 @@ void Checkpoints::ResetOthersCheckpoints() {
 
 	pugi::xml_node sceneNode;
 	
-	int maxScenes = 12;
+	int maxScenes = 3;
 
 	for (int i = 0; i < maxScenes; ++i) {
 		if (i == 0) sceneNode = loadFile.child("config").child("scene");
 		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
 		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
-		else if (i == 3) sceneNode = loadFile.child("config").child("scene4");
-		else if (i == 4) sceneNode = loadFile.child("config").child("scene5");
-		else if (i == 5) sceneNode = loadFile.child("config").child("scene6");
-		else if (i == 6) sceneNode = loadFile.child("config").child("scene7");
-		else if (i == 7) sceneNode = loadFile.child("config").child("scene8");
-		else if (i == 8) sceneNode = loadFile.child("config").child("scene9");
-		else if (i == 9) sceneNode = loadFile.child("config").child("scene10");
-		else if (i == 10) sceneNode = loadFile.child("config").child("scene11");
 		//checkpoints
 		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
 
@@ -355,7 +243,7 @@ void Checkpoints::ResetOthersCheckpoints() {
 bool Checkpoints::CleanUp()
 {
 	if (texture != nullptr) {
-		SDL_DestroyTexture(texture);
+		Engine::GetInstance().textures.get()->UnLoad(texture);
 		texture = nullptr;
 	}
 
