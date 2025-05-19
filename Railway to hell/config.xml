@@ -937,7 +937,7 @@
 			<dialog ID="4" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those pink sneakers you gave me for my birthday? I know it costed you a lot to get them." />
 		</dialogues>
 	</scene>
-	<scene10>
+	<scene2>
 		<map path="Assets/Maps/" name="IE1L1.tmx" />
 		<visibility accessed="true" />
 		<entities>
@@ -1141,7 +1141,7 @@
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You're on the right track. For now you've reached the end of this vertical slice." />
 		</dialogues>
-	</scene10>
+	</scene2>
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
 		<visibility accessed="true" />
