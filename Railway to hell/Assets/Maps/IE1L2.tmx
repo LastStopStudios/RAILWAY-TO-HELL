@@ -93778,7 +93778,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="12" name="Colisiones">
+ <objectgroup id="12" name="Colisiones" visible="0">
   <object id="281" x="639.727" y="223.606" width="32" height="734.667"/>
   <object id="180" x="1280" y="1152" width="1280" height="32"/>
   <object id="181" x="1280" y="1184" width="32" height="736"/>

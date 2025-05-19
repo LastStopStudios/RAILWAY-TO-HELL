@@ -64922,7 +64922,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Colisiones">
+ <objectgroup id="12" name="Colisiones" visible="0">
   <object id="174" x="640" y="192" width="32" height="768"/>
   <object id="177" x="3168" y="224" width="32" height="704"/>
   <object id="227" x="640" y="864" width="2560" height="96"/>

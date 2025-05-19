@@ -93761,7 +93761,7 @@
   <object id="272" x="3168" y="544" width="32" height="160"/>
  </objectgroup>
  <objectgroup id="27" name="Dialogos" visible="0"/>
- <objectgroup id="12" name="Colisiones">
+ <objectgroup id="12" name="Colisiones" visible="0">
   <object id="202" x="1344" y="160" width="1152" height="98.6667"/>
   <object id="307" x="3105.33" y="188" width="94.6667" height="98.6667"/>
   <object id="308" x="3009.33" y="157.333" width="94.6667" height="98.6667"/>
