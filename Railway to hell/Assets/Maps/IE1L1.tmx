@@ -64922,19 +64922,15 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Colisiones" visible="0">
+ <objectgroup id="12" name="Colisiones">
   <object id="174" x="640" y="192" width="32" height="768"/>
   <object id="177" x="3168" y="224" width="32" height="704"/>
   <object id="227" x="640" y="864" width="2560" height="96"/>
   <object id="235" x="640" y="192" width="2560" height="188.106"/>
-  <object id="237" x="2207.33" y="831.333" width="96.6667" height="32"/>
-  <object id="238" x="1984" y="832" width="96.6667" height="32"/>
-  <object id="239" x="1760" y="832" width="96.6667" height="32"/>
-  <object id="240" x="1535.33" y="832.667" width="96.6667" height="32"/>
   <object id="242" x="2721" y="380" width="445" height="68"/>
   <object id="243" x="672" y="379" width="448" height="69"/>
  </objectgroup>
- <objectgroup id="14" name="Sensores" visible="0">
+ <objectgroup id="14" name="Sensores">
   <object id="241" x="3168" y="416" width="32" height="480">
    <properties>
     <property name="Sensor" value="IE1L1IT1L1"/>
