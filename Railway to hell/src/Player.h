@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
@@ -44,37 +44,37 @@ public:
 	};
 	//list of scenes with their id
 	std::vector<EscenaQueCargar> escenas = {
-	//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
-	{"DT2L1EC",6,3072,658,true,false},
-	{"DT2L1DE2L1",3,700,600,true,false},
-	{"DT2L1DTL1L2",7,186,2006,true,false},
-	{"IE1L1IT1L1",10,146,4400,true,false},
-	{"DE2L1DT2L1",1,10114,2122,true,false},
-	{"DE2L2DT2L2",8,10113,3296,true,false},
-	{"IE1L2IT1L2",11,261,3211,true,false},
-	{"ECDT2L1",1,690,2137,true,false},
-	{"ECIT1L1",10,10100,2048,true,false},
-	{"ECDT2L2",8,775,2532,true,false},
-	{"ECIT1L2",11,9812,1680,true,false}, 
-	{"DTL1L2DT2L1",1,5561,5984,true,false},
-	{"DTL1L2DT2L2",8,7818,2564,true,false},
-	{"DT2L2EC",6,3072,1640,true,false},
-	{"DT2L2DTL1L2",7,3731,2302,true,false},
-	{"DT2L2DE2L2",4,724,422,true,false},
-	{"ITL1L2IT1L1",10,3962,2610,true,false},
-	{"ITL1L2IT1L2",11,4697,5570,true,false},
-	{"IT1L1EC",6,750,689,true,false},
-	{"IT1L1IE1L1",2,3097,729,true,false},
-	{"IT1L1ITL1L2",9,3740,4000,true,false},
-	{"IT1L2EC",6,779,1652,true,false},
-	{"IT1L2IE1L2",5,3123,665,true,false},
-	{"IT1L2ITL1L2",9,140,4308,true,false},
-	{"ECP1AP2",6,2571,1633,true,false},
-	{"ECP2AP1",6,2542,663,true,false},
-	{"ECP2AP3",6,1098,2622,true,false},
-	{"ECP3AP2",6,1101,1615,true,false},
-	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator fist floor first boss
-	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
+		//sensor id list with info: scene to load, player's x, player's y, fade in and fade out, boss camera
+		{"DT2L1EC",6,3072,658,true,false},
+		{"DT2L1DE2L1",3,700,600,true,false},
+		{"DT2L1DTL1L2",7,186,2006,true,false},
+		{"IE1L1IT1L1",10,146,4400,true,false},
+		{"DE2L1DT2L1",1,10114,2122,true,false},
+		{"DE2L2DT2L2",8,10113,3296,true,false},
+		{"IE1L2IT1L2",11,261,3211,true,false},
+		{"ECDT2L1",1,690,2137,true,false},
+		{"ECIT1L1",10,10100,2048,true,false},
+		{"ECDT2L2",8,775,2532,true,false},
+		{"ECIT1L2",11,9812,1680,true,false},
+		{"DTL1L2DT2L1",1,5561,5984,true,false},
+		{"DTL1L2DT2L2",8,7818,2564,true,false},
+		{"DT2L2EC",6,3072,1640,true,false},
+		{"DT2L2DTL1L2",7,3731,2302,true,false},
+		{"DT2L2DE2L2",4,724,422,true,false},
+		{"ITL1L2IT1L1",10,3962,2610,true,false},
+		{"ITL1L2IT1L2",11,4697,5570,true,false},
+		{"IT1L1EC",6,750,689,true,false},
+		{"IT1L1IE1L1",2,3097,729,true,false},
+		{"IT1L1ITL1L2",9,3740,4000,true,false},
+		{"IT1L2EC",6,779,1652,true,false},
+		{"IT1L2IE1L2",5,3123,665,true,false},
+		{"IT1L2ITL1L2",9,140,4308,true,false},
+		{"ECP1AP2",6,2571,1633,true,false},
+		{"ECP2AP1",6,2542,663,true,false},
+		{"ECP2AP3",6,1098,2622,true,false},
+		{"ECP3AP2",6,1101,1615,true,false},
+		{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator fist floor first boss
+		{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	};
 	//elevator control
 	bool TocandoAs = false;
@@ -83,8 +83,8 @@ public:
 	void DesbloquearSensor();
 	void BloquearSensor();
 	//Dialog control
-	void DialogoOn() { dialogo = true;}//stop player
-	void DialogoOff() { dialogo = false;}//return control player
+	void DialogoOn() { dialogo = true; }//stop player
+	void DialogoOff() { dialogo = false; }//return control player
 	//health
 	void hit();
 
@@ -136,12 +136,12 @@ private:
 	std::string Id;
 
 	// Audio fx
-	int pickCoinFxId, punchFX, stepFX, diedFX, hurtFX,dashFX,whipFX,fallFX,jumpFX;
+	int pickCoinFxId, punchFX, stepFX, diedFX, hurtFX, dashFX, whipFX, fallFX, jumpFX;
 
 	PhysBody* pbodyUpper;
 	PhysBody* pbodyLower;
 
-	b2Joint* bodyJoint; 
+	b2Joint* bodyJoint;
 
 	bool isJumping = false; // Flag to check if the player is currently jumping
 
@@ -181,7 +181,7 @@ private:
 	float whipAttackCooldown = 0.0f;
 	SDL_Texture* whipAttackTexture = nullptr;
 
-	Animation jump, falling, recovering; 
+	Animation jump, falling, recovering;
 	SDL_Texture* jumpTexture = nullptr;
 	SDL_Texture* fallingTexture = nullptr;
 	SDL_Texture* recoveringTexture = nullptr;
@@ -237,7 +237,7 @@ private:
 	int maxTotalDashes = 3;          // Maximum number of dashes allowed
 	float dashRechargeTimer = 0.0f;  // Timer for complete recharge
 	float dashFullRechargeTime = 5000.0f; // Time to recharge all dashes
-	
+
 	// Death properties
 	Animation death;
 	SDL_Texture* deathTexture = nullptr;
@@ -273,14 +273,14 @@ private:
 	int ballCounter = 3; // Track how many balls does the player have left
 	float ballCooldown = 3000.0f; // Time until ball recharge
 
-	
+
 	bool isFallingInAbyss = false; //if player touches the abyss
 	//colliding with enemies
 	std::chrono::time_point<std::chrono::steady_clock> lastHitTime;
 	bool isTouchingEnemy = false;
 	bool wasTouchingEnemy = false;
 	float damageCooldown = 0.0f;
-	const float DAMAGE_COOLDOWN_TIME = 1.0f; // 1 segundo entre daños
+	const float DAMAGE_COOLDOWN_TIME = 1.0f; // 1 segundo entre daï¿½os
 
 	bool tocado = false;//Enemy collides with player
 	bool first = true;// first time colision

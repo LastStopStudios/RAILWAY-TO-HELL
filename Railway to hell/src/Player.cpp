@@ -1,4 +1,3 @@
-
 #include "Player.h"
 #include "Engine.h"
 #include "Textures.h"
@@ -42,7 +41,7 @@ bool Player::Start() {
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
-    texW = parameters.attribute("w").as_int();  
+    texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
     idleTexture = texture;  // Default texture
 
@@ -118,11 +117,11 @@ bool Player::Start() {
     punchFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Weapon_Punch_Hit_D.ogg");
     stepFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Concrete_FS_2.wav");
     diedFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/Game_Died_A.ogg");
-    hurtFX= Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/hurt.ogg");
-	dashFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/dash.ogg");
-	whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
-	fallFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/fall.ogg");
-	jumpFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.ogg");
+    hurtFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/hurt.ogg");
+    dashFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/dash.ogg");
+    whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
+    fallFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/fall.ogg");
+    jumpFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
@@ -131,10 +130,10 @@ bool Player::Start() {
     Engine::GetInstance().audio.get()->SetFxVolume(stepFX, 2);
     Engine::GetInstance().audio.get()->SetFxVolume(diedFX, 4);
     Engine::GetInstance().audio.get()->SetFxVolume(hurtFX, 1);
-	Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 2);
-	Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
-	Engine::GetInstance().audio.get()->SetFxVolume(fallFX, 4);
-	Engine::GetInstance().audio.get()->SetFxVolume(jumpFX, 10);
+    Engine::GetInstance().audio.get()->SetFxVolume(dashFX, 2);
+    Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
+    Engine::GetInstance().audio.get()->SetFxVolume(fallFX, 4);
+    Engine::GetInstance().audio.get()->SetFxVolume(jumpFX, 10);
 
     // Attack animation
     meleeAttack = Animation();
@@ -155,7 +154,7 @@ bool Player::Start() {
     recovering.LoadAnimations(parameters.child("animations").child("recoveringJump"));
     auto recoveringNode = parameters.child("animations").child("recoveringJump");
     recoveringTexture = recoveringNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(recoveringNode.attribute("texture").as_string()) : texture;
-    
+
     isFalling = false;
     isRecovering = false;
     recoveringTimer = 0.0f;
@@ -195,7 +194,7 @@ bool Player::Start() {
     pickupAnim.LoadAnimations(parameters.child("animations").child("pickup"));
     auto pickupNode = parameters.child("animations").child("pickup");
     pickupTexture = pickupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(pickupNode.attribute("texture").as_string()) : texture;
-    
+
     // Death animation
     death.LoadAnimations(parameters.child("animations").child("death"));
     auto deathNode = parameters.child("animations").child("death");
@@ -226,7 +225,7 @@ bool Player::Start() {
     // For testing, temporarily enable whip attack
     WhipAttack = false;
     //facingRight = true;
- 
+
     //Ice Movement
     giro = facingRight;
 
@@ -268,7 +267,7 @@ bool Player::Update(float dt)
         DrawPlayer();
         return true;
     }
- 
+
     if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
@@ -281,7 +280,7 @@ bool Player::Update(float dt)
         if (lives <= 0 && !isDying) {
             isDying = true;
 
-			isAttacking = isWhipAttacking = isDashing = isJumping = isFalling = isRecovering = false;
+            isAttacking = isWhipAttacking = isDashing = isJumping = isFalling = isRecovering = false;
             pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
             pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
         }
@@ -293,7 +292,7 @@ bool Player::Update(float dt)
             //UI Lives
             Engine::GetInstance().ui->figth = false;
             HandleSceneSwitching();
-			return true;
+            return true;
         }
 
         // Mutually exclusive action handling
@@ -307,7 +306,7 @@ bool Player::Update(float dt)
             HandleDash(velocity, dt);
         }
 
-		// Handle hurt animation
+        // Handle hurt animation
         HandleHurt(dt);
         if (changeMusicCaronte) {
             Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
@@ -324,11 +323,11 @@ bool Player::Update(float dt)
             HandleBallAttack(dt);
         }
         HitWcooldown(dt);
-   
+
         // If jumping, preserve the vertical velocity
         if (isJumping) {
             velocity.y = pbodyUpper->body->GetLinearVelocity().y;
-           
+
         }
 
         if (NeedSceneChange) { // Scene change
@@ -383,7 +382,7 @@ bool Player::Update(float dt)
 }
 
 bool Player::PostUpdate() {
-    return true; 
+    return true;
 }
 
 void Player::HandleWakeup(float dt) {
@@ -426,7 +425,8 @@ void Player::HandleMovement(b2Vec2& velocity) {
             velocity.x = -icev; //horizontal velocity on ice left
             LOG("velocidad idle izquierda: %f", velocity.x);
         }
-    }else{
+    }
+    else {
         velocity.x = 0; //horizontal velocity
     }
 
@@ -466,11 +466,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
                     velocity.x = velocity.x - anta;//adding vel to speed up on ice
                     a++;
                     anta = anta - 0.59f;
-                }else {
+                }
+                else {
                     velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
                     giro = facingRight;
                 }
-            }else{
+            }
+            else {
                 velocity.x = -0.3f * 16;
                 giro = facingRight;
             }
@@ -485,11 +487,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
                     velocity.x = velocity.x + antb;//adding vel to speed up on ice
                     b++;
                     antb = antb - 0.59f;
-                }else{
+                }
+                else {
                     velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                     giro = facingRight;
                 }
-            }else{
+            }
+            else {
                 velocity.x = 0.3f * 16;
                 giro = facingRight;
             }
@@ -507,11 +511,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
                 velocity.x = velocity.x - anta;//adding vel to speed up on ice
                 a++;
                 anta = anta - 0.59f;
-            }else{
+            }
+            else {
                 velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
                 giro = facingRight;
             }
-        }else{
+        }
+        else {
             velocity.x = -0.3f * 16;
             giro = facingRight;
         }
@@ -526,11 +532,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
                 velocity.x = velocity.x + antb;//adding vel to speed up on ice
                 b++;
                 antb = antb - 0.59f;
-            }else{
+            }
+            else {
                 velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                 giro = facingRight;
             }
-        }else{
+        }
+        else {
             velocity.x = 0.3f * 16;
             giro = facingRight;
         }
@@ -773,14 +781,14 @@ void Player::HandleSceneSwitching() {
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 || hasDied && currentLvl == 1) {//go to scene 1
         Engine::GetInstance().sceneLoader->LoadScene(1, 2900, 2079, false, false);
-		hasDied = false;    
+        hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {//go to scene 2
         Engine::GetInstance().sceneLoader->LoadScene(2, 3082, 720, false, false);
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {//go to scene 3
-        Engine::GetInstance().sceneLoader->LoadScene(3, 700 , 600, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
         hasDied = false;
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
@@ -857,14 +865,14 @@ void Player::HandlePickup(float dt) {
             pickupAnim.Reset();
             hasPickupStarted = true; // Reset pickup animation one time
         }
-        pickupAnim.Update(); 
+        pickupAnim.Update();
 
-        if (pickupAnim.HasFinished()) { 
+        if (pickupAnim.HasFinished()) {
             isPickingUp = false;
             hasPickupStarted = false;
             idle.Reset();
             currentAnimation = &idle;
-            
+
         }
     }
 }
@@ -873,19 +881,19 @@ void Player::HandleDeath(float dt) {
     if (!hasDeathStarted) {
         death.Reset();
         hasDeathStarted = true;
-		currentAnimation = &death;
-		texture = deathTexture;
+        currentAnimation = &death;
+        texture = deathTexture;
     }
     death.Update();
 
     if (death.HasFinished()) {
-		hasDied = true;
+        hasDied = true;
         isDying = false;
-		hasDeathStarted = false;
+        hasDeathStarted = false;
         lives = 5;
-		isWakingUp = true;
-		currentAnimation = &wakeupAnim;
-		wakeupAnim.Reset();
+        isWakingUp = true;
+        currentAnimation = &wakeupAnim;
+        wakeupAnim.Reset();
     }
 }
 
@@ -1032,9 +1040,9 @@ void Player::UpdateMeleeAttack(float dt) {
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
 
         isAttacking = true;
-        canAttack = false;           
-        attackCooldown = 500.0f;       
-        meleeAttack.Reset();          
+        canAttack = false;
+        attackCooldown = 500.0f;
+        meleeAttack.Reset();
 
         // Calculate the size of the hitbox to fit the attack sprite
         int attackWidth = texW * 0.5f;
@@ -1246,44 +1254,44 @@ void Player::DrawPlayer() {
     // Calculate offset for flipping (similar to Boss class)
     if (isWhipAttacking) {
 
-		if (facingRight) {
-		
-        drawX = position.getX() - 32;
-        drawY = position.getY() - 79;
-       
-		}
-		else {
+        if (facingRight) {
+
+            drawX = position.getX() - 32;
+            drawY = position.getY() - 79;
+
+        }
+        else {
 
             drawX = position.getX() - 128;
             drawY = position.getY() - 79;
-           
+
         }
     }
     if (isAttacking)
     {
         if (facingRight) {
 
-            drawX = position.getX() +1;
-            drawY = position.getY() -16;
+            drawX = position.getX() + 1;
+            drawY = position.getY() - 16;
         }
         else {
 
-            drawX = position.getX() - 2.25 ;
+            drawX = position.getX() - 2.25;
             drawY = position.getY() - 16;
 
         }
     }
 
-    if (isJumping || isFalling || isRecovering ) {
+    if (isJumping || isFalling || isRecovering) {
         if (facingRight) {
 
-            drawX = position.getX() - 7 ;
+            drawX = position.getX() - 7;
             drawY = position.getY() - 10;
         }
         else {
 
-            drawX = position.getX() +  7;
-            drawY = position.getY() - 10 ;
+            drawX = position.getX() + 7;
+            drawY = position.getY() - 10;
 
         }
     }
@@ -1341,23 +1349,23 @@ void Player::ResetToInitPosition() {
                 .child("entities")
                 .child("player");
             playerNode.attribute("x").set_value(Scene1InitX);
-			playerNode.attribute("y").set_value(Scene1InitY);
+            playerNode.attribute("y").set_value(Scene1InitY);
         }
         else if (i == 1) {
             playerNode = doc.child("config")
                 .child("scene2")
                 .child("entities")
                 .child("player");
-			playerNode.attribute("x").set_value(Scene2InitX);
-			playerNode.attribute("y").set_value(Scene2InitY);
+            playerNode.attribute("x").set_value(Scene2InitX);
+            playerNode.attribute("y").set_value(Scene2InitY);
         }
         else if (i == 2) {
             playerNode = doc.child("config")
                 .child("scene3")
                 .child("entities")
                 .child("player");
-			playerNode.attribute("x").set_value(Scene3InitX);
-			playerNode.attribute("y").set_value(Scene3InitY);
+            playerNode.attribute("x").set_value(Scene3InitX);
+            playerNode.attribute("y").set_value(Scene3InitY);
         }
     }
 
@@ -1487,8 +1495,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
         if (lever && lever->GetLeverType() == "lever_to_Station_E1L1" && !leverThree) {
-                leverThree = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            leverThree = true;
+            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
         }
         if (lever && lever->GetLeverType() == "lever_next_to_dash" && !leverFour) {
             leverFour = true;
@@ -1497,7 +1505,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
-    if (physA->ctype == ColliderType::PLAYER  &&  physB->ctype == ColliderType::ITEM) {
+    if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::ITEM) {
         Item* item = (Item*)physB->listener;
 
         if (item) {
@@ -1509,10 +1517,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
 
             }
-			if (item && item->GetItemType() == "Double jump") {
-				doubleJump = true;
-				Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-			}
+            if (item && item->GetItemType() == "Double jump") {
+                doubleJump = true;
+                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+            }
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
@@ -1528,7 +1536,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
                 Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
-                changeMusicCaronte = true; 
+                changeMusicCaronte = true;
                 //Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
 
             }
@@ -1554,7 +1562,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (physB->Salio == false) {//makes the dialog trigger only once
             NeedDialogue = true;
             Id = physB->ID;
-            physB->Salio = true;   
+            physB->Salio = true;
         }
         return;
     }
@@ -1588,8 +1596,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::BOSS_ATTACK: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurt = true;
-            lives = lives-2;
-			// Cancel any ongoing attack
+            lives = lives - 2;
+            // Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;
                 if (attackHitbox) {
@@ -1637,14 +1645,14 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-    case ColliderType::ABYSS: 
-		
+    case ColliderType::ABYSS:
+
         if (!isFallingInAbyss) {
-            hit(); 
+            hit();
             isFallingInAbyss = true;
         }
-   
-		break;
+
+        break;
     case ColliderType::UNKNOWN:
         break;
     }
@@ -1670,9 +1678,9 @@ void Player::Ascensor() {
         NeedSceneChange = true;
     }
 }
-void Player:: Abyss()
+void Player::Abyss()
 {
-   
+
     if (hurt.HasFinished()) {
         hurted = true;
         isHurt = false;
@@ -1681,7 +1689,7 @@ void Player:: Abyss()
         idle.Reset();
 
         if (isFallingInAbyss) {
-           
+
             NeedSceneChange = true;
             sceneToLoad = 1;
             Playerx = 2777;
@@ -1689,17 +1697,17 @@ void Player:: Abyss()
             Fade = false;
             BossCam = false;
 
-            isFallingInAbyss = false; 
+            isFallingInAbyss = false;
         }
     }
-   
+
 }
 
-void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
+void Player::BloquearSensor() {//block scene change sensors to prevent the player from escaping
     Bloqueo = true;
 }
 
-void Player::DesbloquearSensor(){//unlocks sensors scene change
+void Player::DesbloquearSensor() {//unlocks sensors scene change
     Bloqueo = false;
 }
 
@@ -1768,28 +1776,28 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         physB->Salio = true;
         break;
 
-	case ColliderType::ABYSS:
+    case ColliderType::ABYSS:
         isFallingInAbyss = false;
         hurted = true;
         isHurt = false;
         hasHurtStarted = false;
         currentAnimation = &idle;
         idle.Reset();
-		break;
+        break;
     }
 }
 
 void Player::SetPosition(Vector2D pos) {
     int adjustment = 2;
     // Establish upper body position
-    pos.setX(pos.getX() );
-    pos.setY(pos.getY() + texH /3 + adjustment);  
+    pos.setX(pos.getX());
+    pos.setY(pos.getY() + texH / 3 + adjustment);
     b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
     pbodyUpper->body->SetTransform(upperPos, 0);
 
     // Establish lower body position
     Vector2D lowerPos = pos;
-    lowerPos.setY(pos.getY() + texH / 3 + adjustment);  
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);
     b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
     pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
@@ -1800,10 +1808,10 @@ Vector2D Player::GetPosition() {
     // Use upper body position as a reference
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
-	pos.setY(pos.getY() - texH / 3 + adjustment);  
+    pos.setY(pos.getY() - texH / 3 + adjustment);
     return pos;
 }
-void Player::hit(){
+void Player::hit() {
     isHurt = true;
     lives--;
 }
@@ -1827,8 +1835,8 @@ void Player::HitWcooldown(float dt) {
                 }
                 //hurted = false;
                 //isHurt = false;
-            }    
-          // if(isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted){ hurt.Reset(); isHurt = false;  hurted = false;}         
+            }
+            // if(isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted){ hurt.Reset(); isHurt = false;  hurted = false;}         
             if (hurt.HasFinished() && hurted) {
                 // Reset to idle
                 hurted = false;
@@ -1838,19 +1846,19 @@ void Player::HitWcooldown(float dt) {
         }
     }
     else {
-      // first = true;
-        /*hurted = false;
-        isHurt = false;
-        hasHurtStarted = false;*/
-       // hurted = false;
-       // if (isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted) { hurt.Reset(); isHurt = false;  hurted = false; }
+        // first = true;
+          /*hurted = false;
+          isHurt = false;
+          hasHurtStarted = false;*/
+          // hurted = false;
+          // if (isHurt && !hasHurtStarted && lives > 0 && !isDying && hurted) { hurt.Reset(); isHurt = false;  hurted = false; }
     }
-   
-    
-    
-    
-    
-    
+
+
+
+
+
+
     /* // update latest status
     wasTouchingEnemy = isTouchingEnemy;
 

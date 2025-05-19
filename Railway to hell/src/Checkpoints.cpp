@@ -44,7 +44,7 @@ bool Checkpoints::Start() {
 		currentAnimation = &idle;
 	}
 
-    // Add a physics to an item - initialize the physics body
+	// Add a physics to an item - initialize the physics body
 	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::STATIC);
 
 	// Assign collider type
@@ -79,7 +79,7 @@ bool Checkpoints::Update(float dt)
 	}
 
 	setToIdleAnim();
-	
+
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
@@ -217,7 +217,7 @@ void Checkpoints::ResetOthersCheckpoints() {
 	}
 
 	pugi::xml_node sceneNode;
-	
+
 	int maxScenes = 3;
 
 	for (int i = 0; i < maxScenes; ++i) {

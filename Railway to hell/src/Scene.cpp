@@ -1,4 +1,4 @@
-#include "Engine.h"
+ï»¿#include "Engine.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -28,7 +28,8 @@ Scene::Scene() : Module()
 
 // Destructor
 Scene::~Scene()
-{}
+{
+}
 
 // Called before render is available
 bool Scene::Awake()
@@ -39,30 +40,30 @@ bool Scene::Awake()
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("entities").child("player"));
-	
+
 	//Create a new item using the entity manager and set the position to (200, 672) to test
-	for(pugi::xml_node itemNode = configParameters.child("entities").child("items").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	for (pugi::xml_node itemNode = configParameters.child("entities").child("items").child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		std::string type = itemNode.attribute("name").as_string();
 
-		if (type == "Door key"){
+		if (type == "Door key") {
 			doorItemConfigNode = itemNode;
 		}
 		else if (type == "Whip") {
 			whipItemConfigNode = itemNode;
 		}
 		else {
-		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-		item->SetParameters(itemNode);
-		//item->SetAliveInXML();
-		itemList.push_back(item);
+			Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+			item->SetParameters(itemNode);
+			//item->SetAliveInXML();
+			itemList.push_back(item);
 		}
 
 	}
 
 	for (pugi::xml_node checkpointNode = configParameters.child("entities").child("checkpoints").child("checkpoint"); checkpointNode; checkpointNode = checkpointNode.next_sibling("checkpoint"))
 	{
-		std::string type = checkpointNode.attribute("name").as_string(); 
+		std::string type = checkpointNode.attribute("name").as_string();
 
 		if (type == "beta") {
 			//checkpointBetaConfigNode = checkpointNode;
@@ -111,7 +112,7 @@ bool Scene::Awake()
 	// Create a enemy using the entity manager 
 	for (pugi::xml_node enemyNode = configParameters.child("entities").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
-		std::string type = enemyNode.attribute("type").as_string(); 
+		std::string type = enemyNode.attribute("type").as_string();
 		if (type == "rastrero") {
 			Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
 			enemy->SetParameters(enemyNode);
@@ -125,7 +126,7 @@ bool Scene::Awake()
 		if (type == "volador") {
 			Volador* volador = (Volador*)Engine::GetInstance().entityManager->CreateEntity(EntityType::VOLADOR);
 			volador->SetParameters(enemyNode);
-			voladorList.push_back(volador);  
+			voladorList.push_back(volador);
 		}
 		if (type == "boss") {
 			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
@@ -267,7 +268,7 @@ bool Scene::Update(float dt)
 			highlightTile.getY(),
 			&rect);*/
 
-		// saves the tile pos for debugging purposes
+			// saves the tile pos for debugging purposes
 		if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
 			tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
 			once = true;
@@ -288,10 +289,10 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-	
+
 	SceneState currentState = GetCurrentState();
 	if (currentState == SceneState::GAMEPLAY) {
-		// Definimos el factor de zoom aquí para usarlo en ambos casos
+		// Definimos el factor de zoom aquï¿½ para usarlo en ambos casos
 		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
 
 		if (BossBattle == false) {
@@ -314,7 +315,7 @@ bool Scene::PostUpdate()
 					Engine::GetInstance().render.get()->camera.x = (int)(-Bosses.x * TEXTURE_SIZE_MULTIPLIER) + 100;
 					Engine::GetInstance().render.get()->camera.y = (int)(-Bosses.y * TEXTURE_SIZE_MULTIPLIER) - 140;
 
-					// Opcionalmente, podemos añadir un ajuste central como en el caso del jugador
+					// Opcionalmente, podemos aï¿½adir un ajuste central como en el caso del jugador
 					int window_width, window_height;
 					Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
 					int center_x = window_width / 2;
@@ -324,7 +325,7 @@ bool Scene::PostUpdate()
 		}
 	}
 
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		LoadState();
@@ -335,9 +336,9 @@ bool Scene::PostUpdate()
 	return ret;
 }
 
-void Scene::EntrarBoss() { BossBattle = true;}
+void Scene::EntrarBoss() { BossBattle = true; }
 
-void Scene::SalirBoss() { BossBattle = false;}
+void Scene::SalirBoss() { BossBattle = false; }
 
 // Called before quitting
 bool Scene::CleanUp()
@@ -397,9 +398,9 @@ bool Scene::CleanUp()
 		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
 			std::string type = enemyNode.attribute("type").as_string();
 			if (type == "boss") {
-				if(i == 2){
-				enemyNode.attribute("x").set_value(2045);
-				enemyNode.attribute("y").set_value(1648);
+				if (i == 2) {
+					enemyNode.attribute("x").set_value(2045);
+					enemyNode.attribute("y").set_value(1648);
 				}
 
 				enemyNode.attribute("death").set_value(0);
@@ -547,11 +548,11 @@ void Scene::LoadState() {
 
 }
 //Dialogs
-void Scene::DialogoOn() {Engine::GetInstance().entityManager->DialogoOn();}
+void Scene::DialogoOn() { Engine::GetInstance().entityManager->DialogoOn(); }
 
-void Scene::DialogoOff(){Engine::GetInstance().entityManager->DialogoOff();}
+void Scene::DialogoOff() { Engine::GetInstance().entityManager->DialogoOff(); }
 //block sensor
-void Scene::DesbloquearSensor(){
+void Scene::DesbloquearSensor() {
 	player->DesbloquearSensor();
 	Engine::GetInstance().entityManager->AscensorOn();
 }
@@ -561,7 +562,7 @@ void Scene::BloquearSensor() {
 }
 
 //hit player
-void Scene::hitearPlayer() {player->hit();}
+void Scene::hitearPlayer() { player->hit(); }
 
 
 void Scene::SaveState() {

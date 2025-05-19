@@ -19,7 +19,7 @@ Boss::Boss() : Entity(EntityType::BOSS)
 }
 
 Boss::~Boss() {
-	CleanUp();
+    CleanUp();
     delete pathfinding;
     if (area != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(area);
@@ -37,7 +37,7 @@ bool Boss::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-	enemyID = parameters.attribute("name").as_string();
+    enemyID = parameters.attribute("name").as_string();
     ref = parameters.attribute("ref").as_string();
     initX = parameters.attribute("x").as_int();
     initY = parameters.attribute("y").as_int();
@@ -222,7 +222,7 @@ bool Boss::Update(float dt)
             item->SetPosition(pos);
             item->SavePosition("Whip");
             item->SetCreatedTrueInXML();
-            
+
             if (pendingDisable) {
                 SetEnabled(false);
                 pendingDisable = false;
@@ -383,7 +383,8 @@ bool Boss::Update(float dt)
             b2Transform pbodyUpperPos = pbodyUpper->body->GetTransform();
             position.setX(METERS_TO_PIXELS(pbodyUpperPos.p.x) - texH / 2);
             position.setY(METERS_TO_PIXELS(pbodyUpperPos.p.y) - 32);
-        }else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0)); pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));/*frenar el cuerpo*/ currentAnimation = &idle; }
+        }
+        else { pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0)); pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));/*frenar el cuerpo*/ currentAnimation = &idle; }
     }
 
     SDL_Rect frame = currentAnimation->GetCurrentFrame();
@@ -404,8 +405,8 @@ bool Boss::Update(float dt)
     );
 
     currentAnimation->Update();
-    
-    
+
+
     // pathfinding drawing
     pathfinding->DrawPath();
     pathfinding->ResetPath(enemyTilePos);
@@ -656,7 +657,7 @@ bool Boss::CleanUp()
     // We don't need to destroy the texture as it's managed elsewhere
     // Just set our pointer to null to avoid double deletion issues
     if (texture != nullptr) {
-		Engine::GetInstance().textures.get()->UnLoad(texture);
+        Engine::GetInstance().textures.get()->UnLoad(texture);
         texture = nullptr;
     }
     return true;
@@ -724,8 +725,8 @@ void Boss::ResetPosition() {
             std::string xmlRef = bossNode.attribute("ref").as_string();
             for (const auto& boss : Engine::GetInstance().scene.get()->bossList) {
                 if (boss->GetRef() == xmlRef) {
-                        bossNode.attribute("x").set_value(initX);
-                        bossNode.attribute("y").set_value(initY);
+                    bossNode.attribute("x").set_value(initX);
+                    bossNode.attribute("y").set_value(initY);
                 }
             }
         }
@@ -733,7 +734,7 @@ void Boss::ResetPosition() {
 
     //Saves the modifications to the XML 
     loadFile.save_file("config.xml");
-    
+
 }
 
 void Boss::SavePosition(std::string name) {
@@ -800,9 +801,9 @@ void Boss::SavePosition(std::string name) {
 
 void Boss::ResetLives() {
     lives = 12;
-	currentAnimation = &idle;
-    if(isDying) isDying = false;
-    if(isDead) isDead = false;
+    currentAnimation = &idle;
+    if (isDying) isDying = false;
+    if (isDead) isDead = false;
 }
 
 // Fix for hurt animation in OnCollision
@@ -857,10 +858,10 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                 }
             }
         }
-        break; 
+        break;
 
     case ColliderType::PLAYER_WHIP_ATTACK:
-        if(Hiteado == false){
+        if (Hiteado == false) {
             Hiteado = true;
 
             if (lives > 0) {
@@ -888,7 +889,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-                                  
+
     }
 }
 
