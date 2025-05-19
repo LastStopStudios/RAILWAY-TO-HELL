@@ -234,7 +234,7 @@ bool Boss::Update(float dt)
     }
     if (Engine::GetInstance().ui->figth == true) {
         //UI Lives
-        Engine::GetInstance().ui->vidab = lives;
+        Engine::GetInstance().ui->vidab1 = lives;
     }
 
     enemyPos = GetPosition();
