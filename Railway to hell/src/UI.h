@@ -37,31 +37,40 @@ private:
 	void LoadTUi();//loads textures of the UI
 	void renderUI();//renders UI
 	void PJs(); //render player lives
-	void Boss1();//Only if there is a boss figth
+	void Boss1();//Only if there is a figth with Boss 1
+	void Boss2();//Only if there is a figth with Boss 2
+	void Boss3();//Only if there is a figth with Boss 3
 
 
 public:
 	bool dialogoOn = false;
-	bool figth = false;
-	int vidap, vidab;
+	bool figth = false, figth2 = false, figth3 = false;
+	int vidap, vidab1, vidab2, vidab3;//Entities health
+
+	//to get boss healt put in boss's update this
+	/* if (Engine::GetInstance().ui->*figth with number* == true) {
+        //UI Lives
+        Engine::GetInstance().ui->*vidab with same figth number* = lives;
+    }*/
 
 private:
 	//Textures
 	//Full
-	SDL_Texture* vida = nullptr;//health texture
-	SDL_Texture* Evida = nullptr;//Empty health texture
-	SDL_Texture* vidapl = nullptr;//health texture
+	SDL_Texture* vidaB1 = nullptr;// Boss health texture
+	SDL_Texture* vidaB2 = nullptr;// Boss health texture
+	SDL_Texture* vidaB3 = nullptr;// Boss health texture
+	SDL_Texture* vidaB4 = nullptr;// Boss health texture
+	SDL_Texture* vidapl = nullptr;//Player health texture
 	//Empty
-	SDL_Texture* vida2 = nullptr;//health texture
-	SDL_Texture* vidapl2 = nullptr;//health texture
-	SDL_Texture* Evida2 = nullptr;//Empty health texturev
-	SDL_Texture* amo = nullptr;//stamina texture (Dash)
-	SDL_Texture* boss = nullptr;//stamina texture (Dash)
+	SDL_Texture* vidapl2 = nullptr;//Empty Player health texture
+	SDL_Texture* Evida = nullptr;//Empty Boss health texturev
+	//SDL_Texture* amo = nullptr;//stamina texture (Dash)
+	//SDL_Texture* boss = nullptr;//stamina texture (Dash)
 	//UI sizes
 	int w = 40, h = 40, w2, h2, wb=60, hb = 40;
 	//UI positions
 	float posy = 0, posx = 0, posx2=30, posx3 = 60, posx4 = 90, posx5 = 120, posxb, posyb;// renders player position
-	float posy2 = 700, bposx = 500, bposx2 = 540, bposx3 = 580, bposx4 = 620, bposx5 = 660, bposx6 = 700;//render boss 1 position
+	float posy2 = 700, bposx = 500, bposx2 = 550, bposx3 = 600, bposx4 = 650, bposx5 = 700, bposx6 = 750;//render boss 1 position
 	
 	
 

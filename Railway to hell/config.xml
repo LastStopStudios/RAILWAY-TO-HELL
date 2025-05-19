@@ -1500,6 +1500,64 @@
 						</hurt>
 					</animations>
 				</enemy>
+				<enemy name="Anger" x="2045,45" y="1648,48" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="96" h="128" />
+							<frame x="96" y="0" w="96" h="128" />
+							<frame x="192" y="0" w="96" h="128" />
+							<frame x="288" y="0" w="96" h="128" />
+							<frame x="384" y="0" w="96" h="128" />
+							<frame x="480" y="0" w="96" h="128" />
+							<frame x="576" y="0" w="96" h="128" />
+							<frame x="672" y="0" w="96" h="128" />
+							<frame x="768" y="0" w="96" h="128" />
+							<frame x="864" y="0" w="96" h="128" />
+						</idle>
+						<walking loop="true" speed="0.1">
+							<frame x="0" y="128" w="96" h="128" />
+							<frame x="96" y="128" w="96" h="128" />
+							<frame x="192" y="128" w="96" h="128" />
+							<frame x="288" y="128" w="96" h="128" />
+							<frame x="384" y="128" w="96" h="128" />
+							<frame x="480" y="128" w="96" h="128" />
+							<frame x="576" y="128" w="96" h="128" />
+							<frame x="672" y="128" w="96" h="128" />
+						</walking>
+						<whipAttack loop="false" speed="0.15">
+							<frame x="0" y="256" w="224" h="160" />
+							<frame x="224" y="256" w="224" h="160" />
+							<frame x="448" y="256" w="224" h="160" />
+							<frame x="672" y="256" w="224" h="160" />
+							<frame x="896" y="256" w="224" h="160" />
+							<frame x="1120" y="256" w="224" h="160" />
+							<frame x="1344" y="256" w="224" h="160" />
+							<frame x="1568" y="256" w="224" h="160" />
+							<frame x="1792" y="256" w="224" h="160" />
+							<frame x="2016" y="256" w="224" h="160" />
+							<frame x="2240" y="256" w="224" h="160" />
+							<frame x="2464" y="256" w="224" h="160" />
+						</whipAttack>
+						<die loop="false" speed="0.15">
+							<frame x="0" y="416" w="128" h="128" />
+							<frame x="128" y="416" w="128" h="128" />
+							<frame x="256" y="416" w="128" h="128" />
+							<frame x="384" y="416" w="128" h="128" />
+							<frame x="512" y="416" w="128" h="128" />
+							<frame x="640" y="416" w="128" h="128" />
+							<frame x="768" y="416" w="128" h="128" />
+							<frame x="896" y="416" w="128" h="128" />
+							<frame x="1024" y="416" w="128" h="128" />
+							<frame x="1152" y="416" w="128" h="128" />
+							<frame x="1280" y="416" w="128" h="128" />
+							<frame x="1408" y="416" w="128" h="128" />
+							<frame x="1536" y="416" w="128" h="128" />
+						</die>
+						<hurt loop="false" speed="0.05">
+							<frame x="0" y="558" w="96" h="128" />
+						</hurt>
+					</animations>
+				</enemy>
 			</enemies>
 		</entities>
 		<dialogues>
