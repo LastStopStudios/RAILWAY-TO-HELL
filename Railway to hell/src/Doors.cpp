@@ -7,7 +7,6 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
-#include "Physics.h"
 
 Doors::Doors() : Entity(EntityType::DOORS)
 {
@@ -21,6 +20,8 @@ bool Doors::Awake() {
 }
 
 bool Doors::Start() {
+
+	LOG("Start doors");
 
 	//initilize textures
 	texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
@@ -39,6 +40,7 @@ bool Doors::Start() {
 	door_lever_memory_left_activated.LoadAnimations(parameters.child("animations").child("door_lever_memory_left_activated"));
 	door_lever_to_station_activated.LoadAnimations(parameters.child("animations").child("door_lever_to_station_activated"));
 	door_lever_next_to_dashItem_activated.LoadAnimations(parameters.child("animations").child("door_lever_next_to_dashItem_activated"));
+	door_puuzle_Activated.LoadAnimations(parameters.child("animations").child("door_puuzle_Activated"));
 	currentAnimation = &idle;
 
 	// Add a physics to an door - initialize the physics body
@@ -60,6 +62,9 @@ bool Doors::Start() {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
 	else if (GetDoorType() == "door_lever_next_to_dashItem") {
+		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
+	}
+	else if (GetDoorType() == "puzzle_door") {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
 	else {
@@ -138,7 +143,20 @@ bool Doors::Update(float dt)
 	if (GetDoorType() == "door_lever_next_to_dashItem") {
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
 	}
+	if (GetDoorType() == "puzzle_door") {
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW / 2, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	}
+
 	currentAnimation->Update();
+
+	if (GetDoorType() == "puzzle_door") {
+		if (Engine::GetInstance().scene->OpenDoors() && primera) {
+			primera = false;
+			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+			LOG("ABIERTO");
+		}
+
+	}
 
 	return true;
 }
@@ -219,6 +237,12 @@ void Doors::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
 }
 
+void Doors::KillDoor(){
+	if (GetDoorType() == "lever_door") {
+		Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+	}
+}
+
 bool Doors::CleanUp()
 {
 
@@ -251,6 +275,13 @@ bool Doors::CleanUp()
 		}
 	}
 	if (GetDoorType() == "door_lever_next_to_dashItem") {
+		if (pbody != nullptr) {
+			pbody->listener = nullptr;
+			Engine::GetInstance().physics->DeletePhysBody(pbody);
+			pbody = nullptr;
+		}
+	}
+	if (GetDoorType() == "puzzle_door") {
 		if (pbody != nullptr) {
 			pbody->listener = nullptr;
 			Engine::GetInstance().physics->DeletePhysBody(pbody);

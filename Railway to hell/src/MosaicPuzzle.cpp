@@ -95,6 +95,7 @@ void MosaicPuzzle::AddPiece(MosaicPiece* piece)
 
 void MosaicPuzzle::OnPuzzleSolved()
 {
+    Engine::GetInstance().scene->SetOpenDoors();
     solved = true;
     LOG("Mosaic puzzle solved!");
 
@@ -102,7 +103,4 @@ void MosaicPuzzle::OnPuzzleSolved()
     if (solveFxId > 0) {
         Engine::GetInstance().audio.get()->PlayFx(solveFxId);
     }
-
-    // Here you can add logic to trigger events when the puzzle is solved
-    // For example, open doors 
 }

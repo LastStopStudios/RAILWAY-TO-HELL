@@ -43,7 +43,6 @@ public:
 private:
     // List of pieces that make up this puzzle
     std::vector<MosaicPiece*> pieces;
-
     // Flag to track if the puzzle has been solved
     bool solved;
 };

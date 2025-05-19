@@ -74,8 +74,14 @@ public:
 
 	// Draw the current scene
 	void DrawCurrentScene();
+	//Open puzzles doors
+	bool OpenDoors() { return OpenDoor; }
+	void SetOpenDoors() {  OpenDoor = true; }
 
 public:
+	//Open puzzle doors
+	bool OpenDoor = false;
+
 	// Get tilePosDebug value
 	std::string GetTilePosDebug() {
 		return tilePosDebug;

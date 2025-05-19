@@ -354,7 +354,7 @@ bool Player::Update(float dt)
         // Check vertical velocity to determine if falling
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
 
-        // If moving downward (positive y velocity), switch to falling animation
+        // If moving downward (positive and velocity), switch to falling animation
         if (verticalVelocity > 0.1f && !isFalling) {
             LOG("Transition to falling animation");
             isFalling = true;
@@ -778,6 +778,9 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().sceneLoader->LoadScene(4, 766, 429, false, false);
         hasDied = false;
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN ) {//Open Puzzle Doors
+        Engine::GetInstance().scene->SetOpenDoors();
+    }
     // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
         DesbloquearSensor();
@@ -1113,7 +1116,7 @@ void Player::HandleBallAttack(float dt) {
         ballAttackButtonPressed = true;
     }
 
-    // TODO: Add check for ball attack animation completion before allowing next shot
+    // Add check for ball attack animation completion before allowing next shot
     if (ballAttackButtonPressed && engine.scene.get()->ballConfigNode && ballCounter > 0) {
         ballCounter--;
         Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
