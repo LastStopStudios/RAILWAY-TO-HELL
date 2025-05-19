@@ -354,10 +354,10 @@ void Checkpoints::ResetOthersCheckpoints() {
 
 bool Checkpoints::CleanUp()
 {
-	if (texture != nullptr) {
-		SDL_DestroyTexture(texture);
-		texture = nullptr;
-	}
+	//if (texture != nullptr) {
+	//	SDL_DestroyTexture(texture);
+	//	texture = nullptr;
+	//}
 
 	if (pbody != nullptr) {
 		Engine::GetInstance().physics.get()->DeletePhysBody(pbody);

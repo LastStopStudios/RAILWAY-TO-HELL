@@ -879,10 +879,10 @@ bool Boss::CleanUp()
     // Make sure textures are properly released
     // We don't need to destroy the texture as it's managed elsewhere
     // Just set our pointer to null to avoid double deletion issues
-    if (texture != nullptr) {
-        SDL_DestroyTexture(texture);
-        texture = nullptr;
-    }
+    //if (texture != nullptr) {
+    //    SDL_DestroyTexture(texture);
+    //    texture = nullptr;
+    //}
     return true;
 }
 
