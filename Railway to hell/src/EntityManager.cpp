@@ -16,6 +16,9 @@
 #include "Explosivo.h"
 #include <vector>
 #include <algorithm>
+#include "MosaicPiece.h"
+#include "MosaicLevers.h"
+#include "MosaicPuzzle.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -114,6 +117,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PROJECTILE:
 		entity = new Projectiles();
+		break;
+	case EntityType::MOSAIC_PIECE:
+		entity = new MosaicPiece();
+		break;
+	case EntityType::MOSAIC_LEVER:
+		entity = new MosaicLever();
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();

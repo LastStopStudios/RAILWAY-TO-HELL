@@ -45,6 +45,8 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	void DrawTextureEx(SDL_Texture* texture, int x, int y, SDL_Rect* section, int pivotX, int pivotY, double angle);
+
 public:
 
 	SDL_Renderer* renderer;

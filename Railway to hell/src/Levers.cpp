@@ -86,8 +86,6 @@ bool Levers::Update(float dt)
 	}
 	currentAnimation->Update();
 
-
-
 	return true;
 }
 

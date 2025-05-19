@@ -4,7 +4,7 @@
 #include "Log.h"
 
 #define VSYNC true
-#define TEXTURE_SIZE_MULTIPLIER 1.5f  // Factor para hacer las texturas más grandes
+#define TEXTURE_SIZE_MULTIPLIER 1.5f  // Factor para hacer las texturas zon zoom
 
 Render::Render() : Module()
 {
@@ -155,7 +155,6 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 
 	return ret;
 }
-// Similar changes should be applied to DrawTextureWithFlip:
 
 bool Render::DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
     float speed, double angle, int pivotX, int pivotY,
@@ -203,7 +202,6 @@ bool Render::DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_R
     return ret;
 }
 
-// Modified DrawRectangle method to properly scale positions and dimensions
 bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
     bool ret = true;
@@ -240,7 +238,6 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
     return ret;
 }
 
-// Modified DrawLine method to properly scale positions
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
     bool ret = true;
@@ -277,7 +274,6 @@ bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b,
     return ret;
 }
 
-// Modified DrawCircle method to properly scale positions and radius
 bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
     bool ret = true;
@@ -314,26 +310,59 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 bool Render::DrawText(const char* text, int posx, int posy, int w, int h) const
 {
-	SDL_Color color = { 255, 255, 255 };
-	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Color color = { 255, 255, 255 };
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-	int texW = 0;
-	int texH = 0;
-	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+    int texW = 0;
+    int texH = 0;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
 
-	// Escalamos solo el tamaño, manteniendo la posición original
-	SDL_Rect dstrect = {
-		posx,
-		posy,
-		(int)(w * TEXTURE_SIZE_MULTIPLIER),
-		(int)(h * TEXTURE_SIZE_MULTIPLIER)
-	};
+    // Scale only the size, keeping the original position
+    SDL_Rect dstrect = {
+        posx,
+        posy,
+        (int)(w * TEXTURE_SIZE_MULTIPLIER),
+        (int)(h * TEXTURE_SIZE_MULTIPLIER)
+    };
 
-	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+    SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 
-	SDL_DestroyTexture(texture);
-	SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
 
-	return true;
+    return true;
+}
+
+void Render::DrawTextureEx(SDL_Texture* texture, int x, int y, SDL_Rect* section, int pivotX, int pivotY, double angle)
+{
+    if (texture == nullptr) return;
+
+    int scale = 1;
+
+    SDL_Rect rect;
+
+    rect.x = (int)(camera.x) + x;
+    rect.y = (int)(camera.y) + y;
+
+    if (section != NULL)
+    {
+        rect.w = section->w;
+        rect.h = section->h;
+    }
+    else
+    {
+        SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    }
+
+    rect.w *= scale;
+    rect.h *= scale;
+
+    // Define the pivot point for rotation
+    SDL_Point pivot;
+    pivot.x = pivotX * scale;
+    pivot.y = pivotY * scale;
+
+    // Render with rotation
+    SDL_RenderCopyEx(renderer, texture, section, &rect, angle, &pivot, SDL_FLIP_NONE);
 }

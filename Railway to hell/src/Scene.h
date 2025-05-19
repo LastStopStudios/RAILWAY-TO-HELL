@@ -15,7 +15,10 @@
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
-#include "Bufón.h"
+#include "Bufï¿½n.h"
+#include "MosaicLevers.h"
+#include "MosaicPiece.h"
+#include "MosaicPuzzle.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -76,8 +79,14 @@ public:
 
 	// Draw the current scene
 	void DrawCurrentScene();
+	//Open puzzles doors
+	bool OpenDoors() { return OpenDoor; }
+	void SetOpenDoors() {  OpenDoor = true; }
 
 public:
+	//Open puzzle doors
+	bool OpenDoor = false;
+
 	// Get tilePosDebug value
 	std::string GetTilePosDebug() {
 		return tilePosDebug;
@@ -97,6 +106,9 @@ public:
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
 	std::vector<Bufon*> bufonList;
+	std::vector<MosaicLever*> mosaicLeversList;
+	std::vector<MosaicPiece*> mosaicPiecesList;
+	std::vector<MosaicPuzzle*> mosaicPuzzleList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Explosivo*>& GetExploList() { return explosivoList; }
@@ -108,6 +120,9 @@ public:
 	std::vector<Levers*>& GetLeversList() { return leverList; }
 	std::vector<Elevators*>& GetElevatorsList() { return elevatorList; }
 	std::vector<Bufon*>& GetBufonList() { return bufonList; }
+	std::vector<MosaicLever*>& GetMosaicLeversList() { return mosaicLeversList; }
+	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }
+	std::vector<MosaicPuzzle*>& GetMosaicPuzzleList() { return mosaicPuzzleList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
@@ -128,9 +143,9 @@ public:
 		int id;
 		float x;
 		float y;
-		// Nuevos límites para la cámara en el eje X
-		float leftBoundary;   // Límite izquierdo de la cámara
-		float rightBoundary;  // Límite derecho de la cámara
+		// limites eje x cam
+		float leftBoundary;   // limite izq cam
+		float rightBoundary;  // limite derecho cam
 	};
 	//list of boss fights with their id
 	std::vector<Bosses> Bosses = {

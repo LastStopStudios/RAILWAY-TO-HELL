@@ -32,10 +32,13 @@ public:
 	void SetDoorType(const std::string& type) { doorType = type; }
 
 	const std::string& GetDoorType() const { return doorType; }
+	//kill collisions of puzzle doors
+	void KillDoor();
 
 public:
 
 	bool Activated = false;
+	bool primera = true;
 
 private:
 
@@ -44,7 +47,7 @@ private:
 	int texW, texH;
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
-	Animation idle, activated, lever_activated, lever_door_activated, lever_door_Viewleft, door_lever_memory_left_activated, door_lever_to_station_activated, door_lever_next_to_dashItem_activated;
+	Animation idle, activated, lever_activated, lever_door_activated, lever_door_Viewleft, door_lever_memory_left_activated, door_lever_to_station_activated, door_lever_next_to_dashItem_activated, door_puuzle_Activated;
 
 	//Add a physics to an door
 	PhysBody* pbody;

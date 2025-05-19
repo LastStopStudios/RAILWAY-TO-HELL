@@ -358,7 +358,7 @@ bool Player::Update(float dt)
         // Check vertical velocity to determine if falling
         float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
 
-        // If moving downward (positive y velocity), switch to falling animation
+        // If moving downward (positive and velocity), switch to falling animation
         if (verticalVelocity > 0.1f && !isFalling) {
             LOG("Transition to falling animation");
             isFalling = true;
@@ -790,6 +790,8 @@ void Player::HandleSceneSwitching() {
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {//go to scene of double jump
         Engine::GetInstance().sceneLoader->LoadScene(6, 1929, 622, false, false);
         hasDied = false;
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN ) {//Open Puzzle Doors
+        Engine::GetInstance().scene->SetOpenDoors();
     }
     // unlocks sensors
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {//unlocks sensors scene change
@@ -1135,7 +1137,7 @@ void Player::HandleBallAttack(float dt) {
         ballAttackButtonPressed = true;
     }
 
-    // TODO: Add check for ball attack animation completion before allowing next shot
+    // Add check for ball attack animation completion before allowing next shot
     if (ballAttackButtonPressed && engine.scene.get()->ballConfigNode && ballCounter > 0) {
         ballCounter--;
         Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
@@ -1503,6 +1505,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
     case ColliderType::LEVER: {
+        break;
+    }
+    case ColliderType::MOSAIC_PIECE: {
+        break;
+    }
+    case ColliderType::MOSAIC_LEVER: {
         break;
     }
     case ColliderType::SENSOR:

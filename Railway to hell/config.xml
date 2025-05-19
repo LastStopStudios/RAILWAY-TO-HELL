@@ -116,6 +116,109 @@
 					</wakeup>
 				</animations>
 			</player>
+			<mosaicPuzzle name="main_puzzle" solve_fx="Assets/Audio/Fx/puzzle_solved.wav" rotate_fx="Assets/Audio/Fx/piece_rotate.wav">
+				<!-- La entidad principal del puzzle que controla todas las piezas -->
+			</mosaicPuzzle>
+
+			<!-- Piezas del mosaico -->
+			<mosaicPieces>
+				<mosaicPiece name="mosaic_piece_1" x="2976" y="1856" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<rotating loop="false" speed="0.01">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+						</rotating>
+					</animations>
+				</mosaicPiece>
+				<mosaicPiece name="mosaic_piece_2" x="3104" y="1920" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza2.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<rotating loop="false" speed="0.1">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+						</rotating>
+					</animations>
+				</mosaicPiece>
+				<mosaicPiece name="mosaic_piece_3" x="2976" y="1984" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza3.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.3">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<rotating loop="false" speed="0.1">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+						</rotating>
+					</animations>
+				</mosaicPiece>
+				<mosaicPiece name="mosaic_piece_4" x="3104" y="1984" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza4.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<rotating loop="false" speed="0.1">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+						</rotating>
+					</animations>
+				</mosaicPiece>
+			</mosaicPieces>
+
+			<!-- Palancas que controlan las piezas del mosaico -->
+			<mosaicLevers>
+				<mosaicLever name="mosaic_lever_1" x="3072" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="2" target_piece_id_2="3" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</mosaicLever>
+				<mosaicLever name="mosaic_lever_2" x="3250" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="1" target_piece_id_2="4" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</mosaicLever>
+				<mosaicLever name="mosaic_lever_3" x="3350" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="2" target_piece_id_2="4" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</mosaicLever>
+				<mosaicLever name="mosaic_lever_4" x="3450" y="2000" w="64" h="64" texture="Assets/Textures/background/Levers.png" target_piece_id="4" target_piece_id_2="1" target_piece_id_3="2" target_piece_id_4="3" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="64" h="64" />
+						</idle>
+						<lever_activated loop="false" speed="0.05">
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+						</lever_activated>
+					</animations>
+				</mosaicLever>
+			</mosaicLevers>
 			<projectiles>
 				<projectile name="ball" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/balll.png" gravity="false">
 					<animations>
@@ -230,6 +333,20 @@
 				</item>
 			</items>
 			<doors>
+				<door name="puzzle_door" x="2703" y="2000" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+					</animations>
+				</door>
+				<door name="puzzle_door" x="2680" y="2000" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+					</animations>
+				</door>
 				<door name="whip boss door" x="3713" y="1905" w="64" h="240" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
