@@ -98,6 +98,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
         std::string type = enemyNode.attribute("type").as_string();
+		std::string ref = enemyNode.attribute("ref").as_string();
         int deathValue = enemyNode.attribute("death").as_int();
         int deathXMLValue = enemyNode.attribute("savedDeath").as_int();
 
@@ -118,14 +119,15 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
             Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
         }
 
-        if (type == "bufon") {
-            Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
-			bufon->SetParameters(enemyNode);
-			Engine::GetInstance().scene->GetBufonList().push_back(bufon);
-        }
-
         if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
-            if (type == "boss") {
+            if (type == "boss" && ref == "bufon") {
+                Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
+                bufon->SetParameters(enemyNode);
+                Engine::GetInstance().scene->GetBufonList().push_back(bufon);
+            }
+        }
+        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+            if (type == "boss" && ref == "noma") {
                 Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
                 boss->SetParameters(enemyNode);
                 boss->SetAliveInXML();

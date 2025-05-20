@@ -110,7 +110,8 @@ bool Scene::Awake()
 	// Create a enemy using the entity manager 
 	for (pugi::xml_node enemyNode = configParameters.child("entities").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{
-		std::string type = enemyNode.attribute("type").as_string(); 
+		std::string type = enemyNode.attribute("type").as_string();
+		std::string ref = enemyNode.attribute("ref").as_string();
 		if (type == "rastrero") {
 			Terrestre* enemy = (Terrestre*)Engine::GetInstance().entityManager->CreateEntity(EntityType::TERRESTRE);
 			enemy->SetParameters(enemyNode);
@@ -126,12 +127,12 @@ bool Scene::Awake()
 			volador->SetParameters(enemyNode);
 			voladorList.push_back(volador);  
 		}
-		if (type == "boss") {
+		if (type == "boss" && ref == "noma") {
 			Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
 			boss->SetParameters(enemyNode);
 			bossList.push_back(boss);
 		}
-		if (type == "bufon") {
+		if (type == "boss" && ref == "bufon") {
 			Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
 			bufon->SetParameters(enemyNode);
 			bufonList.push_back(bufon);
