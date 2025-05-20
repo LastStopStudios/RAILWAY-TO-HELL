@@ -391,11 +391,19 @@ bool Scene::CleanUp()
 	}
 
 	pugi::xml_node sceneNode;
-	int maxScenes = 3;
+	int maxScenes = 12;
 	for (int i = 0; i < maxScenes; ++i) {
 		if (i == 0) sceneNode = loadFile.child("config").child("scene");
 		else if (i == 1) sceneNode = loadFile.child("config").child("scene2");
 		else if (i == 2) sceneNode = loadFile.child("config").child("scene3");
+		else if (i == 3) sceneNode = loadFile.child("config").child("scene4");
+		else if (i == 4) sceneNode = loadFile.child("config").child("scene5");
+		else if (i == 5) sceneNode = loadFile.child("config").child("scene6");
+		else if (i == 6) sceneNode = loadFile.child("config").child("scene7");
+		else if (i == 7) sceneNode = loadFile.child("config").child("scene8");
+		else if (i == 8) sceneNode = loadFile.child("config").child("scene9");
+		else if (i == 9) sceneNode = loadFile.child("config").child("scene10");
+		else if (i == 10) sceneNode = loadFile.child("config").child("scene11");
 
 		//checkpoints
 		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
@@ -480,6 +488,31 @@ void Scene::LoadState() {
 	if (currentScene == 3) {
 		sceneNode = loadFile.child("config").child("scene3");
 	}
+	if (currentScene == 4) {
+		sceneNode = loadFile.child("config").child("scene4");
+	}
+	if (currentScene == 5) {
+		sceneNode = loadFile.child("config").child("scene5");
+	}
+	if (currentScene == 6) {
+		sceneNode = loadFile.child("config").child("scene6");
+	}
+	if (currentScene == 7) {
+		sceneNode = loadFile.child("config").child("scene7");
+	}
+	if (currentScene == 8) {
+		sceneNode = loadFile.child("config").child("scene8");
+	}
+	if (currentScene == 9) {
+		sceneNode = loadFile.child("config").child("scene9");
+	}
+	if (currentScene == 10) {
+		sceneNode = loadFile.child("config").child("scene10");
+	}
+	if (currentScene == 11) {
+		sceneNode = loadFile.child("config").child("scene11");
+	}
+
 	//Read XML and restore information
 
 	//Player position
@@ -613,6 +646,31 @@ void Scene::SaveState() {
 	if (currentScene == 3) {
 		sceneNode = loadFile.child("config").child("scene3");
 	}
+	if (currentScene == 4) {
+		sceneNode = loadFile.child("config").child("scene4");
+	}
+	if (currentScene == 5) {
+		sceneNode = loadFile.child("config").child("scene5");
+	}
+	if (currentScene == 6) {
+		sceneNode = loadFile.child("config").child("scene6");
+	}
+	if (currentScene == 7) {
+		sceneNode = loadFile.child("config").child("scene7");
+	}
+	if (currentScene == 8) {
+		sceneNode = loadFile.child("config").child("scene8");
+	}
+	if (currentScene == 9) {
+		sceneNode = loadFile.child("config").child("scene9");
+	}
+	if (currentScene == 10) {
+		sceneNode = loadFile.child("config").child("scene10");
+	}
+	if (currentScene == 11) {
+		sceneNode = loadFile.child("config").child("scene11");
+	}
+
 
 	//Save info to XML 
 

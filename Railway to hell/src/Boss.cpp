@@ -454,6 +454,62 @@ void Boss::SetDeathInXML()
             .child("enemies")
             .find_child_by_attribute("enemy", "name", enemyID.c_str());
     }
+    else if (currentScene == 4) {
+        bossNode = doc.child("config")
+            .child("scene4")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 5) {
+        bossNode = doc.child("config")
+            .child("scene5")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 6) {
+        bossNode = doc.child("config")
+            .child("scene6")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 7) {
+        bossNode = doc.child("config")
+            .child("scene7")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 8) {
+        bossNode = doc.child("config")
+            .child("scene8")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 9) {
+        bossNode = doc.child("config")
+            .child("scene9")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 10) {
+        bossNode = doc.child("config")
+            .child("scene10")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 11) {
+        bossNode = doc.child("config")
+            .child("scene11")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for boss in the XML");
@@ -504,6 +560,62 @@ void Boss::SetAliveInXML()
             .child("enemies")
             .find_child_by_attribute("enemy", "name", enemyID.c_str());
     }
+    else if (currentScene == 4) {
+        bossNode = doc.child("config")
+            .child("scene4")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 5) {
+        bossNode = doc.child("config")
+            .child("scene5")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 6) {
+        bossNode = doc.child("config")
+            .child("scene6")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 7) {
+        bossNode = doc.child("config")
+            .child("scene7")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 8) {
+        bossNode = doc.child("config")
+            .child("scene8")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 9) {
+        bossNode = doc.child("config")
+            .child("scene9")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 10) {
+        bossNode = doc.child("config")
+            .child("scene10")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 11) {
+        bossNode = doc.child("config")
+            .child("scene11")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for boss in the XML");
@@ -550,6 +662,62 @@ void Boss::SetSavedDeathToDeathInXML()
     else if (currentScene == 3) {
         bossNode = doc.child("config")
             .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 4) {
+        bossNode = doc.child("config")
+            .child("scene4")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 5) {
+        bossNode = doc.child("config")
+            .child("scene5")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 6) {
+        bossNode = doc.child("config")
+            .child("scene6")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 7) {
+        bossNode = doc.child("config")
+            .child("scene7")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 8) {
+        bossNode = doc.child("config")
+            .child("scene8")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 9) {
+        bossNode = doc.child("config")
+            .child("scene9")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 10) {
+        bossNode = doc.child("config")
+            .child("scene10")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 11) {
+        bossNode = doc.child("config")
+            .child("scene11")
             .child("entities")
             .child("enemies")
             .find_child_by_attribute("enemy", "name", enemyID.c_str());
@@ -605,6 +773,62 @@ void Boss::SetSavedDeathToAliveInXML()
             .child("enemies")
             .find_child_by_attribute("enemy", "name", enemyID.c_str());
     }
+    else if (currentScene == 4) {
+        bossNode = doc.child("config")
+            .child("scene4")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 5) {
+        bossNode = doc.child("config")
+            .child("scene5")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 6) {
+        bossNode = doc.child("config")
+            .child("scene6")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 7) {
+        bossNode = doc.child("config")
+            .child("scene7")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 8) {
+        bossNode = doc.child("config")
+            .child("scene8")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 9) {
+        bossNode = doc.child("config")
+            .child("scene9")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 10) {
+        bossNode = doc.child("config")
+            .child("scene10")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 11) {
+        bossNode = doc.child("config")
+            .child("scene11")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
 
     if (!bossNode) {
         LOG("Could not find the node for item in the XML");
@@ -655,10 +879,10 @@ bool Boss::CleanUp()
     // Make sure textures are properly released
     // We don't need to destroy the texture as it's managed elsewhere
     // Just set our pointer to null to avoid double deletion issues
-    if (texture != nullptr) {
-		Engine::GetInstance().textures.get()->UnLoad(texture);
-        texture = nullptr;
-    }
+    //if (texture != nullptr) {
+    //    SDL_DestroyTexture(texture);
+    //    texture = nullptr;
+    //}
     return true;
 }
 
@@ -716,6 +940,30 @@ void Boss::ResetPosition() {
     if (currentScene == 3) {
         sceneNode = loadFile.child("config").child("scene3");
     }
+    if (currentScene == 4) {
+        sceneNode = loadFile.child("config").child("scene4");
+    }
+    if (currentScene == 5) {
+        sceneNode = loadFile.child("config").child("scene5");
+    }
+    if (currentScene == 6) {
+        sceneNode = loadFile.child("config").child("scene6");
+    }
+    if (currentScene == 7) {
+        sceneNode = loadFile.child("config").child("scene7");
+    }
+    if (currentScene == 8) {
+        sceneNode = loadFile.child("config").child("scene8");
+    }
+    if (currentScene == 9) {
+        sceneNode = loadFile.child("config").child("scene9");
+    }
+    if (currentScene == 10) {
+        sceneNode = loadFile.child("config").child("scene10");
+    }
+    if (currentScene == 11) {
+        sceneNode = loadFile.child("config").child("scene11");
+    }
 
     //bosses
     pugi::xml_node bossesNode = sceneNode.child("entities").child("bosses");
@@ -764,6 +1012,62 @@ void Boss::SavePosition(std::string name) {
     else if (currentScene == 3) {
         sceneNode = doc.child("config")
             .child("scene3")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 4) {
+        sceneNode = doc.child("config")
+            .child("scene4")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 5) {
+        sceneNode = doc.child("config")
+            .child("scene5")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 6) {
+        sceneNode = doc.child("config")
+            .child("scene6")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 7) {
+        sceneNode = doc.child("config")
+            .child("scene7")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 8) {
+        sceneNode = doc.child("config")
+            .child("scene8")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 9) {
+        sceneNode = doc.child("config")
+            .child("scene9")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 10) {
+        sceneNode = doc.child("config")
+            .child("scene10")
+            .child("entities")
+            .child("enemies")
+            .find_child_by_attribute("enemy", "name", enemyID.c_str());
+    }
+    else if (currentScene == 11) {
+        sceneNode = doc.child("config")
+            .child("scene11")
             .child("entities")
             .child("enemies")
             .find_child_by_attribute("enemy", "name", enemyID.c_str());

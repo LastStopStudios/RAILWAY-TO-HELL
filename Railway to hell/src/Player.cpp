@@ -312,6 +312,7 @@ bool Player::Update(float dt)
             Engine::GetInstance().ui->figth2 = false;
             Engine::GetInstance().ui->figth3 = false;
             HandleSceneSwitching();
+            hasDied = false;
 			return true;
         }
 
@@ -956,10 +957,12 @@ void Player::HandleDeath(float dt) {
 		hasDied = true;
         isDying = false;
 		hasDeathStarted = false;
-        lives = 5;
-		isWakingUp = true;
+        ResetLives();
+        isWakingUp = true;
 		currentAnimation = &wakeupAnim;
 		wakeupAnim.Reset();
+
+        ResetPlayerPosition();
     }
 }
 
@@ -1408,30 +1411,94 @@ void Player::ResetToInitPosition() {
 
     pugi::xml_node playerNode;
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 11; ++i) {
         if (i == 0) {
             playerNode = doc.child("config")
                 .child("scene")
                 .child("entities")
                 .child("player");
             playerNode.attribute("x").set_value(Scene1InitX);
-			playerNode.attribute("y").set_value(Scene1InitY);
+            playerNode.attribute("y").set_value(Scene1InitY);
         }
         else if (i == 1) {
             playerNode = doc.child("config")
                 .child("scene2")
                 .child("entities")
                 .child("player");
-			playerNode.attribute("x").set_value(Scene2InitX);
-			playerNode.attribute("y").set_value(Scene2InitY);
+            playerNode.attribute("x").set_value(Scene2InitX);
+            playerNode.attribute("y").set_value(Scene2InitY);
         }
         else if (i == 2) {
             playerNode = doc.child("config")
                 .child("scene3")
                 .child("entities")
                 .child("player");
-			playerNode.attribute("x").set_value(Scene3InitX);
-			playerNode.attribute("y").set_value(Scene3InitY);
+            playerNode.attribute("x").set_value(Scene3InitX);
+            playerNode.attribute("y").set_value(Scene3InitY);
+        }
+        else if (i == 3) {
+            playerNode = doc.child("config")
+                .child("scene4")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene4InitX);
+            playerNode.attribute("y").set_value(Scene4InitY);
+        }
+        else if (i == 4) {
+            playerNode = doc.child("config")
+                .child("scene5")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene5InitX);
+            playerNode.attribute("y").set_value(Scene5InitY);
+        }
+        else if (i == 5) {
+            playerNode = doc.child("config")
+                .child("scene6")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene6InitX);
+            playerNode.attribute("y").set_value(Scene6InitY);
+        }
+        else if (i == 6) {
+            playerNode = doc.child("config")
+                .child("scene7")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene7InitX);
+            playerNode.attribute("y").set_value(Scene7InitY);
+        }
+        else if (i == 7) {
+            playerNode = doc.child("config")
+                .child("scene8")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene8InitX);
+            playerNode.attribute("y").set_value(Scene8InitY);
+        }
+        else if (i == 8) {
+            playerNode = doc.child("config")
+                .child("scene9")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene9InitX);
+            playerNode.attribute("y").set_value(Scene9InitY);
+        }
+        else if (i == 9) {
+            playerNode = doc.child("config")
+                .child("scene10")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene10InitX);
+            playerNode.attribute("y").set_value(Scene10InitY);
+        }
+        else if (i == 10) {
+            playerNode = doc.child("config")
+                .child("scene11")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene11InitX);
+            playerNode.attribute("y").set_value(Scene11InitY);
         }
     }
 
@@ -1459,7 +1526,7 @@ void Player::SaveInitialPosition() {
 
     pugi::xml_node playerNode;
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 11; ++i) {
         if (i == 0) {
             playerNode = doc.child("config")
                 .child("scene")
@@ -1484,6 +1551,70 @@ void Player::SaveInitialPosition() {
             Scene3InitX = playerNode.attribute("x").as_float();
             Scene3InitY = playerNode.attribute("y").as_float();
         }
+        else if (i == 3) {
+            playerNode = doc.child("config")
+                .child("scene4")
+                .child("entities")
+                .child("player");
+            Scene4InitX = playerNode.attribute("x").as_float();
+            Scene4InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 4) {
+            playerNode = doc.child("config")
+                .child("scene5")
+                .child("entities")
+                .child("player");
+            Scene5InitX = playerNode.attribute("x").as_float();
+            Scene5InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 5) {
+            playerNode = doc.child("config")
+                .child("scene6")
+                .child("entities")
+                .child("player");
+            Scene6InitX = playerNode.attribute("x").as_float();
+            Scene6InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 6) {
+            playerNode = doc.child("config")
+                .child("scene7")
+                .child("entities")
+                .child("player");
+            Scene7InitX = playerNode.attribute("x").as_float();
+            Scene7InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 7) {
+            playerNode = doc.child("config")
+                .child("scene8")
+                .child("entities")
+                .child("player");
+            Scene8InitX = playerNode.attribute("x").as_float();
+            Scene8InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 8) {
+            playerNode = doc.child("config")
+                .child("scene9")
+                .child("entities")
+                .child("player");
+            Scene9InitX = playerNode.attribute("x").as_float();
+            Scene9InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 9) {
+            playerNode = doc.child("config")
+                .child("scene10")
+                .child("entities")
+                .child("player");
+            Scene10InitX = playerNode.attribute("x").as_float();
+            Scene10InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 10) {
+            playerNode = doc.child("config")
+                .child("scene11")
+                .child("entities")
+                .child("player");
+            Scene11InitX = playerNode.attribute("x").as_float();
+            Scene11InitY = playerNode.attribute("y").as_float();
+        }
     }
 
     if (!playerNode) {
@@ -1497,6 +1628,61 @@ void Player::SaveInitialPosition() {
     else {
         LOG("death status updated in the XML for player");
     }
+
+}
+
+void Player::ResetPlayerPosition() {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+    if (result == NULL) {
+        LOG("Could not load file. Pugi error: %s", result.description());
+        return;
+    }
+
+    pugi::xml_node sceneNode;
+
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+    if (currentScene == 1) {
+        sceneNode = loadFile.child("config").child("scene");
+    }
+    else if (currentScene == 2) {
+        sceneNode = loadFile.child("config").child("scene2");
+    }
+    else if (currentScene == 3) {
+        sceneNode = loadFile.child("config").child("scene3");
+    }
+    else if (currentScene == 4) {
+        sceneNode = loadFile.child("config").child("scene4");
+    }
+    else if (currentScene == 5) {
+        sceneNode = loadFile.child("config").child("scene5");
+    }
+    else if (currentScene == 6) {
+        sceneNode = loadFile.child("config").child("scene6");
+    }
+    else if (currentScene == 7) {
+        sceneNode = loadFile.child("config").child("scene7");
+    }
+    else if (currentScene == 8) {
+        sceneNode = loadFile.child("config").child("scene8");
+    }
+    else if (currentScene == 9) {
+        sceneNode = loadFile.child("config").child("scene9");
+    }
+    else if (currentScene == 10) {
+        sceneNode = loadFile.child("config").child("scene10");
+    }
+    else if (currentScene == 11) {
+        sceneNode = loadFile.child("config").child("scene11");
+    }
+
+    float x = sceneNode.child("entities").child("player").attribute("x").as_float();
+    float y = sceneNode.child("entities").child("player").attribute("y").as_float();
+
+    Vector2D newPos(x, y);
+
+    SetPosition(newPos);
 
 }
 
@@ -1570,6 +1756,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         return;
     }
+
+    //if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+    //    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+    //        ResetLives();
+    //    } 
+    //    return;
+    //}
 
     if (physA->ctype == ColliderType::PLAYER  &&  physB->ctype == ColliderType::ITEM) {
         Item* item = (Item*)physB->listener;
