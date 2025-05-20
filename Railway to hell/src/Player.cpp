@@ -878,8 +878,8 @@ void Player::HandleDeath(float dt) {
 		hasDied = true;
         isDying = false;
 		hasDeathStarted = false;
-        lives = 5;
-		isWakingUp = true;
+        ResetLives();
+        isWakingUp = true;
 		currentAnimation = &wakeupAnim;
 		wakeupAnim.Reset();
 
@@ -1677,6 +1677,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         return;
     }
+
+    //if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+    //    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+    //        ResetLives();
+    //    } 
+    //    return;
+    //}
 
     if (physA->ctype == ColliderType::PLAYER  &&  physB->ctype == ColliderType::ITEM) {
         Item* item = (Item*)physB->listener;

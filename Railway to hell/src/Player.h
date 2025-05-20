@@ -89,6 +89,11 @@ public:
 	void hit();
 
 public:
+	
+	void ResetLives() {
+		lives = 5;
+	};
+
 	void ResetToInitPosition();
 	void SaveInitialPosition();
 	float Scene1InitX, Scene1InitY;
