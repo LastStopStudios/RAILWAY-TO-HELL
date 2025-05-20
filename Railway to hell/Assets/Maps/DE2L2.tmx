@@ -93789,7 +93789,7 @@
   <object id="317" x="832" y="94.3333" width="159.667" height="129.333"/>
  </objectgroup>
  <objectgroup id="14" name="Sensores" visible="0">
-  <object id="306" x="640" y="192" width="32" height="448">
+  <object id="306" x="630.5" y="193" width="32" height="448">
    <properties>
     <property name="Sensor" value="DE2L2DT2L2"/>
    </properties>

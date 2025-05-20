@@ -57715,7 +57715,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="7" name="Navigation" width="120" height="60">
+ <layer id="7" name="Navigation" width="120" height="60" visible="0">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
@@ -64922,23 +64922,22 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Colisiones">
+ <objectgroup id="12" name="Colisiones" visible="0">
   <object id="174" x="640" y="192" width="32" height="768"/>
-  <object id="177" x="3168" y="224" width="32" height="704"/>
   <object id="227" x="640" y="864" width="2560" height="96"/>
   <object id="235" x="640" y="192" width="2560" height="188.106"/>
   <object id="242" x="2721" y="380" width="445" height="68"/>
   <object id="243" x="672" y="379" width="448" height="69"/>
  </objectgroup>
  <objectgroup id="14" name="Sensores" visible="0">
-  <object id="241" x="3168" y="416" width="32" height="480">
+  <object id="241" x="3200" y="448" width="32" height="480">
    <properties>
     <property name="Sensor" value="IE1L1IT1L1"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="17" name="Giro" visible="0"/>
- <objectgroup id="25" name="Dialogos">
+ <objectgroup id="25" name="Dialogos" visible="0">
   <object id="246" x="2912" y="416" width="32" height="512">
    <properties>
     <property name="ID" value="1"/>
