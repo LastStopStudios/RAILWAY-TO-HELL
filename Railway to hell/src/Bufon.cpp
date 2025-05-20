@@ -112,6 +112,19 @@ bool Bufon::Update(float dt) {
 
     Draw();
 
+
+    //Inside isDying add
+    /* //UI Lives
+        Engine::GetInstance().ui->figth2 = false;*/
+
+    if (Engine::GetInstance().ui->figth2 == true) {
+        //UI Lives
+        Engine::GetInstance().ui->vidab2/*= life boss*/;
+    }
+
+    //TO SHOW BOSS LIVE ADD On his dialogue before the figth o whatever happens before the boss fight starts
+    /*Engine::GetInstance().ui->figth2 = true;//show boss2 health*/
+
     return true;
 }
 
