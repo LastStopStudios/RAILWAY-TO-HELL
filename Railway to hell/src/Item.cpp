@@ -125,7 +125,58 @@ void Item::SetDeathInXML()
 		itemNode = doc.child("config")
 			.child("scene3")
 			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
 			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
+			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
 
@@ -175,7 +226,58 @@ void Item::SetAliveInXML()
 		itemNode = doc.child("config")
 			.child("scene3")
 			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
 			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
+			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
 
@@ -225,7 +327,58 @@ void Item::SetSavedDeathToDeathInXML()
 		itemNode = doc.child("config")
 			.child("scene3")
 			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
 			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
+			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
 
@@ -276,7 +429,58 @@ void Item::SetSavedDeathToAliveInXML()
 		itemNode = doc.child("config")
 			.child("scene3")
 			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
 			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
+			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
 
@@ -328,6 +532,58 @@ void Item::SetCreatedTrueInXML() {
 			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
 
 	if (!itemNode) {
 		LOG("Could not find the node for item in the XML");
@@ -373,6 +629,58 @@ void Item::SetCreatedFalseInXML() {
 	else if (currentScene == 3) {
 		itemNode = doc.child("config")
 			.child("scene3")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 4) {
+		itemNode = doc.child("config")
+			.child("scene4")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 5) {
+		itemNode = doc.child("config")
+			.child("scene5")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 6) {
+		itemNode = doc.child("config")
+			.child("scene6")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 7) {
+		itemNode = doc.child("config")
+			.child("scene7")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 8) {
+		itemNode = doc.child("config")
+			.child("scene8")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 9) {
+		itemNode = doc.child("config")
+			.child("scene9")
+			.child("entities")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 10) {
+		itemNode = doc.child("config")
+			.child("scene10")
+			.child("entities")
+			.child("items")
+			.find_child_by_attribute("item", "name", enemyID.c_str());
+	}
+	else if (currentScene == 11) {
+		itemNode = doc.child("config")
+			.child("scene11")
 			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
 	}
@@ -478,7 +786,31 @@ void Item::SavePosition(std::string name) {
 	if (currentScene == 3) {
 		sceneNode = loadFile.child("config").child("scene3");
 	}
-
+	if (currentScene == 4) {
+		sceneNode = loadFile.child("config").child("scene4");
+	}
+	if (currentScene == 5) {
+		sceneNode = loadFile.child("config").child("scene5");
+	}
+	if (currentScene == 6) {
+		sceneNode = loadFile.child("config").child("scene6");
+	}
+	if (currentScene == 7) {
+		sceneNode = loadFile.child("config").child("scene7");
+	}
+	if (currentScene == 8) {
+		sceneNode = loadFile.child("config").child("scene8");
+	}
+	if (currentScene == 9) {
+		sceneNode = loadFile.child("config").child("scene9");
+	}
+	if (currentScene == 10) {
+		sceneNode = loadFile.child("config").child("scene10");
+	}
+	if (currentScene == 11) {
+		sceneNode = loadFile.child("config").child("scene11");
+	}
+	
 	//Save info to XML 
 
 	//items
