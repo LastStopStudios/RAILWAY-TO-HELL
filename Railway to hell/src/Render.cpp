@@ -55,7 +55,7 @@ bool Render::Awake()
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 14);
+	font = TTF_OpenFont("Assets/Fonts/PanasChill.ttf", 13);
 
 	return ret;
 }
