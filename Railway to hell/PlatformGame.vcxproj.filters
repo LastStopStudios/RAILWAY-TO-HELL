@@ -114,6 +114,8 @@
     </ClCompile>
     <ClCompile Include="src\MosaicPuzzle.cpp">
       <Filter>Source Filles\Game\Mosaic</Filter>
+    <ClCompile Include="src\Checkpoints.cpp">
+      <Filter>Source Filles\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +244,8 @@
     </ClInclude>
     <ClInclude Include="src\MosaicPuzzle.h">
       <Filter>Source Filles\Game\Mosaic</Filter>
+    <ClInclude Include="src\Checkpoints.h">
+      <Filter>Source Filles\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

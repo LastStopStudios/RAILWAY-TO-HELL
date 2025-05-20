@@ -14,6 +14,7 @@
 #include "Elevators.h"
 #include "Projectiles.h"
 #include "Explosivo.h"
+#include "Checkpoints.h"
 #include <vector>
 #include <algorithm>
 #include "MosaicPiece.h"
@@ -123,6 +124,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::MOSAIC_LEVER:
 		entity = new MosaicLever();
+		break;
+	case EntityType::CHECKPOINT:
+		entity = new Checkpoints();
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();
