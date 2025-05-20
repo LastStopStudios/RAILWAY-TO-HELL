@@ -1,5 +1,4 @@
-
-#include "Boss.h"
+#include "Bufon.h"
 #include "Engine.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -10,9 +9,8 @@
 #include "Physics.h"
 #include "Map.h"
 #include "EntityManager.h"
-#include "DialogoM.h"
 #include "UI.h"
-#include "Bufon.h"
+
 
 Bufon::Bufon() : Entity(EntityType::BUFON)
 {
@@ -20,107 +18,211 @@ Bufon::Bufon() : Entity(EntityType::BUFON)
 }
 
 Bufon::~Bufon() {
-    if (pathfinding != nullptr) {
-        delete pathfinding;
-        pathfinding = nullptr;
+    delete pathfinding;
+    if (area != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(area);
     }
 }
-
 bool Bufon::Awake() {
     return true;
 }
 
 bool Bufon::Start() {
-    // Initialize textures
+
+    //initilize textures
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
-    // Load animations
+    //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
-    die.LoadAnimations(parameters.child("animations").child("die"));
     hurt.LoadAnimations(parameters.child("animations").child("hurt"));
+    die.LoadAnimations(parameters.child("animations").child("die"));
+    disparoR.LoadAnimations(parameters.child("animations").child("disparoR"));
+	disparoG.LoadAnimations(parameters.child("animations").child("disparoG"));
+	salto.LoadAnimations(parameters.child("animations").child("salto"));
+
     currentAnimation = &idle;
 
-    // Add physics to the entity - initialize the physics body
+    //initialize enemy parameters 
+    moveSpeed = 30.0f;
+    patrolSpeed = 30.0f;
+    savedPosX = 0.0f;
+
+    //Add a physics to an item - initialize the physics body
     pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
 
-    // Assign collider type
+    pbody->listener = this;
+    //Assign collider type
     pbody->ctype = ColliderType::BUFON;
 
-    pbody->listener = this;
-
-    if (!parameters.attribute("gravity").as_bool())
-        pbody->body->SetGravityScale(0);
+    pbody->body->SetFixedRotation(false);
+    pbody->body->SetGravityScale(1.0f);
+    pbody->body->GetFixtureList()->SetDensity(10);
+	pbody->body->ResetMassData();
+    // Set the gravity of the body
+    if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(2.0f);
 
     // Initialize pathfinding
     pathfinding = new Pathfinding();
     ResetPath();
 
-    // Initialize detection distance
-    detectionDistance = 50.0f;  // Distance in tiles to detect player
-
     return true;
 }
 
-bool Bufon::Update(float dt) {
-    // Update the current animation
-    if (currentAnimation != nullptr) {
-        currentAnimation->Update();
-    }
-
-    // Get enemy position
+bool Bufon::Update(float dt)
+{
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
-
-    // Get player position
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
-    // Calculate the distance between the enemy and the player
+    b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+
     float dx = playerTilePos.getX() - enemyTilePos.getX();
     float dy = playerTilePos.getY() - enemyTilePos.getY();
-    float distanceToPlayer = sqrt(dx * dx + dy * dy);  // Euclidean distance
+    // Calculate the distance between the enemy and the player only on the X axis
+    float distanceToPlayer = abs(dx);
 
-    // Check if player is within detection range
-    if (distanceToPlayer <= detectionDistance) {
-        LOG("HOLI");
-        
+    // Limit movement towards the player only if within X tiles
+    float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player 
+
+    if (!canAttack) { // update the attack cooldown
+        currentAttackCooldown -= dt;
+        if (currentAttackCooldown <= 0) {
+            canAttack = true;
+            currentAttackCooldown = 0.0f;
+        }
     }
 
-    // Always reset the path before propagating
-    pathfinding->ResetPath(enemyTilePos);
-
-    // Always propagate A* algorithm to calculate path to player
-    int maxIterations = 100;
-    int iterations = 0;
-
-    // Generate path to player using A* algorithm
-    while (pathfinding->pathTiles.empty() && iterations < maxIterations) {
-        pathfinding->PropagateAStar(SQUARED);
-        iterations++;
+    if ((isLookingLeft && dx <= -attackDistance)) {
+        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
     }
 
-    // Draw the path (after it has been calculated)
+    isLookingLeft = dx < 0; // Set the direction of the enemy
+
+    if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
+        // Lógica de selección de ataque
+        if (attackCounter >= 2) {
+            currentAnimation = &disparoG;
+            attackCounter = 0;
+        }
+        else {
+            // Verificar si el jugador está lejos para salto
+            float jumpThreshold = 6.0f; // Ajusta según necesites
+            if (distanceToPlayer > jumpThreshold) {
+                currentAnimation = &salto;
+                // Aplicar salto físico
+                float jumpForceX = 2000.0f; // Fuerza horizontal
+                float jumpForceY = -300.0f; // Fuerza vertical (negativo para hacia arriba)
+                float direction = isLookingLeft ? -1.0f : 1.0f;
+  
+					pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
+                attackCounter++;
+               
+            }
+            else {
+                currentAnimation = &disparoR;
+                attackCounter++;
+            }
+        }
+
+        isAttacking = true;
+        canAttack = false;
+        currentAttackCooldown = attackCooldown;
+        currentAnimation->Reset();
+    }
+
+    if (isAttacking) {
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+
+        if (disparoR.HasFinished()) { // stop attacking
+            isAttacking = false;
+            currentAnimation = &idle;
+            disparoR.Reset();
+        }
+        if (salto.HasFinished()) { // stop attacking
+            isAttacking = false;
+            currentAnimation = &idle;
+            salto.Reset();
+		}
+        if (disparoG.HasFinished()) { // stop attacking
+            isAttacking = false;
+            currentAnimation = &idle;
+            disparoG.Reset();
+		}
+    }
+
+    if (!isAttacking) {
+        if (distanceToPlayer <= patrolDistance) { // if player is within patrol distance
+            //if (!resting) { // start chasing player
+            //    resting = true;
+            //    currentAnimation = &salto;
+            //    salto.Reset();
+            //}
+        }
+        else { // idle (not chasing player)
+            if (resting) {
+                resting = false;
+                currentAnimation = &idle;
+                idle.Reset();
+            }
+            b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
+            pbody->body->SetLinearVelocity(velocity);
+        }
+    }
+
+    SDL_Rect frame = currentAnimation->GetCurrentFrame();
+    int offsetX = 0; // used to adjust the position of the sprite
+
+    // change sprite direction
+    if (currentAnimation == &idle || currentAnimation == &hurt) {
+        if (isLookingLeft) {
+            flip = SDL_FLIP_NONE;
+            offsetX = (frame.w - texW);
+        }
+        else {
+            flip = SDL_FLIP_HORIZONTAL;
+        }
+    }
+    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &salto || currentAnimation == &die) {
+        if (isLookingLeft) {
+            flip = SDL_FLIP_NONE;
+            offsetX = ((frame.w - texW)/2 - 24);
+        }
+        else {
+            flip = SDL_FLIP_HORIZONTAL;
+        }
+    }
+    b2Transform pbodyPos = pbody->body->GetTransform();
+    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+
+    if (currentAnimation == &idle || currentAnimation == &hurt) {
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    }
+    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &salto || currentAnimation == &die) {
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    }
+
+
+    currentAnimation->Update();
+
+    // pathfinding drawing
     pathfinding->DrawPath();
-
-    // Update sprite position based on the physical body position
-    position.setX(METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - texW / 2);
-    position.setY(METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - texH / 2);
-
-    Draw();
-
+    pathfinding->ResetPath(enemyTilePos);
 
     //Inside isDying add
     /* //UI Lives
-        Engine::GetInstance().ui->figth2 = false;*/
+    Engine::GetInstance().ui->figth2 = false;*/
 
     if (Engine::GetInstance().ui->figth2 == true) {
         //UI Lives
         Engine::GetInstance().ui->vidab2/*= life boss*/;
     }
+
 
     //TO SHOW BOSS LIVE ADD On his dialogue before the figth o whatever happens before the boss fight starts
     /*Engine::GetInstance().ui->figth2 = true;//show boss2 health*/
@@ -128,12 +230,14 @@ bool Bufon::Update(float dt) {
     return true;
 }
 
-bool Bufon::CleanUp() {
-    // Release resources
-    if (pathfinding != nullptr) {
-        delete pathfinding;
-        pathfinding = nullptr;
+bool Bufon::CleanUp()
+{
+    if (area != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(area);
+        area = nullptr;
     }
+
+    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
 }
 
@@ -160,16 +264,18 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        // Logic when colliding with the player
+        LOG("Collided with player - DESTROY");
+        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     }
 }
 
-void Bufon::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+void Bufon::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
+{
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        // Logic when the collision with the player ends
+        LOG("Collision player");
         break;
     }
 }
@@ -189,25 +295,4 @@ int Bufon::GetTotalFrames() const {
         return currentAnimation->totalFrames;
     }
     return 0;
-}
-
-void Bufon::Draw() {
-    if (texture != nullptr && currentAnimation != nullptr) {
-        // Get the current animation frame (source section)
-        SDL_Rect rect = currentAnimation->GetCurrentFrame();
-
-        // Render the texture with the current animation
-        // Parameters: texture, posX, posY, section, speed, angle, pivotX, pivotY, flip
-        Engine::GetInstance().render.get()->DrawTexture(
-            texture,                 // texture
-            (int)position.getX(),    // position X
-            (int)position.getY(),    // position Y
-            &rect,                   // source section (SDL_Rect*)
-            1.0f,                    // speed (1.0 = normal speed)
-            0.0,                     // rotation angle (0 = no rotation)
-            INT_MAX,                 // pivotX (INT_MAX = no pivot)
-            INT_MAX,                 // pivotY (INT_MAX = no pivot)
-            SDL_FLIP_NONE            // no flipping
-        );
-    }
 }
