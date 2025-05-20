@@ -65,7 +65,7 @@ bool DialogoM::PostUpdate()
 		posy = h - 200; //background position with screen size
 
 		//text position
-		texty = posy - 150 ;//text position with background size
+		texty = posy - 145 ;//text position with background size
 		textx = posx + 40;//text position with background size
 		
 		SDL_Rect dstRect = { posx, posy, width, height }; //Position and scale text background
