@@ -1621,25 +1621,27 @@ void Player:: Abyss()
 {
    
     if (hurt.HasFinished()) {
-        hurted = true;
-        isHurt = false;
-        hasHurtStarted = false;
-        currentAnimation = &idle;
-        idle.Reset();
 
         if (isFallingInAbyss) {
-           
+           // Player position
             NeedSceneChange = true;
             sceneToLoad = 1;
-            Playerx = 2777;
+            Playerx = 2777; 
             Playery = 2048;
             Fade = false;
             BossCam = false;
 
             isFallingInAbyss = false; 
+           
+         
+
         }
+        hasHurtStarted = false;
+        isHurt = false;
+        hurted = false;
+        return;
     }
-   
+  
 }
 
 void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
