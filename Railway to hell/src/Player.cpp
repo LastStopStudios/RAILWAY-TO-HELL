@@ -307,6 +307,8 @@ bool Player::Update(float dt)
         if (hasDied) {
             //UI Lives
             Engine::GetInstance().ui->figth = false;
+            Engine::GetInstance().ui->figth2 = false;
+            Engine::GetInstance().ui->figth3 = false;
             HandleSceneSwitching();
 			return true;
         }
