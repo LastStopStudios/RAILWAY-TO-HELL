@@ -67,12 +67,14 @@ public:
 	{"IT1L2EC",6,779,1652,true,false},
 	{"IT1L2IE1L2",5,3123,665,true,false},
 	{"IT1L2ITL1L2",9,140,4308,true,false},
-	{"ECP1AP2",6,2571,1633,true,false},
-	{"ECP2AP1",6,2542,663,true,false},
-	{"ECP2AP3",6,1098,2622,true,false},
-	{"ECP3AP2",6,1101,1615,true,false},
-	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator fist floor first boss
+	{"ECP1AP2",6,2571,1633,true,false},// Stairs EC
+	{"ECP2AP1",6,2542,663,true,false},// Stairs EC
+	{"ECP2AP3",6,1098,2622,true,false},// Stairs EC
+	{"ECP3AP2",6,1101,1615,true,false},// Stairs EC
+	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator first floor first boss
 	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
+	{"IE1L2BOSS2",5,1400,1550,true,true},// Elevator first floor SECOND boss
+	{"BOSS2IE1L2",5,1140,575,true,false},// Elevator second floor SECOND boss
 	};
 	//elevator control
 	bool TocandoAs = false;

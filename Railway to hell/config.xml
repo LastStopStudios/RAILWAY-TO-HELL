@@ -1910,6 +1910,43 @@
 					</animations>
 				</enemy>
 			</enemies>
+			<elevators>
+				<elevator name="elevator" x="1120" y="576" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="82" h="120" />
+						</idle>
+						<activated loop="false" speed="0.05">
+							<frame x="0" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="164" y="0" w="82" h="120" />
+						</activated>
+						<deactivated loop="false" speed="0.05">
+							<frame x="164" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="0" y="0" w="82" h="120" />
+						</deactivated>
+					</animations>
+				</elevator>
+				<elevator name="elevator" x="1366" y="1531" w="82" h="120" texture="Assets/Textures/background/Ascensor.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.05">
+							<frame x="0" y="0" w="82" h="120" />
+						</idle>
+						<activated loop="false" speed="0.05">
+							<frame x="0" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="164" y="0" w="82" h="120" />
+						</activated>
+						<deactivated loop="false" speed="0.05">
+							&gt;
+							<frame x="164" y="0" w="82" h="120" />
+							<frame x="82" y="0" w="82" h="120" />
+							<frame x="0" y="0" w="82" h="120" />
+						</deactivated>
+					</animations>
+				</elevator>
+			</elevators>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Asmodeos.png" TEXT="Icicles and Stalactites!! I never imagined you'd make it this far. I'm surrounded by incompetents, Noma gets herself killed against an unarmed human and Belfegor just messaged me that he is not in the mood to fight, can you believe it? But nonetheless, you are not getting past myself. I hope you're not afraid of the cold, because you're gonna spend the rest of eternity as an ice sculpture decorating my lair. Come on, it's time to dance on the ice!" />

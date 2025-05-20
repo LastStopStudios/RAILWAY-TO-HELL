@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="307">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="314">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -30963,10 +30963,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24211"/>
-   <tile gid="24212"/>
-   <tile gid="24213"/>
-   <tile gid="24214"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31083,10 +31083,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24537"/>
-   <tile gid="24538"/>
-   <tile gid="24539"/>
-   <tile gid="24540"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31203,10 +31203,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24863"/>
-   <tile gid="24864"/>
-   <tile gid="24865"/>
-   <tile gid="24866"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31323,10 +31323,10 @@
    <tile gid="17073"/>
    <tile gid="17074"/>
    <tile gid="17075"/>
-   <tile gid="25189"/>
-   <tile gid="25190"/>
-   <tile gid="25191"/>
-   <tile gid="25192"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="17073"/>
    <tile gid="17074"/>
@@ -31443,10 +31443,10 @@
    <tile gid="17399"/>
    <tile gid="17400"/>
    <tile gid="17401"/>
-   <tile gid="25515"/>
-   <tile gid="25516"/>
-   <tile gid="25517"/>
-   <tile gid="25518"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="17399"/>
    <tile gid="17400"/>
@@ -34571,10 +34571,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24211"/>
-   <tile gid="24212"/>
-   <tile gid="24213"/>
-   <tile gid="24214"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34691,10 +34687,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24537"/>
-   <tile gid="24538"/>
-   <tile gid="24539"/>
-   <tile gid="24540"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34811,10 +34803,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="24863"/>
-   <tile gid="24864"/>
-   <tile gid="24865"/>
-   <tile gid="24866"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34931,10 +34919,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="25189"/>
-   <tile gid="25190"/>
-   <tile gid="25191"/>
-   <tile gid="25192"/>
    <tile/>
    <tile/>
    <tile/>
@@ -35051,10 +35035,26 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="25515"/>
-   <tile gid="25516"/>
-   <tile gid="25517"/>
-   <tile gid="25518"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -86541,14 +86541,14 @@
   </data>
  </layer>
  <objectgroup id="17" name="Ascensores" visible="0">
-  <object id="190" x="1344" y="1536" width="71.333" height="125.189">
+  <object id="190" x="1376" y="1536" width="71.333" height="125.189">
    <properties>
-    <property name="Sensor" value="BOSS1DE2L1"/>
+    <property name="Sensor" value="BOSS2IE1L2"/>
    </properties>
   </object>
-  <object id="207" x="2624" y="704" width="64" height="128">
+  <object id="207" x="1120" y="576" width="64" height="128">
    <properties>
-    <property name="Sensor" value="DE2L1BOSS1"/>
+    <property name="Sensor" value="IE1L2BOSS2"/>
    </properties>
   </object>
  </objectgroup>
