@@ -833,7 +833,7 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 7, Connector Right
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_7) == KEY_DOWN && currentLvl != 7 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(7, 1310, 1940, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(7, 4950, 3970, false, false);
     }
     //Go to Scene 8, Ice tunnel, VERY CLOSE TO THE DOOR OF THE CONNECTOR
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_8) == KEY_DOWN && currentLvl != 8 ) {
@@ -841,7 +841,7 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 9, Connector Left
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_9) == KEY_DOWN && currentLvl != 9 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(9, 2644, 3920, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(9, 4574, 2213, false, false);
     }
     //Go to Scene 10, Left Electric tunnel, VERY CLOSE TO THE DOOR OF THE CONNECTOR
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_T) == KEY_DOWN && currentLvl != 10 ) {
