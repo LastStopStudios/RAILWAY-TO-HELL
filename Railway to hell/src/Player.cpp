@@ -803,9 +803,11 @@ void Player::HandleSceneSwitching() {
         hasDied = false;
     }
     //Go to Scene 5, Second Boss Scene
+    // Versión corregida
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 5 || hasDied && currentLvl == 5) {
-        Engine::GetInstance().sceneLoader->LoadScene(5, 3123, 665, false, false);
-        hasDied = false;
+            // Use FadeIn for smooth transition
+            Engine::GetInstance().sceneLoader->LoadScene(5, 1408, 1568, true, false);
+            hasDied = false;
     }
     //Go to Scene 6, Central Station
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 6 || hasDied && currentLvl == 6) {
