@@ -266,6 +266,24 @@ bool Player::Update(float dt)
         DrawPlayer();
         return true;
     }
+    if (freezeWhileHurting) {
+   
+        HandleHurt(dt);
+
+        // During wakeup, we freeze player position and don't process other inputs
+        pbodyUpper->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        pbodyLower->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+        // Update position from physics body
+        b2Transform pbodyPos = pbodyUpper->body->GetTransform();
+        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) + 32 - texH / 2);
+
+        // Draw the player with the wakeup animation
+        currentAnimation->Update();
+        DrawPlayer();
+        return true;
+    }
     if (Engine::GetInstance().entityManager->dialogo == false)// Keep the player idle when dialogues are on screen
     {
         // Initialize velocity vector para ambos cuerpos
@@ -857,10 +875,18 @@ void Player::HandleSceneSwitching() {
 void Player::HandleHurt(float dt) {
     if (isHurtDelayed) {
         currentHurtDelay += dt;
+       
         if (currentHurtDelay >= hurtDelay) {
-            isHurt = true;
-            lives = lives - 2;
-            isHurtDelayed = false;
+            currentHurtDelay += dt;
+            if (currentHurtDelay >= hurtDelay) {
+                isHurt = true;
+                isHurtDelayed = false;
+                hurt.Reset();
+                currentAnimation = &hurt;
+                texture = hurtTexture;
+                hasHurtStarted = true;
+                lives -= 2;
+            }
         }
         return; // Salimos para no procesar la animación hasta que termine el retraso
     }
@@ -900,7 +926,7 @@ void Player::HandleHurt(float dt) {
             hasHurtStarted = false;
             currentAnimation = &idle;
             idle.Reset();
-        }
+        }   
     }
 }
 
@@ -1526,6 +1552,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurtDelayed = true; 
             currentHurtDelay = 0.0f; 
+            freezeWhileHurting = true;
 
 			// Cancel any ongoing attack
             if (isAttacking) {
@@ -1708,6 +1735,7 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
             isHurt = false;
             hasHurtStarted = false;
             hurted = false;
+            freezeWhileHurting = false;
         }
         break;
     case ColliderType::ASCENSORES:
