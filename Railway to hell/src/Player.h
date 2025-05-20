@@ -281,6 +281,7 @@ private:
 	float hurtDelay = 500.0f;      
 	float currentHurtDelay = 0.0f; 
 	bool isHurtDelayed = false;  
+	bool freezeWhileHurting = false;
 
 
 };
