@@ -180,7 +180,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Remember1" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
+				<item name="Remember1" x="393" y="4257" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -268,7 +268,7 @@
 						</lever_door_Viewleft>
 					</animations>
 				</door>
-				<door name="door_lever_memory_left" x="294" y="4222" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+				<door name="door_lever_memory_left" x="452" y="4232" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="48" h="144" />
@@ -317,7 +317,7 @@
 						</lever_activated>
 					</animations>
 				</lever>
-				<lever name="lever_memory_left" x="450" y="4260" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
+				<lever name="lever_memory_left" x="556" y="4302" w="64" h="64" texture="Assets/Textures/background/Levers.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
 							<frame x="0" y="0" w="64" h="64" />
