@@ -93771,8 +93771,8 @@
   <object id="271" x="2848" y="544" width="32" height="160"/>
   <object id="272" x="3168" y="544" width="32" height="160"/>
  </objectgroup>
- <objectgroup id="27" name="Dialogos" visible="0">
-  <object id="229" x="1472" y="1408" width="32" height="256">
+ <objectgroup id="27" name="Dialogos">
+  <object id="229" x="1472" y="1440" width="32" height="256">
    <properties>
     <property name="ID" value="1"/>
    </properties>

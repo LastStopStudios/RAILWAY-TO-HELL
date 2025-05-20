@@ -1912,7 +1912,8 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Icicles and Stalactites!! I never imagined you’d make it this far. I’m surrounded by incompetents, Noma gets herself killed against an unarmed human and Belfegor just messaged me that he is not in the mood to fight, can you believe it? But nonetheless, you are not getting past myself. I hope you’re not afraid of the cold, because you're gonna spend the rest of eternity as an ice sculpture decorating my lair. Come on, it’s time to dance on the ice!" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Asmodeos.png" TEXT="Icicles and Stalactites!! I never imagined you’d make it this far. I’m surrounded by incompetents, Noma gets herself killed against an unarmed human and Belfegor just messaged me that he is not in the mood to fight, can you believe it? But nonetheless, you are not getting past myself. I hope you’re not afraid of the cold, because you're gonna spend the rest of eternity as an ice sculpture decorating my lair. Come on, it’s time to dance on the ice!" />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Congratulations big sister! You're getting stronger every day — I never doubted you! I can hear your footsteps getting closer... Hurry, come find me. I need you! Everything around me is shaking... I think something huge is approaching. My life is in danger... Please, hurry!" />
 		</dialogues>
 	</scene5>
 	<scene6>
@@ -2017,9 +2018,28 @@
 					</wakeup>
 				</animations>
 			</player>
+			<items>
+				<item name="Remember" x="2150" y="1670" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get out of here and see all my friends and I trust we will both go out together." />
+			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember going through that door, I think that's the way. It seems the door is locked, you have to defeat someone else sister." />
 		</dialogues>
 	</scene6>
 	<scene7>
@@ -2125,9 +2145,6 @@
 				</animations>
 			</player>
 		</entities>
-		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
-		</dialogues>
 	</scene7>
 	<scene8>
 		<map path="Assets/Maps/" name="DT2L2.tmx" />
@@ -2231,9 +2248,42 @@
 					</wakeup>
 				</animations>
 			</player>
+			<items>
+				<item name="Remember" x="6905" y="2000" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+				<item name="Remember2" x="2735" y="4695" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me not to eat snow too fast or it’d stab my chest like needles. But I still did it. I said it was ice cream. You rolled your eyes, but you let me pretend." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Do you remember when we wanted to keep our snowman in the fridge to prevent it from defrosting and the next day when dad came home he gave us a big scolding because we had flooded the fridge." />
 		</dialogues>
 	</scene8>
 	<scene9>
@@ -2339,9 +2389,6 @@
 				</animations>
 			</player>
 		</entities>
-		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
-		</dialogues>
 	</scene9>
 	<scene10>
 		<map path="Assets/Maps/" name="IT1L1.tmx" />
@@ -2445,9 +2492,26 @@
 					</wakeup>
 				</animations>
 			</player>
+			<items>
+				<item name="Remember" x="7205" y="2115" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me if I ever got lost, you’d find me. Even in hell. I’ve been trying to leave you a trail. I don’t know if you can see it… but I’m still trying" />
 		</dialogues>
 	</scene10>
 	<scene11>
