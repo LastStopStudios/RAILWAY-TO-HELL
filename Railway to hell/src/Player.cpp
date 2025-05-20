@@ -42,9 +42,11 @@ bool Player::Start() {
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
-    texW = parameters.attribute("w").as_int();
+    texW = parameters.attribute("w").as_int();  
     texH = parameters.attribute("h").as_int();
     idleTexture = texture;  // Default texture
+
+    SaveInitialPosition();
 
     // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -788,10 +790,9 @@ void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
     //Go to scene 1, Start of the game
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 || hasDied && currentLvl == 1) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN && currentLvl != 1 ) {
         //Move the player to the start position tunel scene
         Engine::GetInstance().sceneLoader->LoadScene(1, 2877, 2048, false, false);
-        hasDied = false;
     }
     //In Scene 1, pressing F8 will move the player to the dash item:
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
@@ -808,56 +809,46 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     //Go to Scene 2, Puzzle Scene
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 || hasDied && currentLvl == 2) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_2) == KEY_DOWN && currentLvl != 2 ) {
         Engine::GetInstance().sceneLoader->LoadScene(2, 3097, 729, false, false);
-        hasDied = false;
     }
     //Go to Scene 3, First Boss Scene
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 || hasDied && currentLvl == 3) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_3) == KEY_DOWN && currentLvl != 3 ) {
         Engine::GetInstance().sceneLoader->LoadScene(3, 700, 600, false, false);
-        hasDied = false;
     }
     //Go to scene 4, Double Jump item
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4 || hasDied && currentLvl == 4) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_4) == KEY_DOWN && currentLvl != 4 ) {
         Engine::GetInstance().sceneLoader->LoadScene(4, 724, 422, false, false);
-        hasDied = false;
     }
     //Go to Scene 5, Second Boss Scene
     // Versión corregida
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 5 || hasDied && currentLvl == 5) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 5 ) {
             // Use FadeIn for smooth transition
             Engine::GetInstance().sceneLoader->LoadScene(5, 1408, 1568, true, false);
-            hasDied = false;
     }
     //Go to Scene 6, Central Station
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 6 || hasDied && currentLvl == 6) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 6 ) {
         Engine::GetInstance().sceneLoader->LoadScene(6, 2180, 600, false, false);
-        hasDied = false;
     }
     //Go to Scene 7, Connector Right
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_7) == KEY_DOWN && currentLvl != 7 || hasDied && currentLvl == 7) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_7) == KEY_DOWN && currentLvl != 7 ) {
         Engine::GetInstance().sceneLoader->LoadScene(7, 1310, 1940, false, false);
-        hasDied = false;
     }
     //Go to Scene 8, Ice tunnel, VERY CLOSE TO THE DOOR OF THE CONNECTOR
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_8) == KEY_DOWN && currentLvl != 8 || hasDied && currentLvl == 8) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_8) == KEY_DOWN && currentLvl != 8 ) {
         Engine::GetInstance().sceneLoader->LoadScene(8, 8340, 2640, false, false);
-        hasDied = false;
     }
     //Go to Scene 9, Connector Left
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_9) == KEY_DOWN && currentLvl != 9 || hasDied && currentLvl == 9) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_9) == KEY_DOWN && currentLvl != 9 ) {
         Engine::GetInstance().sceneLoader->LoadScene(9, 2644, 3920, false, false);
-        hasDied = false;
     }
     //Go to Scene 10, Left Electric tunnel, VERY CLOSE TO THE DOOR OF THE CONNECTOR
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_T) == KEY_DOWN && currentLvl != 10 || hasDied && currentLvl == 10) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_T) == KEY_DOWN && currentLvl != 10 ) {
         Engine::GetInstance().sceneLoader->LoadScene(10, 4620, 2570, false, false);
-        hasDied = false;
     }
     //Go to Scene 11
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && currentLvl != 11 || hasDied && currentLvl == 11) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && currentLvl != 11 ) {
         Engine::GetInstance().sceneLoader->LoadScene(11, 8980, 1640, false, false);
-        hasDied = false;
     }
     //In Scene 11, pressing F6 will move the player to the connector door:
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
@@ -1407,6 +1398,108 @@ void Player::DrawPlayer() {
     */
 }
 
+void Player::ResetToInitPosition() {
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node playerNode;
+
+    for (int i = 0; i < 3; ++i) {
+        if (i == 0) {
+            playerNode = doc.child("config")
+                .child("scene")
+                .child("entities")
+                .child("player");
+            playerNode.attribute("x").set_value(Scene1InitX);
+			playerNode.attribute("y").set_value(Scene1InitY);
+        }
+        else if (i == 1) {
+            playerNode = doc.child("config")
+                .child("scene2")
+                .child("entities")
+                .child("player");
+			playerNode.attribute("x").set_value(Scene2InitX);
+			playerNode.attribute("y").set_value(Scene2InitY);
+        }
+        else if (i == 2) {
+            playerNode = doc.child("config")
+                .child("scene3")
+                .child("entities")
+                .child("player");
+			playerNode.attribute("x").set_value(Scene3InitX);
+			playerNode.attribute("y").set_value(Scene3InitY);
+        }
+    }
+
+    if (!playerNode) {
+        LOG("Could not find the node for player in the XML");
+        return;
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for player");
+    }
+
+}
+void Player::SaveInitialPosition() {
+
+    // Load XML
+    pugi::xml_document doc;
+    if (!doc.load_file("config.xml")) {
+        LOG("Error loading config.xml");
+        return;
+    }
+
+    pugi::xml_node playerNode;
+
+    for (int i = 0; i < 3; ++i) {
+        if (i == 0) {
+            playerNode = doc.child("config")
+                .child("scene")
+                .child("entities")
+                .child("player");
+            Scene1InitX = playerNode.attribute("x").as_float();
+            Scene1InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 1) {
+            playerNode = doc.child("config")
+                .child("scene2")
+                .child("entities")
+                .child("player");
+            Scene2InitX = playerNode.attribute("x").as_float();
+            Scene2InitY = playerNode.attribute("y").as_float();
+        }
+        else if (i == 2) {
+            playerNode = doc.child("config")
+                .child("scene3")
+                .child("entities")
+                .child("player");
+            Scene3InitX = playerNode.attribute("x").as_float();
+            Scene3InitY = playerNode.attribute("y").as_float();
+        }
+    }
+
+    if (!playerNode) {
+        LOG("Could not find the node for player in the XML");
+        return;
+    }
+
+    if (!doc.save_file("config.xml")) {
+        LOG("Error saving config.xml");
+    }
+    else {
+        LOG("death status updated in the XML for player");
+    }
+
+}
+
 bool Player::CleanUp() {
     LOG("Cleanup player");
 
@@ -1516,6 +1609,20 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         return;
     }
+
+    //if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::CHECKPOINT) {
+    //    Checkpoints* checkpoint = (Checkpoints*)physB->listener;
+
+    //    if (checkpoint) {
+
+    //        if (checkpoint && checkpoint->GetCheckpointType() == "checkpoint1" && !checkpoint->GetActivitatedXML()) { 
+    //            Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+    //            LOG("A");
+    //            return;
+    //        }
+    //    }
+    //    return;
+    //}
 
     if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::DIALOGOS) {
         if (physB->Salio == false) {//makes the dialog trigger only once
@@ -1764,23 +1871,27 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
 void Player::SetPosition(Vector2D pos) {
+    int adjustment = 2;
     // Establish upper body position
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 3);  // Locate at one third of the total height.
+    pos.setX(pos.getX() );
+    pos.setY(pos.getY() + texH /3 + adjustment);  
     b2Vec2 upperPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
     pbodyUpper->body->SetTransform(upperPos, 0);
 
     // Establish lower body position
     Vector2D lowerPos = pos;
-    lowerPos.setY(pos.getY() + texH / 3);  // One third lower than the upper
+    lowerPos.setY(pos.getY() + texH / 3 + adjustment);  
     b2Vec2 lowerPosB2 = b2Vec2(PIXEL_TO_METERS(lowerPos.getX()), PIXEL_TO_METERS(lowerPos.getY()));
     pbodyLower->body->SetTransform(lowerPosB2, 0);
 }
 
 Vector2D Player::GetPosition() {
+    int adjustment = 2;
+
     // Use upper body position as a reference
     b2Vec2 bodyPos = pbodyUpper->body->GetTransform().p;
     Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+	pos.setY(pos.getY() - texH / 3 + adjustment);  
     return pos;
 }
 void Player::hit(){

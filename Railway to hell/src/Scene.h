@@ -19,6 +19,8 @@
 #include "MosaicLevers.h"
 #include "MosaicPiece.h"
 #include "MosaicPuzzle.h"
+#include "Checkpoints.h"
+
 
 struct SDL_Texture;
 enum class SceneState
@@ -110,6 +112,7 @@ public:
 	std::vector<MosaicLever*> mosaicLeversList;
 	std::vector<MosaicPiece*> mosaicPiecesList;
 	std::vector<MosaicPuzzle*> mosaicPuzzleList;
+	std::vector<Checkpoints*> checkpointList;
 
 	std::vector<Terrestre*>& GetEnemyList() { return enemyList; }
 	std::vector<Explosivo*>& GetExploList() { return explosivoList; }
@@ -124,6 +127,7 @@ public:
 	std::vector<MosaicLever*>& GetMosaicLeversList() { return mosaicLeversList; }
 	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }
 	std::vector<MosaicPuzzle*>& GetMosaicPuzzleList() { return mosaicPuzzleList; }
+	std::vector<Checkpoints*>& GetCheckpointsList() { return checkpointList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
@@ -172,7 +176,7 @@ private:
 	GuiControlButton* guiBt;
 
 	Player* player;
-
+	Boss* boss;
 	//background music statement
 	int musicaFondoId = -1;
 

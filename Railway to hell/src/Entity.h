@@ -20,6 +20,7 @@ enum class EntityType
 	MOSAIC_PIECE,
 	MOSAIC_PUZZLE,
 	MOSAIC_LEVER,
+	CHECKPOINT,
 	UNKNOWN
 };
 

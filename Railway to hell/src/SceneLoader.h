@@ -40,10 +40,8 @@ public:
 	int currentScene;
 	
 private:
-	//Load and unload
-	void LoadEnemiesItems(pugi::xml_node sceneNode);
-	void UnLoadEnemiesItems();
-	//Scene visibility on map
+	void LoadEnemiesItems(pugi::xml_node sceneNode, int scene = -1);
+	void UnLoadEnemiesItems();	
 	void VisibilityScene(int level);
 	void SetupMosaicPuzzle();
 };
