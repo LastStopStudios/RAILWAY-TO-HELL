@@ -797,8 +797,8 @@ void Player::HandleSceneSwitching() {
     }
     //In Scene 1, pressing F8 will move the player to the dash item:
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
-        int debugXLevelDesignInitialPositionOfLevel = 5888;
-        int debugYLevelDesignInitialPositionOfLevel = 3670;
+        int debugXLevelDesignInitialPositionOfLevel = 6600;
+        int debugYLevelDesignInitialPositionOfLevel = 3990;
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
@@ -822,10 +822,8 @@ void Player::HandleSceneSwitching() {
         Engine::GetInstance().sceneLoader->LoadScene(4, 724, 422, false, false);
     }
     //Go to Scene 5, Second Boss Scene
-    // Versión corregida
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 5 ) {
-            // Use FadeIn for smooth transition
-            Engine::GetInstance().sceneLoader->LoadScene(5, 1408, 1568, true, false);
+        Engine::GetInstance().sceneLoader->LoadScene(5, 1408, 1568, false, false);
     }
     //Go to Scene 6, Central Station
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 6 ) {
@@ -849,11 +847,11 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 11
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && currentLvl != 11 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(11, 8980, 1640, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(11, 4600, 5500, false, false);
     }
     //In Scene 11, pressing F6 will move the player to the connector door:
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-        int debugXLevelDesignInitialPositionOfLevel = 4350;
+        int debugXLevelDesignInitialPositionOfLevel = 4600;
         int debugYLevelDesignInitialPositionOfLevel = 5500;
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);

@@ -95,9 +95,6 @@ void SceneLoader::DrawScene(int level, int x, int y) {
 void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
 
     pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
-    if (!enemiesNode) {
-        return;
-    }
 
     for (pugi::xml_node enemyNode = enemiesNode.child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy")) {
         std::string type = enemyNode.attribute("type").as_string();

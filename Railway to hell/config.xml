@@ -246,7 +246,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Dash ability" death="0" savedDeath="0" x="6656" y="4482" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1" ref="dash_item">
+				<item name="Dash ability" death="0" savedDeath="0" x="6750" y="4080" w="32" h="32" texture="Assets/Textures/Items/Ability_Dash_Orb_Sprite_V3.png" gravity="false" ID="1" ref="dash_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -265,17 +265,10 @@
 				</item>
 			</items>
 			<doors>
-				<door name="puzzle_door" x="2703" y="2000" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+				<door name="puzzle_door" x="5545" y="5940" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.5">
-							<frame x="0" y="0" w="48" h="144" />
-						</idle>
-					</animations>
-				</door>
-				<door name="puzzle_door" x="2680" y="2000" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
-					<animations>
-						<idle loop="false" speed="0.5">
-							<frame x="0" y="0" w="48" h="144" />
+							<frame x="0" y="144" w="48" h="144" />
 						</idle>
 					</animations>
 				</door>
@@ -1745,7 +1738,7 @@
 			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You can count on me like one, two, three, I'll be there and i know when i need it. Remember this song we used to love to play it all the time?"/>
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You can count on me like one, two, three, I'll be there and i know when i need it. Remember this song we used to love to play it all the time?" />
 		</dialogues>
 	</scene4>
 	<scene5>
@@ -2353,6 +2346,15 @@
 					</animations>
 				</item>
 			</items>
+			<doors>
+				<door name="puzzle_door" x="7655" y="2565" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+					</animations>
+				</door>
+			</doors>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me not to eat snow too fast or it'd stab my chest like needles. But I still did it. I said it was ice cream. You rolled your eyes, but you let me pretend." />
@@ -2582,6 +2584,15 @@
 					</animations>
 				</item>
 			</items>
+			<doors>
+				<door name="puzzle_door" x="3815" y="2560" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="0" w="48" h="144" />
+						</idle>
+					</animations>
+				</door>
+			</doors>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me if I ever got lost, you'd find me. Even in hell. I've been trying to leave you a trail. I don't know if you can see it... but I'm still trying" />
@@ -2706,6 +2717,15 @@
 					</animations>
 				</item>
 			</items>
+			<doors>
+				<door name="puzzle_door" x="4742" y="5555" w="48" h="144" texture="Assets/Textures/background/Doors.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.5">
+							<frame x="0" y="144" w="48" h="144" />
+						</idle>
+					</animations>
+				</door>
+			</doors>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sister trust me, believe me a little leap and we will meet again." />
