@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="246">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="29" nextobjectid="247">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -31821,28 +31821,28 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14481"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14481"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14481"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14481"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31941,28 +31941,28 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14807"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14807"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14807"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14807"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -64930,7 +64930,7 @@
   <object id="242" x="2721" y="380" width="445" height="68"/>
   <object id="243" x="672" y="379" width="448" height="69"/>
  </objectgroup>
- <objectgroup id="14" name="Sensores">
+ <objectgroup id="14" name="Sensores" visible="0">
   <object id="241" x="3168" y="416" width="32" height="480">
    <properties>
     <property name="Sensor" value="IE1L1IT1L1"/>
@@ -64938,5 +64938,11 @@
   </object>
  </objectgroup>
  <objectgroup id="17" name="Giro" visible="0"/>
- <objectgroup id="25" name="Dialogos" visible="0"/>
+ <objectgroup id="25" name="Dialogos">
+  <object id="246" x="2912" y="416" width="32" height="512">
+   <properties>
+    <property name="ID" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

@@ -1136,10 +1136,27 @@
 					</animations>
 				</mosaicLever>
 			</mosaicLevers>
-			<enemies />
+			<items>
+				<item name="Remember" x="1236" y="772" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You're on the right track. For now you've reached the end of this vertical slice." />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember the legend of the station that was decorated and completely illuminated and then never opened, it was cursed, that station by the photos I've seen reminds me a lot of that maybe it was an entrance to the underworld and that's why they never opened it you can imagine…" />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I still think about those nights when we stayed up doing puzzles together… Those are some of my favorite memories with you, Nadia. I miss you so much. Things haven’t been the same without you." />
 		</dialogues>
 	</scene2>
 	<scene3>
@@ -1668,6 +1685,21 @@
 				</animations>
 			</player>
 			<items>
+				<item name="Remember" x="1560" y="424" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+					<animations>
+						<idle loop="true" speed="0.2">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+							<frame x="128" y="0" w="32" h="32" />
+							<frame x="160" y="0" w="32" h="32" />
+							<frame x="192" y="0" w="32" h="32" />
+							<frame x="224" y="0" w="32" h="32" />
+							<frame x="256" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
 				<item name="Double jump" x="2895" y="589" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2">
 					<animations>
 						<idle loop="true" speed="0.1">
@@ -1676,11 +1708,9 @@
 					</animations>
 				</item>
 			</items>
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You can count on me like one, two, three, I'll be there and i know when i need it” remember this song we used to love to play it all the time?"/>
 		</dialogues>
 	</scene4>
 	<scene5>
@@ -1880,11 +1910,9 @@
 					</animations>
 				</enemy>
 			</enemies>
-			<items />
-			<elevators />
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Icicles and Stalactites!! I never imagined you’d make it this far. I’m surrounded by incompetents, Noma gets herself killed against an unarmed human and Belfegor just messaged me that he is not in the mood to fight, can you believe it? But nonetheless, you are not getting past myself. I hope you’re not afraid of the cold, because you're gonna spend the rest of eternity as an ice sculpture decorating my lair. Come on, it’s time to dance on the ice!" />
 		</dialogues>
 	</scene5>
 	<scene6>
@@ -1989,9 +2017,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -2099,9 +2124,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -2209,9 +2231,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -2319,9 +2338,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -2429,9 +2445,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />
@@ -2539,9 +2552,6 @@
 					</wakeup>
 				</animations>
 			</player>
-			<items />
-			<elevators />
-			<enemies />
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="¿Hamood? ¡Hamood! Hamadaybaydahamoodhamadababy aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso aplauso ¡Hamood! ¿Hamood? Yomadadadinadayahomodahomadeyahomodehomadi Hamood Hamood" />

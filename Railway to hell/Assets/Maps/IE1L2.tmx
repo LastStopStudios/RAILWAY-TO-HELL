@@ -86540,7 +86540,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="7" name="Navigation" width="120" height="60">
+ <layer id="7" name="Navigation" width="120" height="60" visible="0">
   <properties>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
