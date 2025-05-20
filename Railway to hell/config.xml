@@ -1750,7 +1750,7 @@
 			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You can count on me like one, two, three, I'll be there and i know when i need it. Remember this song we used to love to play it all the time?"/>
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="You can count on me like one, two, three, I'll be there and i know when i need it. Remember this song we used to love to play it all the time?" />
 		</dialogues>
 	</scene4>
 	<scene5>
