@@ -367,27 +367,21 @@ bool Checkpoints::CleanUp()
 	return true;
 }
 void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
-	// Declare the variable outside the switch
-
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
+
 		setToIdleAnim();
-		// Assign to the variable (not declaring it again)
-		actionPressed = Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
 
-		// Add controller support (B button)
-		if (Engine::GetInstance().IsControllerConnected()) {
-			SDL_GameController* controller = Engine::GetInstance().GetGameController();
-			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == 1) {
-				actionPressed = true;
-			}
-		}
-
-		if (!isActivated && actionPressed) {
+		if (!isActivated && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
+
+			// Guardar la escena del último checkpoint activado
+			SaveLastCheckpointScene(currentscene);
+
 			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
 			Engine::GetInstance().audio.get()->PlayFx(checkpointFX);
@@ -395,15 +389,46 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 			currentAnimation = &activated;
 		}
 
-		if (actionPressed) {
-			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
-		}
-
 		break;
 	case ColliderType::UNKNOWN:
+
 		break;
 	default:
 		break;
+	}
+}
+
+// para guardar la escena del último checkpoint
+void Checkpoints::SaveLastCheckpointScene(int scene) {
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	// Buscar o crear un nodo para guardar la escena del último checkpoint
+	pugi::xml_node gameStateNode = doc.child("config").child("gamestate");
+	if (!gameStateNode) {
+		gameStateNode = doc.child("config").append_child("gamestate");
+	}
+
+	pugi::xml_node lastCheckpointSceneNode = gameStateNode.child("lastCheckpointScene");
+	if (!lastCheckpointSceneNode) {
+		lastCheckpointSceneNode = gameStateNode.append_child("lastCheckpointScene");
+	}
+
+	pugi::xml_node sceneValueNode = lastCheckpointSceneNode.child("scene");
+	if (!sceneValueNode) {
+		sceneValueNode = lastCheckpointSceneNode.append_child("scene");
+	}
+
+	sceneValueNode.attribute("value").set_value(scene);
+	if (!sceneValueNode.attribute("value")) {
+		sceneValueNode.append_attribute("value").set_value(scene);
+	}
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
 	}
 }
 

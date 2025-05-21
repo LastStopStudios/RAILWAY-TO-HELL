@@ -1678,56 +1678,97 @@ void Player::SaveInitialPosition() {
 void Player::ResetPlayerPosition() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
     if (result == NULL) {
         LOG("Could not load file. Pugi error: %s", result.description());
         return;
     }
 
+    // Obtener la escena del último checkpoint activado
+    int checkpointScene = GetLastCheckpointScene();
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (checkpointScene == -1) {
+        // Si no hay checkpoint guardado, usar la escena actual
+        checkpointScene = currentScene;
+    }
+
+    // Obtener la posición guardada del checkpoint
     pugi::xml_node sceneNode;
 
-    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
-    if (currentScene == 1) {
+    if (checkpointScene == 1) {
         sceneNode = loadFile.child("config").child("scene");
     }
-    else if (currentScene == 2) {
+    else if (checkpointScene == 2) {
         sceneNode = loadFile.child("config").child("scene2");
     }
-    else if (currentScene == 3) {
+    else if (checkpointScene == 3) {
         sceneNode = loadFile.child("config").child("scene3");
     }
-    else if (currentScene == 4) {
+    else if (checkpointScene == 4) {
         sceneNode = loadFile.child("config").child("scene4");
     }
-    else if (currentScene == 5) {
+    else if (checkpointScene == 5) {
         sceneNode = loadFile.child("config").child("scene5");
     }
-    else if (currentScene == 6) {
+    else if (checkpointScene == 6) {
         sceneNode = loadFile.child("config").child("scene6");
     }
-    else if (currentScene == 7) {
+    else if (checkpointScene == 7) {
         sceneNode = loadFile.child("config").child("scene7");
     }
-    else if (currentScene == 8) {
+    else if (checkpointScene == 8) {
         sceneNode = loadFile.child("config").child("scene8");
     }
-    else if (currentScene == 9) {
+    else if (checkpointScene == 9) {
         sceneNode = loadFile.child("config").child("scene9");
     }
-    else if (currentScene == 10) {
+    else if (checkpointScene == 10) {
         sceneNode = loadFile.child("config").child("scene10");
     }
-    else if (currentScene == 11) {
+    else if (checkpointScene == 11) {
         sceneNode = loadFile.child("config").child("scene11");
     }
 
     float x = sceneNode.child("entities").child("player").attribute("x").as_float();
     float y = sceneNode.child("entities").child("player").attribute("y").as_float();
 
-    Vector2D newPos(x, y);
+    // Si la escena del checkpoint es diferente a la actual, cambiar de escena
+    if (checkpointScene != currentScene) {
+        LOG("Moving player from scene %d to checkpoint scene %d", currentScene, checkpointScene);
+        Engine::GetInstance().sceneLoader.get()->LoadScene(checkpointScene, (int)x, (int)y, true, false);
+    }
+    else {
+        // Si es la misma escena, solo reposicionar
+        Vector2D newPos(x, y);
+        SetPosition(newPos);
+    }
+}
 
-    SetPosition(newPos);
+// Nueva función para obtener la escena del último checkpoint
+int Player::GetLastCheckpointScene() {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+    if (result == NULL) {
+        LOG("Could not load file. Pugi error: %s", result.description());
+        return -1;
+    }
 
+    pugi::xml_node gameStateNode = loadFile.child("config").child("gamestate");
+    if (!gameStateNode) {
+        return -1;
+    }
+
+    pugi::xml_node lastCheckpointSceneNode = gameStateNode.child("lastCheckpointScene");
+    if (!lastCheckpointSceneNode) {
+        return -1;
+    }
+
+    pugi::xml_node sceneValueNode = lastCheckpointSceneNode.child("scene");
+    if (!sceneValueNode) {
+        return -1;
+    }
+
+    return sceneValueNode.attribute("value").as_int();
 }
 
 bool Player::CleanUp() {

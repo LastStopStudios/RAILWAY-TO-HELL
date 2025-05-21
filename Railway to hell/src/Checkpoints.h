@@ -43,6 +43,8 @@ public:
 
 	void ResetOthersCheckpoints();
 
+	void SaveLastCheckpointScene(int scene);
+
 public:
 
 	bool isPicked = false;
