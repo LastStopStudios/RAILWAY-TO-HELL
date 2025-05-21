@@ -437,14 +437,13 @@ void Player::HandleMovement(b2Vec2& velocity) {
     isWalking = false;
     // Horizontal movement
     if (resbalar == true) {//Ice platform
-        if (facingRight == true) {
-            velocity.x = icev; //horizontal velocity on ice rigth
-            LOG("velocidad Idle derecha: %f", velocity.x);
-        }
-        else {
-            velocity.x = -icev; //horizontal velocity on ice left
-            LOG("velocidad idle izquierda: %f", velocity.x);
-        }
+            if (facingRight == true) {
+                velocity.x = icev; //horizontal velocity on ice rigth
+            }
+            else {
+                velocity.x = -icev; //horizontal velocity on ice left
+            }
+
     }else{
         velocity.x = 0; //horizontal velocity
     }
@@ -479,12 +478,19 @@ void Player::HandleMovement(b2Vec2& velocity) {
         // D-pad buttons
         if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
             b = 0;
-            antb = 0.59f;
+            antb = 2;
             if (resbalar == true) {//Ice platform
                 if (velocity.x < 0.0f && a < dificultty && giro == true) {
-                    velocity.x = velocity.x - anta;//adding vel to speed up on ice
+                    if (primero == true) {
+                        velocity.x = 4.0;
+                        if (a == 10) { primero = false; }
+
+                    }
+                    else {
+                        velocity.x = velocity.x - anta;
+                        anta = anta + 1;
+                    }
                     a++;
-                    anta = anta - 0.59f;
                 }else {
                     velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
                     giro = facingRight;
@@ -498,12 +504,20 @@ void Player::HandleMovement(b2Vec2& velocity) {
         }
         if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
             a = 0;
-            anta = 0.59f;
+            anta = 2;
+            primero = true;
             if (resbalar == true) {//Ice platform
                 if (velocity.x > 0.0f && b < dificultty && giro == false) {
-                    velocity.x = velocity.x + antb;//adding vel to speed up on ice
+                    if (primerob) {
+                        velocity.x = -4.0;
+                        if (b == 10) { primerob = false; }
+
+                    }
+                    else {
+                        velocity.x = velocity.x + antb;
+                        antb = antb + 1;
+                    }
                     b++;
-                    antb = antb - 0.59f;
                 }else{
                     velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                     giro = facingRight;
@@ -520,12 +534,20 @@ void Player::HandleMovement(b2Vec2& velocity) {
     // Check keyboard input (maintain compatibility)
     if (input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         b = 0;
-        antb = 0.59f;
+        antb = 0.5;
+        primerob = true;
         if (resbalar == true) {//Ice platform
-            if (velocity.x < 0.0f && a < dificultty && giro == true) {
-                velocity.x = velocity.x - anta;//adding vel to speed up on ice
+            if (velocity.x < 0.0f && a < dificultty && giro == true) {             
+                if (primero == true) {
+                    velocity.x = 4.0;
+                    if(a == 10){ primero = false; }
+                   
+                }
+                else {
+                    velocity.x = velocity.x - anta;
+                    anta = anta + 1;
+                }
                 a++;
-                anta = anta - 0.59f;
             }else{
                 velocity.x = -0.3f * 16 - icev;//adding vel to speed up on ice
                 giro = facingRight;
@@ -539,12 +561,20 @@ void Player::HandleMovement(b2Vec2& velocity) {
     }
     if (input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         a = 0;
-        anta = 0.59f;
+        anta = 0.5;
+        primero = true;
         if (resbalar == true) {//Ice platform
             if (velocity.x > 0.0f && b < dificultty && giro == false) {
-                velocity.x = velocity.x + antb;//adding vel to speed up on ice
+                if (primerob) {
+                    velocity.x = -4.0;
+                    if(b == 10){ primerob = false; }
+                    
+                }
+                else {
+                    velocity.x = velocity.x + antb;
+                    antb = antb + 1;
+                }
                 b++;
-                antb = antb - 0.59f;
             }else{
                 velocity.x = 0.3f * 16 + icev;//adding vel to speed up on ice
                 giro = facingRight;
