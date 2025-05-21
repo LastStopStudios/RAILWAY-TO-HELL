@@ -362,6 +362,13 @@ bool Player::Update(float dt)
             Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Call the corresponding dialogue line
             NeedDialogue = false;
         }
+        if (isHurt && waitForHurtAnimation) {
+            if (hurt.HasFinished()) {
+                isHurt = false;
+                hasHurtStarted = false;
+                hurted = true; // Mark that we've been hurt
+            }
+        }
         Abyss();
         Ascensor();
         // Apply the velocity to both bodies
@@ -1263,6 +1270,11 @@ void Player::DrawPlayer() {
         texture = hurtTexture;
         currentAnimation = &hurt;
         hurt.Update();
+        
+        // Check if the animation finished and we were waiting for teleport
+        if (hurt.HasFinished() && waitForHurtAnimation) {
+            isHurt = false;
+        }
     }
     else if (isWakingUp) {
         currentAnimation = &wakeupAnim;
@@ -1949,14 +1961,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORMICE:
         resbalar = true;//Ice platform
         break;
-    case ColliderType::ABYSS: 
-		
-        if (!isFallingInAbyss) {
-            hit(); 
+    case ColliderType::ABYSS:
+        if (!isFallingInAbyss && !godMode) {
+            if (canHurtAbyss) {
+                lives--;
+            }
+            canHurtAbyss = false;
             isFallingInAbyss = true;
         }
-   
-		break;
+        break;
     case ColliderType::UNKNOWN:
         break;
     }
@@ -1982,31 +1995,33 @@ void Player::Ascensor() {
         NeedSceneChange = true;
     }
 }
-void Player:: Abyss()
+void Player::Abyss()
 {
-   
-    if (hurt.HasFinished()) {
-
-        if (isFallingInAbyss) {
-           // Player position
-            NeedSceneChange = true;
-            sceneToLoad = 11;
-            Playerx = 9730;
-            Playery = 1662;
-            Fade = false;
-            BossCam = false;
-
-            isFallingInAbyss = false; 
-           
-         
-
+    if (isFallingInAbyss) {
+        if (!waitForHurtAnimation) {
+            // Set hurt state without teleporting yet
+            isHurt = true;
+            hasHurtStarted = true;
+            waitForHurtAnimation = true;
+            pendingAbyssTeleport = true;
+            // Play hurt sound if needed
+            Engine::GetInstance().audio.get()->PlayFx(hurtFX);
         }
-        hasHurtStarted = false;
-        isHurt = false;
-        hurted = false;
-        return;
+        else if (pendingAbyssTeleport && !isHurt) {
+            // The hurt animation has finished, now teleport
+            Player* player = Engine::GetInstance().scene->GetPlayer();
+            player->SetPosition(Vector2D(abyssTeleportX, abyssTeleportY));
+            canHurtAbyss = true;
+            // Reset velocities
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            // Reset states
+            waitForHurtAnimation = false;
+            pendingAbyssTeleport = false;
+            isFallingInAbyss = false; // Make sure to reset this flag
+            hurted = false;
+        }
     }
-  
 }
 
 void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
@@ -2086,14 +2101,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         resbalar = false;//Ice platform
         break;
 
-	case ColliderType::ABYSS:
-        isFallingInAbyss = false;
-        hurted = true;
-        isHurt = false;
-        hasHurtStarted = false;
-        currentAnimation = &idle;
-        idle.Reset();
-		break;
     }
 }
 

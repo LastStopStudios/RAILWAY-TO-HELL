@@ -127,6 +127,11 @@ private:
 	void Abyss();
 	void ResetPlayerPosition();
 private:
+	bool waitForHurtAnimation = false;
+	bool pendingAbyssTeleport = false;
+	int abyssTeleportX = 9632;
+	int abyssTeleportY = 1696;
+	bool canHurtAbyss = true;
 	// Public properties
 	SDL_Texture* texture = NULL;
 	int texW, texH;
