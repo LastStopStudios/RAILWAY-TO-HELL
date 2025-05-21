@@ -2102,8 +2102,13 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         resbalar = false;//Ice platform
         break;
 
-    }
+    
+    case ColliderType::ABYSS:
+        hurt.Reset();
+         break;
+     }
 }
+
 
 void Player::SetPosition(Vector2D pos) {
     int adjustment = 2;
