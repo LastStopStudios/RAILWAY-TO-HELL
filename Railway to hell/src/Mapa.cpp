@@ -149,6 +149,10 @@ bool Mapa::CleanUp()
 		Engine::GetInstance().textures->UnLoad(MNegro11);//Unload text background
 		MNegro11 = nullptr;
 	}
+	if (MNegro12 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(MNegro12);//Unload text background
+		MNegro12 = nullptr;
+	}
 
 	return true;
 }
@@ -167,37 +171,39 @@ void Mapa::ShowMap() {
 			//SDL_Rect dstRect3 = { negro.px, negro.py, negro.tmx, negro.tmy }; //Position and scale of the black texture to covern unknown zones of the map
 			switch (negro.num) {
 			case 1: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 2: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro2, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 3: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro3, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 4: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro4, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 5: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro5, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 6: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro6, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 7: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro7, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 8: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro8, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				break;
-			case 9: // Scene 
 				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro9, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				break;
-			case 10: // Scene 
+			case 2: // Scene 2
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro2, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 3: // Scene 3
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro4, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 4: // Scene 4
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 5: // Scene 5
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro3, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 6: // Scene 6
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro6, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro10, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro11, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 7: // Scene 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro12, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 8: // Scene 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro7, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 9: // Scene 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro12, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				break;
+			case 10: // Scene 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro8, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				break;
 			case 11: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro11, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro5, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				break;
 			}
 			
@@ -267,11 +273,12 @@ void Mapa::LoadMap(){
 	MNegro4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black4.png"); //Load black texture to cover unknow parts of the map
 	MNegro5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black5.png"); //Load black texture to cover unknow parts of the map
 	MNegro6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black6.png"); //Load black texture to cover unknow parts of the map
-	MNegro7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black7.png"); //Load black texture to cover unknow parts of the map ;
-	MNegro8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black8.png"); //Load black texture to cover unknow parts of the map ;
-	MNegro9 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black9.png"); //Load black texture to cover unknow parts of the map ;
-	MNegro10 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black10.png"); //Load black texture to cover unknow parts of the map ;
-	MNegro11 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black11.png"); //Load black texture to cover unknow parts of the map ;
+	MNegro7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black7.png"); //Load black texture to cover unknow parts of the map
+	MNegro8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black8.png"); //Load black texture to cover unknow parts of the map
+	MNegro9 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black9.png"); //Load black texture to cover unknow parts of the map
+	MNegro10 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black10.png"); //Load black texture to cover unknow parts of the map
+	MNegro11 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black11.png"); //Load black texture to cover unknow parts of the map
+	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black12png"); //Load black texture to cover unknow parts of the map ;
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 }
 

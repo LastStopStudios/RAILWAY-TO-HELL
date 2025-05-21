@@ -102,6 +102,11 @@ bool Explosivo::Update(float dt)
             1.0f, 0.0, INT_MAX, INT_MAX,
             flip
         );
+        // Handle damage to player if explosion and collision happened
+        if (exploto && toco) {
+            Engine::GetInstance().scene->hitearPlayer();
+            exploto = false;
+        }
 
         // When dying/exploding, don't process any other logic
         return true;
@@ -200,11 +205,7 @@ bool Explosivo::Update(float dt)
         }
     }
 
-    // Handle damage to player if explosion and collision happened
-    if (exploto && toco) {
-        Engine::GetInstance().scene->hitearPlayer();
-        exploto = false;
-    }
+   
 
     // Handle skipping first input if necessary
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
