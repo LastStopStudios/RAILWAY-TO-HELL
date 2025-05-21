@@ -786,7 +786,6 @@ void Player::HandleJump(float dt) {
     }
 }
 
-
 void Player::HandleSceneSwitching() {
     // Level switching controls
     int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
@@ -823,7 +822,7 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 5, Second Boss Scene
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_5) == KEY_DOWN && currentLvl != 5 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(5, 1408, 1568, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(5, 1248, 608, false, false);
     }
     //Go to Scene 6, Central Station
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_6) == KEY_DOWN && currentLvl != 6 ) {
