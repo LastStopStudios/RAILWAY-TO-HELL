@@ -1043,7 +1043,7 @@
 		<map path="Assets/Maps/" name="IE1L1.tmx" />
 		<visibility accessed="false" />
 		<entities>
-			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="2785" y="770" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
