@@ -222,7 +222,11 @@ bool Boss::Update(float dt)
             item->SetPosition(pos);
             item->SavePosition("Whip");
             item->SetCreatedTrueInXML();
-            
+            if (changeMusicBoss)
+            {
+                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
+                changeMusicBoss = false;
+            }
             if (pendingDisable) {
                 SetEnabled(false);
                 pendingDisable = false;
@@ -1158,6 +1162,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
                     // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                      // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                    changeMusicBoss = true;
                 }
             }
         }
@@ -1188,6 +1193,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                     // Disable gravity on both bodies
                     pbodyUpper->body->SetGravityScale(0.0f);
                     pbodyLower->body->SetGravityScale(0.0f);
+                    changeMusicBoss = true;
                 }
             }
         }

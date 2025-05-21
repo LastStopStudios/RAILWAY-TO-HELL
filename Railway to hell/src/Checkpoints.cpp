@@ -33,9 +33,10 @@ bool Checkpoints::Start() {
 	activatedXML = parameters.attribute("activated").as_bool();
 	sceneForThisCheckpoint = parameters.attribute("scene").as_int();
 
-	checkpointFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+	checkpointFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/checkpoint.ogg");
 
-	Engine::GetInstance().scene->AddToMusic(checkpointFX);
+	//Engine::GetInstance().scene->AddToMusic(checkpointFX);
+	Engine::GetInstance().audio.get()->SetFxVolume(checkpointFX, 4);
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));

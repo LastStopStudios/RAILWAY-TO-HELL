@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="34" nextobjectid="295">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="34" nextobjectid="296">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -23878,11 +23878,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="20610"/>
+   <tile gid="20611"/>
+   <tile gid="20612"/>
+   <tile gid="20613"/>
+   <tile gid="20614"/>
    <tile/>
    <tile/>
    <tile/>
@@ -23998,11 +23998,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="20846"/>
+   <tile gid="20847"/>
+   <tile gid="20848"/>
+   <tile gid="20849"/>
+   <tile gid="20850"/>
    <tile/>
    <tile/>
    <tile gid="22362"/>
@@ -24118,11 +24118,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="21082"/>
+   <tile gid="21083"/>
+   <tile gid="21084"/>
+   <tile gid="21085"/>
+   <tile gid="21086"/>
    <tile/>
    <tile/>
    <tile gid="22598"/>
@@ -24238,11 +24238,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="21318"/>
+   <tile gid="21319"/>
+   <tile gid="21320"/>
+   <tile gid="21321"/>
+   <tile gid="21322"/>
    <tile/>
    <tile/>
    <tile gid="22834"/>
@@ -31446,8 +31446,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20619"/>
-   <tile gid="20620"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31566,8 +31566,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20855"/>
-   <tile gid="20856"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31686,8 +31686,8 @@
    <tile gid="1301"/>
    <tile/>
    <tile/>
-   <tile gid="21091"/>
-   <tile gid="21092"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31806,8 +31806,8 @@
    <tile gid="1537"/>
    <tile/>
    <tile/>
-   <tile gid="21327"/>
-   <tile gid="21328"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile gid="1535"/>
    <tile/>
@@ -93756,7 +93756,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="32" name="Giro">
+ <objectgroup id="32" name="Giro" visible="0">
   <object id="252" x="1248" y="416" width="32" height="384"/>
   <object id="253" x="1568" y="416" width="32" height="384"/>
   <object id="254" x="2080" y="416" width="32" height="288"/>

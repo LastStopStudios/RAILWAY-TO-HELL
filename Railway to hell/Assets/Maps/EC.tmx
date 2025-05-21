@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="120" tilewidth="32" tileheight="32" infinite="0" nextlayerid="35" nextobjectid="367">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="120" tilewidth="32" tileheight="32" infinite="0" nextlayerid="35" nextobjectid="369">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -31330,6 +31330,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="20610"/>
+   <tile gid="20611"/>
+   <tile gid="20612"/>
+   <tile gid="20613"/>
+   <tile gid="20614"/>
    <tile/>
    <tile/>
    <tile/>
@@ -31445,6 +31450,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="20846"/>
+   <tile gid="20847"/>
+   <tile gid="20848"/>
+   <tile gid="20849"/>
+   <tile gid="20850"/>
    <tile/>
    <tile/>
    <tile/>
@@ -31560,6 +31570,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="21082"/>
+   <tile gid="21083"/>
+   <tile gid="21084"/>
+   <tile gid="21085"/>
+   <tile gid="21086"/>
    <tile/>
    <tile/>
    <tile/>
@@ -31675,26 +31690,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="21318"/>
+   <tile gid="21319"/>
+   <tile gid="21320"/>
+   <tile gid="21321"/>
+   <tile gid="21322"/>
    <tile/>
    <tile/>
    <tile/>
@@ -60268,9 +60268,9 @@
    <tile/>
    <tile gid="21416"/>
    <tile/>
-   <tile gid="21799"/>
-   <tile gid="21800"/>
-   <tile gid="21801"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -60388,9 +60388,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="22035"/>
-   <tile gid="22036"/>
-   <tile gid="22037"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -60508,9 +60508,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="22271"/>
-   <tile gid="22272"/>
-   <tile gid="22273"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -60628,9 +60628,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="22507"/>
-   <tile gid="22508"/>
-   <tile gid="22509"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>

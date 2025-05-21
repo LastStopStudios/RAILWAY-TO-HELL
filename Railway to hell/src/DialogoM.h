@@ -68,7 +68,7 @@ private:
 	float Skip = true; //Skip texts | Now only closes texts
 	//Margins and position of dialogs and backgrounds
 	int textMaxWidth = 390; // Maximum width before jumping out of line
-	int textMaxheigth = 252; //Maximum length before the dialog break
+	int textMaxheigth = 253; //Maximum length before the dialog break
 	int h, w;
 	int width, height;
 	int posx, posy;
