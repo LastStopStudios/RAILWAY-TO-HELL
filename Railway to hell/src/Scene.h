@@ -155,7 +155,8 @@ public:
 	//list of boss fights with their id
 	std::vector<Bosses> Bosses = {
 		//scene to which it goes, x from camera, y from camera, leftBoundary, rightBoundary
-		{3, 1270, 1195, 1270, 1710.0f}
+		{3, 1270, 1195, 1270, 1710.0f},
+		{ 5, 1344, 1170, 1270, 1710.0f }
 	};
 	//camera control
 	void EntrarBoss();

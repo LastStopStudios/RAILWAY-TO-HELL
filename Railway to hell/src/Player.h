@@ -307,7 +307,4 @@ private:
 	bool isHurtDelayed = false;  
 	bool freezeWhileHurting = false;
 
-
-
-
 };

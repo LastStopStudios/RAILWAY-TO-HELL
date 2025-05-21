@@ -44,7 +44,7 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
         /*Line to use to unlock scene change sensors*/
         Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
     }
-      
+    
     /*if (fade == false) {
         
     }*/
