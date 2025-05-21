@@ -1165,7 +1165,7 @@
 				</mosaicLever>
 			</mosaicLevers>
 			<items>
-				<item name="Remember" x="1236" y="772" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+				<item name="Remember1" death="0" savedDeath="0" x="1236" y="800" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -1683,7 +1683,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember" x="1560" y="424" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+				<item name="Remember1" death="0" savedDeath="0" x="1560" y="424" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -2292,7 +2292,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember" x="2150" y="1670" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+				<item name="Remember1" death="0" savedDeath="0" x="2150" y="1670" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -2522,7 +2522,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember" x="6905" y="2000" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+				<item name="Remember1" death="0" savedDeath="0" x="6905" y="2000" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -2537,7 +2537,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Remember2" x="2735" y="4695" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+				<item name="Remember1" death="0" savedDeath="0" x="2735" y="4695" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3189,7 +3189,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember" x="7205" y="2115" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1">
+				<item name="Remember1" death="0" savedDeath="0" x="7205" y="2115" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3639,7 +3639,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember" x="6950" y="4000" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2">
+				<item name="Remember1" death="0" savedDeath="0" x="6950" y="4000" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
