@@ -878,7 +878,7 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 11
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && currentLvl != 11 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(11, 4600, 5500, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(11, 9730, 1662, false, false);
     }
     //In Scene 11, pressing F6 will move the player to the connector door:
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
@@ -1990,9 +1990,9 @@ void Player:: Abyss()
         if (isFallingInAbyss) {
            // Player position
             NeedSceneChange = true;
-            sceneToLoad = 1;
-            Playerx = 2777; 
-            Playery = 2048;
+            sceneToLoad = 11;
+            Playerx = 9730;
+            Playery = 1662;
             Fade = false;
             BossCam = false;
 
