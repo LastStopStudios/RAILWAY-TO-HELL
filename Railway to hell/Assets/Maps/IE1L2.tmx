@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="329">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="331">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -31235,8 +31235,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="19439"/>
-   <tile gid="19440"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31355,8 +31355,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="19675"/>
-   <tile gid="19676"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31475,8 +31475,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="19911"/>
-   <tile gid="19912"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="13567"/>
@@ -31595,8 +31595,8 @@
    <tile gid="15209"/>
    <tile gid="15209"/>
    <tile/>
-   <tile gid="20147"/>
-   <tile gid="20148"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="13803"/>
@@ -86552,11 +86552,11 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="32" name="Giro" visible="0">
+ <objectgroup id="32" name="Giro">
   <object id="314" x="1792" y="384" width="32" height="96"/>
   <object id="315" x="2048" y="384" width="32" height="96"/>
-  <object id="316" x="2016" y="640" width="32" height="96"/>
-  <object id="317" x="2336" y="640" width="32" height="96"/>
+  <object id="316" x="2816" y="576" width="32" height="96"/>
+  <object id="317" x="2656" y="576" width="32" height="96"/>
   <object id="318" x="1184" y="512" width="32" height="96"/>
   <object id="319" x="1472" y="512" width="32" height="96"/>
   <object id="320" x="2944" y="480" width="32" height="96"/>

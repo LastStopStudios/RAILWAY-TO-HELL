@@ -1915,6 +1915,23 @@
 					</wakeup>
 				</animations>
 			</player>
+			<checkpoints>
+				<checkpoint name="checkpoint5" x="2100" y="620" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="5">
+					<animations>
+						<idle loop="false" speed="0.2">
+							<frame x="0" y="0" w="80" h="112" />
+						</idle>
+						<activated loop="true" speed="0.2">
+							<frame x="0" y="0" w="80" h="112" />
+							<frame x="96" y="0" w="80" h="112" />
+							<frame x="192" y="0" w="80" h="112" />
+							<frame x="288" y="0" w="80" h="112" />
+							<frame x="384" y="0" w="80" h="112" />
+							<frame x="480" y="0" w="80" h="112" />
+						</activated>
+					</animations>
+				</checkpoint>
+			</checkpoints>
 			<enemies>
 				<enemy name="spider" x="1933" y="424" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
@@ -1947,7 +1964,7 @@
 						</die>
 					</animations>
 				</enemy>
-				<enemy name="spider2" x="2209" y="681" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
+				<enemy name="spider2" x="2750" y="580" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 					<animations>
 						<idle loop="true" speed="0.15">
 							<frame x="0" y="0" w="64" h="64" />
