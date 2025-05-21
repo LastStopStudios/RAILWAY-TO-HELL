@@ -1335,7 +1335,7 @@
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
-						<deactivated loop="false" speed="0.05">&gt;
+						<deactivated loop="false" speed="0.05">
 							<frame x="164" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="0" y="0" w="82" h="120" />
@@ -2175,7 +2175,6 @@
 							<frame x="164" y="0" w="82" h="120" />
 						</activated>
 						<deactivated loop="false" speed="0.05">
-							&gt;
 							<frame x="164" y="0" w="82" h="120" />
 							<frame x="82" y="0" w="82" h="120" />
 							<frame x="0" y="0" w="82" h="120" />
@@ -2655,7 +2654,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider4" x="3086" y="2368" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2686,7 +2685,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider5" x="3868" y="1696" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2717,7 +2716,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider6" x="5200" y="716" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2748,7 +2747,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider7" x="7568" y="3352" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2779,7 +2778,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon1" x="8374" y="3004" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2806,7 +2805,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon2" x="8378" y="3786" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2833,7 +2832,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon3" x="2318" y="3754" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2860,7 +2859,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon4" x="3864" y="1104" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2887,7 +2886,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon5" x="6608" y="1760" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -2914,7 +2913,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+				</enemy>
 				<enemy name="explosivo" x="5390" y="5354" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="amego">
 					<animations>
 						<idle loop="true" speed="0.15">
@@ -3244,7 +3243,7 @@
 						<frame x="0" y="160" w="64" h="64" />
 					</hurt>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="badguy2" x="5036" y="3672" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3274,7 +3273,7 @@
 						<frame x="0" y="160" w="64" h="64" />
 					</hurt>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="badguy3" x="4548" y="2890" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3304,7 +3303,7 @@
 						<frame x="0" y="160" w="64" h="64" />
 					</hurt>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="badguy4" x="1454" y="4439" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3334,7 +3333,7 @@
 						<frame x="0" y="160" w="64" h="64" />
 					</hurt>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="HellBat1" x="7246" y="2063" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3361,7 +3360,7 @@
 						<frame x="640" y="129" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="HellBat1" x="8520" y="2454" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3388,7 +3387,7 @@
 						<frame x="640" y="129" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="HellBat2" x="8075" y="3260" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3415,7 +3414,7 @@
 						<frame x="640" y="129" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="HellBat3" x="5944" y="3251" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3442,7 +3441,7 @@
 						<frame x="640" y="129" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="HellBat4" x="3054" y="4293" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3469,7 +3468,7 @@
 						<frame x="640" y="129" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+				</enemy>
 				<enemy name="explosivo" x="6836" y="2094" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="amego">
 					<animations>
 						<idle loop="true" speed="0.15">
@@ -3695,7 +3694,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider2" x="6366" y="3832" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3726,7 +3725,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider3" x="4228" y="4978" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3757,7 +3756,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider4" x="6854" y="1072" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3788,7 +3787,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider5" x="5306" y="939" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3819,7 +3818,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="spider6" x="2396" y="1848" w="64" h="64" texture="Assets/Textures/enemy/Spider.png" gravity="true" type="rastrero">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3850,7 +3849,7 @@
 						<frame x="864" y="128" w="96" h="96" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon" x="6356" y="2426" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3877,7 +3876,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon2" x="3874" y="3410" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3904,7 +3903,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon3" x="1893" y="1178" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3931,7 +3930,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+			</enemy>
 			<enemy name="Pigeon4" x="2248" y="2757" w="32" h="32" texture="Assets/Textures/enemy/Pigeon.png" gravity="false" type="volador">
 				<animations>
 					<idle loop="true" speed="0.15">
@@ -3958,7 +3957,7 @@
 						<frame x="567" y="128" w="64" h="64" />
 					</die>
 				</animations>
-</enemy>
+				</enemy>
 				<enemy name="explosivo" x="4996" y="4296" w="64" h="64" texture="Assets/Textures/enemy/Rata.png" gravity="true" type="amego">
 					<animations>
 						<idle loop="true" speed="0.15">
