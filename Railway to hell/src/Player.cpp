@@ -313,6 +313,7 @@ bool Player::Update(float dt)
             Engine::GetInstance().ui->figth = false;
             Engine::GetInstance().ui->figth2 = false;
             Engine::GetInstance().ui->figth3 = false;
+            Engine::GetInstance().scene->SalirBoss();
             HandleSceneSwitching();
             hasDied = false;
 			return true;
