@@ -25,23 +25,27 @@ bool Explosivo::Awake() {
 
 bool Explosivo::Start() {
 
-    //initilize textures
+    // Initialize textures
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
-    //Load animations
+    // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
     die.LoadAnimations(parameters.child("animations").child("die"));
     hurt.LoadAnimations(parameters.child("animations").child("hurt"));
+    explode.LoadAnimations(parameters.child("animations").child("explode"));
+    spot.LoadAnimations(parameters.child("animations").child("spot"));
+    run.LoadAnimations(parameters.child("animations").child("run"));
+
     currentAnimation = &idle;
 
-    //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+    // Add physics to entity - initialize the physics body
+    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2.5, bodyType::DYNAMIC);
 
-    //Assign collider type
+    // Assign collider type
     pbody->ctype = ColliderType::AMEGO;
 
     pbody->listener = this;
@@ -55,16 +59,58 @@ bool Explosivo::Start() {
     ResetPath();
     a = 0;
     kill = 1;
+    isSpotting = false;  // Variable to control spot animation
+    hasSpotted = false;  // Variable to track if spotting animation has been done
     return true;
 }
 
 bool Explosivo::Update(float dt)
 {
+    // If exploding, apply offset immediately
+    if (isExploding) {
+        // Unified death/explosion state handling
+        // Ensure that there is no movement during death/explosion
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+
+        // Update the current animation
+        currentAnimation->Update();
+
+        // If animation finished, start the timer for deletion
+        if (currentAnimation->HasFinished()) {
+            deathTimer += dt;
+            LOG("Death Timer: %f of %f", deathTimer, deathDelay);
+            if (deathTimer >= deathDelay) {
+                LOG("Setting pendingToDelete = true");
+                pendingToDelete = true;
+            }
+        }
+
+        // Draw the death/explosion animation with offset
+        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+
+        // Always apply offset for explosion
+        float yOffset = -explodeOffsetY; // Negative because we want to draw it higher
+
+        Engine::GetInstance().render.get()->DrawTexture(
+            texture,
+            (int)position.getX() - 32,
+            (int)position.getY() - 32 + yOffset,  // Apply offset here
+            &currentAnimation->GetCurrentFrame(),
+            1.0f, 0.0, INT_MAX, INT_MAX,
+            flip
+        );
+
+        // When dying/exploding, don't process any other logic
+        return true;
+    }
+
     // Don't process logic if we're not in GAMEPLAY mode
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
-
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(0.0f);
@@ -72,7 +118,6 @@ bool Explosivo::Update(float dt)
         return true;
     }
     else {
-
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetGravityScale(1.0f);
         }
@@ -89,54 +134,76 @@ bool Explosivo::Update(float dt)
         }
     }
 
-    if(cigarro == true){
-        explosiveTimer += dt;
-        LOG("Timer: %f", explosiveTimer);
-        if (explosiveTimer >= Ivolo) {
-            exploto = true;
-        }
-        if (exploto == true) {
-            isDying = true;
-            currentAnimation = &die;
-            currentAnimation->Reset();
-
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            pbody->body->SetAwake(false);
-            // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-            pbody->body->SetGravityScale(0.0f);
-            cigarro = false;
-        }//llamada al player para hacer daño si esta dentro de la colision 
-        //Engine::GetInstance().entityManager->dialogo == false
-    }
-
-    if (exploto == true && toco == true) {
-        Engine::GetInstance().scene->hitearPlayer();
-        exploto = false;
-    }
-
-    if (isDying || isDead) {
-        // Ensure that there is no movement during death
+    // Unified death/explosion state handling for dying state
+    if (isDying) {
+        // Ensure that there is no movement during death/explosion
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(0.0f);
         }
 
+        // Update the current animation
         currentAnimation->Update();
 
-        // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
+        // If animation finished, start the timer for deletion
+        if (currentAnimation->HasFinished()) {
             deathTimer += dt;
+            LOG("Death Timer: %f of %f", deathTimer, deathDelay);
             if (deathTimer >= deathDelay) {
+                LOG("Setting pendingToDelete = true");
                 pendingToDelete = true;
             }
         }
 
-        // Draw the death animation
+        // Draw the death animation (without offset)
         SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32, (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
-        // When dying, don't process any other logic
+        Engine::GetInstance().render.get()->DrawTexture(
+            texture,
+            (int)position.getX() - 32,
+            (int)position.getY() - 32,
+            &currentAnimation->GetCurrentFrame(),
+            1.0f, 0.0, INT_MAX, INT_MAX,
+            flip
+        );
+
+        // When dying/exploding, don't process any other logic
         return true;
+    }
+
+    // Self-explosion timer logic
+    if (cigarro) {
+        explosiveTimer += dt;
+        LOG("Timer: %f", explosiveTimer);
+
+        if (explosiveTimer >= Ivolo && !isExploding) {
+            // Start explosion sequence
+            isExploding = true;
+            currentAnimation = &explode;
+            currentAnimation->Reset();
+            deathTimer = 0.0f;
+
+            // Stop movement
+            if (pbody != nullptr && pbody->body != nullptr) {
+                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                pbody->body->SetAwake(false);
+                pbody->body->SetGravityScale(0.0f);
+            }
+
+            // Set explosion state
+            exploto = true;
+
+            // Update position once to apply offset immediately
+            // This prevents the first frame from showing without offset
+            position.setY(position.getY());
+            return Update(dt); // Re-run Update to apply offset immediately
+        }
+    }
+
+    // Handle damage to player if explosion and collision happened
+    if (exploto && toco) {
+        Engine::GetInstance().scene->hitearPlayer();
+        exploto = false;
     }
 
     // Handle skipping first input if necessary
@@ -149,10 +216,10 @@ bool Explosivo::Update(float dt)
 
         // Constants to adjust enemy behavior
         const float DETECTION_DISTANCE = 250.0f;
-        const float CHASE_SPEED = 190.0f;
+        const float CHASE_SPEED = 140.0f;
         const float PATROL_SPEED = 50.0f;
         const int MAX_PATHFINDING_ITERATIONS = 50;
-        const int TikingDistance = 60;
+        const int TikingDistance = 80;
 
         // Get current positions
         enemyPos = GetPosition();
@@ -169,21 +236,85 @@ bool Explosivo::Update(float dt)
 
         // Variable to control speed based on mode
         float velocityX = 0.0f;
+        bool wasChasing = isChasing; // Store previous state
         isChasing = false;
 
+        // Spot animation handling (new logic)
+        if (!ishurt && !isSpotting) {
+            // Player detected but not yet spotted (first detection)
+            if (distanceToPlayer <= DETECTION_DISTANCE && !hasSpotted) {
+                isSpotting = true;
+                hasSpotted = true;
+                currentAnimation = &spot;
+                currentAnimation->Reset();
+
+                // Stop movement during spotting animation
+                if (pbody != nullptr && pbody->body != nullptr) {
+                    pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+                }
+
+                // Set direction to face player
+                isLookingLeft = (dx < 0);
+            }
+        }
+
+        // Check if spot animation has finished
+        if (isSpotting) {
+            if (currentAnimation->HasFinished()) {
+                isSpotting = false;
+                currentAnimation = &run;  // Switch to run animation for chasing
+                currentAnimation->Reset();
+            }
+            else {
+                // Keep updating spot animation but don't move
+                currentAnimation->Update();
+
+                // Configure sprite flip based on direction
+                SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+
+                // Draw enemy texture and animation
+                Engine::GetInstance().render.get()->DrawTexture(
+                    texture,
+                    (int)position.getX(),
+                    (int)position.getY(),
+                    &currentAnimation->GetCurrentFrame(),
+                    1.0f, 0.0, INT_MAX, INT_MAX,
+                    flip
+                );
+
+                return true;  // Skip the rest of the update during spot animation
+            }
+        }
+
         // Chase mode (high priority)
-        if (!ishurt) {
+        if (!ishurt && !isSpotting) {
             if (distanceToPlayer <= DETECTION_DISTANCE)
             {
                 isChasing = true;
                 LOG("Distance: %f", distanceToPlayer);
 
-                if (distanceToPlayer < TikingDistance) {
-                    LOG("Tiking: %s", cigarro);
-                    cigarro = true;
-                }//start counting to explote
+                // Use run animation during chase
+                if (currentAnimation != &run && !cigarro) {
+                    currentAnimation = &run;
+                    currentAnimation->Reset(); // Ensure animation resets
+                }
 
-                if (distanceToPlayer >= 240) { cigarro = false; exploto = false; explosiveTimer = 0.0f; }//Reset timer since player is far away
+                if (distanceToPlayer < TikingDistance) {
+                    LOG("Tiking: %s", cigarro ? "true" : "false");
+                    cigarro = true;
+                    // Switch to explode animation will happen when timer expires
+                }
+
+                if (distanceToPlayer >= 240) {
+                    cigarro = false;
+                    exploto = false;
+                    explosiveTimer = 0.0f;
+                    // Reset to idle if not chasing
+                    if (currentAnimation != &idle) {
+                        currentAnimation = &idle;
+                        currentAnimation->Reset(); // Ensure animation resets
+                    }
+                }//Reset timer since player is far away
 
                 // Reset and calculate path to player
                 pathfinding->ResetPath(enemyTilePos);
@@ -222,35 +353,48 @@ bool Explosivo::Update(float dt)
 
                     // Adjust speed according to direction
                     velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
-
                 }
             }
-
-            if (vez < 3 && !isChasing) {
-                velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
-                isLookingLeft = !giro;
-            }
-            else if (!isChasing) {
-                bool isOutsidePatrolBounds = (enemyPos.getX() < std::min(patrol1, patrol2) || enemyPos.getX() > std::max(patrol1, patrol2));
-                if (isOutsidePatrolBounds) {
-                    float patrolCenter = (patrol1 + patrol2) / 2.0f;
-                    float direction = (patrolCenter > enemyPos.getX()) ? 1.0f : -1.0f;
-                    velocityX = direction * PATROL_SPEED;
-                    isLookingLeft = (direction < 0);
-
-                    if (!isOutsidePatrolBounds) {
-                        giro = (enemyPos.getX() < patrolCenter);
-                    }
+            else {
+                // Smooth transition from chase to patrol
+                if (wasChasing && !cigarro) {
+                    // Just stopped chasing
+                    currentAnimation = &idle;
+                    currentAnimation->Reset();
                 }
-                else {
-                    // Patrol mode (low priority) - only if not chasing
+                // Return to patrolling behavior
+                if (currentAnimation != &idle) {
+                    currentAnimation = &idle;
+                    currentAnimation->Reset(); // Ensure animation resets correctly
+                }
+
+                hasSpotted = false;  // Reset spot status when player is out of range
+
+                if (vez < 3) {
                     velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
                     isLookingLeft = !giro;
                 }
+                else {
+                    bool isOutsidePatrolBounds = (enemyPos.getX() < std::min(patrol1, patrol2) || enemyPos.getX() > std::max(patrol1, patrol2));
+                    if (isOutsidePatrolBounds) {
+                        float patrolCenter = (patrol1 + patrol2) / 2.0f;
+                        float direction = (patrolCenter > enemyPos.getX()) ? 1.0f : -1.0f;
+                        velocityX = direction * PATROL_SPEED;
+                        isLookingLeft = (direction < 0);
+
+                        if (!isOutsidePatrolBounds) {
+                            giro = (enemyPos.getX() < patrolCenter);
+                        }
+                    }
+                    else {
+                        // Patrol mode (low priority) - only if not chasing
+                        velocityX = giro ? PATROL_SPEED : -PATROL_SPEED;
+                        isLookingLeft = !giro;
+                    }
+                }
             }
-
-
         }
+
         // Apply velocity to physical body
         b2Vec2 velocity = b2Vec2(PIXEL_TO_METERS(velocityX), pbody->body->GetLinearVelocity().y);
         pbody->body->SetLinearVelocity(velocity);
@@ -260,7 +404,10 @@ bool Explosivo::Update(float dt)
         position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
         position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
     }
-    else { pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));/*frenar el cuerpo*/ currentAnimation = &idle; }
+    else {
+        pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f)); // Stop the body
+        currentAnimation = &idle;
+    }
 
     // Configure sprite flip based on direction
     SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
@@ -275,9 +422,10 @@ bool Explosivo::Update(float dt)
         flip
     );
 
-
-    // Update animation
-    currentAnimation->Update();
+    // Update animation - update only once
+    if (!isExploding && !isDying) {
+        currentAnimation->Update();
+    }
 
     // Draw path for debugging
     // Ensure it's drawn in chase mode regardless of direction
@@ -288,13 +436,13 @@ bool Explosivo::Update(float dt)
     return true;
 }
 
-void Explosivo::Matar() {//eliminating the enemy once dead 
+void Explosivo::Matar() { // Eliminate the enemy once dead 
     if (kill == 1) {
         kill = 2;
-        Disable();//when it has to be activated use  Enable();
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        Disable(); // When it has to be activated use Enable()
     }
 }
+
 bool Explosivo::CleanUp()
 {
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -327,7 +475,6 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         LOG("Collided with player - DESTROY");
         toco = true;
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
     case ColliderType::PLAYER_ATTACK: {
         if (lives > 0) {
@@ -337,16 +484,24 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
                 hurt.Reset();
                 ishurt = true;
             }
-            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            else if (lives <= 0 && !isDying && !isExploding) {
+                // Start die animation when killed by player attack
+                LOG("Starting die animation");
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
+                deathTimer = 0.0f;
 
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                pbody->body->SetAwake(false);
-                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-                pbody->body->SetGravityScale(0.0f);
+                // Stop physical body
+                if (pbody != nullptr && pbody->body != nullptr) {
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    pbody->body->SetAwake(false);
+                    pbody->body->SetGravityScale(0.0f);
+                }
 
+                // Disable cigar timer if it was active
+                cigarro = false;
+                explosiveTimer = 0.0f;
             }
         }
     }
@@ -359,15 +514,25 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
                 hurt.Reset();
                 ishurt = true;
             }
-            else if (lives <= 0 && !isDead) {
-                isDead = true;
+            else if (lives <= 0 && !isDying && !isExploding) {
+                // Start die animation when killed by whip attack
+                LOG("Starting die animation from whip");
+                isDying = true;
                 currentAnimation = &die;
+                currentAnimation->Reset();
+                deathTimer = 0.0f;
                 a = 1;
 
-                // Stop physical body movement
-                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-                pbody->body->SetAwake(false);
-                pbody->body->SetGravityScale(0.0f); // In case it's falling
+                // Stop physical body
+                if (pbody != nullptr && pbody->body != nullptr) {
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    pbody->body->SetAwake(false);
+                    pbody->body->SetGravityScale(0.0f);
+                }
+
+                // Disable cigar timer if it was active
+                cigarro = false;
+                explosiveTimer = 0.0f;
             }
         }
         break;
@@ -380,16 +545,24 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
                 hurt.Reset();
                 ishurt = true;
             }
-            else if (lives <= 0 && !isDying) { // Prevent multiple death animations
+            else if (lives <= 0 && !isDying && !isExploding) {
+                // Start die animation when killed by projectile
+                LOG("Starting die animation from projectile");
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
+                deathTimer = 0.0f;
 
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-                pbody->body->SetAwake(false);
-                // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-                pbody->body->SetGravityScale(0.0f);
+                // Stop physical body
+                if (pbody != nullptr && pbody->body != nullptr) {
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+                    pbody->body->SetAwake(false);
+                    pbody->body->SetGravityScale(0.0f);
+                }
 
+                // Disable cigar timer if it was active
+                cigarro = false;
+                explosiveTimer = 0.0f;
             }
         }
         break;

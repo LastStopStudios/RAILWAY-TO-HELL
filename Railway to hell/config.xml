@@ -155,7 +155,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
+				<item name="Ball" death="1" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -168,7 +168,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Double jump" death="0" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
+				<item name="Double jump" death="1" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -364,6 +364,76 @@
 							<frame x="448" y="128" w="64" h="64" />
 							<frame x="512" y="128" w="64" h="64" />
 							<frame x="567" y="128" w="64" h="64" />
+						</die>
+					</animations>
+				</enemy>
+				<enemy name="Explosivo" x="3200" y="2048" w="64" h="64" texture="Assets/Textures/enemy/explosivo.png" gravity="false" type="amego">
+					<animations>
+						<idle loop="true" speed="0.15">
+							<frame x="0" y="0" w="64" h="64" />
+							<frame x="64" y="0" w="64" h="64" />
+							<frame x="128" y="0" w="64" h="64" />
+							<frame x="192" y="0" w="64" h="64" />
+							<frame x="256" y="0" w="64" h="64" />
+							<frame x="320" y="0" w="64" h="64" />
+							<frame x="384" y="0" w="64" h="64" />
+							<frame x="448" y="0" w="64" h="64" />
+						</idle>
+						<spot loop="false" speed="0.15">
+							<frame x="0" y="64" w="64" h="64" />
+							<frame x="64" y="64" w="64" h="64" />
+							<frame x="128" y="64" w="64" h="64" />
+							<frame x="192" y="64" w="64" h="64" />
+							<frame x="256" y="64" w="64" h="64" />
+							<frame x="320" y="64" w="64" h="64" />
+						</spot>
+						<run loop="true" speed="0.15">
+							<frame x="0" y="128" w="64" h="64" />
+							<frame x="64" y="128" w="64" h="64" />
+							<frame x="128" y="128" w="64" h="64" />
+							<frame x="192" y="128" w="64" h="64" />
+							<frame x="256" y="128" w="64" h="64" />
+							<frame x="320" y="128" w="64" h="64" />
+							<frame x="384" y="128" w="64" h="64" />
+							<frame x="448" y="128" w="64" h="64" />
+						</run>
+						<explode loop="false" speed="0.15">
+							<frame x="0" y="192" w="128" h="128" />
+							<frame x="128" y="192" w="128" h="128" />
+							<frame x="256" y="192" w="128" h="128" />
+							<frame x="384" y="192" w="128" h="128" />
+							<frame x="512" y="192" w="128" h="128" />
+							<frame x="640" y="192" w="128" h="128" />
+							<frame x="768" y="192" w="128" h="128" />
+							<frame x="896" y="192" w="128" h="128" />
+							<frame x="1024" y="192" w="128" h="128" />
+							<frame x="1152" y="192" w="128" h="128" />
+							<frame x="1280" y="192" w="128" h="128" />
+							<frame x="1408" y="192" w="128" h="128" />
+							<frame x="1536" y="192" w="128" h="128" />
+							<frame x="1664" y="192" w="128" h="128" />
+							<frame x="1792" y="192" w="128" h="128" />
+							<frame x="1920" y="192" w="128" h="128" />
+							<frame x="2048" y="192" w="128" h="128" />
+							<frame x="2176" y="192" w="128" h="128" />
+						</explode>
+						<hurt loop="false" speed="0.05">
+							<frame x="0" y="384" w="64" h="64" />
+						</hurt>
+						<die loop="false" speed="0.15">
+							<frame x="0" y="320" w="64" h="64" />
+							<frame x="64" y="320" w="64" h="64" />
+							<frame x="128" y="320" w="64" h="64" />
+							<frame x="192" y="320" w="64" h="64" />
+							<frame x="256" y="320" w="64" h="64" />
+							<frame x="320" y="320" w="64" h="64" />
+							<frame x="384" y="320" w="64" h="64" />
+							<frame x="448" y="320" w="64" h="64" />
+							<frame x="512" y="320" w="64" h="64" />
+							<frame x="567" y="320" w="64" h="64" />
+							<frame x="631" y="320" w="64" h="64" />
+							<frame x="695" y="320" w="64" h="64" />
+							<frame x="759" y="320" w="64" h="64" />
 						</die>
 					</animations>
 				</enemy>
