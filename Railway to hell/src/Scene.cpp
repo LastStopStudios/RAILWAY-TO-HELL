@@ -157,6 +157,7 @@ bool Scene::Start()
 	//Cargar Texturas splash screen
 	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen2.png");
 	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto2.png"); //png reescale to 853 X 512 to work with camera zoom
+
 	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
@@ -171,6 +172,7 @@ bool Scene::Start()
 	Engine::GetInstance().window.get()->GetWindowSize(w, h);
 	Engine::GetInstance().render.get()->camera.x = 0;
 	Engine::GetInstance().render.get()->camera.y = 0;
+
 
 	//Draw player
 	dibujar = false;
@@ -356,6 +358,7 @@ bool Scene::PostUpdate()
 
 	return ret;
 }
+
 void Scene::EntrarBoss() { BossBattle = true;
 
 if (BossBattle) {
@@ -396,7 +399,14 @@ bool Scene::CleanUp()
 		LOG("Could not load file. Pugi error: %s", result.description());
 		return false;
 	}
+	// Reset lastCheckpointScene to 1 if it's not already 1
+	pugi::xml_node gamestateNode = loadFile.child("config").child("gamestate");
+	pugi::xml_node lastCheckpointNode = gamestateNode.child("lastCheckpointScene").child("scene");
 
+	int currentValue = lastCheckpointNode.attribute("value").as_int();
+	if (currentValue != 1) {
+		lastCheckpointNode.attribute("value").set_value(1);
+	}
 	pugi::xml_node sceneNode;
 	int maxScenes = 12;
 	for (int i = 0; i < maxScenes; ++i) {

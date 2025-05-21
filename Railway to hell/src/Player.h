@@ -88,6 +88,8 @@ public:
 	//health
 	void hit();
 
+	int GetLastCheckpointScene();
+
 public:
 	
 	void ResetLives() {
