@@ -1202,10 +1202,10 @@ void Player::HandleBallAttack(float dt) {
     }
 
     // Add check for ball attack animation completion before allowing next shot
-    if (ballAttackButtonPressed && engine.scene.get()->ballConfigNode && ballCounter > 0) {
+    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0) {
         ballCounter--;
         Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
-        projectile->SetParameters(engine.scene.get()->ballConfigNode);
+        projectile->SetParameters(engine.scene.get()->normalProjectileConfigNode);
         projectile->Start();
         Vector2D playerPosition = engine.scene.get()->GetPlayerPosition();
         // Adjust horizontal position based on facing direction

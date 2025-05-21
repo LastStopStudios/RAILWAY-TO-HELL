@@ -79,11 +79,10 @@ bool Scene::Awake()
 
 	for (pugi::xml_node projectileNode = configParameters.child("entities").child("projectiles").child("projectile"); projectileNode; projectileNode = projectileNode.next_sibling("projectile"))
 	{
-		std::string type = projectileNode.attribute("name").as_string();
-		if (type == "ball")	ballConfigNode = projectileNode;
-		else {
-
-		}
+		std::string type = projectileNode.attribute("type").as_string();
+		if (type == "big")	bigProjectileConfigNode = projectileNode;
+		if (type == "normal") normalProjectileConfigNode = projectileNode;
+		
 	}
 
 	for (pugi::xml_node doorNode = configParameters.child("entities").child("doors").child("door"); doorNode; doorNode = doorNode.next_sibling("door"))

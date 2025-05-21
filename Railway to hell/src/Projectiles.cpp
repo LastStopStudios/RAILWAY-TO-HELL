@@ -49,21 +49,14 @@ bool Projectiles::Start() {
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
-    moveSpeed = 300.5f;
+    moveSpeed = 400.5f;
 
     return true;
 }
 
 bool Projectiles::Update(float dt)
 {
-    if (idle.HasFinished() && speedingUp) {
-        speedingUp = false;
-		currentAnimation = &speedingUpp;
-		moveSpeed = 400.5f;
-    }
-    if (speedingUpp.HasFinished() && !isImpacting) {
-		currentAnimation = &moving;
-    }
+
     if (isImpacting) {
         if (currentAnimation->HasFinished()) {
             Engine::GetInstance().entityManager.get()->DestroyEntity(this);
@@ -80,7 +73,7 @@ bool Projectiles::Update(float dt)
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
-    if (!isLookingLeft) {
+    if (isLookingLeft) {
         flip = SDL_FLIP_HORIZONTAL;
     }
 
@@ -94,8 +87,8 @@ bool Projectiles::Update(float dt)
 
 void Projectiles::startImpactAnimation() {
     pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-    currentAnimation = &impact;
-    currentAnimation->Reset();
+    //currentAnimation = &impact;
+    //currentAnimation->Reset();
     isImpacting = true;
 }
 

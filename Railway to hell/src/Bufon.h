@@ -80,11 +80,11 @@ private:
 
 	// jump variables
 
-	bool isJumping = false; // Controlar estado de salto
-	float jumpTimer = 0.0f; // Temporizador del salto
-	Vector2D jumpStartPos;  // Posición inicial del salto
-	Vector2D jumpTargetPos; // Posición objetivo (jugador)
-	float jumpDuration = 0.0f; // Duración del salto (en segundos)
+	bool isJumping = false; 
+	float jumpTimer = 0.0f; 
+	Vector2D jumpStartPos; 
+	Vector2D jumpTargetPos; 
+	float jumpDuration = 0.0f; 
 
 	// Función auxiliar para obtener el número total de frames
 	int GetTotalFrames() const;

@@ -104,19 +104,19 @@ bool Bufon::Update(float dt)
     isLookingLeft = dx < 0; // Set the direction of the enemy
 
     if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
-        // Lógica de selección de ataque
+
         if (attackCounter >= 2) {
             currentAnimation = &disparoG;
             attackCounter = 0;
         }
         else {
-            // Verificar si el jugador está lejos para salto
-            float jumpThreshold = 6.0f; // Ajusta según necesites
+
+            float jumpThreshold = 6.0f; 
             if (distanceToPlayer > jumpThreshold) {
                 currentAnimation = &salto;
-                // Aplicar salto físico
-                float jumpForceX = 2000.0f; // Fuerza horizontal
-                float jumpForceY = -300.0f; // Fuerza vertical (negativo para hacia arriba)
+
+                float jumpForceX = 2000.0f; 
+                float jumpForceY = -300.0f; 
                 float direction = isLookingLeft ? -1.0f : 1.0f;
   
 					pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));

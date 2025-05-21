@@ -377,12 +377,15 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
-			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
 			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
 			Engine::GetInstance().audio.get()->PlayFx(checkpointFX);
 			isActivated = true;
 			currentAnimation = &activated;
+		}
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
 		}
 
 		break;
