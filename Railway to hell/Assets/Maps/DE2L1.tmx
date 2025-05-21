@@ -23878,11 +23878,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="20610"/>
+   <tile gid="20611"/>
+   <tile gid="20612"/>
+   <tile gid="20613"/>
+   <tile gid="20614"/>
    <tile/>
    <tile/>
    <tile/>
@@ -23998,11 +23998,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="20846"/>
+   <tile gid="20847"/>
+   <tile gid="20848"/>
+   <tile gid="20849"/>
+   <tile gid="20850"/>
    <tile/>
    <tile/>
    <tile gid="22362"/>
@@ -24118,11 +24118,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="21082"/>
+   <tile gid="21083"/>
+   <tile gid="21084"/>
+   <tile gid="21085"/>
+   <tile gid="21086"/>
    <tile/>
    <tile/>
    <tile gid="22598"/>
@@ -24238,11 +24238,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="21318"/>
+   <tile gid="21319"/>
+   <tile gid="21320"/>
+   <tile gid="21321"/>
+   <tile gid="21322"/>
    <tile/>
    <tile/>
    <tile gid="22834"/>
@@ -93756,7 +93756,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="32" name="Giro">
+ <objectgroup id="32" name="Giro" visible="0">
   <object id="252" x="1248" y="416" width="32" height="384"/>
   <object id="253" x="1568" y="416" width="32" height="384"/>
   <object id="254" x="2080" y="416" width="32" height="288"/>
