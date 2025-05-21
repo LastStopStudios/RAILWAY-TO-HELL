@@ -366,15 +366,25 @@ bool Checkpoints::CleanUp()
 	}
 	return true;
 }
-
 void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
+	// Declare the variable outside the switch
+
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-
 		setToIdleAnim();
+		// Assign to the variable (not declaring it again)
+		actionPressed = Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN;
 
-		if (!isActivated && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		// Add controller support (B button)
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == 1) {
+				actionPressed = true;
+			}
+		}
+
+		if (!isActivated && actionPressed) {
 			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
@@ -385,18 +395,19 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 			currentAnimation = &activated;
 		}
 
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		if (actionPressed) {
 			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
 		}
 
 		break;
 	case ColliderType::UNKNOWN:
-
 		break;
 	default:
 		break;
 	}
 }
+
+
 
 void Checkpoints::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {

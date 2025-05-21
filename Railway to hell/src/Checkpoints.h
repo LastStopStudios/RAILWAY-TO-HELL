@@ -50,7 +50,7 @@ public:
 	bool isActivated = false;
 
 	bool pendingToChangeAnim = false;
-
+	bool actionPressed = false;
 
 private:
 

@@ -94,12 +94,15 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::TERRESTRE:
 		entity = new Terrestre();
+		entity->renderPriority = 9;
 		break;
 	case EntityType::EXPLOSIVO:
 		entity = new Explosivo();
+		entity->renderPriority = 8;
 		break;
 	case EntityType::VOLADOR:
 		entity = new Volador();
+		entity->renderPriority = 7;
 		break;
 	case EntityType::BOSS:
 		entity = new Boss();
@@ -127,6 +130,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::CHECKPOINT:
 		entity = new Checkpoints();
+		entity->renderPriority = 4;
 		break;
 	case EntityType::ELEVATORS:
 		entity = new Elevators();
