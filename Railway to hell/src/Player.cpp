@@ -123,6 +123,7 @@ bool Player::Start() {
 	whipFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/whip.ogg");
 	fallFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/fall.ogg");
 	jumpFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.ogg");
+    itemFX = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/itemfx.ogg");
     int lowVolume = 5; // Low volume setting (range: 0 to 128)
     int mediumVolume = 15;
     int highVolume = 80;
@@ -135,6 +136,7 @@ bool Player::Start() {
 	Engine::GetInstance().audio.get()->SetFxVolume(whipFX, 10);
 	Engine::GetInstance().audio.get()->SetFxVolume(fallFX, 4);
 	Engine::GetInstance().audio.get()->SetFxVolume(jumpFX, 10);
+    Engine::GetInstance().audio.get()->SetFxVolume(itemFX, 10);
 
     // Attack animation
     meleeAttack = Animation();
@@ -909,6 +911,8 @@ void Player::HandleHurt(float dt) {
                 texture = hurtTexture;
                 hasHurtStarted = true;
                 lives -= 2;
+                Engine::GetInstance().audio.get()->PlayFx(hurtFX);
+
             }
         }
         return; // Salimos para no procesar la animación hasta que termine el retraso
@@ -1800,31 +1804,34 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             if (item && item->GetItemType() == "Dash ability") {
                 Dash = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayFx(itemFX);
 
             }
 			if (item && item->GetItemType() == "Double jump") {
 				doubleJump = true;
-				Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+				Engine::GetInstance().audio.get()->PlayFx(itemFX);
 			}
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayFx(itemFX);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
 
             }
             if (item && item->GetItemType() == "Remember1") {
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayFx(itemFX);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
             }
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
-                Engine::GetInstance().audio.get()->PlayFx(pickCoinFxId);
+                Engine::GetInstance().audio.get()->PlayFx(itemFX);
                 changeMusicCaronte = true; 
                 //Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
 
+            }
+            if (item && item->GetItemType() == "Ball") {
+                Engine::GetInstance().audio.get()->PlayFx(itemFX);
             }
         }
         return;
