@@ -248,7 +248,7 @@ bool Explosivo::Update(float dt)
                 hasSpotted = true;
                 currentAnimation = &spot;
                 currentAnimation->Reset();
-
+                LOG("FIRST SPOT");
                 // Stop movement during spotting animation
                 if (pbody != nullptr && pbody->body != nullptr) {
                     pbody->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -265,11 +265,12 @@ bool Explosivo::Update(float dt)
                 isSpotting = false;
                 currentAnimation = &run;  // Switch to run animation for chasing
                 currentAnimation->Reset();
+                LOG("CURRENT ANIM FINISH SPOTING FALSE"); 
             }
             else {
                 // Keep updating spot animation but don't move
                 currentAnimation->Update();
-
+                LOG("CURRENT ANIM NOT FINISH SPOTING FALSE");
                 // Configure sprite flip based on direction
                 SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 

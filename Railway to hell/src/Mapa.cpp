@@ -278,7 +278,7 @@ void Mapa::LoadMap(){
 	MNegro9 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black9.png"); //Load black texture to cover unknow parts of the map
 	MNegro10 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black10.png"); //Load black texture to cover unknow parts of the map
 	MNegro11 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black11.png"); //Load black texture to cover unknow parts of the map
-	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black12png"); //Load black texture to cover unknow parts of the map ;
+	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black12.png"); //Load black texture to cover unknow parts of the map ;
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 }
 
