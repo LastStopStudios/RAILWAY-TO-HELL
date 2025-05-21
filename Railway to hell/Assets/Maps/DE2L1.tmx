@@ -21677,7 +21677,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="23" name="Grafitis" width="120" height="60">
+ <layer id="23" name="Grafitis" width="120" height="60" opacity="0.91">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -23636,7 +23636,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="11149"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -24111,11 +24111,11 @@
    <tile gid="29515"/>
    <tile gid="29516"/>
    <tile/>
-   <tile gid="28224"/>
-   <tile gid="28225"/>
-   <tile gid="28226"/>
-   <tile gid="28227"/>
-   <tile gid="28228"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -24231,11 +24231,11 @@
    <tile gid="29841"/>
    <tile gid="29842"/>
    <tile/>
-   <tile gid="28550"/>
-   <tile gid="28551"/>
-   <tile gid="28552"/>
-   <tile gid="28553"/>
-   <tile gid="28554"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -24351,11 +24351,11 @@
    <tile gid="30167"/>
    <tile gid="30168"/>
    <tile/>
-   <tile gid="28876"/>
-   <tile gid="28877"/>
-   <tile gid="28878"/>
-   <tile gid="28879"/>
-   <tile gid="28880"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -24519,7 +24519,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="11149"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -27500,10 +27500,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28234"/>
-   <tile gid="28235"/>
-   <tile gid="28236"/>
-   <tile gid="28237"/>
+   <tile gid="8879"/>
+   <tile gid="8880"/>
+   <tile gid="8881"/>
+   <tile gid="8882"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27609,21 +27609,21 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="27880"/>
-   <tile gid="27881"/>
-   <tile gid="27882"/>
-   <tile gid="27883"/>
-   <tile gid="27884"/>
-   <tile gid="27885"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28560"/>
-   <tile gid="28561"/>
-   <tile gid="28562"/>
-   <tile gid="28563"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="9205"/>
+   <tile gid="9206"/>
+   <tile gid="9207"/>
+   <tile gid="9208"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27729,21 +27729,21 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28206"/>
-   <tile gid="28207"/>
-   <tile gid="28208"/>
-   <tile gid="28209"/>
-   <tile gid="28210"/>
-   <tile gid="28211"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28886"/>
-   <tile gid="28887"/>
-   <tile gid="28888"/>
-   <tile gid="28889"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="9531"/>
+   <tile gid="9532"/>
+   <tile gid="9533"/>
+   <tile gid="9534"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27849,21 +27849,21 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="28532"/>
-   <tile gid="28533"/>
-   <tile gid="28534"/>
-   <tile gid="28535"/>
-   <tile gid="28536"/>
-   <tile gid="28537"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="29212"/>
-   <tile gid="29213"/>
-   <tile gid="29214"/>
-   <tile gid="29215"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -27970,11 +27970,11 @@
    <tile/>
    <tile/>
    <tile gid="28858"/>
-   <tile gid="28859"/>
-   <tile gid="28860"/>
-   <tile gid="28861"/>
-   <tile gid="28862"/>
-   <tile gid="28863"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
