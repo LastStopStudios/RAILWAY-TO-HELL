@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="326">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="33" nextobjectid="314">
  <tileset firstgid="1" name="tmw_desert_spacing" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="48" columns="8">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <wangsets>
@@ -21677,7 +21677,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="23" name="Grafitis" width="120" height="60">
+ <layer id="23" name="Grafitis" width="120" height="60" opacity="0.8">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -23295,10 +23295,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="14742"/>
-   <tile gid="14743"/>
-   <tile gid="14744"/>
-   <tile gid="14745"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="10197"/>
@@ -23415,10 +23415,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="15068"/>
-   <tile gid="15069"/>
-   <tile gid="15070"/>
-   <tile gid="15071"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -23664,10 +23664,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="19950"/>
+   <tile gid="19951"/>
+   <tile gid="19952"/>
+   <tile gid="19953"/>
    <tile/>
    <tile/>
    <tile/>
@@ -23784,11 +23784,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="20276"/>
+   <tile gid="20277"/>
+   <tile gid="20278"/>
+   <tile gid="20279"/>
    <tile/>
-   <tile gid="19950"/>
-   <tile gid="19951"/>
-   <tile gid="19952"/>
-   <tile gid="19953"/>
    <tile/>
    <tile/>
    <tile/>
@@ -23904,11 +23904,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="20602"/>
+   <tile gid="20603"/>
+   <tile gid="20604"/>
+   <tile gid="20605"/>
    <tile/>
-   <tile gid="20276"/>
-   <tile gid="20277"/>
-   <tile gid="20278"/>
-   <tile gid="20279"/>
    <tile/>
    <tile/>
    <tile/>
@@ -24005,6 +24005,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="14742"/>
+   <tile gid="14743"/>
+   <tile gid="14744"/>
+   <tile gid="14745"/>
    <tile/>
    <tile/>
    <tile/>
@@ -24020,15 +24024,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="20928"/>
+   <tile gid="20929"/>
+   <tile gid="20930"/>
+   <tile gid="20931"/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="20602"/>
-   <tile gid="20603"/>
-   <tile gid="20604"/>
-   <tile gid="20605"/>
    <tile/>
    <tile/>
    <tile/>
@@ -24125,6 +24125,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="15068"/>
+   <tile gid="15069"/>
+   <tile gid="15070"/>
+   <tile gid="15071"/>
    <tile/>
    <tile/>
    <tile/>
@@ -24145,10 +24149,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20928"/>
-   <tile gid="20929"/>
-   <tile gid="20930"/>
-   <tile gid="20931"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27500,6 +27500,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="28234"/>
+   <tile gid="28235"/>
+   <tile gid="28236"/>
+   <tile gid="28237"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27616,6 +27620,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="28560"/>
+   <tile gid="28561"/>
+   <tile gid="28562"/>
+   <tile gid="28563"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27732,18 +27740,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="28886"/>
+   <tile gid="28887"/>
+   <tile gid="28888"/>
+   <tile gid="28889"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27860,10 +27860,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="29212"/>
+   <tile gid="29213"/>
+   <tile gid="29214"/>
+   <tile gid="29215"/>
    <tile/>
    <tile/>
    <tile/>
@@ -74559,8 +74559,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="25215"/>
+   <tile gid="25216"/>
    <tile/>
    <tile/>
    <tile gid="18710"/>
