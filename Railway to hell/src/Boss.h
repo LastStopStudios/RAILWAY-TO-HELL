@@ -147,6 +147,8 @@ private:
 
 	//one hit colision
 	bool Hiteado = false;
+
+	bool changeMusicBoss = false;
 	
 };
 

@@ -356,7 +356,14 @@ bool Scene::PostUpdate()
 
 	return ret;
 }
-void Scene::EntrarBoss() { BossBattle = true;}
+void Scene::EntrarBoss() { BossBattle = true;
+
+if (BossBattle) {
+	Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/boss.ogg", 3.0f);
+	Engine::GetInstance().audio.get()->SetMusicVolume(2);
+}
+
+}
 
 void Scene::SalirBoss() { BossBattle = false;}
 
