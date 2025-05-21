@@ -52,7 +52,7 @@ bool Bufon::Start() {
     savedPosX = 0.0f;
 
     //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texH / 2, bodyType::DYNAMIC);
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::DYNAMIC);
 
     pbody->listener = this;
     //Assign collider type
@@ -139,6 +139,15 @@ bool Bufon::Update(float dt)
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 
         if (disparoR.HasFinished()) { // stop attacking
+            Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
+            projectile->SetParameters(Engine::GetInstance().scene.get()->normalProjectileConfigNode);
+            projectile->Start();
+            Vector2D bufonPosition = GetPosition();
+            // Adjust horizontal position based on facing direction
+            if (isLookingLeft) bufonPosition.setX(bufonPosition.getX() - 50);
+            else bufonPosition.setX(bufonPosition.getX() + 20);
+            projectile->SetPosition(bufonPosition);
+            projectile->SetDirection(!isLookingLeft);
             isAttacking = false;
             currentAnimation = &idle;
             disparoR.Reset();

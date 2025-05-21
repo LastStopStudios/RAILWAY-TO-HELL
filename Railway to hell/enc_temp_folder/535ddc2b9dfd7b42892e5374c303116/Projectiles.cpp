@@ -135,11 +135,6 @@ void Projectiles::OnCollision(PhysBody* physA, PhysBody* physB) {
         startImpactAnimation();
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
         break;
-    case ColliderType::PLAYER:
-        LOG("Collision PLAYER");
-        startImpactAnimation();
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        break;
     case ColliderType::UNKNOWN:
         LOG("Collision UNKNOWN");
         startImpactAnimation();
