@@ -213,15 +213,19 @@ bool Boss::Update(float dt)
 
         // If death animation finished, start the timer
         if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
-            // Create the key item before deleting the entity
-            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-            item->SetParameters(Engine::GetInstance().scene.get()->whipItemConfigNode);
-            Engine::GetInstance().scene.get()->itemList.push_back(item);
-            item->Start();
-            Vector2D pos(position.getX() + texW, position.getY());
-            item->SetPosition(pos);
-            item->SavePosition("Whip");
-            item->SetCreatedTrueInXML();
+           // if(primeravez){
+                primeravez = false;
+                // Create the key item before deleting the entity
+                Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
+                item->SetParameters(Engine::GetInstance().scene.get()->whipItemConfigNode);
+                Engine::GetInstance().scene.get()->itemList.push_back(item);
+                item->Start();
+                Vector2D pos(position.getX() + texW, position.getY());
+                item->SetPosition(pos);
+                item->SavePosition("Whip");
+                item->SetCreatedTrueInXML();
+            //}
+            
             if (changeMusicBoss)
             {
                 Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
@@ -1145,6 +1149,7 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                     }
                 }
                 else if (lives <= 0 && !isDying) {
+                    pendingDisable = true;
                     // Same cleanup for death case
                     if (isAttacking) {
                         isAttacking = false;

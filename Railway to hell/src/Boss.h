@@ -74,6 +74,7 @@ public:
 	bool pendingDisable = false;
 	int DeathValue = 0;
 	int SavedDeathValue = 0;
+	bool primeravez = true;
 
 	// death
 	int a = 0;
