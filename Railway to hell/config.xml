@@ -1275,7 +1275,7 @@
 	</scene2>
 	<scene3>
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
-		<visibility accessed="true" />
+		<visibility accessed="false" />
 		<entities>
 			<player x="3330" y="2079" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -1393,7 +1393,7 @@
 				</checkpoint>
 			</checkpoints>
 			<items>
-				<item name="Whip" death="0" savedDeath="0" x="1861" y="1620" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item" created="false">
+				<item name="Whip" death="0" savedDeath="0" x="1854" y="1620" w="32" h="32" texture="Assets/Textures/Items/Item_Whip.png" gravity="false" ID="2" ref="whip_item" created="false">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
