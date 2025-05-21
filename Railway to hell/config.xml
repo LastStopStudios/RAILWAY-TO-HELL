@@ -1676,6 +1676,23 @@
 					</wakeup>
 				</animations>
 			</player>
+			<checkpoints>
+				<checkpoint name="checkpoint4" x="2365" y="588" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="4">
+					<animations>
+						<idle loop="false" speed="0.2">
+							<frame x="0" y="0" w="80" h="112" />
+						</idle>
+						<activated loop="true" speed="0.2">
+							<frame x="0" y="0" w="80" h="112" />
+							<frame x="96" y="0" w="80" h="112" />
+							<frame x="192" y="0" w="80" h="112" />
+							<frame x="288" y="0" w="80" h="112" />
+							<frame x="384" y="0" w="80" h="112" />
+							<frame x="480" y="0" w="80" h="112" />
+						</activated>
+					</animations>
+				</checkpoint>
+			</checkpoints>
 			<items>
 				<item name="Remember1" death="0" savedDeath="0" x="1560" y="424" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
 					<animations>
