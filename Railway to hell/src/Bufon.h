@@ -57,7 +57,7 @@ private:
 	pugi::xml_node parameters;
 
 	Animation* currentAnimation = nullptr;
-	Animation idle, hurt, die, disparoR, disparoG, salto;
+	Animation idle, hurt, die, disparoR, disparoG, jumping, going_up, going_down, impacting;
 
 	PhysBody* pbody;
 	PhysBody* area;
@@ -68,12 +68,15 @@ private:
 	bool isdeath = false;
 	bool resting = false;
 	bool isAttacking = false;
+	bool isJumpAttacking = false;
+
+	bool phase_One, phase_Two, phase_Three = false;
 
 	float attackCooldown = 3000.0f;
 	float currentAttackCooldown = 0.0f;
 	int attackCounter = 0; 
 
-	float attackDistance = 10.0f;
+	float attackDistance = 12.0f;
 	bool canAttack = true;
 
 	int lives = 8;

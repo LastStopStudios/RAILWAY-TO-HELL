@@ -42,7 +42,10 @@ bool Bufon::Start() {
     die.LoadAnimations(parameters.child("animations").child("die"));
     disparoR.LoadAnimations(parameters.child("animations").child("disparoR"));
 	disparoG.LoadAnimations(parameters.child("animations").child("disparoG"));
-	salto.LoadAnimations(parameters.child("animations").child("salto"));
+	jumping.LoadAnimations(parameters.child("animations").child("jumping"));
+	going_up.LoadAnimations(parameters.child("animations").child("going_up"));
+	going_down.LoadAnimations(parameters.child("animations").child("going_down"));
+	impacting.LoadAnimations(parameters.child("animations").child("impacting"));
 
     currentAnimation = &idle;
 
@@ -62,6 +65,11 @@ bool Bufon::Start() {
     pbody->body->SetGravityScale(1.0f);
     pbody->body->GetFixtureList()->SetDensity(10);
 	pbody->body->ResetMassData();
+	pbody->body->SetFixedRotation(true);
+
+ //   b2Fixture* fixture = pbody->body->GetFixtureList();
+	//fixture->SetFriction(0.0f); // Set friction to 0.0f
+
     // Set the gravity of the body
     if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(2.0f);
 
@@ -74,6 +82,24 @@ bool Bufon::Start() {
 
 bool Bufon::Update(float dt)
 {
+
+    bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
+
+    if (!isGameplay) {
+
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(0.0f);
+        }
+        return true;
+    }
+    else {
+
+        if (pbody != nullptr && pbody->body != nullptr) {
+            pbody->body->SetGravityScale(1.0f);
+        }
+    }
+
     enemyPos = GetPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
@@ -87,7 +113,7 @@ bool Bufon::Update(float dt)
     float distanceToPlayer = abs(dx);
 
     // Limit movement towards the player only if within X tiles
-    float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player 
+    float patrolDistance = 12.0f; // Set the maximum distance for the enemy to chase the player 
 
     if (!canAttack) { // update the attack cooldown
         currentAttackCooldown -= dt;
@@ -98,35 +124,22 @@ bool Bufon::Update(float dt)
     }
 
     if ((isLookingLeft && dx <= -attackDistance)) {
-        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+        //pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
     }
 
     isLookingLeft = dx < 0; // Set the direction of the enemy
 
     if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
 
-        if (attackCounter >= 2) {
-            currentAnimation = &disparoG;
-            attackCounter = 0;
+        float jumpThreshold = 8.0f;
+        if (distanceToPlayer > jumpThreshold) {
+			phase_One = true;
+            currentAnimation = &jumping;
+			isJumpAttacking = true;
+
         }
         else {
-
-            float jumpThreshold = 6.0f; 
-            if (distanceToPlayer > jumpThreshold) {
-                currentAnimation = &salto;
-
-                float jumpForceX = 2000.0f; 
-                float jumpForceY = -300.0f; 
-                float direction = isLookingLeft ? -1.0f : 1.0f;
-  
-					pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
-                attackCounter++;
-               
-            }
-            else {
-                currentAnimation = &disparoR;
-                attackCounter++;
-            }
+            currentAnimation = &disparoR;
         }
 
         isAttacking = true;
@@ -135,8 +148,32 @@ bool Bufon::Update(float dt)
         currentAnimation->Reset();
     }
 
+    if (jumping.HasFinished()) {
+		phase_Two = true;
+        currentAnimation = &going_up;
+        float jumpForceX = 7.0f;
+        float jumpForceY = -10.0f;
+        float direction = isLookingLeft ? -1.0f : 1.0f;
+
+        pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
+       // pbody->body->ApplyLinearImpulse(b2Vec2(direction * jumpForceX, jumpForceY), pbody->body->GetWorldCenter(), true);
+        jumping.Reset();
+
+    }
+    if (going_up.HasFinished() && pbody->body->GetLinearVelocity().y > 0) {
+		phase_Three = true;
+		currentAnimation = &going_down;
+		going_up.Reset();
+    }
+
     if (isAttacking) {
-        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+        if (currentAnimation == &going_up) {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
+
+        }
+        else {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
+        }
 
         if (disparoR.HasFinished()) { // stop attacking
             Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
@@ -152,15 +189,12 @@ bool Bufon::Update(float dt)
             currentAnimation = &idle;
             disparoR.Reset();
         }
-        if (salto.HasFinished()) { // stop attacking
+        if (impacting.HasFinished()) { // stop attacking
+			phase_One, phase_Two, phase_Three = false;
+			isJumpAttacking = false;
             isAttacking = false;
             currentAnimation = &idle;
-            salto.Reset();
-		}
-        if (disparoG.HasFinished()) { // stop attacking
-            isAttacking = false;
-            currentAnimation = &idle;
-            disparoG.Reset();
+            impacting.Reset();
 		}
     }
 
@@ -190,19 +224,21 @@ bool Bufon::Update(float dt)
     if (currentAnimation == &idle || currentAnimation == &hurt) {
         if (isLookingLeft) {
             flip = SDL_FLIP_NONE;
-            offsetX = (frame.w - texW);
+            offsetX = (frame.w - texW) ;
         }
         else {
             flip = SDL_FLIP_HORIZONTAL;
+            offsetX = -8;
         }
     }
-    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &salto || currentAnimation == &die) {
+    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting || currentAnimation == &die) {
         if (isLookingLeft) {
             flip = SDL_FLIP_NONE;
             offsetX = ((frame.w - texW)/2 - 24);
         }
         else {
             flip = SDL_FLIP_HORIZONTAL;
+            offsetX = -8;
         }
     }
     b2Transform pbodyPos = pbody->body->GetTransform();
@@ -210,10 +246,10 @@ bool Bufon::Update(float dt)
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
     if (currentAnimation == &idle || currentAnimation == &hurt) {
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() -4 - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     }
-    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &salto || currentAnimation == &die) {
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 32 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting || currentAnimation == &die) {
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 36 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     }
 
 
@@ -275,6 +311,13 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLAYER:
         LOG("Collided with player - DESTROY");
         //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+        break;
+
+    case ColliderType::PLATFORM:
+        if (isJumpAttacking && phase_One && phase_Two && phase_Three) {
+			pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+            currentAnimation = &impacting;
+        }
         break;
     }
 }
