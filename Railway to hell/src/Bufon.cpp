@@ -33,7 +33,6 @@ bool Bufon::Start() {
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-    intitalPosX = parameters.attribute("x").as_int();
 
     //Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -126,24 +125,7 @@ bool Bufon::Update(float dt)
     if (ishurt) {
         if (hurt.HasFinished()) {
             ishurt = false;
-            escaping = true;
-            currentAnimation = &jumping;
-            phase_One = true;
-            currentAnimation = &jumping;
-            isJumpAttacking = true;
-            float jumpForceX = isLookingLeft ? 5.0f : 5.0f;
-            float jumpForceY = -10.0f;
-            float direction = 0;
-            float deltaX = position.getX() - intitalPosX;
-
-            if (deltaX > 0) {
-                direction = -1.0f;
-            }
-            else {
-                direction = 1.0f;
-            }
-
-            pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
+            currentAnimation = &idle;
         }
     }
 
@@ -201,7 +183,7 @@ bool Bufon::Update(float dt)
     }
 
     if (!ishurt) {
-        if (currentAnimation == &going_up && !escaping || currentAnimation == &going_down && !escaping) {
+        if (currentAnimation == &going_up || currentAnimation == &going_down) {
             pathfindingTimer += dt;
 
             int maxIterations = 100;
@@ -241,7 +223,7 @@ bool Bufon::Update(float dt)
                 }
             }
         }
-        if (currentAnimation != &going_up && currentAnimation != &going_down && !escaping) {
+        if (currentAnimation != &going_up && currentAnimation != &going_down) {
             pathfindingTimer = 0.0f;
         }
         if (!canAttack) { // update the attack cooldown
@@ -258,7 +240,7 @@ bool Bufon::Update(float dt)
 
         isLookingLeft = dx < 0; // Set the direction of the enemy
 
-        if (distanceToPlayer <= attackDistance && canAttack && !isAttacking && !escaping) {
+        if (distanceToPlayer <= attackDistance && canAttack && !isAttacking) {
 
             float jumpThreshold = 10.0f;
             if (distanceToPlayer > jumpThreshold) {
@@ -300,9 +282,8 @@ bool Bufon::Update(float dt)
             going_up.Reset();
         }
 
-
         if (isAttacking) {
-            if (currentAnimation == &going_up && !escaping) {
+            if (currentAnimation == &going_up) {
                 pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
 
             }
@@ -328,7 +309,6 @@ bool Bufon::Update(float dt)
                 phase_One, phase_Two, phase_Three = false;
                 isJumpAttacking = false;
                 isAttacking = false;
-                idle.Reset();
                 currentAnimation = &idle;
                 impacting.Reset();
                 pbody->body->GetFixtureList()->SetDensity(500);
@@ -1061,7 +1041,7 @@ void Bufon::SavePosition(std::string name) {
 }
 
 void Bufon::ResetLives() {
-    lives = 10;
+    lives = 6;
     currentAnimation = &idle;
     if (isDying) isDying = false;
     if (isDead) isDead = false;
@@ -1091,12 +1071,6 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (isJumpAttacking && phase_One && phase_Two && phase_Three) {
 			pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
             currentAnimation = &impacting;
-            escaping = false;   
-        }
-        else if (isJumpAttacking && phase_One && phase_Two && phase_Three && escaping) {
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-            currentAnimation = &impacting;
-			escaping = false;
         }
         break;
     case ColliderType::PLAYER_ATTACK:

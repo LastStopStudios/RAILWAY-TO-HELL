@@ -118,16 +118,15 @@ private:
 
 	bool phase_One, phase_Two, phase_Three = false;
 
-	float attackCooldown = 3000.0f;
+	float attackCooldown = 4000.0f;
 	float currentAttackCooldown = 0.0f;
 	int attackCounter = 0; 
 
 	float pathfindingTimer = 0.0f;
 	float maxPathfindingTime = 700.0f;
 
-	float attackDistance = 14.0f;
+	float attackDistance = 12.0f;
 	bool canAttack = true;
-	bool escaping = false;
 
 	int lives = 10;
 
@@ -158,7 +157,5 @@ private:
 	bool Hiteado = false;
 
 	bool changeMusicBoss = false;
-
-	float intitalPosX = 0;
 };
 
