@@ -108,12 +108,10 @@ bool Boss::Start() {
     jointDef.stiffness = 1000.0f;
     jointDef.damping = 0.5f;
     bodyJoint = Engine::GetInstance().physics.get()->world->CreateJoint(&jointDef);
-    if (bodyJoint) {
-        LOG("Weld joint created successfully");
-    }
-    else {
+    if (!bodyJoint) {
         LOG("Failed to create weld joint");
     }
+    
     b2Fixture* fixtureUpper = pbodyUpper->body->GetFixtureList();
     b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
 
@@ -530,7 +528,7 @@ void Boss::SetDeathInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for boss");
+        //LOG("death status updated in the XML for boss");
     }
     DeathValue = 1;
 }
@@ -636,7 +634,7 @@ void Boss::SetAliveInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for boss");
+        //LOG("death status updated in the XML for boss");
     }
     DeathValue = 0;
 }
@@ -742,7 +740,7 @@ void Boss::SetSavedDeathToDeathInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for boss");
+        //LOG("death status updated in the XML for boss");
     }
 
     SavedDeathValue = 1;
@@ -849,7 +847,7 @@ void Boss::SetSavedDeathToAliveInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for boss");
+        //LOG("death status updated in the XML for boss");
     }
 
     SavedDeathValue = 0;

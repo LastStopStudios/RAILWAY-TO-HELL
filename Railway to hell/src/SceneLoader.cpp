@@ -419,10 +419,6 @@ void SceneLoader::SetupMosaicPuzzle() {
     for (auto lever : Engine::GetInstance().scene->GetMosaicLeversList()) {
         lever->SetPuzzle(puzzle);
     }
-
-    LOG("Mosaic puzzle setup complete: %d pieces and %d levers connected",
-        Engine::GetInstance().scene->GetMosaicPiecesList().size(),
-        Engine::GetInstance().scene->GetMosaicLeversList().size());
 }
 
 void SceneLoader::VisibilityScene(int level) {//player goes to another scene

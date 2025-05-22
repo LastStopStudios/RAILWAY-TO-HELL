@@ -341,33 +341,6 @@ bool Map::Load(std::string path, std::string fileName)
 
         ret = true;
 
-        //LOG all the data loaded iterate all tilesetsand LOG everything
-        if (ret == true)
-        {
-            LOG("Successfully parsed map XML file :%s", fileName.c_str());
-            LOG("width : %d height : %d", mapData.width, mapData.height);
-            LOG("tile_width : %d tile_height : %d", mapData.tileWidth, mapData.tileHeight);
-
-            LOG("Tilesets----");
-
-            //iterate the tilesets
-            for (const auto& tileset : mapData.tilesets) {
-                LOG("name : %s firstgid : %d", tileset->name.c_str(), tileset->firstGid);
-                LOG("tile width : %d tile height : %d", tileset->tileWidth, tileset->tileHeight);
-                LOG("spacing : %d margin : %d", tileset->spacing, tileset->margin);
-            }
-            			
-            LOG("Layers----");
-
-            for (const auto& layer : mapData.layers) {
-                LOG("id : %d name : %s", layer->id, layer->name.c_str());
-				LOG("Layer width : %d Layer height : %d", layer->width, layer->height);
-            }   
-        }
-        else {
-            LOG("Error while parsing map file: %s", mapPathName.c_str());
-        }
-
         if (mapFileXML) mapFileXML.reset();
 
     }

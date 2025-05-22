@@ -1087,51 +1087,51 @@
 			</checkpoints>
 			<mosaicPuzzle name="main_puzzle" solve_fx="Assets/Audio/Fx/puzzle_solved.wav" rotate_fx="Assets/Audio/Fx/piece_rotate.wav" />
 			<mosaicPieces>
-				<mosaicPiece name="mosaic_piece_1" x="1696" y="672" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza1.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_1" x="1344" y="673" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0" y="0" w="64" h="64" />
+							<frame x="0" y="96" w="96" h="96" />
 						</idle>
 						<rotating loop="false" speed="0.1">
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
+							<frame x="96" y="96" w="96" h="96" />
+							<frame x="192" y="96" w="96" h="96" />
+							<frame x="288" y="96" w="96" h="96" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_2" x="1888" y="672" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza2.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_2" x="1746" y="649" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0" y="0" w="64" h="64" />
+							<frame x="0" y="192" w="96" h="96" />
 						</idle>
 						<rotating loop="false" speed="0.1">
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
+							<frame x="96" y="192" w="96" h="96" />
+							<frame x="192" y="192" w="96" h="96" />
+							<frame x="288" y="192" w="96" h="96" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_3" x="2112" y="672" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza3.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_3" x="1975" y="570" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
 					<animations>
-						<idle loop="true" speed="0.3">
-							<frame x="0" y="0" w="64" h="64" />
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="96" h="96" />
 						</idle>
 						<rotating loop="false" speed="0.1">
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
+							<frame x="96" y="0" w="96" h="96" />
+							<frame x="192" y="0" w="96" h="96" />
+							<frame x="288" y="0" w="96" h="96" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_4" x="2336" y="672" w="64" h="64" texture="Assets/Textures/Puzzles/Pieza4.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_4" x="2347" y="630" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0" y="0" w="64" h="64" />
+							<frame x="0" y="288" w="64" h="64" />
 						</idle>
 						<rotating loop="false" speed="0.1">
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
+							<frame x="64" y="288" w="64" h="64" />
+							<frame x="128" y="288" w="64" h="64" />
+							<frame x="192" y="288" w="64" h="64" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
@@ -1209,7 +1209,7 @@
 		<map path="Assets/Maps/" name="DE2L1.tmx" />
 		<visibility accessed="false" />
 		<entities>
-			<player x="690.909973" y="736.359985" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="1210" y="706" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
@@ -1856,7 +1856,7 @@
 	</scene4>
 	<scene5>
 		<map path="Assets/Maps/" name="IE1L2.tmx" />
-		<visibility accessed="true" />
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
