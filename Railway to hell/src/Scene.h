@@ -191,6 +191,7 @@ public:
 	pugi::xml_node itemConfigNode; //mover a private
 	pugi::xml_node whipItemConfigNode;
 	pugi::xml_node doorItemConfigNode;
+	pugi::xml_node ballItemConfigNode;
 	pugi::xml_node ballConfigNode;
 	pugi::xml_node bigProjectileConfigNode;
 	pugi::xml_node normalProjectileConfigNode;

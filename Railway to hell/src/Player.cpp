@@ -227,6 +227,7 @@ bool Player::Start() {
 
     // For testing, temporarily enable whip attack
     WhipAttack = false;
+	//Dash = true;
     //facingRight = true;
  
     //Ice Movement
@@ -238,6 +239,7 @@ bool Player::Start() {
         texture = wakeupTexture;
     }
     return true;
+
 }
 
 bool Player::Update(float dt)
@@ -896,7 +898,7 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     //Debug Mode:
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {//Open Puzzle Doors
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
         }
         // unlocks sensors
@@ -906,6 +908,7 @@ void Player::HandleSceneSwitching() {
         }
 }
 void Player::HandleHurt(float dt) {
+    if(!godMode){
     if (isHurtDelayed) {
         currentHurtDelay += dt;
        
@@ -918,7 +921,15 @@ void Player::HandleHurt(float dt) {
                 currentAnimation = &hurt;
                 texture = hurtTexture;
                 hasHurtStarted = true;
-                lives -= 2;
+                if(ballhurt){
+					lives -= 1;
+                }
+                else if(bufonjumphurt) {
+                    lives -= 2;
+                }
+                else {
+                    lives -= 2;
+                }
                 Engine::GetInstance().audio.get()->PlayFx(hurtFX);
 
             }
@@ -956,12 +967,32 @@ void Player::HandleHurt(float dt) {
         hurt.Update();
         if (hurt.HasFinished()) {
             // Reset to idle
+            if (ballhurt) {
+                ballhurt = false;
+                if (isHurt) {
+                    isHurt = false;
+                    hasHurtStarted = false;
+                    hurted = false;
+                    freezeWhileHurting = false;
+                }
+            }
+            if (bufonjumphurt) {
+                bufonjumphurt = false;
+                if (isHurt) {
+                    isHurt = false;
+                    hasHurtStarted = false;
+                    hurted = false;
+                    freezeWhileHurting = false;
+                }
+            }
+
             hurted = true;
             isHurt = false;
             hasHurtStarted = false;
             currentAnimation = &idle;
             idle.Reset();
         }   
+    }
     }
 }
 
@@ -1243,7 +1274,7 @@ void Player::HandleBallAttack(float dt) {
     }
 
     // Add check for ball attack animation completion before allowing next shot
-    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0) {
+    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack) {
         ballCounter--;
         Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
         projectile->SetParameters(engine.scene.get()->normalProjectileConfigNode);
@@ -1796,7 +1827,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     // Logic so that the player cannot shoot if he has the enemy next to him
     if (physA == pbodyLower) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
-            LOG("TOCANDO");
             collidingWithEnemy = true;
             isTouchingEnemy = true;
             tocado = true;
@@ -1885,6 +1915,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             }
             if (item && item->GetItemType() == "Ball") {
+				BallAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
             }
         }
@@ -1941,12 +1972,40 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::BOSS_ATTACK: {
+        if(!godMode){
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurtDelayed = true; 
-            currentHurtDelay = 0.0f; 
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
             freezeWhileHurting = true;
 
-			// Cancel any ongoing attack
+            // Cancel any ongoing attack
+            if (isAttacking) {
+                isAttacking = false;
+                if (attackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                    attackHitbox = nullptr;
+                }
+            }
+            if (isWhipAttacking) {
+                isWhipAttacking = false;
+                if (whipAttackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                    whipAttackHitbox = nullptr;
+                }
+            }
+        }
+        }
+
+        break;
+    }
+    case ColliderType::PROJECTILE: {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
+            freezeWhileHurting = true;
+			ballhurt = true; 
+
+            // Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;
                 if (attackHitbox) {
@@ -1965,11 +2024,43 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
         break;
     }
+    case ColliderType::BUFON_JUMP_ATTACK_AREA: {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
+            freezeWhileHurting = true;
+            bufonjumphurt = true;
+
+			// Apply knockback force to the player
+            float knockbackForce = facingRight ? 50.0f : 50.0f; 
+            b2Vec2 impulse = facingRight ? b2Vec2(-knockbackForce, 0) : b2Vec2(knockbackForce, 0);
+
+            pbodyUpper->body->ApplyLinearImpulseToCenter(impulse, true);
+            pbodyLower->body->ApplyLinearImpulseToCenter(impulse, true);
+
+			// Cancel any ongoing attack
+            if (isAttacking) {
+                isAttacking = false;
+                if (attackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                    attackHitbox = nullptr;
+                }
+            }
+            if (isWhipAttacking) {
+                isWhipAttacking = false;
+                if (whipAttackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                    whipAttackHitbox = nullptr;
+                }
+            }
+        }
+        break;
+    }
     case ColliderType::LEVER: {
         break;
     }
     case ColliderType::MOSAIC_PIECE: {
-        break;
+         break;
     }
     case ColliderType::MOSAIC_LEVER: {
         break;
@@ -2006,7 +2097,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ABYSS:
         if (!isFallingInAbyss && !godMode) {
             if (canHurtAbyss) {
-                lives--;
+                if (!godMode) {
+                    lives--;
+                }
             }
             canHurtAbyss = false;
             isFallingInAbyss = true;
@@ -2083,7 +2176,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
             collidingWithEnemy = false;
             isTouchingEnemy = false;
-            LOG("DEJO DE TOCAR");
             //first = true;
             tocado = false;
             return;
@@ -2133,6 +2225,10 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
             freezeWhileHurting = false;
         }
         break;
+    case ColliderType::PROJECTILE:
+        break;
+    case ColliderType::BUFON_JUMP_ATTACK_AREA:
+        break;
     case ColliderType::ASCENSORES:
         TocandoAs = false;
         break;
@@ -2176,8 +2272,10 @@ Vector2D Player::GetPosition() {
     return pos;
 }
 void Player::hit(){
-    isHurt = true;
-    lives--;
+    if (!godMode) {
+        isHurt = true;
+        lives--;
+    }
 }
 
 void Player::HitWcooldown(float dt) {

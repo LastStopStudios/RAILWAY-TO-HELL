@@ -161,8 +161,8 @@ bool Explosivo::Update(float dt)
 
         Engine::GetInstance().render.get()->DrawTexture(
             texture,
-            (int)position.getX() - 32,
-            (int)position.getY() - 32,
+            (int)position.getX() ,
+            (int)position.getY() ,
             &currentAnimation->GetCurrentFrame(),
             1.0f, 0.0, INT_MAX, INT_MAX,
             flip
