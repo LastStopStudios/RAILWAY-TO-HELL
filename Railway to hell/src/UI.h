@@ -70,7 +70,7 @@ private:
 	int w = 40, h = 40, w2, h2, wb=60, hb = 60;
 	//UI positions
 	float posy = 0, posx = 0, posx2=30, posx3 = 60, posx4 = 90, posx5 = 120, posxb, posyb;// renders player position
-	float posy2 = 700, bposx = 460, bposx2 = 520, bposx3 = 580, bposx4 = 640, bposx5 = 700, bposx6 = 760;//render boss position
+	float posy2 = 700, bposx = 400, bposx2 = 460, bposx3 = 520, bposx4 = 580, bposx5 = 640, bposx6 = 700, bposx7 = 760, bposx8 = 820, bposx9 = 880, bposx10 = 940;//render boss position
 
 };
 

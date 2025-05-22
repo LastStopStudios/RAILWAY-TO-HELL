@@ -235,6 +235,10 @@ void UI::Boss2()
 	SDL_Rect dstRect4 = { bposx4,posy2, wb, hb }; //Position and scale Boss health
 	SDL_Rect dstRect5 = { bposx5,posy2, wb, hb }; //Position and scale Boss health
 	SDL_Rect dstRect6 = { bposx6,posy2, wb, hb }; //Position and scale Boss health
+	SDL_Rect dstRect7 = { bposx7,posy2, wb, hb }; //Position and scale Boss health
+	SDL_Rect dstRect8 = { bposx8,posy2, wb, hb }; //Position and scale Boss health
+	SDL_Rect dstRect9 = { bposx9,posy2, wb, hb }; //Position and scale Boss health
+	SDL_Rect dstRect10 = { bposx10,posy2, wb, hb }; //Position and scale Boss health
 	switch (vidab2)
 	{
 	case 1:
@@ -244,6 +248,10 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
 		break;
 	case 2:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
@@ -252,6 +260,10 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
 		break;
 	case 3:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
@@ -260,6 +272,10 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
 		break;
 	case 4:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
@@ -268,6 +284,10 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
 		break;
 	case 5:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
@@ -276,6 +296,10 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
 		break;
 	case 6:
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
@@ -284,6 +308,59 @@ void UI::Boss2()
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
+		break;
+	case 7:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect2);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect3);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
+		break;
+	case 8:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect2);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect3);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
+		break;
+	case 9:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect2);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect3);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Evida, nullptr, &dstRect10);//render  Boss health
+		break;
+	case 10:
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect2);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect3);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect4);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect5);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect6);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect7);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect8);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect9);//render  Boss health
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, vidaB2, nullptr, &dstRect10);//render  Boss health
 		break;
 	}
 
