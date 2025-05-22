@@ -128,7 +128,7 @@ private:
 	float attackDistance = 12.0f;
 	bool canAttack = true;
 
-	int lives = 2;
+	int lives = 10;
 
 	// jump variables
 
