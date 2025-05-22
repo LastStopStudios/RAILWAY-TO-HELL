@@ -147,7 +147,7 @@ void MosaicLever::Activate()
     cooldownTimer = activationCooldown;
 
     // Play activation sound
-    Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/lever_activate.wav"));
+    //Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/lever_activate.wav"));
 
     // Rotate all target pieces if puzzle reference exists
     if (puzzleRef != nullptr) {

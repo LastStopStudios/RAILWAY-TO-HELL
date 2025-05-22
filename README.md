@@ -23,6 +23,25 @@ Railway to Hell is a Metroidvania action and exploration video game set in a hel
 - Circle / B Use Key (Doors and Interactions), close dialogues and use checkpoints
 - Triangle / Y Map
 
+### *Debug Controls:*
+- P GodMode
+- 1 Tp to scene 1
+- F7 Tp connector door (Scene 1)
+- F8 Tp to dash item (Scene 1)
+- 2 Tp to Puzzle (Scene 2)
+- 3 Tp to First Boss (Scene 3)
+- 4 Tp to  Double Jump item (Scene 4)
+- 5 Tp to Second Boss (Scene 5)
+- 6 Tp to Central Station (Scene 6)
+- 7 Tp to Connector Right (Scene 7)
+- 8 Tp to Ice tunnel (Scene 8)
+- 9 Tp to onnector Left (Scene 9)
+- 10 Tp to Left Electric tunnel (Scene 10)
+- 11 Tp to Scene 11
+- F6 Tp to connector door (Scene 11)
+- N Open Puzzle Doors
+- 0 unlocks elevators sensors
+
 ### *Implemented Features*
 - Dialogue system personalized for each character, with rendered animations.
 - Scene Loader
