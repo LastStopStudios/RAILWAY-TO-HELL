@@ -169,7 +169,7 @@ void MosaicPiece::Rotate()
     currentAnim = &rotating;
 
     // Play rotation sound
-    Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
+    //Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
 }
 
 bool MosaicPiece::IsCorrectRotation() const
