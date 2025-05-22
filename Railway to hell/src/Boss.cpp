@@ -1111,7 +1111,7 @@ void Boss::SavePosition(std::string name) {
 }
 
 void Boss::ResetLives() {
-    lives = 12;
+    lives = 6;
 	currentAnimation = &idle;
     if(isDying) isDying = false;
     if(isDead) isDead = false;

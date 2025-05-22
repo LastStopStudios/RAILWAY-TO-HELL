@@ -160,16 +160,13 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_Ball.png" gravity="false" ID="2" ref="ball_item">
+				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
 							<frame x="32" y="0" w="32" h="32" />
 							<frame x="64" y="0" w="32" h="32" />
 							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
 						</idle>
 					</animations>
 				</item>
@@ -1959,6 +1956,18 @@
 					</wakeup>
 				</animations>
 			</player>
+			<items>
+				<item name="Ball" death="0" savedDeath="0" x="3108" y="2120" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item" created="false">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="0" w="32" h="32" />
+							<frame x="32" y="0" w="32" h="32" />
+							<frame x="64" y="0" w="32" h="32" />
+							<frame x="96" y="0" w="32" h="32" />
+						</idle>
+					</animations>
+				</item>
+			</items>
 			<checkpoints>
 				<checkpoint name="checkpoint5" x="2100" y="620" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="5">
 					<animations>
@@ -2217,9 +2226,6 @@
 						</impacting>
 						<hurt loop="true" speed="0.15">
 							<frame x="0" y="1216" w="192" h="192" />
-							<frame x="192" y="1216" w="192" h="192" />
-							<frame x="384" y="1216" w="192" h="192" />
-							<frame x="576" y="1216" w="192" h="192" />
 						</hurt>
 					</animations>
 				</enemy>
