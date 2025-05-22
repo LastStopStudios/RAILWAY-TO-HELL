@@ -92,13 +92,11 @@ bool MosaicPiece::Update(float dt)
 
         // Comprueba si la animación ha terminado
         if (rotating.HasFinished()) {
-            LOG("Rotation animation finished for piece %d", pieceId);
             isRotating = false;
             currentAnim = &idle;
             int oldRotation = currentRotation;
             // Increment rotation and wrap around using modulo 4 (0, 1, 2, 3)
             currentRotation = (currentRotation + 1) % 4;
-            LOG("MosaicPiece: Piece ID %d rotating from %d to %d degrees", pieceId, oldRotation * 90, currentRotation * 90);
         }
         else {
             currentAnim = &rotating;
@@ -169,7 +167,6 @@ void MosaicPiece::Rotate()
     isRotating = true;
     rotating.Reset();
     currentAnim = &rotating;
-    LOG("Starting rotation animation for piece %d", pieceId);
 
     // Play rotation sound
     Engine::GetInstance().audio.get()->PlayFx(Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/piece_rotate.wav"));
