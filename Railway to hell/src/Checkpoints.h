@@ -43,6 +43,8 @@ public:
 
 	void ResetOthersCheckpoints();
 
+	void SaveLastCheckpointScene(int scene);
+
 public:
 
 	bool isPicked = false;
@@ -50,7 +52,7 @@ public:
 	bool isActivated = false;
 
 	bool pendingToChangeAnim = false;
-
+	bool actionPressed = false;
 
 private:
 

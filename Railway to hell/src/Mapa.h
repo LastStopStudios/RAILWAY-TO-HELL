@@ -128,6 +128,7 @@ private:
 	SDL_Texture* MNegro9 = nullptr;//Black texture
 	SDL_Texture* MNegro10 = nullptr;//Black texture
 	SDL_Texture* MNegro11 = nullptr;//Black texture
+	SDL_Texture* MNegro12 = nullptr;//Black texture
 	std::string scene = "";//what scene is now loading
 	std::string pjposition = "";//what scene is now loading
 	std::string Zona = "";//zone of the map where the player is

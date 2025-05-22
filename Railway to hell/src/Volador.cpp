@@ -296,7 +296,7 @@ bool Volador::CleanUp()
 
     if(texture){
         Engine::GetInstance().textures.get()->UnLoad(texture);
-        texture = nullptr;
+        //texture = nullptr;
     }
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     vez = 1;

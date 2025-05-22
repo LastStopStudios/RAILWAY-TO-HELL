@@ -315,6 +315,7 @@ bool Player::Update(float dt)
             Engine::GetInstance().ui->figth = false;
             Engine::GetInstance().ui->figth2 = false;
             Engine::GetInstance().ui->figth3 = false;
+            Engine::GetInstance().scene->SalirBoss();
             HandleSceneSwitching();
             hasDied = false;
 			return true;
@@ -363,6 +364,13 @@ bool Player::Update(float dt)
         if (NeedDialogue) { // Dialogue
             Engine::GetInstance().dialogoM->Texto(Id.c_str()); // Call the corresponding dialogue line
             NeedDialogue = false;
+        }
+        if (isHurt && waitForHurtAnimation) {
+            if (hurt.HasFinished()) {
+                isHurt = false;
+                hasHurtStarted = false;
+                hurted = true; // Mark that we've been hurt
+            }
         }
         Abyss();
         Ascensor();
@@ -890,7 +898,7 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     //Debug Mode:
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {//Open Puzzle Doors
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
         }
         // unlocks sensors
@@ -900,6 +908,7 @@ void Player::HandleSceneSwitching() {
         }
 }
 void Player::HandleHurt(float dt) {
+    if(!godMode){
     if (isHurtDelayed) {
         currentHurtDelay += dt;
        
@@ -983,6 +992,7 @@ void Player::HandleHurt(float dt) {
             currentAnimation = &idle;
             idle.Reset();
         }   
+    }
     }
 }
 
@@ -1292,6 +1302,11 @@ void Player::DrawPlayer() {
         texture = hurtTexture;
         currentAnimation = &hurt;
         hurt.Update();
+        
+        // Check if the animation finished and we were waiting for teleport
+        if (hurt.HasFinished() && waitForHurtAnimation) {
+            isHurt = false;
+        }
     }
     else if (isWakingUp) {
         currentAnimation = &wakeupAnim;
@@ -1694,56 +1709,97 @@ void Player::SaveInitialPosition() {
 void Player::ResetPlayerPosition() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
-
     if (result == NULL) {
         LOG("Could not load file. Pugi error: %s", result.description());
         return;
     }
 
+    // Obtener la escena del último checkpoint activado
+    int checkpointScene = GetLastCheckpointScene();
+    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+
+    if (checkpointScene == -1) {
+        // Si no hay checkpoint guardado, usar la escena actual
+        checkpointScene = currentScene;
+    }
+
+    // Obtener la posición guardada del checkpoint
     pugi::xml_node sceneNode;
 
-    int currentScene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
-    if (currentScene == 1) {
+    if (checkpointScene == 1) {
         sceneNode = loadFile.child("config").child("scene");
     }
-    else if (currentScene == 2) {
+    else if (checkpointScene == 2) {
         sceneNode = loadFile.child("config").child("scene2");
     }
-    else if (currentScene == 3) {
+    else if (checkpointScene == 3) {
         sceneNode = loadFile.child("config").child("scene3");
     }
-    else if (currentScene == 4) {
+    else if (checkpointScene == 4) {
         sceneNode = loadFile.child("config").child("scene4");
     }
-    else if (currentScene == 5) {
+    else if (checkpointScene == 5) {
         sceneNode = loadFile.child("config").child("scene5");
     }
-    else if (currentScene == 6) {
+    else if (checkpointScene == 6) {
         sceneNode = loadFile.child("config").child("scene6");
     }
-    else if (currentScene == 7) {
+    else if (checkpointScene == 7) {
         sceneNode = loadFile.child("config").child("scene7");
     }
-    else if (currentScene == 8) {
+    else if (checkpointScene == 8) {
         sceneNode = loadFile.child("config").child("scene8");
     }
-    else if (currentScene == 9) {
+    else if (checkpointScene == 9) {
         sceneNode = loadFile.child("config").child("scene9");
     }
-    else if (currentScene == 10) {
+    else if (checkpointScene == 10) {
         sceneNode = loadFile.child("config").child("scene10");
     }
-    else if (currentScene == 11) {
+    else if (checkpointScene == 11) {
         sceneNode = loadFile.child("config").child("scene11");
     }
 
     float x = sceneNode.child("entities").child("player").attribute("x").as_float();
     float y = sceneNode.child("entities").child("player").attribute("y").as_float();
 
-    Vector2D newPos(x, y);
+    // Si la escena del checkpoint es diferente a la actual, cambiar de escena
+    if (checkpointScene != currentScene) {
+        LOG("Moving player from scene %d to checkpoint scene %d", currentScene, checkpointScene);
+        Engine::GetInstance().sceneLoader.get()->LoadScene(checkpointScene, (int)x, (int)y, true, false);
+    }
+    else {
+        // Si es la misma escena, solo reposicionar
+        Vector2D newPos(x, y);
+        SetPosition(newPos);
+    }
+}
 
-    SetPosition(newPos);
+// Nueva función para obtener la escena del último checkpoint
+int Player::GetLastCheckpointScene() {
+    pugi::xml_document loadFile;
+    pugi::xml_parse_result result = loadFile.load_file("config.xml");
+    if (result == NULL) {
+        LOG("Could not load file. Pugi error: %s", result.description());
+        return -1;
+    }
 
+    pugi::xml_node gameStateNode = loadFile.child("config").child("gamestate");
+    if (!gameStateNode) {
+        return -1;
+    }
+
+    pugi::xml_node lastCheckpointSceneNode = gameStateNode.child("lastCheckpointScene");
+    if (!lastCheckpointSceneNode) {
+        return -1;
+    }
+
+    pugi::xml_node sceneValueNode = lastCheckpointSceneNode.child("scene");
+    if (!sceneValueNode) {
+        return -1;
+    }
+
+    return sceneValueNode.attribute("value").as_int();
 }
 
 bool Player::CleanUp() {
@@ -1771,7 +1827,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     // Logic so that the player cannot shoot if he has the enemy next to him
     if (physA == pbodyLower) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
-            LOG("TOCANDO");
             collidingWithEnemy = true;
             isTouchingEnemy = true;
             tocado = true;
@@ -1917,12 +1972,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::BOSS_ATTACK: {
+        if(!godMode){
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurtDelayed = true; 
-            currentHurtDelay = 0.0f; 
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
             freezeWhileHurting = true;
 
-			// Cancel any ongoing attack
+            // Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;
                 if (attackHitbox) {
@@ -1937,6 +1993,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     whipAttackHitbox = nullptr;
                 }
             }
+        }
         }
 
         break;
@@ -2037,14 +2094,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORMICE:
         resbalar = true;//Ice platform
         break;
-    case ColliderType::ABYSS: 
-		
-        if (!isFallingInAbyss) {
-            hit(); 
+    case ColliderType::ABYSS:
+        if (!isFallingInAbyss && !godMode) {
+            if (canHurtAbyss) {
+                if (!godMode) {
+                    lives--;
+                }
+            }
+            canHurtAbyss = false;
             isFallingInAbyss = true;
         }
-   
-		break;
+        break;
     case ColliderType::UNKNOWN:
         break;
     }
@@ -2070,31 +2130,33 @@ void Player::Ascensor() {
         NeedSceneChange = true;
     }
 }
-void Player:: Abyss()
+void Player::Abyss()
 {
-   
-    if (hurt.HasFinished()) {
-
-        if (isFallingInAbyss) {
-           // Player position
-            NeedSceneChange = true;
-            sceneToLoad = 11;
-            Playerx = 9730;
-            Playery = 1662;
-            Fade = false;
-            BossCam = false;
-
-            isFallingInAbyss = false; 
-           
-         
-
+    if (isFallingInAbyss) {
+        if (!waitForHurtAnimation) {
+            // Set hurt state without teleporting yet
+            isHurt = true;
+            hasHurtStarted = true;
+            waitForHurtAnimation = true;
+            pendingAbyssTeleport = true;
+            // Play hurt sound if needed
+            Engine::GetInstance().audio.get()->PlayFx(hurtFX);
         }
-        hasHurtStarted = false;
-        isHurt = false;
-        hurted = false;
-        return;
+        else if (pendingAbyssTeleport && !isHurt) {
+            // The hurt animation has finished, now teleport
+            Player* player = Engine::GetInstance().scene->GetPlayer();
+            player->SetPosition(Vector2D(abyssTeleportX, abyssTeleportY));
+            canHurtAbyss = true;
+            // Reset velocities
+            pbodyUpper->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbodyLower->body->SetLinearVelocity(b2Vec2(0, 0));
+            // Reset states
+            waitForHurtAnimation = false;
+            pendingAbyssTeleport = false;
+            isFallingInAbyss = false; // Make sure to reset this flag
+            hurted = false;
+        }
     }
-  
 }
 
 void Player::BloquearSensor(){//block scene change sensors to prevent the player from escaping
@@ -2114,7 +2176,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
             collidingWithEnemy = false;
             isTouchingEnemy = false;
-            LOG("DEJO DE TOCAR");
             //first = true;
             tocado = false;
             return;
@@ -2178,16 +2239,13 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         resbalar = false;//Ice platform
         break;
 
-	case ColliderType::ABYSS:
-        isFallingInAbyss = false;
-        hurted = true;
-        isHurt = false;
-        hasHurtStarted = false;
-        currentAnimation = &idle;
-        idle.Reset();
-		break;
-    }
+    
+    case ColliderType::ABYSS:
+        hurt.Reset();
+         break;
+     }
 }
+
 
 void Player::SetPosition(Vector2D pos) {
     int adjustment = 2;
@@ -2214,8 +2272,10 @@ Vector2D Player::GetPosition() {
     return pos;
 }
 void Player::hit(){
-    isHurt = true;
-    lives--;
+    if (!godMode) {
+        isHurt = true;
+        lives--;
+    }
 }
 
 void Player::HitWcooldown(float dt) {

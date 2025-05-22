@@ -76,9 +76,17 @@ private:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
-	Animation die;
 	Animation hurt;
+	Animation explode;
+	Animation spot;
+	Animation run;
+	Animation die;
 	PhysBody* pbody;
+
+	bool isSpotting, hasSpotted;
+	float explodeOffsetY = 32.0f;
+	bool isExploding = false; 
+
 	Pathfinding* pathfinding;
 	bool isDead = false;
 	bool hasPlayedDeathAnim = false;

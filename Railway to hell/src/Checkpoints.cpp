@@ -366,7 +366,6 @@ bool Checkpoints::CleanUp()
 	}
 	return true;
 }
-
 void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
@@ -378,15 +377,16 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
+			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
+
+			// Guardar la escena del último checkpoint activado
+			SaveLastCheckpointScene(currentscene);
+
 			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
 			Engine::GetInstance().audio.get()->PlayFx(checkpointFX);
 			isActivated = true;
 			currentAnimation = &activated;
-		}
-
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
-			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
 		}
 
 		break;
@@ -397,6 +397,42 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	}
 }
+
+// para guardar la escena del último checkpoint
+void Checkpoints::SaveLastCheckpointScene(int scene) {
+	pugi::xml_document doc;
+	if (!doc.load_file("config.xml")) {
+		LOG("Error loading config.xml");
+		return;
+	}
+
+	// Buscar o crear un nodo para guardar la escena del último checkpoint
+	pugi::xml_node gameStateNode = doc.child("config").child("gamestate");
+	if (!gameStateNode) {
+		gameStateNode = doc.child("config").append_child("gamestate");
+	}
+
+	pugi::xml_node lastCheckpointSceneNode = gameStateNode.child("lastCheckpointScene");
+	if (!lastCheckpointSceneNode) {
+		lastCheckpointSceneNode = gameStateNode.append_child("lastCheckpointScene");
+	}
+
+	pugi::xml_node sceneValueNode = lastCheckpointSceneNode.child("scene");
+	if (!sceneValueNode) {
+		sceneValueNode = lastCheckpointSceneNode.append_child("scene");
+	}
+
+	sceneValueNode.attribute("value").set_value(scene);
+	if (!sceneValueNode.attribute("value")) {
+		sceneValueNode.append_attribute("value").set_value(scene);
+	}
+
+	if (!doc.save_file("config.xml")) {
+		LOG("Error saving config.xml");
+	}
+}
+
+
 
 void Checkpoints::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 {

@@ -531,6 +531,7 @@ void Item::SetCreatedTrueInXML() {
 			.child("scene3")
 			.child("entities")
 			.find_child_by_attribute("item", "name", enemyID.c_str());
+		LOG("ID: %s", enemyID.c_str());
 	}
 	else if (currentScene == 4) {
 		itemNode = doc.child("config")
