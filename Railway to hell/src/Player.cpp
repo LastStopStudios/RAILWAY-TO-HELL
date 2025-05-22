@@ -966,29 +966,15 @@ void Player::HandleHurt(float dt) {
 
         hurt.Update();
         if (hurt.HasFinished()) {
-            // Reset to idle
-            if (ballhurt) {
-                ballhurt = false;
-                if (isHurt) {
-                    isHurt = false;
-                    hasHurtStarted = false;
-                    hurted = false;
-                    freezeWhileHurting = false;
-                }
-            }
-            if (bufonjumphurt) {
-                bufonjumphurt = false;
-                if (isHurt) {
-                    isHurt = false;
-                    hasHurtStarted = false;
-                    hurted = false;
-                    freezeWhileHurting = false;
-                }
-            }
-
-            hurted = true;
+			// reset to idle state
             isHurt = false;
             hasHurtStarted = false;
+            hurted = false;
+            freezeWhileHurting = false;
+            ballhurt = false;
+            bufonjumphurt = false; 
+            currentHurtDelay = 0.0f;
+            isHurtDelayed = false;
             currentAnimation = &idle;
             idle.Reset();
         }   

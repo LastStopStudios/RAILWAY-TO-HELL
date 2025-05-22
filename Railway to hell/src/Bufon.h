@@ -72,7 +72,7 @@ public:
 	bool pendingDisable = false;
 	int DeathValue = 0;
 	int SavedDeathValue = 0;
-
+	bool itemCreated = false;
 	// death
 	int a = 0;
 	int kill = 1;
@@ -123,7 +123,7 @@ private:
 	int attackCounter = 0; 
 
 	float pathfindingTimer = 0.0f;
-	float maxPathfindingTime = 720.0f;
+	float maxPathfindingTime = 700.0f;
 
 	float attackDistance = 12.0f;
 	bool canAttack = true;
