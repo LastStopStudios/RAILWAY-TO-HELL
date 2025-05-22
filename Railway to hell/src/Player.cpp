@@ -896,7 +896,7 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     //Debug Mode:
-        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {//Open Puzzle Doors
+        if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
         }
         // unlocks sensors
@@ -906,6 +906,7 @@ void Player::HandleSceneSwitching() {
         }
 }
 void Player::HandleHurt(float dt) {
+    if(!godMode){
     if (isHurtDelayed) {
         currentHurtDelay += dt;
        
@@ -962,6 +963,7 @@ void Player::HandleHurt(float dt) {
             currentAnimation = &idle;
             idle.Reset();
         }   
+    }
     }
 }
 
@@ -1796,7 +1798,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     // Logic so that the player cannot shoot if he has the enemy next to him
     if (physA == pbodyLower) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
-            LOG("TOCANDO");
             collidingWithEnemy = true;
             isTouchingEnemy = true;
             tocado = true;
@@ -1941,12 +1942,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
     case ColliderType::BOSS_ATTACK: {
+        if(!godMode){
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurtDelayed = true; 
-            currentHurtDelay = 0.0f; 
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
             freezeWhileHurting = true;
 
-			// Cancel any ongoing attack
+            // Cancel any ongoing attack
             if (isAttacking) {
                 isAttacking = false;
                 if (attackHitbox) {
@@ -1961,6 +1963,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     whipAttackHitbox = nullptr;
                 }
             }
+        }
         }
 
         break;
@@ -2006,7 +2009,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ABYSS:
         if (!isFallingInAbyss && !godMode) {
             if (canHurtAbyss) {
-                lives--;
+                if (!godMode) {
+                    lives--;
+                }
             }
             canHurtAbyss = false;
             isFallingInAbyss = true;
@@ -2083,7 +2088,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         if (physA->ctype == ColliderType::PLAYER && physB->ctype == ColliderType::TERRESTRE) {
             collidingWithEnemy = false;
             isTouchingEnemy = false;
-            LOG("DEJO DE TOCAR");
             //first = true;
             tocado = false;
             return;
@@ -2176,8 +2180,10 @@ Vector2D Player::GetPosition() {
     return pos;
 }
 void Player::hit(){
-    isHurt = true;
-    lives--;
+    if (!godMode) {
+        isHurt = true;
+        lives--;
+    }
 }
 
 void Player::HitWcooldown(float dt) {
