@@ -60,6 +60,9 @@
   <image source="atlas_backgrounds.png" width="7559" height="3272"/>
  </tileset>
  <layer id="28" name="FondoNegro" width="120" height="60">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="2050"/>
    <tile gid="2050"/>
