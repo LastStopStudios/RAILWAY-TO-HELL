@@ -108,6 +108,8 @@ public:
 	float Scene10InitX, Scene10InitY;
 	float Scene11InitX, Scene11InitY;
 
+	
+
 private:
 	// Private methods
 	void DrawPlayer();
@@ -263,6 +265,7 @@ private:
 	// items booleans
 	bool Dash = false;
 	bool WhipAttack = false;
+	bool BallAttack = false;
 
 	// door and lever booleans
 	bool canOpenDoor = false;
@@ -306,5 +309,8 @@ private:
 	float currentHurtDelay = 0.0f; 
 	bool isHurtDelayed = false;  
 	bool freezeWhileHurting = false;
+
+	bool ballhurt = false; //if player is hurt by ball attack
+	bool bufonjumphurt = false; //if player is hurt by bufon jump attack
 
 };

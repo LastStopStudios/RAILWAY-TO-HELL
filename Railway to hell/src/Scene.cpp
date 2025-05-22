@@ -51,6 +51,9 @@ bool Scene::Awake()
 		else if (type == "Whip") {
 			whipItemConfigNode = itemNode;
 		}
+		else if (type == "Ball") {
+			ballItemConfigNode = itemNode;
+		}
 		else {
 		Item* item = (Item*) Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
 		item->SetParameters(itemNode);

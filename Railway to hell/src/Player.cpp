@@ -227,6 +227,7 @@ bool Player::Start() {
 
     // For testing, temporarily enable whip attack
     WhipAttack = false;
+	//Dash = true;
     //facingRight = true;
  
     //Ice Movement
@@ -238,6 +239,7 @@ bool Player::Start() {
         texture = wakeupTexture;
     }
     return true;
+
 }
 
 bool Player::Update(float dt)
@@ -910,7 +912,15 @@ void Player::HandleHurt(float dt) {
                 currentAnimation = &hurt;
                 texture = hurtTexture;
                 hasHurtStarted = true;
-                lives -= 2;
+                if(ballhurt){
+					lives -= 1;
+                }
+                else if(bufonjumphurt) {
+                    lives -= 2;
+                }
+                else {
+                    lives -= 2;
+                }
                 Engine::GetInstance().audio.get()->PlayFx(hurtFX);
 
             }
@@ -948,6 +958,25 @@ void Player::HandleHurt(float dt) {
         hurt.Update();
         if (hurt.HasFinished()) {
             // Reset to idle
+            if (ballhurt) {
+                ballhurt = false;
+                if (isHurt) {
+                    isHurt = false;
+                    hasHurtStarted = false;
+                    hurted = false;
+                    freezeWhileHurting = false;
+                }
+            }
+            if (bufonjumphurt) {
+                bufonjumphurt = false;
+                if (isHurt) {
+                    isHurt = false;
+                    hasHurtStarted = false;
+                    hurted = false;
+                    freezeWhileHurting = false;
+                }
+            }
+
             hurted = true;
             isHurt = false;
             hasHurtStarted = false;
@@ -1235,7 +1264,7 @@ void Player::HandleBallAttack(float dt) {
     }
 
     // Add check for ball attack animation completion before allowing next shot
-    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0) {
+    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack) {
         ballCounter--;
         Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
         projectile->SetParameters(engine.scene.get()->normalProjectileConfigNode);
@@ -1831,6 +1860,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
             }
             if (item && item->GetItemType() == "Ball") {
+				BallAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
             }
         }
@@ -1911,11 +1941,69 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
         break;
     }
+    case ColliderType::PROJECTILE: {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
+            freezeWhileHurting = true;
+			ballhurt = true; 
+
+            // Cancel any ongoing attack
+            if (isAttacking) {
+                isAttacking = false;
+                if (attackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                    attackHitbox = nullptr;
+                }
+            }
+            if (isWhipAttacking) {
+                isWhipAttacking = false;
+                if (whipAttackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                    whipAttackHitbox = nullptr;
+                }
+            }
+        }
+
+        break;
+    }
+    case ColliderType::BUFON_JUMP_ATTACK_AREA: {
+        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+            isHurtDelayed = true;
+            currentHurtDelay = 0.0f;
+            freezeWhileHurting = true;
+            bufonjumphurt = true;
+
+			// Apply knockback force to the player
+            float knockbackForce = facingRight ? 50.0f : 50.0f; 
+            b2Vec2 impulse = facingRight ? b2Vec2(-knockbackForce, 0) : b2Vec2(knockbackForce, 0);
+
+            pbodyUpper->body->ApplyLinearImpulseToCenter(impulse, true);
+            pbodyLower->body->ApplyLinearImpulseToCenter(impulse, true);
+
+			// Cancel any ongoing attack
+            if (isAttacking) {
+                isAttacking = false;
+                if (attackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                    attackHitbox = nullptr;
+                }
+            }
+            if (isWhipAttacking) {
+                isWhipAttacking = false;
+                if (whipAttackHitbox) {
+                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                    whipAttackHitbox = nullptr;
+                }
+            }
+        }
+        break;
+    }
     case ColliderType::LEVER: {
         break;
     }
     case ColliderType::MOSAIC_PIECE: {
-        break;
+         break;
     }
     case ColliderType::MOSAIC_LEVER: {
         break;
@@ -2075,6 +2163,10 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
             hurted = false;
             freezeWhileHurting = false;
         }
+        break;
+    case ColliderType::PROJECTILE:
+        break;
+    case ColliderType::BUFON_JUMP_ATTACK_AREA:
         break;
     case ColliderType::ASCENSORES:
         TocandoAs = false;
