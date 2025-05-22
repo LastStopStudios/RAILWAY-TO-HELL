@@ -376,12 +376,12 @@ bool Scene::CleanUp()
 	if (introScreenTexture != nullptr)
 	{
 		Engine::GetInstance().textures->UnLoad(introScreenTexture);
-		introScreenTexture = nullptr;
+		//introScreenTexture = nullptr;
 	}
 	if (introTextoTexture != nullptr)
 	{
 		Engine::GetInstance().textures->UnLoad(introTextoTexture);
-		introTextoTexture = nullptr;
+		//introTextoTexture = nullptr;
 	}
 	for (auto puzzle : mosaicPuzzleList) {
 		puzzle->CleanUp();

@@ -102,7 +102,7 @@ void DialogoM::ResetText() {
 	Siguiente = true;
 	if (textTexture != nullptr) {
 		SDL_DestroyTexture(textTexture);
-		textTexture = nullptr;
+		//textTexture = nullptr;
 	}
 	showText = false; // Reset text visibility 
 	// No resetear lastDialogID aquí
@@ -113,7 +113,7 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 	if (textTexture != nullptr)
 	{
 		SDL_DestroyTexture(textTexture); // Release previous texture
-		textTexture = nullptr;
+		//textTexture = nullptr;
 	}
 
 	SDL_Color color = { 255, 255, 255 }; // Define font color
@@ -251,7 +251,7 @@ bool DialogoM::CleanUp()
 	if (textTexture != nullptr)
 	{
 		SDL_DestroyTexture(textTexture);
-		textTexture = nullptr;
+		//textTexture = nullptr;
 	}
 
 	if (fondo != nullptr) {
