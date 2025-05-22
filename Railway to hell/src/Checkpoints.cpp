@@ -370,28 +370,36 @@ void Checkpoints::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-
 		setToIdleAnim();
 
-		if (!isActivated && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		// Check keyboard input
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			activatePressed = true;
+		}
+
+		// Check if a controller is connected and if the B button is pressed
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+				activatePressed = true;
+			}
+		}
+
+		if (!isActivated && activatePressed) {
 			ResetOthersCheckpoints();
 			Engine::GetInstance().scene.get()->SaveState();
 			int currentscene = Engine::GetInstance().sceneLoader.get()->GetCurrentLevel();
 			Engine::GetInstance().scene.get()->GetPlayer()->ResetLives();
-
 			// Guardar la escena del último checkpoint activado
 			SaveLastCheckpointScene(currentscene);
-
 			setActivatedToTrue(currentscene);
 			Engine::GetInstance().audio.get()->StopAllFx();
 			Engine::GetInstance().audio.get()->PlayFx(checkpointFX);
 			isActivated = true;
 			currentAnimation = &activated;
 		}
-
 		break;
 	case ColliderType::UNKNOWN:
-
 		break;
 	default:
 		break;

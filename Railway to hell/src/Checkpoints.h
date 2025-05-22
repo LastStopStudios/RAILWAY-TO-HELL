@@ -46,7 +46,7 @@ public:
 	void SaveLastCheckpointScene(int scene);
 
 public:
-
+	bool activatePressed = false;
 	bool isPicked = false;
 
 	bool isActivated = false;
