@@ -115,12 +115,6 @@ bool MosaicPiece::Update(float dt)
     // Dibuja la textura con rotación
     double angle = currentRotation * 90.0; // Convert rotation (0-3) to degrees (0, 90, 180, 270)
 
-    // Imprime información de depuración
-    if (isRotating) {
-        LOG("Drawing rotation frame for piece %d: x=%d, y=%d, w=%d, h=%d",
-            pieceId, rect.x, rect.y, rect.w, rect.h);
-    }
-
     // Using correct signature: DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, 
     // float speed, double angle, int pivotX, int pivotY, SDL_RendererFlip flip)
     Engine::GetInstance().render.get()->DrawTexture(

@@ -42,9 +42,7 @@ bool EntityManager::Awake()
 		if (entity->active == false) continue;
 		ret = entity->Awake();
 	}
-
 	return ret;
-
 }
 
 bool EntityManager::Start() {
@@ -72,9 +70,7 @@ bool EntityManager::CleanUp()
 		if (entity->active == false) continue;
 		ret = entity->CleanUp();
 	}
-
 	entities.clear();
-
 	return ret;
 }
 
@@ -179,7 +175,6 @@ bool EntityManager::PreUpdate(){
 			entitiesToRemove.push_back(entity);
 			continue;
 		}
-
 		ret = entity->PreUpdate();
 	}
 
@@ -187,7 +182,6 @@ bool EntityManager::PreUpdate(){
 	for (auto entity : entitiesToRemove) {
 		DestroyEntity(entity);
 	}
-
 	return ret;
 }
 bool EntityManager::Update(float dt)
