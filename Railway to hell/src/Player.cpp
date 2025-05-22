@@ -316,6 +316,7 @@ bool Player::Update(float dt)
             Engine::GetInstance().ui->figth2 = false;
             Engine::GetInstance().ui->figth3 = false;
             Engine::GetInstance().scene->SalirBoss();
+            Engine::GetInstance().scene->DesbloquearSensor();
             HandleSceneSwitching();
             hasDied = false;
 			return true;
@@ -1962,7 +1963,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurtDelayed = true;
             currentHurtDelay = 0.0f;
-            freezeWhileHurting = true;
+            //freezeWhileHurting = true;
 
             // Cancel any ongoing attack
             if (isAttacking) {
