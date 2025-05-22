@@ -1856,7 +1856,7 @@
 	</scene4>
 	<scene5>
 		<map path="Assets/Maps/" name="IE1L2.tmx" />
-		<visibility accessed="true" />
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -1957,7 +1957,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Ball" death="0" savedDeath="0" x="3108" y="2120" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item" created="false">
+				<item name="Ball" death="0" savedDeath="0" x="3268" y="2279" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item" created="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -2144,9 +2144,6 @@
 							<frame x="960" y="0" w="192" h="192" />
 							<frame x="1344" y="0" w="192" h="192" />
 						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
 						<die loop="false" speed="0.15">
 							<frame x="0" y="704" w="256" h="256" />
 							<frame x="256" y="704" w="256" h="256" />
@@ -2224,7 +2221,7 @@
 							<frame x="5376" y="960" w="256" h="256" />
 							<frame x="5632" y="960" w="256" h="256" />
 						</impacting>
-						<hurt loop="true" speed="0.15">
+						<hurt loop="false" speed="0.05">
 							<frame x="0" y="1216" w="192" h="192" />
 						</hurt>
 					</animations>

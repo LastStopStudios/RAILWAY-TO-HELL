@@ -134,13 +134,15 @@ bool Bufon::Update(float dt)
         currentAnimation->Update();
 
         // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying || currentAnimation->HasFinished() && isDead) {
+        if (currentAnimation->HasFinished() && isDying && !itemCreated || currentAnimation->HasFinished() && isDead && !itemCreated) {
             // Create the key item before deleting the entity
+            itemCreated = true;
+
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(Engine::GetInstance().scene.get()->ballItemConfigNode);
             Engine::GetInstance().scene.get()->itemList.push_back(item);
             item->Start();
-            Vector2D pos(position.getX() + texW, position.getY());
+            Vector2D pos(position.getX() + texW / 2, position.getY());
             item->SetPosition(pos);
             item->SavePosition("Ball");
             item->SetCreatedTrueInXML();
@@ -157,8 +159,17 @@ bool Bufon::Update(float dt)
         }
 
         // Draw the death animation
-        SDL_RendererFlip flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
+        SDL_Rect frame = currentAnimation->GetCurrentFrame();
+        int offsetX = 0;
+        if (isLookingLeft) {
+            flip = SDL_FLIP_NONE;
+            offsetX = ((frame.w - texW) / 2 - 24);
+        }
+        else {
+            flip = SDL_FLIP_HORIZONTAL;
+            offsetX = -8;
+        }
+        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 36 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         //UI Lives
         Engine::GetInstance().ui->figth2 = false;
@@ -353,13 +364,12 @@ bool Bufon::Update(float dt)
     position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
     position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-    if (currentAnimation == &idle || currentAnimation == &hurt) {
+	if (currentAnimation == &idle || currentAnimation == &hurt) { // 192, 192
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() -4 - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
-    }
-    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting || currentAnimation == &die) {
+    }  // 256, 256
+    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting) {
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 36 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     }
-
 
     currentAnimation->Update();
 
@@ -811,7 +821,9 @@ void Bufon::SetSavedDeathToAliveInXML()
 void Bufon::SetEnabled(bool active) {
     isEnabled = active;
     pbody->body->SetEnabled(active);
+	jumpAttackArea->body->SetEnabled(active);
     pbody->body->SetAwake(active);
+	jumpAttackArea->body->SetAwake(active);
 }
 
 bool Bufon::CleanUp()
