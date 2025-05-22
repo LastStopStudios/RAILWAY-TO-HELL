@@ -191,7 +191,7 @@ void Item::SetDeathInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for item");
+        //LOG("death status updated in the XML for item");
     }
     DeathValue = 1;
 }
@@ -292,7 +292,7 @@ void Item::SetAliveInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for item");
+        //LOG("death status updated in the XML for item");
     }
     DeathValue = 0;
 }
@@ -393,7 +393,7 @@ void Item::SetSavedDeathToDeathInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for item");
+        //LOG("death status updated in the XML for item");
     }
 
     SavedDeathValue = 1;
@@ -495,7 +495,7 @@ void Item::SetSavedDeathToAliveInXML()
         LOG("Error saving config.xml");
     }
     else {
-        LOG("death status updated in the XML for item");
+        //LOG("death status updated in the XML for item");
     }
 
     SavedDeathValue = 0;
@@ -597,7 +597,7 @@ void Item::SetCreatedTrueInXML() {
 		LOG("Error saving config.xml");
 	}
 	else {
-		LOG("death status updated in the XML for item");
+		//LOG("death status updated in the XML for item");
 	}
 
 }
@@ -697,7 +697,7 @@ void Item::SetCreatedFalseInXML() {
 		LOG("Error saving config.xml");
 	}
 	else {
-		LOG("death status updated in the XML for item");
+		//LOG("death status updated in the XML for item");
 	}
 }
 
@@ -827,7 +827,6 @@ void Item::SavePosition(std::string name) {
 				}
 				i++;
 			}
-
 		}
 	}
 
@@ -837,8 +836,6 @@ void Item::SavePosition(std::string name) {
 
 bool Item::CleanUp()
 {
-
-
 	Engine::GetInstance().physics->DeletePhysBody(pbody);
 
 	return true;

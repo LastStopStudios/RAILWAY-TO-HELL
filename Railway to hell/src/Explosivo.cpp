@@ -81,9 +81,7 @@ bool Explosivo::Update(float dt)
         // If animation finished, start the timer for deletion
         if (currentAnimation->HasFinished()) {
             deathTimer += dt;
-            LOG("Death Timer: %f of %f", deathTimer, deathDelay);
             if (deathTimer >= deathDelay) {
-                LOG("Setting pendingToDelete = true");
                 pendingToDelete = true;
             }
         }
@@ -153,9 +151,7 @@ bool Explosivo::Update(float dt)
         // If animation finished, start the timer for deletion
         if (currentAnimation->HasFinished()) {
             deathTimer += dt;
-            LOG("Death Timer: %f of %f", deathTimer, deathDelay);
             if (deathTimer >= deathDelay) {
-                LOG("Setting pendingToDelete = true");
                 pendingToDelete = true;
             }
         }
@@ -179,7 +175,6 @@ bool Explosivo::Update(float dt)
     // Self-explosion timer logic
     if (cigarro) {
         explosiveTimer += dt;
-        LOG("Timer: %f", explosiveTimer);
 
         if (explosiveTimer >= Ivolo && !isExploding) {
             // Start explosion sequence
@@ -204,8 +199,6 @@ bool Explosivo::Update(float dt)
             return Update(dt); // Re-run Update to apply offset immediately
         }
     }
-
-   
 
     // Handle skipping first input if necessary
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
@@ -290,7 +283,6 @@ bool Explosivo::Update(float dt)
             if (distanceToPlayer <= DETECTION_DISTANCE)
             {
                 isChasing = true;
-                LOG("Distance: %f", distanceToPlayer);
 
                 // Use run animation during chase
                 if (currentAnimation != &run && !cigarro) {
@@ -299,7 +291,6 @@ bool Explosivo::Update(float dt)
                 }
 
                 if (distanceToPlayer < TikingDistance) {
-                    LOG("Tiking: %s", cigarro ? "true" : "false");
                     cigarro = true;
                     // Switch to explode animation will happen when timer expires
                 }
@@ -472,7 +463,7 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
     case ColliderType::PLAYER:
-        LOG("Collided with player - DESTROY");
+        LOG("Collided with player");
         toco = true;
         break;
     case ColliderType::PLAYER_ATTACK: {
@@ -485,7 +476,6 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             else if (lives <= 0 && !isDying && !isExploding) {
                 // Start die animation when killed by player attack
-                LOG("Starting die animation");
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
@@ -515,7 +505,6 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             else if (lives <= 0 && !isDying && !isExploding) {
                 // Start die animation when killed by whip attack
-                LOG("Starting die animation from whip");
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();
@@ -546,7 +535,6 @@ void Explosivo::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             else if (lives <= 0 && !isDying && !isExploding) {
                 // Start die animation when killed by projectile
-                LOG("Starting die animation from projectile");
                 isDying = true;
                 currentAnimation = &die;
                 currentAnimation->Reset();

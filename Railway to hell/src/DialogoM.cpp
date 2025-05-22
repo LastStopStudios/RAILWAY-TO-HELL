@@ -127,7 +127,7 @@ void DialogoM::GenerateTextTexture()//display text on the screen
 	SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, currentText.c_str(), color, textMaxWidth);// TTF_RenderText_Blended_Wrapped divides text into lines automatically
 	if (surface == nullptr)
 	{
-		LOG("Error creating text Render: %s", SDL_GetError());
+		LOG("Creating text Render : % s", SDL_GetError());
 		return;
 	}
 

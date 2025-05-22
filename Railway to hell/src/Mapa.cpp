@@ -220,7 +220,6 @@ void Mapa::CoverXML() {
 	i = 1;
 	for (i = 1; i < 11; i++)// Iterate through all the maps
 	{
-		LOG("Entro al for");
 		std::string escena = (i == 1) ? "scene" : "scene" + std::to_string(i);//pass the scene from where to get the dialogues
 		pugi::xml_node sceneNodes = sceneNode.child(escena.c_str()).child("visibility");
 
