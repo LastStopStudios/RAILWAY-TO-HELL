@@ -23,7 +23,7 @@
 		<map path="Assets/Maps/" name="DT2L1.tmx" />
 		<visibility accessed="true" />
 		<entities>
-			<player x="2877" y="2048" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="2909" y="2018" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.03">
 						<frame x="0" y="0" w="64" h="96" />
@@ -1856,7 +1856,7 @@
 	</scene4>
 	<scene5>
 		<map path="Assets/Maps/" name="IE1L2.tmx" />
-		<visibility accessed="false" />
+		<visibility accessed="true" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>

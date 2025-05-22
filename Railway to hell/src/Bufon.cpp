@@ -161,14 +161,14 @@ bool Bufon::Update(float dt)
         Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 32, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
 
         //UI Lives
-        Engine::GetInstance().ui->figth = false;
+        Engine::GetInstance().ui->figth2 = false;
 
         // When dying, don't process any other logic
         return true;
     }
-    if (Engine::GetInstance().ui->figth == true) {
+    if (Engine::GetInstance().ui->figth2 == true) {
         //UI Lives
-        Engine::GetInstance().ui->vidab1 = lives;
+        Engine::GetInstance().ui->vidab2 = lives;
     }
 
     if (!ishurt) {
