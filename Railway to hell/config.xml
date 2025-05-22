@@ -170,13 +170,6 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Double jump" death="0" savedDeath="0" x="3000" y="2088" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
-					<animations>
-						<idle loop="true" speed="0.1">
-							<frame x="0" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</item>
 				<item name="Remember1" death="0" savedDeath="0" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
@@ -1201,7 +1194,7 @@
 			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember the legend of the station that was decorated and completely illuminated and then never opened, it was cursed, that station by the photos I've seen reminds me a lot of that maybe it was an entrance to the underworld and that's why they never opened it you can imagine..." />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember the legend of the station that was decorated and completely illuminated and then never opened? It was cursed. Maybe that's why they never opened it you can imagine..." />
 			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I still think about those nights when we stayed up doing puzzles together... Those are some of my favorite memories with you, Nadia. I miss you so much. Things haven't been the same without you." />
 		</dialogues>
 	</scene2>
@@ -1750,7 +1743,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Double jump" x="2895" y="589" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2">
+				<item name="Double jump" death="0" savedDeath="0" x="2895" y="589" w="32" h="32" texture="Assets/Textures/Items/Doublejump.png" gravity="false" ID="2" ref="doubleJump_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -3156,7 +3149,7 @@
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me not to eat snow too fast or it'd stab my chest like needles. But I still did it. I said it was ice cream. You rolled your eyes, but you let me pretend." />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Do you remember when we wanted to keep our snowman in the fridge to prevent it from defrosting and the next day when dad came home he gave us a big scolding because we had flooded the fridge." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Do you remember when we wanted to keep our snowman in the fridge to prevent it from defrosting? The next day when dad came home he gave us a big scolding because we had flooded the fridge." />
 		</dialogues>
 	</scene8>
 	<scene9>

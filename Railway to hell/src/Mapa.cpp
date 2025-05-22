@@ -71,8 +71,10 @@ bool Mapa::Update(float dt) {
 		static bool previousAbuttonPressed = false;
 		if (AbuttonPressed && !previousAbuttonPressed) {
 			Mostrar = !Mostrar;
+			if (Mostrar) { LoadMap(); }
 			if (!Mostrar) {
 				Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
+				CleanUp();
 			}
 		}
 		previousAbuttonPressed = AbuttonPressed;
