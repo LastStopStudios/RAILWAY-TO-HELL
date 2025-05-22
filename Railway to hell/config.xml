@@ -170,7 +170,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Remember1" death="0" savedDeath="0" x="239" y="4305" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4" ref="remember1_item">
+				<item name="Remember1" death="0" savedDeath="0" x="436" y="4288" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="4" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
