@@ -128,6 +128,7 @@ private:
 	float attackDistance = 14.0f;
 	bool canAttack = true;
 	bool escaping = false;
+	bool isRunning = false;
 
 	int lives = 10;
 

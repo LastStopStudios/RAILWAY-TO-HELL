@@ -1957,7 +1957,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Ball" death="0" savedDeath="0" x="3284" y="2295" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item" created="false">
+				<item name="Ball" death="0" savedDeath="0" x="3332" y="2342" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item" created="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />

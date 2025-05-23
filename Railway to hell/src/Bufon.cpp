@@ -131,7 +131,7 @@ bool Bufon::Update(float dt)
             phase_One = true;
             currentAnimation = &jumping;
             isJumpAttacking = true;
-            float jumpForceX = isLookingLeft ? 5.0f : 5.0f;
+            float jumpForceX = isLookingLeft ? 7.0f : 7.0f;
             float jumpForceY = -10.0f;
             float direction = 0;
             float deltaX = position.getX() - intitalPosX;
@@ -155,7 +155,7 @@ bool Bufon::Update(float dt)
         if (currentAnimation->HasFinished() && isDying && !itemCreated || currentAnimation->HasFinished() && isDead && !itemCreated) {
             // Create the key item before deleting the entity
             itemCreated = true;
-
+            currentAnimation->Reset();
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(Engine::GetInstance().scene.get()->ballItemConfigNode);
             Engine::GetInstance().scene.get()->itemList.push_back(item);
@@ -324,7 +324,20 @@ bool Bufon::Update(float dt)
                 currentAnimation = &idle;
                 disparoR.Reset();
             }
-            if (impacting.HasFinished()) { // stop attacking
+            if (impacting.HasFinished() && isRunning) {
+                phase_One, phase_Two, phase_Three = false;
+                isJumpAttacking = false;
+                isAttacking = false;
+                idle.Reset();
+                currentAnimation = &idle;
+                escaping = false;
+                canAttack = true;
+                currentAttackCooldown = 0.0f;
+                impacting.Reset();
+                pbody->body->GetFixtureList()->SetDensity(500);
+                pbody->body->ResetMassData();
+            }
+            if (impacting.HasFinished() && !escaping && !          isRunning) { // stop attacking
                 phase_One, phase_Two, phase_Three = false;
                 isJumpAttacking = false;
                 isAttacking = false;
@@ -334,6 +347,7 @@ bool Bufon::Update(float dt)
                 pbody->body->GetFixtureList()->SetDensity(500);
                 pbody->body->ResetMassData();
             }
+            
         }
 
         if (!isAttacking) {
@@ -1088,19 +1102,19 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLATFORM:
-        if (isJumpAttacking && phase_One && phase_Two && phase_Three) {
+        if (isJumpAttacking && phase_One && phase_Two && phase_Three && !escaping) {
 			pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
             currentAnimation = &impacting;
-            escaping = false;   
         }
         else if (isJumpAttacking && phase_One && phase_Two && phase_Three && escaping) {
             pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
             currentAnimation = &impacting;
-			escaping = false;
+            escaping = false;
         }
         break;
     case ColliderType::PLAYER_ATTACK:
-        if (Hiteado == false) {
+        if (Hiteado == false && currentAnimation != &impacting && !escaping) {
+            isRunning = true;
             Hiteado = true;
             if (lives > 0) {
                 lives = lives - 1;
@@ -1135,7 +1149,8 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLAYER_WHIP_ATTACK:
-        if (Hiteado == false) {
+        if (Hiteado == false && currentAnimation != &impacting && !escaping) {
+            isRunning = true;
             Hiteado = true;
 
             if (lives > 0) {

@@ -2019,7 +2019,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             bufonjumphurt = true;
 
 			// Apply knockback force to the player
-            float knockbackForce = facingRight ? 50.0f : 50.0f; 
+            float knockbackForce = facingRight ? 30.0f : 50.0f; 
             b2Vec2 impulse = facingRight ? b2Vec2(-knockbackForce, 0) : b2Vec2(knockbackForce, 0);
 
             pbodyUpper->body->ApplyLinearImpulseToCenter(impulse, true);
