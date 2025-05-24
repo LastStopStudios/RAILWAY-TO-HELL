@@ -357,13 +357,36 @@ bool Ffmpeg::OpenAudioCodecContext(int audioIndex)
 bool Ffmpeg::HandleEvents()
 {
     SDL_Event event;
+
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            running = false;  // Set running to false on quit event
-            return false;     // Return false to break the main loop
+        switch (event.type) {
+        case SDL_QUIT:
+            // Usuario cierra la ventana
+            running = false;
+            return false;
+
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+                // ESC presionado - detener reproducción
+                LOG("ESC pressed - stopping video playback");
+                running = false;
+                CloseCurrentVideo();
+                return false;
+
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        default:
+            break;
         }
     }
-    return true;  // Continue running
+
+    return true; // Continuar reproducción
 }
 
 // Process audio from the audio buffer
@@ -731,6 +754,7 @@ void Ffmpeg::RenderCutscene()
 // Update function called each frame
 bool Ffmpeg::Update(float dt)
 {
+    HandleEvents();
     // Currently empty, could be used for updating UI elements
     return true;  // Continue running
 }
