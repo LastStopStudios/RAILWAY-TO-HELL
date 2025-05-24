@@ -899,7 +899,7 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_I) == KEY_DOWN && currentLvl != 12 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(12, 1020, 634, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(12, 1020, 1656, false, false);
     }
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors

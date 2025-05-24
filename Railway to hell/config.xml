@@ -4437,7 +4437,7 @@
 		<map path="Assets/Maps/" name="FBOSS.tmx" />
 		<visibility accessed="true" />
 		<entities>
-			<player x="920" y="634" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
+			<player x="920" y="1956" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
 					<hurt loop="false" speed="0.15">
 						<frame x="0" y="0" w="64" h="96" />
@@ -4536,7 +4536,7 @@
 				</animations>
 			</player>
 			<items>
-				<item name="Remember1" death="0" savedDeath="0" x="550" y="650" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
+				<item name="Remember1" death="0" savedDeath="0" x="550" y="1656" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
 					<animations>
 						<idle loop="true" speed="0.2">
 							<frame x="0" y="0" w="32" h="32" />
