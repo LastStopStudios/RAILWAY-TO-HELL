@@ -56,8 +56,11 @@
  <tileset firstgid="49" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
- <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="24072" columns="236">
-  <image source="atlas_backgrounds.png" width="7559" height="3272"/>
+ <tileset firstgid="51" name="atlas_backgrounds" tilewidth="32" tileheight="32" tilecount="14160" columns="236">
+  <image source="atlas_backgrounds.png" width="7559" height="1920"/>
+ </tileset>
+ <tileset firstgid="23685" name="background3" tilewidth="32" tileheight="32" tilecount="9063" columns="159">
+  <image source="background3.png" trans="ff00ff" width="5112" height="1848"/>
  </tileset>
  <layer id="28" name="FondoNegro" width="120" height="60">
   <properties>
@@ -78072,15 +78075,15 @@
    <tile gid="13351"/>
    <tile gid="13352"/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="13344"/>
-   <tile gid="13345"/>
-   <tile gid="13346"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
    <tile gid="13347"/>
    <tile gid="13348"/>
    <tile gid="13349"/>
@@ -78192,7 +78195,7 @@
    <tile gid="13587"/>
    <tile gid="13588"/>
    <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78200,7 +78203,7 @@
    <tile/>
    <tile gid="13580"/>
    <tile gid="13581"/>
-   <tile gid="13582"/>
+   <tile gid="5921"/>
    <tile gid="13583"/>
    <tile gid="13584"/>
    <tile gid="13585"/>
@@ -78312,6 +78315,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78319,8 +78323,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile gid="4363"/>
    <tile/>
    <tile/>
@@ -78432,7 +78435,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile gid="4602"/>
    <tile gid="4603"/>
@@ -78440,7 +78443,7 @@
    <tile gid="4605"/>
    <tile gid="4606"/>
    <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78552,6 +78555,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78559,8 +78563,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78672,6 +78675,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78679,8 +78683,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78787,6 +78790,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5918"/>
+   <tile gid="5918"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78794,13 +78803,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78907,6 +78910,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5918"/>
+   <tile gid="5918"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -78914,13 +78923,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>
@@ -79027,20 +79030,20 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="5918"/>
+   <tile gid="5918"/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
+   <tile gid="5921"/>
    <tile/>
    <tile/>
    <tile/>

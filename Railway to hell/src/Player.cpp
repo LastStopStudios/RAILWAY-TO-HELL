@@ -898,6 +898,9 @@ void Player::HandleSceneSwitching() {
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_I) == KEY_DOWN && currentLvl != 12 ) {
+        Engine::GetInstance().sceneLoader->LoadScene(12, 1020, 634, false, false);
+    }
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
