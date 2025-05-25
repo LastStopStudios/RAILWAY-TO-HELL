@@ -47,7 +47,7 @@ bool Ffmpeg::Start()
     return true;
 }
 
-// Genera la ruta del archivo WAV basándose en la ruta del video
+// Generate WAV file path based on video path
 std::string Ffmpeg::GetWavPathFromVideo(const char* videoPath)
 {
     std::string videoPathStr(videoPath);
@@ -85,7 +85,7 @@ bool Ffmpeg::LoadAndPlayWavAudio(const char* wavPath)
 void Ffmpeg::StopWavAudio()
 {
     if (isAudioPlaying) {
-        // Solo parar el audio actual, no reproducir "Nothing.ogg"
+        // Stop current audio only, don't play "Nothing.ogg"
         Mix_HaltMusic();
 
         LOG("Stopping WAV music playback");
@@ -101,7 +101,7 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
         return true;
     }
 
-    // Si el video ya está cargado, no lo recargamos
+    // Don't reload if video is already loaded
     if (currentVideoPath == videoPath && formatContext != nullptr) {
         return false;
     }
@@ -134,7 +134,7 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
 
     av_dump_format(formatContext, 0, videoPath, 0);
 
-    // Abrir contexto de codec solo para video (sin audio del video)
+    // Open codec context for video only (no video audio)
     if (OpenCodecContext(&streamIndex)) {
         LOG("Failed to open codec contexts");
         CloseCurrentVideo();
@@ -147,7 +147,7 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
         return true;
     }
 
-    // Crear textura SDL para renderizar los frames del video
+    // Create SDL texture for rendering video frames
     renderTexture = SDL_CreateTexture(
         Engine::GetInstance().render.get()->renderer,
         SDL_PIXELFORMAT_YV12,
@@ -164,7 +164,7 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
 
     renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
 
-    // Cargar y reproducir el audio WAV correspondiente
+    // Load and play corresponding WAV audio
     std::string wavPath = GetWavPathFromVideo(videoPath);
     if (!wavPath.empty()) {
         LoadAndPlayWavAudio(wavPath.c_str());
@@ -213,7 +213,7 @@ bool Ffmpeg::ConvertPixels(const char* videoPath)
     return ConvertPixels(streamIndex, -1);
 }
 
-// Abrir contexto de codec solo para el stream de video
+// Open codec context for video stream only
 bool Ffmpeg::OpenCodecContext(int* index)
 {
     if (!formatContext) {
@@ -296,7 +296,7 @@ bool Ffmpeg::HandleEvents()
                 return false;
 
             case SDLK_SPACE:
-                // Iniciar proceso de skip al presionar espacio
+                // Start skip process when space is pressed
                 if (!isSkipping && !skipCompleted) {
                     isSkipping = true;
                     skipStartTime = SDL_GetTicks();
@@ -312,7 +312,7 @@ bool Ffmpeg::HandleEvents()
         case SDL_KEYUP:
             switch (event.key.keysym.sym) {
             case SDLK_SPACE:
-                // Cancelar skip si se suelta la tecla antes de completar
+                // Cancel skip if key is released before completion
                 if (isSkipping && !skipCompleted) {
                     isSkipping = false;
                     LOG("Skip cancelled - SPACE released");
@@ -339,7 +339,7 @@ void Ffmpeg::UpdateSkipSystem()
     Uint32 currentTime = SDL_GetTicks();
     Uint32 elapsedTime = currentTime - skipStartTime;
 
-    // Si se completó el tiempo de skip
+    // Skip time completed
     if (elapsedTime >= SKIP_DURATION) {
         LOG("Skip completed - stopping audio and marking for end");
         skipCompleted = true;
@@ -350,7 +350,7 @@ void Ffmpeg::UpdateSkipSystem()
         return;
     }
 
-    // Verificar si la tecla SPACE sigue presionada
+    // Check if SPACE key is still held
     const Uint8* keyState = SDL_GetKeyboardState(NULL);
     if (!keyState[SDL_SCANCODE_SPACE]) {
         isSkipping = false;
@@ -358,40 +358,40 @@ void Ffmpeg::UpdateSkipSystem()
     }
 }
 
-// Renderizar círculo que se llena progresivamente de derecha a izquierda (todo el círculo)
 void Ffmpeg::RenderSkipBar(float progress)
 {
     if (!isSkipping) return;
 
     SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
 
-    int centerX = Engine::GetInstance().window->width - 80;
-    int centerY = 700;
-    int radius = 20;
+    int centerX = Engine::GetInstance().window->width - 50;
+    int centerY = 720;
+    int radius = 11;
+    int thickness = 4; // Border thickness in pixels
 
-    // Asegurar que el progreso esté entre 0 y 1
+    // Clamp progress between 0 and 1
     if (progress < 0.0f) progress = 0.0f;
     if (progress > 1.0f) progress = 1.0f;
 
-    float fillAngle = progress * 2.0f * M_PI;
+    float maxAngle = progress * 2.0f * M_PI;
 
-    SDL_SetRenderDrawColor(renderer, 139, 0, 0, 255);  // Rojo oscuro sólido
+    SDL_SetRenderDrawColor(renderer, 139, 0, 0, 255);  // Dark red
 
-    for (int y = -radius; y <= radius; y++) {
-        for (int x = -radius; x <= radius; x++) {
-            if (x * x + y * y <= radius * radius) {
-                float angle = atan2f(y, x); // Rango: -? a ?
-                if (angle < 0.0f) angle += 2.0f * M_PI; // Normalizar a 0 a 2?
+    const int segments = 200;
+    for (int i = 0; i <= segments; ++i) {
+        float angle = (float)i / segments * maxAngle;
 
-                if (angle <= fillAngle) {
-                    SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
-                }
-            }
+        // Draw multiple points with adjacent radii to simulate thickness
+        for (int t = -thickness / 2; t <= thickness / 2; ++t) {
+            float currentRadius = radius + t;
+            int x = centerX + static_cast<int>(cosf(angle) * currentRadius);
+            int y = centerY + static_cast<int>(sinf(angle) * currentRadius);
+            SDL_RenderDrawPoint(renderer, x, y);
         }
     }
 }
 
-// Función principal para decodificar y convertir frames de video
+// Main function for decoding and converting video frames
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
     if (!formatContext || !videoCodecContext) {
@@ -434,7 +434,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         return true;
     }
 
-    // Crear contexto de escalado para conversión de formato
+    // Create scaling context for format conversion
     struct SwsContext* sws_ctx = sws_getContext(
         videoCodecContext->width, videoCodecContext->height, videoCodecContext->pix_fmt,
         videoCodecContext->width, videoCodecContext->height, AV_PIX_FMT_YUV420P,
@@ -453,7 +453,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
     Uint32 videoStartTime = SDL_GetTicks();
     int64_t firstPts = AV_NOPTS_VALUE;
 
-    // Bucle principal de lectura de paquetes
+    // Main packet reading loop
     while (av_read_frame(formatContext, packet) >= 0 && running && !skipCompleted)
     {
         if (skipCompleted) {
@@ -477,7 +477,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
             break;
         }
 
-        // Procesar solo paquetes de video
+        // Process video packets only
         if (packet->stream_index == videoIndex)
         {
             if (!videoCodecContext) {
@@ -502,7 +502,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 continue;
             }
 
-            // Obtener timestamp de presentación para este frame
+            // Get presentation timestamp for this frame
             int64_t pts = srcFrame->pts;
             if (pts == AV_NOPTS_VALUE) {
                 pts = 0;
@@ -513,14 +513,14 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 videoStartTime = SDL_GetTicks();
             }
 
-            // Calcular el tiempo de visualización en milisegundos
+            // Calculate display time in milliseconds
             double timeInSeconds = av_q2d(videoTimeBase) * (pts - firstPts);
             int displayTimeMs = (int)(timeInSeconds * 1000.0);
 
             int elapsedMs = SDL_GetTicks() - videoStartTime;
             int delayMs = displayTimeMs - elapsedMs;
 
-            // Escalar y convertir el frame al formato necesario
+            // Scale and convert frame to required format
             int scaleResult = sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
                 srcFrame->linesize, 0, videoCodecContext->height,
                 dstFrame->data, dstFrame->linesize);
@@ -531,7 +531,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 continue;
             }
 
-            // Actualizar la textura con los datos del nuevo frame
+            // Update texture with new frame data
             int updateResult = SDL_UpdateYUVTexture(renderTexture, &renderRect,
                 dstFrame->data[0], dstFrame->linesize[0],  // Y plane
                 dstFrame->data[1], dstFrame->linesize[1],  // U plane
@@ -546,7 +546,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 
             RenderCutscene();
 
-            // Esperar si es necesario para mantener el timing correcto
+            // Wait if necessary to maintain correct timing
             if (delayMs > 0 && delayMs < 1000) {
                 SDL_Delay(delayMs);
             }
@@ -555,7 +555,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         av_packet_unref(packet);
     }
 
-    // Limpiar recursos
+    // Clean up resources
     av_frame_free(&srcFrame);
     av_frame_free(&dstFrame);
     av_packet_free(&packet);
@@ -601,11 +601,11 @@ void Ffmpeg::RenderCutscene()
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, renderTexture, NULL, NULL);
 
-    // Dibujar elementos interactivos si están activos
+    // Draw interactive elements if active
     if (isHover1) Engine::GetInstance().render->DrawTexture(texture1, position1.x, position1.y, NULL);
     if (isHover2) Engine::GetInstance().render->DrawTexture(texture2, position2.x, position2.y, NULL);
 
-    // Renderizar barra de skip si está activa
+    // Render skip bar if active
     if (isSkipping) {
         Uint32 currentTime = SDL_GetTicks();
         Uint32 elapsedTime = currentTime - skipStartTime;
