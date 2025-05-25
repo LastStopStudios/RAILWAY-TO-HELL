@@ -8,15 +8,23 @@
 #include "Map.h"
 #include "Point.h"
 #include "Engine.h"
+#include <cmath>
 
 // Constructor initializes the module with basic parameters
 Ffmpeg::Ffmpeg(bool enabled) : Module()
 {
     name = "cutsceneplayer";    // Set the module name
-    audioIndex = -1;            // Initialize audio stream index to invalid
     streamIndex = -1;           // Initialize video stream index to invalid
-    swr = nullptr;              // Initialize audio resampler pointer to null
     currentVideoPath = "";      // Clear the current video path
+    currentAudioPath = "";      // Clear the current audio path
+    isAudioPlaying = false;     // No audio loaded initially
+
+    // Initialize skip system variables
+    isSkipping = false;
+    skipCompleted = false;      // Initialize skip completed flag
+    skipStartTime = 0;
+    skipBarTexture = nullptr;
+    running = false;            // Initialize running state
 }
 
 // Destructor - cleanup is handled in CleanUp()
@@ -41,7 +49,6 @@ bool Ffmpeg::Start()
     // Initialize pointers to null but don't load any video yet
     formatContext = nullptr;         // Format context holds file information
     videoCodecContext = nullptr;     // Video codec context for decoding video
-    audioCodecContext = nullptr;     // Audio codec context for decoding audio
     renderTexture = nullptr;         // Texture used for rendering video frames
 
     // Set the module state to running
@@ -49,9 +56,71 @@ bool Ffmpeg::Start()
     return true;                     // Return success
 }
 
+// Generate WAV file path from video file path
+std::string Ffmpeg::GetWavPathFromVideo(const char* videoPath)
+{
+    std::string videoPathStr(videoPath);
+    std::string wavPath;
+
+    // Find the last slash and dot to extract filename
+    size_t lastSlash = videoPathStr.find_last_of('/');
+    size_t lastDot = videoPathStr.find_last_of('.');
+
+    if (lastSlash != std::string::npos && lastDot != std::string::npos && lastDot > lastSlash) {
+        // Extract filename without extension
+        std::string filename = videoPathStr.substr(lastSlash + 1, lastDot - lastSlash - 1);
+
+        // Build WAV path: Assets/Videos/Audios/filename.wav
+        wavPath = "Assets/Videos/Audios/" + filename + ".wav";
+    }
+
+    LOG("Generated WAV path: %s from video: %s", wavPath.c_str(), videoPath);
+    return wavPath;
+}
+
+// Load and play WAV audio file using PlayMusic
+bool Ffmpeg::LoadAndPlayWavAudio(const char* wavPath)
+{
+    // Stop any currently playing audio
+    StopWavAudio();
+
+    // Load and play the music using the Audio module's PlayMusic method
+    bool playResult = Engine::GetInstance().audio->PlayMusic(wavPath, 1.0f);
+
+    if (!playResult) {
+        LOG("Failed to load and play WAV music: %s", wavPath);
+        return false;
+    }
+
+    isAudioPlaying = true;
+    currentAudioPath = wavPath;
+    LOG("Successfully loaded and playing WAV music: %s", wavPath);
+    return true;
+}
+
+void Ffmpeg::StopWavAudio()
+{
+    if (isAudioPlaying) {
+        // CAMBIO: Solo parar el audio actual, no reproducir "Nothing.ogg"
+        // Esto permite que otros sistemas reproduzcan música después
+        Mix_HaltMusic(); // Si usas SDL_mixer
+        // O simplemente no reproducir nada en lugar de "Nothing.ogg"
+
+        LOG("Stopping WAV music playback");
+        isAudioPlaying = false;
+        currentAudioPath = "";
+    }
+}
+
 // Load a video file from a specified path
 bool Ffmpeg::LoadVideo(const char* videoPath)
 {
+    // Validate input
+    if (!videoPath || strlen(videoPath) == 0) {
+        LOG("Invalid video path provided");
+        return true; // Error
+    }
+
     // If the video is already loaded, don't reload it
     if (currentVideoPath == videoPath && formatContext != nullptr) {
         return false;  // Already loaded, return success (note: false = success)
@@ -67,18 +136,21 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
 
     // Allocate memory for the format context
     formatContext = avformat_alloc_context();
+    if (!formatContext) {
+        LOG("Failed to allocate format context");
+        return true; // Error
+    }
 
     // Open the input video file with FFMPEG
-    if (avformat_open_input(&formatContext, videoPath, NULL, NULL) < 0) {   // Abre el archivo o el stream multimedia
+    if (avformat_open_input(&formatContext, videoPath, NULL, NULL) < 0) {
         LOG("Failed to open input file: %s", videoPath);  // Log error
-        avformat_close_input(&formatContext);             // Close the input if opened
         avformat_free_context(formatContext);             // Free the context
         formatContext = nullptr;                          // Reset pointer
         return true;  // Error (note: true = error)
     }
 
     // Find input stream information
-    if (avformat_find_stream_info(formatContext, NULL) < 0) { // Analiza el archivo abierto para analizar que contiene (video, audio...)
+    if (avformat_find_stream_info(formatContext, NULL) < 0) {
         LOG("Failed to find input stream information");   // Log error
         avformat_close_input(&formatContext);             // Close the input
         avformat_free_context(formatContext);             // Free the context
@@ -87,13 +159,20 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
     }
 
     // Dump format information for debugging
-    av_dump_format(formatContext, 0, videoPath, 0); // Imprime en la consola info detallada del archivo
+    av_dump_format(formatContext, 0, videoPath, 0);
 
-    // Open codec context for video and audio streams
+    // Open codec context for video only (no audio from video)
     if (OpenCodecContext(&streamIndex)) {
         LOG("Failed to open codec contexts");    // Log error
         CloseCurrentVideo();                     // Clean up resources
         return true;  // Error
+    }
+
+    // Validate codec context was properly created
+    if (!videoCodecContext) {
+        LOG("Video codec context is null after opening");
+        CloseCurrentVideo();
+        return true; // Error
     }
 
     // Create SDL texture for rendering video frames
@@ -114,34 +193,25 @@ bool Ffmpeg::LoadVideo(const char* videoPath)
     // Set up SDL rectangle for video rendering
     renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
 
+    // Load and play corresponding WAV audio
+    std::string wavPath = GetWavPathFromVideo(videoPath);
+    if (!wavPath.empty()) {
+        LoadAndPlayWavAudio(wavPath.c_str());
+    }
+
     return false;  // Success (note: false = success)
 }
 
-// Clean up resources for the current video
 void Ffmpeg::CloseCurrentVideo()
 {
-    // Close audio device if open
-    if (audioDevice != 0) {
-        SDL_CloseAudioDevice(audioDevice);  // Close the SDL audio device
-        audioDevice = 0;                    // Reset the device ID
-    }
+    // Stop any playing WAV audio
+    StopWavAudio();
 
-    // Free the audio resampler if it exists
-    if (swr) {
-        swr_free(&swr);    // Free the SwrContext
-        swr = nullptr;     // Reset the pointer
-    }
-
-    // Free the video codec context
+    // Flush and free the video codec context
     if (videoCodecContext) {
+        avcodec_flush_buffers(videoCodecContext);  // Flush remaining frames
         avcodec_free_context(&videoCodecContext);  // Free the context
         videoCodecContext = nullptr;               // Reset the pointer
-    }
-
-    // Free the audio codec context
-    if (audioCodecContext) {
-        avcodec_free_context(&audioCodecContext);  // Free the context
-        audioCodecContext = nullptr;               // Reset the pointer
     }
 
     // Close and free the format context
@@ -157,19 +227,23 @@ void Ffmpeg::CloseCurrentVideo()
         renderTexture = nullptr;              // Reset the pointer
     }
 
-    // Clear the audio buffer queue
-    while (!audioBuffer.empty()) {
-        AVPacket pkt = audioBuffer.front();   // Get the front packet
-        av_packet_unref(&pkt);                // Unreference the packet
-        audioBuffer.pop();                    // Remove from queue
-    }
-
-    // Reset stream indices
+    // Reset stream index
     streamIndex = -1;  // Reset video stream index
-    audioIndex = -1;   // Reset audio stream index
 
-    // Clear the path
+    // Clear the paths
     currentVideoPath = "";  // Reset the video path
+    currentAudioPath = "";  // Reset the audio path
+
+    // Reset audio state
+    isAudioPlaying = false;  // Reset audio playing flag
+
+    // Reset skip system
+    isSkipping = false;
+    skipCompleted = false;    // Reset the skip completed flag
+    skipStartTime = 0;
+
+    // Reset running to allow new videos
+    running = true;  // Allow new videos to be played
 }
 
 // Overloaded ConvertPixels to use with paths
@@ -180,13 +254,19 @@ bool Ffmpeg::ConvertPixels(const char* videoPath)
         return true;  // Error loading video
     }
 
-    // Use the original ConvertPixels with the updated indices
-    return ConvertPixels(streamIndex, audioIndex);
+    // Use the original ConvertPixels with only video index (no audio index needed)
+    return ConvertPixels(streamIndex, -1);
 }
 
-// Open codec contexts for video and audio streams
+// Open codec context for video stream only
 bool Ffmpeg::OpenCodecContext(int* index)
 {
+    // Validate format context
+    if (!formatContext) {
+        LOG("Format context is null");
+        return true; // Error
+    }
+
     // Find the best video stream in the file
     int videoIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
     if (videoIndex < 0) {
@@ -195,16 +275,8 @@ bool Ffmpeg::OpenCodecContext(int* index)
     }
     LOG("Video index found: %d", videoIndex);  // Log success
 
-    // Find the best audio stream in the file
-    int audioIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
-    if (audioIndex < 0) {
-        LOG("Failed to find audio stream in input file\n");  // Log warning
-        // No audio stream found, continue without audio
-        audioIndex = -1;  // Mark as not available with a clear value
-    }
-    else {
-        LOG("Audio index found: %d", audioIndex);  // Log success
-    }
+    // We skip audio stream detection since we're using separate WAV files
+    LOG("Skipping audio stream detection - using separate WAV files");
 
     // Open video codec context
     bool videoOpenFailed = OpenVideoCodecContext(videoIndex);
@@ -213,28 +285,22 @@ bool Ffmpeg::OpenCodecContext(int* index)
         return true;  // Error
     }
 
-    // Open audio codec context if audio stream found
-    bool audioOpenFailed = false;
-    if (audioIndex >= 0) {
-        audioOpenFailed = OpenAudioCodecContext(audioIndex);
-        if (audioOpenFailed) {
-            LOG("Failed to open audio codec context");  // Log warning
-            // Just log the failure, we can continue without audio
-            audioIndex = -1;  // Mark as not available
-        }
-    }
-
-    // Store indices
+    // Store video index
     *index = videoIndex;              // Store video index in the parameter
-    this->audioIndex = audioIndex;    // Store audio index in the member variable
 
-    LOG("Successfully opened codec contexts. Video index: %d, Audio index: %d", videoIndex, audioIndex);
+    LOG("Successfully opened video codec context. Video index: %d", videoIndex);
     return false; // Everything is set up successfully
 }
 
 // Open and configure video codec context
 bool Ffmpeg::OpenVideoCodecContext(int videoIndex)
 {
+    // Validate inputs
+    if (!formatContext || videoIndex < 0 || videoIndex >= formatContext->nb_streams) {
+        LOG("Invalid format context or video index");
+        return true; // Error
+    }
+
     // Find the decoder for the video codec
     const AVCodec* codec = avcodec_find_decoder(formatContext->streams[videoIndex]->codecpar->codec_id);
     if (!codec) {
@@ -243,114 +309,30 @@ bool Ffmpeg::OpenVideoCodecContext(int videoIndex)
     }
 
     // Allocate a codec context for the decoder
-    videoCodecContext = avcodec_alloc_context3(codec); // Crea un objeto AVCodecContext, que contiene toda la configuración necesaria para decodificar el video.
+    videoCodecContext = avcodec_alloc_context3(codec);
     if (!videoCodecContext) {
         LOG("Failed to allocate the video codec context\n");  // Log error
         return true;  // Error
     }
 
     // Copy video codec parameters to the decoder context
-    if (avcodec_parameters_to_context(videoCodecContext, formatContext->streams[videoIndex]->codecpar) < 0) { //Copia los parámetros del stream
+    if (avcodec_parameters_to_context(videoCodecContext, formatContext->streams[videoIndex]->codecpar) < 0) {
         LOG("Failed to copy video codec parameters to decoder context!\n");  // Log error
+        avcodec_free_context(&videoCodecContext);
+        videoCodecContext = nullptr;
         return true;  // Error
     }
 
     // Open the video codec
-    if (avcodec_open2(videoCodecContext, codec, NULL) < 0) { // Inicializa internamente el códec para que empiece a decodificar frames de video, aqui podria estar el problema del desfase
+    if (avcodec_open2(videoCodecContext, codec, NULL) < 0) {
         LOG("Failed to open video codec\n");  // Log error
+        avcodec_free_context(&videoCodecContext);
+        videoCodecContext = nullptr;
         return true;  // Error
     }
 
     // Return success if all steps completed
     return false;  // Success (note: false = success)
-}
-
-// Audio timer callback function - processes audio at regular intervals
-Uint32 audioTimerCallback(Uint32 interval, void* param)
-{
-    // Cast the parameter to Ffmpeg object
-    Ffmpeg* cutscenePlayer = static_cast<Ffmpeg*>(param);
-    if (cutscenePlayer) {
-        cutscenePlayer->ProcessAudio();  // Process audio in the cutscene player
-    }
-    return interval;  // Return same interval for continuous callback
-}
-
-// Open and configure audio codec context
-bool Ffmpeg::OpenAudioCodecContext(int audioIndex)
-{
-    // Find the decoder for the audio codec
-    const AVCodec* codec = avcodec_find_decoder(formatContext->streams[audioIndex]->codecpar->codec_id);
-    if (!codec) {
-        LOG("Failed to find audio codec!");  // Log error
-        return true;  // Error
-    }
-
-    // Allocate and configure the codec context
-    audioCodecContext = avcodec_alloc_context3(codec);
-    if (!audioCodecContext) {
-        LOG("Failed to allocate the audio codec context");  // Log error
-        return true;  // Error
-    }
-
-    // Copy codec parameters and open the codec
-    if (avcodec_parameters_to_context(audioCodecContext, formatContext->streams[audioIndex]->codecpar) < 0 ||
-        avcodec_open2(audioCodecContext, codec, NULL) < 0) {
-        LOG("Failed to set up audio codec context");  // Log error
-        return true;  // Error
-    }
-
-    // Create and configure the audio resampler
-    SwrContext* swr = swr_alloc();
-    if (!swr) {
-        LOG("Failed to allocate resampler context");  // Log error
-        return true;  // Error
-    }
-
-    // Set up channel layouts
-    AVChannelLayout in_ch_layout, out_ch_layout;
-    av_channel_layout_default(&in_ch_layout, audioCodecContext->ch_layout.nb_channels);  // Input layout
-    av_channel_layout_default(&out_ch_layout, 2);  // Stereo output layout
-
-    // Configure resampler options
-    av_opt_set_int(swr, "in_sample_rate", audioCodecContext->sample_rate, 0);  // Input sample rate
-    av_opt_set_int(swr, "out_sample_rate", 44100, 0);  // Output sample rate (44.1kHz)
-    av_opt_set_sample_fmt(swr, "in_sample_fmt", audioCodecContext->sample_fmt, 0);  // Input format
-    av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0);  // Output format (16-bit PCM)
-    av_opt_set_chlayout(swr, "in_chlayout", &audioCodecContext->ch_layout, 0);  // Input channel layout
-    av_opt_set_chlayout(swr, "out_chlayout", &out_ch_layout, 0);  // Output channel layout
-
-    // Initialize the resampler
-    if (swr_init(swr) < 0) {
-        LOG("Failed to initialize resampler");  // Log error
-        swr_free(&swr);  // Free the resampler
-        return true;  // Error
-    }
-
-    // Save the resampler in the member variable
-    this->swr = swr;
-
-    // Configure SDL audio specifications
-    SDL_AudioSpec wantedSpec, obtainedSpec;
-    wantedSpec.freq = 44100;                // Sample rate
-    wantedSpec.format = AUDIO_S16SYS;       // 16-bit audio
-    wantedSpec.channels = 2;                // Stereo
-    wantedSpec.silence = 0;                 // Silence value
-    wantedSpec.samples = 4096;              // Buffer size
-    wantedSpec.callback = NULL;             // Using queue mode
-    wantedSpec.userdata = NULL;             // No user data
-
-    // Open the audio device
-    audioDevice = SDL_OpenAudioDevice(NULL, 0, &wantedSpec, &obtainedSpec, 0);
-    if (audioDevice == 0) {
-        LOG("Failed to open audio device: %s", SDL_GetError());  // Log SDL error
-        return true;  // Error
-    }
-
-    // Start audio playback
-    SDL_PauseAudioDevice(audioDevice, 0);  // Unpause the device (0 = play)
-
-    return false;  // Success
 }
 
 // Handle SDL events
@@ -361,21 +343,41 @@ bool Ffmpeg::HandleEvents()
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            // Usuario cierra la ventana
+            // User closes the window
             running = false;
             return false;
 
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                // ESC presionado - detener reproducción
+                // ESC pressed - stop playback
                 LOG("ESC pressed - stopping video playback");
                 running = false;
-                CloseCurrentVideo();
                 return false;
 
+            case SDLK_SPACE:
+                // Start skip process when space is pressed
+                if (!isSkipping && !skipCompleted) {
+                    isSkipping = true;
+                    skipStartTime = SDL_GetTicks();
+                    LOG("Skip initiated - hold SPACE to continue");
+                }
                 break;
 
+            default:
+                break;
+            }
+            break;
+
+        case SDL_KEYUP:
+            switch (event.key.keysym.sym) {
+            case SDLK_SPACE:
+                // Cancel skip if key is released before completion
+                if (isSkipping && !skipCompleted) {
+                    isSkipping = false;
+                    LOG("Skip cancelled - SPACE released");
+                }
+                break;
             default:
                 break;
             }
@@ -386,101 +388,91 @@ bool Ffmpeg::HandleEvents()
         }
     }
 
-    return true; // Continuar reproducción
+    // Update skip system
+    UpdateSkipSystem();
+
+    return true; // Continue playback
 }
 
-// Process audio from the audio buffer
-void Ffmpeg::ProcessAudio()
+// Update skip system
+void Ffmpeg::UpdateSkipSystem()
 {
-    // Skip if no audio context or device
-    if (audioIndex < 0 || !audioCodecContext || audioDevice == 0) {
-        return;  // No audio to process
+    if (!isSkipping || skipCompleted) return;
+
+    Uint32 currentTime = SDL_GetTicks();
+    Uint32 elapsedTime = currentTime - skipStartTime;
+
+    // If skip time is completed
+    if (elapsedTime >= SKIP_DURATION) {
+        LOG("Skip completed - stopping audio and marking for end");
+        skipCompleted = true;
+        isSkipping = false;
+
+        // IMPORTANT: Stop the audio when skip is completed
+        StopWavAudio();
+
+        running = false;  // Signal to stop the main loop
+        return;
     }
 
-    AVPacket packet;
-    AVFrame* frame = av_frame_alloc();  // Allocate an audio frame, Asigna memoria para un nuevo AVFrame, que se usará para almacenar el audio decodificado
-    if (!frame) {
-        return;  // Memory allocation failed
+    // Check if SPACE key is still being held
+    const Uint8* keyState = SDL_GetKeyboardState(NULL);
+    if (!keyState[SDL_SCANCODE_SPACE]) {
+        isSkipping = false;
+        LOG("Skip cancelled - SPACE not held");
     }
-
-    // Variables for converted data
-    uint8_t* outBuffer = NULL;
-    int outBufferSize = 0;
-
-    // Process each packet from the audio buffer
-    if (!audioBuffer.empty()) {
-        packet = audioBuffer.front();  // Get the next packet
-        audioBuffer.pop();             // Remove it from the queue
-
-        // Send the packet to the decoder
-        int ret = avcodec_send_packet(audioCodecContext, &packet);
-        if (ret < 0) {
-            LOG("Error sending packet to audio decoder: %d", ret);  // Log error
-            av_packet_unref(&packet);  // Free the packet
-            av_frame_free(&frame);     // Free the frame
-            return;
-        }
-
-        // Receive the decoded frame
-        ret = avcodec_receive_frame(audioCodecContext, frame);
-        if (ret < 0) {
-            LOG("Error receiving frame from audio decoder: %d", ret);  // Log error
-            av_packet_unref(&packet);  // Free the packet
-            av_frame_free(&frame);     // Free the frame
-            return;
-        }
-
-        // Calculate the output buffer size based on the resampling ratio
-        int outSamples = av_rescale_rnd(
-            swr_get_delay(swr, audioCodecContext->sample_rate) + frame->nb_samples,
-            44100,  // Output sample rate
-            audioCodecContext->sample_rate,
-            AV_ROUND_UP
-        );
-
-        int outChannels = 2;  // Stereo
-        outBufferSize = outSamples * outChannels * 2;  // 2 bytes per sample for S16
-
-        // Allocate memory for the output buffer
-        outBuffer = (uint8_t*)av_malloc(outBufferSize);
-        if (!outBuffer) {
-            LOG("Failed to allocate output buffer");  // Log error
-            av_packet_unref(&packet);  // Free the packet
-            av_frame_free(&frame);     // Free the frame
-            return;
-        }
-
-        // Convert the audio using the resampler
-        ret = swr_convert(
-            swr,
-            &outBuffer, outSamples,                  // Output
-            (const uint8_t**)frame->data, frame->nb_samples  // Input
-        );
-
-        if (ret < 0) {
-            LOG("Error converting audio: %d", ret);  // Log error
-            av_freep(&outBuffer);      // Free the output buffer
-            av_packet_unref(&packet);  // Free the packet
-            av_frame_free(&frame);     // Free the frame
-            return;
-        }
-
-        // Calculate actual size of the converted data
-        int convertedSize = ret * outChannels * 2;
-
-        // Queue the audio data for playback
-        SDL_QueueAudio(audioDevice, outBuffer, convertedSize);
-
-        // Free resources
-        av_freep(&outBuffer);      // Free the output buffer
-        av_packet_unref(&packet);  // Free the packet
-    }
-
-    // Free the frame
-    av_frame_free(&frame);
 }
 
-// Main function to decode and convert video frames for playback
+// Render skip bar with circular progress
+void Ffmpeg::RenderSkipBar(float progress)
+{
+    if (!isSkipping) return;
+
+    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
+
+    // Bar position (top right corner)
+    int centerX = Engine::GetInstance().window->width - 80;
+    int centerY = 80;
+    int radius = 30;
+
+    // Draw background circle (semi-transparent gray)
+    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 180);
+    for (int angle = 0; angle < 360; angle += 2) {
+        for (int r = radius - 3; r <= radius; r++) {
+            int x = centerX + (int)(r * cos(angle * M_PI / 180.0));
+            int y = centerY + (int)(r * sin(angle * M_PI / 180.0));
+            SDL_RenderDrawPoint(renderer, x, y);
+        }
+    }
+
+    // Draw circular progress (bright yellow)
+    SDL_SetRenderDrawColor(renderer, 255, 255, 100, 255);
+    int maxAngle = (int)(360 * progress);
+
+    for (int angle = -90; angle < -90 + maxAngle; angle += 2) {
+        // Draw lines from center to edge
+        for (int r = 8; r < radius - 2; r++) {
+            int x = centerX + (int)(r * cos(angle * M_PI / 180.0));
+            int y = centerY + (int)(r * sin(angle * M_PI / 180.0));
+            SDL_RenderDrawPoint(renderer, x, y);
+        }
+    }
+
+    // Draw circle border (white)
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    for (int angle = 0; angle < 360; angle += 2) {
+        int x = centerX + (int)(radius * cos(angle * M_PI / 180.0));
+        int y = centerY + (int)(radius * sin(angle * M_PI / 180.0));
+        SDL_RenderDrawPoint(renderer, x, y);
+
+        // Inner circle
+        int x2 = centerX + (int)((radius - 6) * cos(angle * M_PI / 180.0));
+        int y2 = centerY + (int)((radius - 6) * sin(angle * M_PI / 180.0));
+        SDL_RenderDrawPoint(renderer, x2, y2);
+    }
+}
+
+// Main function to decode and convert video frames for playback (video only)
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
     // Check if we have a valid format context
@@ -489,35 +481,43 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         return true;  // Error
     }
 
-    // Check if the indices match the loaded video
-    if (videoIndex != streamIndex || audioIndex != this->audioIndex) {
-        LOG("Warning: Called ConvertPixels with different indices than loaded video");
-        // Could handle this differently, here we use the provided indices
+    // Check if the video index matches the loaded video
+    if (videoIndex != streamIndex) {
+        LOG("Warning: Called ConvertPixels with different video index than loaded video");
     }
 
-    LOG("ConvertPixels called with videoIndex=%d, audioIndex=%d", videoIndex, audioIndex);
-
-    // Master clock for synchronization
-    double videoClock = 0.0;
+    LOG("ConvertPixels called with videoIndex=%d (audio disabled)", videoIndex);
 
     // Packet for demuxed data
-    AVPacket packet;
+    AVPacket* packet = av_packet_alloc();  // Use av_packet_alloc instead of deprecated av_init_packet
+    if (!packet) {
+        LOG("Failed to allocate packet");
+        return true; // Error
+    }
 
     // Allocate video frames
     AVFrame* srcFrame = av_frame_alloc();  // Source frame (as decoded)
     if (!srcFrame) {
         LOG("Failed to allocate source frame");
-        return false;  // Error
+        av_packet_free(&packet);
+        return true;  // Error
     }
     AVFrame* dstFrame = av_frame_alloc();  // Destination frame (converted format)
     if (!dstFrame) {
         LOG("Failed to allocate destination frame");
         av_frame_free(&srcFrame);  // Free source frame
-        return false;  // Error
+        av_packet_free(&packet);
+        return true;  // Error
     }
 
     // Allocate memory for the image data of the destination frame
-    AllocImage(dstFrame);
+    if (AllocImage(dstFrame)) {
+        LOG("Failed to allocate image for destination frame");
+        av_frame_free(&srcFrame);
+        av_frame_free(&dstFrame);
+        av_packet_free(&packet);
+        return true; // Error
+    }
 
     // Create a scaling context for format conversion
     struct SwsContext* sws_ctx = sws_getContext(
@@ -526,54 +526,74 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         SWS_BILINEAR, NULL, NULL, NULL  // Scaling algorithm and parameters
     );
 
-    // Get time bases for video and audio streams
+    if (!sws_ctx) {
+        LOG("Failed to create scaling context");
+        av_frame_free(&srcFrame);
+        av_frame_free(&dstFrame);
+        av_packet_free(&packet);
+        return true; // Error
+    }
+
+    // Get time base for video stream
     AVRational videoTimeBase = formatContext->streams[videoIndex]->time_base;
-    AVRational audioTimeBase;
-    if (audioIndex >= 0) {
-        audioTimeBase = formatContext->streams[audioIndex]->time_base;
-    }
-
-    // Clear any old audio data from the queue
-    while (!audioBuffer.empty()) {
-        AVPacket pkt = audioBuffer.front();
-        av_packet_unref(&pkt);
-        audioBuffer.pop();
-    }
-
-    // Flush audio device if audio is available
-    if (audioIndex >= 0) {
-        SDL_ClearQueuedAudio(audioDevice);
-    }
 
     // Record the start time for playback synchronization
     Uint32 videoStartTime = SDL_GetTicks();
     int64_t firstPts = AV_NOPTS_VALUE;
 
     // Main packet reading loop
-    while (av_read_frame(formatContext, &packet) >= 0 && running)
+    while (av_read_frame(formatContext, packet) >= 0 && running && !skipCompleted)
     {
+        // Check if skip has been completed - exit immediately
+        if (skipCompleted) {
+            LOG("Skip completed - breaking main loop");
+            av_packet_unref(packet);
+            break;
+        }
+
+        // Validate packet
+        if (packet->data == nullptr || packet->size <= 0) {
+            av_packet_unref(packet);
+            continue;
+        }
+
         // Process SDL events
         if (!HandleEvents()) {
-            av_packet_unref(&packet);  // Free the packet
+            av_packet_unref(packet);  // Free the packet
             break;  // Exit the loop if HandleEvents returns false
         }
 
-        // Handle video packets
-        if (packet.stream_index == videoIndex)
+        // Double check that we're still supposed to be running
+        if (!running || skipCompleted) {
+            av_packet_unref(packet);
+            break;
+        }
+
+        // Handle video packets only
+        if (packet->stream_index == videoIndex)
         {
+            // Double-check codec context is still valid
+            if (!videoCodecContext) {
+                LOG("Video codec context became null during playback");
+                av_packet_unref(packet);
+                break;
+            }
+
             // Send packet to decoder
-            int sendResult = avcodec_send_packet(videoCodecContext, &packet);
+            int sendResult = avcodec_send_packet(videoCodecContext, packet);
             if (sendResult < 0) {
                 LOG("Error sending video packet to decoder: %d", sendResult);
-                av_packet_unref(&packet);
+                av_packet_unref(packet);
                 continue;  // Skip to next packet
             }
 
             // Receive decoded frame
             int receiveResult = avcodec_receive_frame(videoCodecContext, srcFrame);
             if (receiveResult < 0) {
-                LOG("Error receiving video frame from decoder: %d", receiveResult);
-                av_packet_unref(&packet);
+                if (receiveResult != AVERROR(EAGAIN)) {
+                    LOG("Error receiving video frame from decoder: %d", receiveResult);
+                }
+                av_packet_unref(packet);
                 continue;  // Skip to next packet
             }
 
@@ -599,20 +619,29 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
             // Calculate how long to wait for this frame
             int delayMs = displayTimeMs - elapsedMs;
 
-            // Update video clock
-            videoClock = timeInSeconds;
-
             // Scale and convert the frame to the needed format
-            sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
+            int scaleResult = sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
                 srcFrame->linesize, 0, videoCodecContext->height,
                 dstFrame->data, dstFrame->linesize);
 
+            if (scaleResult < 0) {
+                LOG("Error scaling frame");
+                av_packet_unref(packet);
+                continue;
+            }
+
             // Update the texture with the new frame data
-            SDL_UpdateYUVTexture(renderTexture, &renderRect,
+            int updateResult = SDL_UpdateYUVTexture(renderTexture, &renderRect,
                 dstFrame->data[0], dstFrame->linesize[0],  // Y plane
                 dstFrame->data[1], dstFrame->linesize[1],  // U plane
                 dstFrame->data[2], dstFrame->linesize[2]   // V plane
             );
+
+            if (updateResult < 0) {
+                LOG("Failed to update YUV texture: %s", SDL_GetError());
+                av_packet_unref(packet);
+                continue;
+            }
 
             // Render the current frame
             RenderCutscene();
@@ -622,114 +651,49 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 SDL_Delay(delayMs);  // Wait for the next frame
             }
         }
-        // Handle audio packets
-        else if (audioIndex >= 0 && packet.stream_index == audioIndex)
-        {
-            // Apply audio sync offset - adjust packet PTS
-            if (packet.pts != AV_NOPTS_VALUE) {
-                // Convert audioSyncOffset from milliseconds to the packet's time base
-                AVRational msTimeBase = { 1, 1000 };
-                int64_t offsetInTimeBase = av_rescale_q(audioSyncOffset,
-                    msTimeBase,
-                    audioTimeBase);
-                packet.pts += offsetInTimeBase;  // Apply offset to presentation timestamp
-                if (packet.dts != AV_NOPTS_VALUE) {
-                    packet.dts += offsetInTimeBase;  // Apply offset to decoding timestamp
-                }
-            }
-
-            // Make a copy of the packet for the audio buffer
-            AVPacket* audioPkt = av_packet_alloc();
-            av_packet_ref(audioPkt, &packet);
-
-            // Process audio immediately to reduce latency
-            avcodec_send_packet(audioCodecContext, audioPkt);
-
-            AVFrame* audioFrame = av_frame_alloc();
-            if (avcodec_receive_frame(audioCodecContext, audioFrame) == 0) {
-                // Process the decoded audio frame
-                ProcessAudioFrame(audioFrame);
-            }
-
-            // Clean up
-            av_frame_free(&audioFrame);
-            av_packet_free(&audioPkt);
+        // Skip audio packets - we're using separate WAV files
+        else {
+            // Just ignore audio packets from the video file
         }
 
         // Free the packet
-        av_packet_unref(&packet);
+        av_packet_unref(packet);
     }
 
     // Clean up resources
     av_frame_free(&srcFrame);
     av_frame_free(&dstFrame);
+    av_packet_free(&packet);
     sws_freeContext(sws_ctx);
 
+    // Clean up video resources after playback ends
+    LOG("Video playback ended - cleaning up");
+    CloseCurrentVideo();
+
     return false;  // Success
-}
-
-// Process a decoded audio frame
-void Ffmpeg::ProcessAudioFrame(AVFrame* frame)
-{
-    // Check for valid inputs
-    if (!frame || !swr || audioDevice == 0) {
-        return;  // Cannot process
-    }
-
-    // Calculate the number of output samples
-    int outSamples = av_rescale_rnd(
-        swr_get_delay(swr, audioCodecContext->sample_rate) + frame->nb_samples,
-        44100,  // Output sample rate
-        audioCodecContext->sample_rate,
-        AV_ROUND_UP
-    );
-
-    // Calculate buffer size for stereo output
-    int outChannels = 2;  // Stereo
-    int outBufferSize = outSamples * outChannels * 2;  // 2 bytes per sample for S16
-
-    // Allocate memory for output buffer
-    uint8_t* outBuffer = (uint8_t*)av_malloc(outBufferSize);
-    if (!outBuffer) {
-        LOG("Failed to allocate audio output buffer");
-        return;  // Memory allocation failed
-    }
-
-    // Convert audio using the resampler
-    int convertedSamples = swr_convert(
-        swr,
-        &outBuffer, outSamples,                        // Output buffer and size
-        (const uint8_t**)frame->data, frame->nb_samples  // Input data and samples
-    );
-
-    // Check for conversion errors
-    if (convertedSamples < 0) {
-        LOG("Error converting audio: %d", convertedSamples);
-        av_freep(&outBuffer);  // Free buffer
-        return;  // Conversion failed
-    }
-
-    // Calculate actual size of converted data
-    int convertedSize = convertedSamples * outChannels * 2;
-
-    // Queue audio data for playback
-    SDL_QueueAudio(audioDevice, outBuffer, convertedSize);
-
-    // Free buffer
-    av_freep(&outBuffer);
 }
 
 // Allocate memory for an image frame
 bool Ffmpeg::AllocImage(AVFrame* image)
 {
+    if (!image || !videoCodecContext) {
+        LOG("Invalid image frame or codec context");
+        return true; // Error
+    }
+
     // Set the pixel format, width, and height of the image frame
     image->format = AV_PIX_FMT_YUV420P;           // YUV 4:2:0 format
     image->width = videoCodecContext->width;      // Width from codec context
     image->height = videoCodecContext->height;    // Height from codec context
 
     // Allocate memory for the image data
-    av_image_alloc(image->data, image->linesize,
+    int result = av_image_alloc(image->data, image->linesize,
         image->width, image->height, (AVPixelFormat)image->format, 32);
+
+    if (result < 0) {
+        LOG("Failed to allocate image data");
+        return true; // Error
+    }
 
     return false;  // Success
 }
@@ -737,18 +701,35 @@ bool Ffmpeg::AllocImage(AVFrame* image)
 // Render the current video frame
 void Ffmpeg::RenderCutscene()
 {
+    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
+
+    if (!renderer || !renderTexture) {
+        LOG("Invalid renderer or render texture");
+        return;
+    }
+
     // Clear the renderer
-    SDL_RenderClear(Engine::GetInstance().render.get()->renderer);
+    SDL_RenderClear(renderer);
 
     // Copy the video texture to the renderer
-    SDL_RenderCopy(Engine::GetInstance().render.get()->renderer, renderTexture, NULL, NULL);
+    SDL_RenderCopy(renderer, renderTexture, NULL, NULL);
 
     // Draw interactive elements if hovered
     if (isHover1) Engine::GetInstance().render->DrawTexture(texture1, position1.x, position1.y, NULL);
     if (isHover2) Engine::GetInstance().render->DrawTexture(texture2, position2.x, position2.y, NULL);
 
+    // Render skip bar if active
+    if (isSkipping) {
+        Uint32 currentTime = SDL_GetTicks();
+        Uint32 elapsedTime = currentTime - skipStartTime;
+        float progress = (float)elapsedTime / (float)SKIP_DURATION;
+        progress = progress > 1.0f ? 1.0f : progress; // Clamp to 1.0
+
+        RenderSkipBar(progress);
+    }
+
     // Present the rendered frame
-    SDL_RenderPresent(Engine::GetInstance().render.get()->renderer);
+    SDL_RenderPresent(renderer);
 }
 
 // Update function called each frame
@@ -764,24 +745,13 @@ bool Ffmpeg::CleanUp()
 {
     LOG("Freeing cutscene player");  // Log cleanup
 
-    // Close the video and audio codec contexts
-    avcodec_free_context(&videoCodecContext);
-    avcodec_free_context(&audioCodecContext);
-
-    // Close and free the format contexts
-    avformat_close_input(&formatContext);
-    avformat_free_context(formatContext);
-
-    // Close audio device
-    SDL_CloseAudioDevice(audioDevice);
-
-    // Destroy textures
-    SDL_DestroyTexture(renderTexture);
-    SDL_DestroyTexture(texture1);
-    SDL_DestroyTexture(texture2);
-
     // Close the current video and clean up remaining resources
     CloseCurrentVideo();
+
+    if (skipBarTexture) {
+        SDL_DestroyTexture(skipBarTexture);
+        skipBarTexture = nullptr;
+    }
 
     return true;  // Cleanup successful
 }

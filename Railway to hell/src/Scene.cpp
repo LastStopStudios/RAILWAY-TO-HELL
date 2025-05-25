@@ -198,7 +198,7 @@ bool Scene::Update(float dt)
 		break;
 	case SceneState::TEXT_SCREEN:
 		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test5.mp4");
-		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test2.mp4");
+
 		currentState = SceneState::GAMEPLAY;
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
@@ -216,9 +216,9 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::GAMEPLAY:
-		if (currentMusic == "text") {
+		if (currentMusic != "caronte") {
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
-			currentMusic = "";
+			currentMusic = "caronte";
 		}
 		//Make the camera movement independent of framerate
 		float camSpeed = 1;
