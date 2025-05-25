@@ -10,67 +10,54 @@
 #include "Engine.h"
 #include <cmath>
 
-// Constructor initializes the module with basic parameters
 Ffmpeg::Ffmpeg(bool enabled) : Module()
 {
-    name = "cutsceneplayer";    // Set the module name
-    streamIndex = -1;           // Initialize video stream index to invalid
-    currentVideoPath = "";      // Clear the current video path
-    currentAudioPath = "";      // Clear the current audio path
-    isAudioPlaying = false;     // No audio loaded initially
-
-    // Initialize skip system variables
+    name = "cutsceneplayer";
+    streamIndex = -1;
+    currentVideoPath = "";
+    currentAudioPath = "";
+    isAudioPlaying = false;
     isSkipping = false;
-    skipCompleted = false;      // Initialize skip completed flag
+    skipCompleted = false;
     skipStartTime = 0;
     skipBarTexture = nullptr;
-    running = false;            // Initialize running state
+    running = false;
 }
 
-// Destructor - cleanup is handled in CleanUp()
 Ffmpeg::~Ffmpeg()
 {
 }
 
-// Initial awakening of the module - called before Start()
 bool Ffmpeg::Awake()
 {
-    LOG("Loading CutscenePlayer");   // Log the initialization
-    bool ret = true;                 // Set return value to success
-
-    return ret;                      // Return success
+    LOG("Loading CutscenePlayer");
+    bool ret = true;
+    return ret;
 }
 
-// Start the module - called after Awake()
 bool Ffmpeg::Start()
 {
-    LOG("Loading CutscenePlayer");   // Log the start of the module
+    LOG("Loading CutscenePlayer");
 
-    // Initialize pointers to null but don't load any video yet
-    formatContext = nullptr;         // Format context holds file information
-    videoCodecContext = nullptr;     // Video codec context for decoding video
-    renderTexture = nullptr;         // Texture used for rendering video frames
+    formatContext = nullptr;
+    videoCodecContext = nullptr;
+    renderTexture = nullptr;
 
-    // Set the module state to running
-    running = true;                  // Mark the module as active
-    return true;                     // Return success
+    running = true;
+    return true;
 }
 
-// Generate WAV file path from video file path
+// Genera la ruta del archivo WAV basándose en la ruta del video
 std::string Ffmpeg::GetWavPathFromVideo(const char* videoPath)
 {
     std::string videoPathStr(videoPath);
     std::string wavPath;
 
-    // Find the last slash and dot to extract filename
     size_t lastSlash = videoPathStr.find_last_of('/');
     size_t lastDot = videoPathStr.find_last_of('.');
 
     if (lastSlash != std::string::npos && lastDot != std::string::npos && lastDot > lastSlash) {
-        // Extract filename without extension
         std::string filename = videoPathStr.substr(lastSlash + 1, lastDot - lastSlash - 1);
-
-        // Build WAV path: Assets/Videos/Audios/filename.wav
         wavPath = "Assets/Videos/Audios/" + filename + ".wav";
     }
 
@@ -78,13 +65,10 @@ std::string Ffmpeg::GetWavPathFromVideo(const char* videoPath)
     return wavPath;
 }
 
-// Load and play WAV audio file using PlayMusic
 bool Ffmpeg::LoadAndPlayWavAudio(const char* wavPath)
 {
-    // Stop any currently playing audio
     StopWavAudio();
 
-    // Load and play the music using the Audio module's PlayMusic method
     bool playResult = Engine::GetInstance().audio->PlayMusic(wavPath, 1.0f);
 
     if (!playResult) {
@@ -101,10 +85,8 @@ bool Ffmpeg::LoadAndPlayWavAudio(const char* wavPath)
 void Ffmpeg::StopWavAudio()
 {
     if (isAudioPlaying) {
-        // CAMBIO: Solo parar el audio actual, no reproducir "Nothing.ogg"
-        // Esto permite que otros sistemas reproduzcan música después
-        Mix_HaltMusic(); // Si usas SDL_mixer
-        // O simplemente no reproducir nada en lugar de "Nothing.ogg"
+        // Solo parar el audio actual, no reproducir "Nothing.ogg"
+        Mix_HaltMusic();
 
         LOG("Stopping WAV music playback");
         isAudioPlaying = false;
@@ -112,230 +94,190 @@ void Ffmpeg::StopWavAudio()
     }
 }
 
-// Load a video file from a specified path
 bool Ffmpeg::LoadVideo(const char* videoPath)
 {
-    // Validate input
     if (!videoPath || strlen(videoPath) == 0) {
         LOG("Invalid video path provided");
-        return true; // Error
+        return true;
     }
 
-    // If the video is already loaded, don't reload it
+    // Si el video ya está cargado, no lo recargamos
     if (currentVideoPath == videoPath && formatContext != nullptr) {
-        return false;  // Already loaded, return success (note: false = success)
+        return false;
     }
 
-    // Close any previously opened video
     CloseCurrentVideo();
-
-    // Save the current video path
     currentVideoPath = videoPath;
 
-    LOG("Loading video: %s", videoPath);  // Log the video being loaded
+    LOG("Loading video: %s", videoPath);
 
-    // Allocate memory for the format context
     formatContext = avformat_alloc_context();
     if (!formatContext) {
         LOG("Failed to allocate format context");
-        return true; // Error
+        return true;
     }
 
-    // Open the input video file with FFMPEG
     if (avformat_open_input(&formatContext, videoPath, NULL, NULL) < 0) {
-        LOG("Failed to open input file: %s", videoPath);  // Log error
-        avformat_free_context(formatContext);             // Free the context
-        formatContext = nullptr;                          // Reset pointer
-        return true;  // Error (note: true = error)
+        LOG("Failed to open input file: %s", videoPath);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
+        return true;
     }
 
-    // Find input stream information
     if (avformat_find_stream_info(formatContext, NULL) < 0) {
-        LOG("Failed to find input stream information");   // Log error
-        avformat_close_input(&formatContext);             // Close the input
-        avformat_free_context(formatContext);             // Free the context
-        formatContext = nullptr;                          // Reset pointer
-        return true;  // Error
+        LOG("Failed to find input stream information");
+        avformat_close_input(&formatContext);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
+        return true;
     }
 
-    // Dump format information for debugging
     av_dump_format(formatContext, 0, videoPath, 0);
 
-    // Open codec context for video only (no audio from video)
+    // Abrir contexto de codec solo para video (sin audio del video)
     if (OpenCodecContext(&streamIndex)) {
-        LOG("Failed to open codec contexts");    // Log error
-        CloseCurrentVideo();                     // Clean up resources
-        return true;  // Error
+        LOG("Failed to open codec contexts");
+        CloseCurrentVideo();
+        return true;
     }
 
-    // Validate codec context was properly created
     if (!videoCodecContext) {
         LOG("Video codec context is null after opening");
         CloseCurrentVideo();
-        return true; // Error
+        return true;
     }
 
-    // Create SDL texture for rendering video frames
+    // Crear textura SDL para renderizar los frames del video
     renderTexture = SDL_CreateTexture(
-        Engine::GetInstance().render.get()->renderer,  // Get the renderer
-        SDL_PIXELFORMAT_YV12,                          // Set YUV format
-        SDL_TEXTUREACCESS_STREAMING,                   // Streaming access for frequent updates
-        videoCodecContext->width,                      // Width from codec context
-        videoCodecContext->height                      // Height from codec context
+        Engine::GetInstance().render.get()->renderer,
+        SDL_PIXELFORMAT_YV12,
+        SDL_TEXTUREACCESS_STREAMING,
+        videoCodecContext->width,
+        videoCodecContext->height
     );
 
     if (!renderTexture) {
-        LOG("Failed to create texture - %s\n", SDL_GetError());  // Log SDL error
-        CloseCurrentVideo();                                     // Clean up
-        return true;  // Error
+        LOG("Failed to create texture - %s\n", SDL_GetError());
+        CloseCurrentVideo();
+        return true;
     }
 
-    // Set up SDL rectangle for video rendering
     renderRect = { 0, 0, videoCodecContext->width, videoCodecContext->height };
 
-    // Load and play corresponding WAV audio
+    // Cargar y reproducir el audio WAV correspondiente
     std::string wavPath = GetWavPathFromVideo(videoPath);
     if (!wavPath.empty()) {
         LoadAndPlayWavAudio(wavPath.c_str());
     }
 
-    return false;  // Success (note: false = success)
+    return false;
 }
 
 void Ffmpeg::CloseCurrentVideo()
 {
-    // Stop any playing WAV audio
     StopWavAudio();
 
-    // Flush and free the video codec context
     if (videoCodecContext) {
-        avcodec_flush_buffers(videoCodecContext);  // Flush remaining frames
-        avcodec_free_context(&videoCodecContext);  // Free the context
-        videoCodecContext = nullptr;               // Reset the pointer
+        avcodec_flush_buffers(videoCodecContext);
+        avcodec_free_context(&videoCodecContext);
+        videoCodecContext = nullptr;
     }
 
-    // Close and free the format context
     if (formatContext) {
-        avformat_close_input(&formatContext);      // Close the input
-        avformat_free_context(formatContext);      // Free the context
-        formatContext = nullptr;                   // Reset the pointer
+        avformat_close_input(&formatContext);
+        avformat_free_context(formatContext);
+        formatContext = nullptr;
     }
 
-    // Destroy the render texture
     if (renderTexture) {
-        SDL_DestroyTexture(renderTexture);    // Destroy the SDL texture
-        renderTexture = nullptr;              // Reset the pointer
+        SDL_DestroyTexture(renderTexture);
+        renderTexture = nullptr;
     }
 
-    // Reset stream index
-    streamIndex = -1;  // Reset video stream index
-
-    // Clear the paths
-    currentVideoPath = "";  // Reset the video path
-    currentAudioPath = "";  // Reset the audio path
-
-    // Reset audio state
-    isAudioPlaying = false;  // Reset audio playing flag
-
-    // Reset skip system
+    streamIndex = -1;
+    currentVideoPath = "";
+    currentAudioPath = "";
+    isAudioPlaying = false;
     isSkipping = false;
-    skipCompleted = false;    // Reset the skip completed flag
+    skipCompleted = false;
     skipStartTime = 0;
-
-    // Reset running to allow new videos
-    running = true;  // Allow new videos to be played
+    running = true;
 }
 
-// Overloaded ConvertPixels to use with paths
 bool Ffmpeg::ConvertPixels(const char* videoPath)
 {
-    // Load the video if it's not the current one
     if (LoadVideo(videoPath)) {
-        return true;  // Error loading video
+        return true;
     }
 
-    // Use the original ConvertPixels with only video index (no audio index needed)
     return ConvertPixels(streamIndex, -1);
 }
 
-// Open codec context for video stream only
+// Abrir contexto de codec solo para el stream de video
 bool Ffmpeg::OpenCodecContext(int* index)
 {
-    // Validate format context
     if (!formatContext) {
         LOG("Format context is null");
-        return true; // Error
+        return true;
     }
 
-    // Find the best video stream in the file
     int videoIndex = av_find_best_stream(formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
     if (videoIndex < 0) {
-        LOG("Failed to find video stream in input file\n");  // Log error
-        return true;  // Error
+        LOG("Failed to find video stream in input file\n");
+        return true;
     }
-    LOG("Video index found: %d", videoIndex);  // Log success
+    LOG("Video index found: %d", videoIndex);
 
-    // We skip audio stream detection since we're using separate WAV files
     LOG("Skipping audio stream detection - using separate WAV files");
 
-    // Open video codec context
     bool videoOpenFailed = OpenVideoCodecContext(videoIndex);
     if (videoOpenFailed) {
-        LOG("Failed to open video codec context");  // Log error
-        return true;  // Error
+        LOG("Failed to open video codec context");
+        return true;
     }
 
-    // Store video index
-    *index = videoIndex;              // Store video index in the parameter
+    *index = videoIndex;
 
     LOG("Successfully opened video codec context. Video index: %d", videoIndex);
-    return false; // Everything is set up successfully
+    return false;
 }
 
-// Open and configure video codec context
 bool Ffmpeg::OpenVideoCodecContext(int videoIndex)
 {
-    // Validate inputs
     if (!formatContext || videoIndex < 0 || videoIndex >= formatContext->nb_streams) {
         LOG("Invalid format context or video index");
-        return true; // Error
+        return true;
     }
 
-    // Find the decoder for the video codec
     const AVCodec* codec = avcodec_find_decoder(formatContext->streams[videoIndex]->codecpar->codec_id);
     if (!codec) {
-        LOG("Failed to find video codec!\n");  // Log error
-        return true;  // Error
+        LOG("Failed to find video codec!\n");
+        return true;
     }
 
-    // Allocate a codec context for the decoder
     videoCodecContext = avcodec_alloc_context3(codec);
     if (!videoCodecContext) {
-        LOG("Failed to allocate the video codec context\n");  // Log error
-        return true;  // Error
+        LOG("Failed to allocate the video codec context\n");
+        return true;
     }
 
-    // Copy video codec parameters to the decoder context
     if (avcodec_parameters_to_context(videoCodecContext, formatContext->streams[videoIndex]->codecpar) < 0) {
-        LOG("Failed to copy video codec parameters to decoder context!\n");  // Log error
+        LOG("Failed to copy video codec parameters to decoder context!\n");
         avcodec_free_context(&videoCodecContext);
         videoCodecContext = nullptr;
-        return true;  // Error
+        return true;
     }
 
-    // Open the video codec
     if (avcodec_open2(videoCodecContext, codec, NULL) < 0) {
-        LOG("Failed to open video codec\n");  // Log error
+        LOG("Failed to open video codec\n");
         avcodec_free_context(&videoCodecContext);
         videoCodecContext = nullptr;
-        return true;  // Error
+        return true;
     }
 
-    // Return success if all steps completed
-    return false;  // Success (note: false = success)
+    return false;
 }
 
-// Handle SDL events
 bool Ffmpeg::HandleEvents()
 {
     SDL_Event event;
@@ -343,20 +285,18 @@ bool Ffmpeg::HandleEvents()
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            // User closes the window
             running = false;
             return false;
 
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                // ESC pressed - stop playback
                 LOG("ESC pressed - stopping video playback");
                 running = false;
                 return false;
 
             case SDLK_SPACE:
-                // Start skip process when space is pressed
+                // Iniciar proceso de skip al presionar espacio
                 if (!isSkipping && !skipCompleted) {
                     isSkipping = true;
                     skipStartTime = SDL_GetTicks();
@@ -372,7 +312,7 @@ bool Ffmpeg::HandleEvents()
         case SDL_KEYUP:
             switch (event.key.keysym.sym) {
             case SDLK_SPACE:
-                // Cancel skip if key is released before completion
+                // Cancelar skip si se suelta la tecla antes de completar
                 if (isSkipping && !skipCompleted) {
                     isSkipping = false;
                     LOG("Skip cancelled - SPACE released");
@@ -388,13 +328,10 @@ bool Ffmpeg::HandleEvents()
         }
     }
 
-    // Update skip system
     UpdateSkipSystem();
-
-    return true; // Continue playback
+    return true;
 }
 
-// Update skip system
 void Ffmpeg::UpdateSkipSystem()
 {
     if (!isSkipping || skipCompleted) return;
@@ -402,20 +339,18 @@ void Ffmpeg::UpdateSkipSystem()
     Uint32 currentTime = SDL_GetTicks();
     Uint32 elapsedTime = currentTime - skipStartTime;
 
-    // If skip time is completed
+    // Si se completó el tiempo de skip
     if (elapsedTime >= SKIP_DURATION) {
         LOG("Skip completed - stopping audio and marking for end");
         skipCompleted = true;
         isSkipping = false;
 
-        // IMPORTANT: Stop the audio when skip is completed
         StopWavAudio();
-
-        running = false;  // Signal to stop the main loop
+        running = false;
         return;
     }
 
-    // Check if SPACE key is still being held
+    // Verificar si la tecla SPACE sigue presionada
     const Uint8* keyState = SDL_GetKeyboardState(NULL);
     if (!keyState[SDL_SCANCODE_SPACE]) {
         isSkipping = false;
@@ -423,107 +358,87 @@ void Ffmpeg::UpdateSkipSystem()
     }
 }
 
-// Render skip bar with circular progress
+// Renderizar círculo que se llena progresivamente de derecha a izquierda (todo el círculo)
 void Ffmpeg::RenderSkipBar(float progress)
 {
     if (!isSkipping) return;
 
     SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
 
-    // Bar position (top right corner)
     int centerX = Engine::GetInstance().window->width - 80;
-    int centerY = 80;
-    int radius = 30;
+    int centerY = 700;
+    int radius = 20;
 
-    // Draw background circle (semi-transparent gray)
-    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 180);
-    for (int angle = 0; angle < 360; angle += 2) {
-        for (int r = radius - 3; r <= radius; r++) {
-            int x = centerX + (int)(r * cos(angle * M_PI / 180.0));
-            int y = centerY + (int)(r * sin(angle * M_PI / 180.0));
-            SDL_RenderDrawPoint(renderer, x, y);
+    // Asegurar que el progreso esté entre 0 y 1
+    if (progress < 0.0f) progress = 0.0f;
+    if (progress > 1.0f) progress = 1.0f;
+
+    float fillAngle = progress * 2.0f * M_PI;
+
+    SDL_SetRenderDrawColor(renderer, 139, 0, 0, 255);  // Rojo oscuro sólido
+
+    for (int y = -radius; y <= radius; y++) {
+        for (int x = -radius; x <= radius; x++) {
+            if (x * x + y * y <= radius * radius) {
+                float angle = atan2f(y, x); // Rango: -? a ?
+                if (angle < 0.0f) angle += 2.0f * M_PI; // Normalizar a 0 a 2?
+
+                if (angle <= fillAngle) {
+                    SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
+                }
+            }
         }
-    }
-
-    // Draw circular progress (bright yellow)
-    SDL_SetRenderDrawColor(renderer, 255, 255, 100, 255);
-    int maxAngle = (int)(360 * progress);
-
-    for (int angle = -90; angle < -90 + maxAngle; angle += 2) {
-        // Draw lines from center to edge
-        for (int r = 8; r < radius - 2; r++) {
-            int x = centerX + (int)(r * cos(angle * M_PI / 180.0));
-            int y = centerY + (int)(r * sin(angle * M_PI / 180.0));
-            SDL_RenderDrawPoint(renderer, x, y);
-        }
-    }
-
-    // Draw circle border (white)
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    for (int angle = 0; angle < 360; angle += 2) {
-        int x = centerX + (int)(radius * cos(angle * M_PI / 180.0));
-        int y = centerY + (int)(radius * sin(angle * M_PI / 180.0));
-        SDL_RenderDrawPoint(renderer, x, y);
-
-        // Inner circle
-        int x2 = centerX + (int)((radius - 6) * cos(angle * M_PI / 180.0));
-        int y2 = centerY + (int)((radius - 6) * sin(angle * M_PI / 180.0));
-        SDL_RenderDrawPoint(renderer, x2, y2);
     }
 }
 
-// Main function to decode and convert video frames for playback (video only)
+// Función principal para decodificar y convertir frames de video
 bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
 {
-    // Check if we have a valid format context
     if (!formatContext || !videoCodecContext) {
         LOG("No video loaded or invalid codec context. Load a video first.");
-        return true;  // Error
+        return true;
     }
 
-    // Check if the video index matches the loaded video
     if (videoIndex != streamIndex) {
         LOG("Warning: Called ConvertPixels with different video index than loaded video");
     }
 
     LOG("ConvertPixels called with videoIndex=%d (audio disabled)", videoIndex);
 
-    // Packet for demuxed data
-    AVPacket* packet = av_packet_alloc();  // Use av_packet_alloc instead of deprecated av_init_packet
+    AVPacket* packet = av_packet_alloc();
     if (!packet) {
         LOG("Failed to allocate packet");
-        return true; // Error
+        return true;
     }
 
-    // Allocate video frames
-    AVFrame* srcFrame = av_frame_alloc();  // Source frame (as decoded)
+    AVFrame* srcFrame = av_frame_alloc();
     if (!srcFrame) {
         LOG("Failed to allocate source frame");
         av_packet_free(&packet);
-        return true;  // Error
-    }
-    AVFrame* dstFrame = av_frame_alloc();  // Destination frame (converted format)
-    if (!dstFrame) {
-        LOG("Failed to allocate destination frame");
-        av_frame_free(&srcFrame);  // Free source frame
-        av_packet_free(&packet);
-        return true;  // Error
+        return true;
     }
 
-    // Allocate memory for the image data of the destination frame
+    AVFrame* dstFrame = av_frame_alloc();
+    if (!dstFrame) {
+        LOG("Failed to allocate destination frame");
+        av_frame_free(&srcFrame);
+        av_packet_free(&packet);
+        return true;
+    }
+
     if (AllocImage(dstFrame)) {
         LOG("Failed to allocate image for destination frame");
         av_frame_free(&srcFrame);
         av_frame_free(&dstFrame);
         av_packet_free(&packet);
-        return true; // Error
+        return true;
     }
 
-    // Create a scaling context for format conversion
+    // Crear contexto de escalado para conversión de formato
     struct SwsContext* sws_ctx = sws_getContext(
-        videoCodecContext->width, videoCodecContext->height, videoCodecContext->pix_fmt,  // Source
-        videoCodecContext->width, videoCodecContext->height, AV_PIX_FMT_YUV420P,         // Destination
-        SWS_BILINEAR, NULL, NULL, NULL  // Scaling algorithm and parameters
+        videoCodecContext->width, videoCodecContext->height, videoCodecContext->pix_fmt,
+        videoCodecContext->width, videoCodecContext->height, AV_PIX_FMT_YUV420P,
+        SWS_BILINEAR, NULL, NULL, NULL
     );
 
     if (!sws_ctx) {
@@ -531,95 +446,81 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
         av_frame_free(&srcFrame);
         av_frame_free(&dstFrame);
         av_packet_free(&packet);
-        return true; // Error
+        return true;
     }
 
-    // Get time base for video stream
     AVRational videoTimeBase = formatContext->streams[videoIndex]->time_base;
-
-    // Record the start time for playback synchronization
     Uint32 videoStartTime = SDL_GetTicks();
     int64_t firstPts = AV_NOPTS_VALUE;
 
-    // Main packet reading loop
+    // Bucle principal de lectura de paquetes
     while (av_read_frame(formatContext, packet) >= 0 && running && !skipCompleted)
     {
-        // Check if skip has been completed - exit immediately
         if (skipCompleted) {
             LOG("Skip completed - breaking main loop");
             av_packet_unref(packet);
             break;
         }
 
-        // Validate packet
         if (packet->data == nullptr || packet->size <= 0) {
             av_packet_unref(packet);
             continue;
         }
 
-        // Process SDL events
         if (!HandleEvents()) {
-            av_packet_unref(packet);  // Free the packet
-            break;  // Exit the loop if HandleEvents returns false
+            av_packet_unref(packet);
+            break;
         }
 
-        // Double check that we're still supposed to be running
         if (!running || skipCompleted) {
             av_packet_unref(packet);
             break;
         }
 
-        // Handle video packets only
+        // Procesar solo paquetes de video
         if (packet->stream_index == videoIndex)
         {
-            // Double-check codec context is still valid
             if (!videoCodecContext) {
                 LOG("Video codec context became null during playback");
                 av_packet_unref(packet);
                 break;
             }
 
-            // Send packet to decoder
             int sendResult = avcodec_send_packet(videoCodecContext, packet);
             if (sendResult < 0) {
                 LOG("Error sending video packet to decoder: %d", sendResult);
                 av_packet_unref(packet);
-                continue;  // Skip to next packet
+                continue;
             }
 
-            // Receive decoded frame
             int receiveResult = avcodec_receive_frame(videoCodecContext, srcFrame);
             if (receiveResult < 0) {
                 if (receiveResult != AVERROR(EAGAIN)) {
                     LOG("Error receiving video frame from decoder: %d", receiveResult);
                 }
                 av_packet_unref(packet);
-                continue;  // Skip to next packet
+                continue;
             }
 
-            // Get presentation timestamp for this frame
+            // Obtener timestamp de presentación para este frame
             int64_t pts = srcFrame->pts;
             if (pts == AV_NOPTS_VALUE) {
-                pts = 0;  // Use 0 if no valid PTS
+                pts = 0;
             }
 
-            // Initialize the first PTS value
             if (firstPts == AV_NOPTS_VALUE) {
-                firstPts = pts;  // Store first frame PTS
-                videoStartTime = SDL_GetTicks();  // Record start time
+                firstPts = pts;
+                videoStartTime = SDL_GetTicks();
             }
 
-            // Calculate the display time in milliseconds
+            // Calcular el tiempo de visualización en milisegundos
             double timeInSeconds = av_q2d(videoTimeBase) * (pts - firstPts);
             int displayTimeMs = (int)(timeInSeconds * 1000.0);
 
-            // Get current playback time
             int elapsedMs = SDL_GetTicks() - videoStartTime;
-
-            // Calculate how long to wait for this frame
             int delayMs = displayTimeMs - elapsedMs;
 
-            // Scale and convert the frame to the needed format
+            // Escalar y convertir el frame al formato necesario
             int scaleResult = sws_scale(sws_ctx, (uint8_t const* const*)srcFrame->data,
                 srcFrame->linesize, 0, videoCodecContext->height,
                 dstFrame->data, dstFrame->linesize);
@@ -630,7 +531,7 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 continue;
             }
 
-            // Update the texture with the new frame data
+            // Actualizar la textura con los datos del nuevo frame
             int updateResult = SDL_UpdateYUVTexture(renderTexture, &renderRect,
                 dstFrame->data[0], dstFrame->linesize[0],  // Y plane
                 dstFrame->data[1], dstFrame->linesize[1],  // U plane
@@ -643,62 +544,51 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 continue;
             }
 
-            // Render the current frame
             RenderCutscene();
 
-            // Wait if necessary to maintain correct timing
-            if (delayMs > 0 && delayMs < 1000) {  // Cap delay at 1 second
-                SDL_Delay(delayMs);  // Wait for the next frame
+            // Esperar si es necesario para mantener el timing correcto
+            if (delayMs > 0 && delayMs < 1000) {
+                SDL_Delay(delayMs);
             }
         }
-        // Skip audio packets - we're using separate WAV files
-        else {
-            // Just ignore audio packets from the video file
-        }
 
-        // Free the packet
         av_packet_unref(packet);
     }
 
-    // Clean up resources
+    // Limpiar recursos
     av_frame_free(&srcFrame);
     av_frame_free(&dstFrame);
     av_packet_free(&packet);
     sws_freeContext(sws_ctx);
 
-    // Clean up video resources after playback ends
     LOG("Video playback ended - cleaning up");
     CloseCurrentVideo();
 
-    return false;  // Success
+    return false;
 }
 
-// Allocate memory for an image frame
 bool Ffmpeg::AllocImage(AVFrame* image)
 {
     if (!image || !videoCodecContext) {
         LOG("Invalid image frame or codec context");
-        return true; // Error
+        return true;
     }
 
-    // Set the pixel format, width, and height of the image frame
-    image->format = AV_PIX_FMT_YUV420P;           // YUV 4:2:0 format
-    image->width = videoCodecContext->width;      // Width from codec context
-    image->height = videoCodecContext->height;    // Height from codec context
+    image->format = AV_PIX_FMT_YUV420P;
+    image->width = videoCodecContext->width;
+    image->height = videoCodecContext->height;
 
-    // Allocate memory for the image data
     int result = av_image_alloc(image->data, image->linesize,
         image->width, image->height, (AVPixelFormat)image->format, 32);
 
     if (result < 0) {
         LOG("Failed to allocate image data");
-        return true; // Error
+        return true;
     }
 
-    return false;  // Success
+    return false;
 }
 
-// Render the current video frame
 void Ffmpeg::RenderCutscene()
 {
     SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
@@ -708,44 +598,36 @@ void Ffmpeg::RenderCutscene()
         return;
     }
 
-    // Clear the renderer
     SDL_RenderClear(renderer);
-
-    // Copy the video texture to the renderer
     SDL_RenderCopy(renderer, renderTexture, NULL, NULL);
 
-    // Draw interactive elements if hovered
+    // Dibujar elementos interactivos si están activos
     if (isHover1) Engine::GetInstance().render->DrawTexture(texture1, position1.x, position1.y, NULL);
     if (isHover2) Engine::GetInstance().render->DrawTexture(texture2, position2.x, position2.y, NULL);
 
-    // Render skip bar if active
+    // Renderizar barra de skip si está activa
     if (isSkipping) {
         Uint32 currentTime = SDL_GetTicks();
         Uint32 elapsedTime = currentTime - skipStartTime;
         float progress = (float)elapsedTime / (float)SKIP_DURATION;
-        progress = progress > 1.0f ? 1.0f : progress; // Clamp to 1.0
+        progress = progress > 1.0f ? 1.0f : progress;
 
         RenderSkipBar(progress);
     }
 
-    // Present the rendered frame
     SDL_RenderPresent(renderer);
 }
 
-// Update function called each frame
 bool Ffmpeg::Update(float dt)
 {
     HandleEvents();
-    // Currently empty, could be used for updating UI elements
-    return true;  // Continue running
+    return true;
 }
 
-// Clean up all resources
 bool Ffmpeg::CleanUp()
 {
-    LOG("Freeing cutscene player");  // Log cleanup
+    LOG("Freeing cutscene player");
 
-    // Close the current video and clean up remaining resources
     CloseCurrentVideo();
 
     if (skipBarTexture) {
@@ -753,5 +635,5 @@ bool Ffmpeg::CleanUp()
         skipBarTexture = nullptr;
     }
 
-    return true;  // Cleanup successful
+    return true;
 }
