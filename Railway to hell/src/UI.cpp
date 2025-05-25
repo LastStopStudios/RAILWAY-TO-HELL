@@ -106,13 +106,11 @@ void UI::LoadTUi()
 	Evida = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Empty.png"); //Load Empty boss life 
 	//amo = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load stamina of the player
 	//boss = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load life of the player
-
 }
 
 void UI::renderUI()
 {
 	PJs();
-	//SDL_RenderCopy(Engine::GetInstance().render->renderer, amo, nullptr, &dstRect2);//render  character health
 	if (figth) { Boss1();}
 	if (figth2) { Boss2(); }
 	if (figth3) { Boss3(); }

@@ -2407,7 +2407,7 @@
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get out of here and see all my friends and I trust we will both go out together." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get  out of here and see all my friends and I trust we will both go out together." />
 			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember going through that door, I think that's the way. It seems the door is locked, you have to defeat someone else sister." />
 		</dialogues>
 	</scene6>

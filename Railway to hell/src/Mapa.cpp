@@ -281,6 +281,60 @@ void Mapa::LoadMap(){
 	MNegro11 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black11.png"); //Load black texture to cover unknow parts of the map
 	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black12.png"); //Load black texture to cover unknow parts of the map ;
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
+
+
+	//Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 1
+	//Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 2
+	//Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 3
+	//Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 4
+}
+
+void Mapa ::Remember() {
+	if (remember1 && !remember2 && !remember3 && !remember4) {//1
+
+	}
+	else if (!remember1 && remember2 && !remember3 && !remember4) {//2
+
+	}
+	else if (!remember1 && !remember2 && remember3 && !remember4) {//3
+
+	}
+	else if (!remember1 && !remember2 && !remember3 && remember4) {//4
+
+	}
+	else if (remember1 && remember2 && !remember3 && !remember4) {//1,2
+
+	}
+	else if (remember1 && !remember2 && remember3 && !remember4) {//1,3
+
+	}
+	else if (remember1 && !remember2 && !remember3 && remember4) {//1,4
+
+	}
+	else if (!remember1 && remember2 && remember3 && !remember4) {//2,3
+
+	}
+	else if (!remember1 && remember2 && !remember3 && remember4) {//2,4
+
+	}
+	else if (!remember1 && !remember2 && remember3 && remember4) {//3,4
+
+	}
+	else if (remember1 && remember2 && remember3 && !remember4) {//1,2,3
+
+	}
+	else if (remember1 && remember2 && !remember3 && remember4) {//1,2,4
+
+	}
+	else if (remember1 && !remember2 && remember3 && remember4) {//1,3,4
+
+	}
+	else if (!remember1 && remember2 && remember3 && remember4) {//2,3,4
+
+	}
+	else if (remember1 && remember2 && remember3 && remember4) {//1,2,3,4
+
+	}
 }
 
 void Mapa::DialogoOn() { dialogoOn = true; }//stop map from showing during dialogs

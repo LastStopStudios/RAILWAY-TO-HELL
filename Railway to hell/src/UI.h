@@ -41,7 +41,6 @@ private:
 	void Boss2();//Only if there is a figth with Boss 2
 	void Boss3();//Only if there is a figth with Boss 3
 
-
 public:
 	bool dialogoOn = false;
 	bool figth = false, figth2 = false, figth3 = false;
@@ -63,7 +62,7 @@ private:
 	SDL_Texture* vidapl = nullptr;//Player health texture
 	//Empty
 	SDL_Texture* vidapl2 = nullptr;//Empty Player health texture
-	SDL_Texture* Evida = nullptr;//Empty Boss health texturev
+	SDL_Texture* Evida = nullptr;//Empty Boss health texture
 	//SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	//SDL_Texture* boss = nullptr;//stamina texture (Dash)
 	//UI sizes

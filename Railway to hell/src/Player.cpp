@@ -1985,32 +1985,34 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
         break;
     }
-    case ColliderType::PROJECTILE: {
-        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurtDelayed = true;
-            currentHurtDelay = 0.0f;
-            freezeWhileHurting = true;
-			ballhurt = true; 
+    case ColliderType::PROJECTILE:
 
-            // Cancel any ongoing attack
-            if (isAttacking) {
-                isAttacking = false;
-                if (attackHitbox) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
-                    attackHitbox = nullptr;
+        if (Engine::GetInstance().entityManager->BBuffon) {//Stop the bullets from hurting the player when the boss is dead
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
+                freezeWhileHurting = true;
+                ballhurt = true;
+
+                // Cancel any ongoing attack
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
                 }
-            }
-            if (isWhipAttacking) {
-                isWhipAttacking = false;
-                if (whipAttackHitbox) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
-                    whipAttackHitbox = nullptr;
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
                 }
             }
         }
-
         break;
-    }
+
     case ColliderType::BUFON_JUMP_ATTACK_AREA: {
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurtDelayed = true;

@@ -192,6 +192,8 @@ bool Bufon::Update(float dt)
         //UI Lives
         Engine::GetInstance().ui->figth2 = false;
 
+        //Bullets Hurt player
+        Engine::GetInstance().entityManager->BulletsOff();
         // When dying, don't process any other logic
         return true;
     }

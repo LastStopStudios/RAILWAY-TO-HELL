@@ -108,9 +108,13 @@ private:
 	void ShowMap();
 	void LoadMap();
 
+	void Remember();// Control of all the remembers
+
 public:
 	bool Mostrar;
 	bool dialogoOn = false;
+
+	bool remember1, remember2, remember3, remember4;
 
 private:
 	//Textures
@@ -129,9 +133,17 @@ private:
 	SDL_Texture* MNegro10 = nullptr;//Black texture
 	SDL_Texture* MNegro11 = nullptr;//Black texture
 	SDL_Texture* MNegro12 = nullptr;//Black texture
+
 	std::string scene = "";//what scene is now loading
 	std::string pjposition = "";//what scene is now loading
 	std::string Zona = "";//zone of the map where the player is
+
+	//Remember
+	SDL_Texture* Recuerdo1 = nullptr;// Remember 1 texture
+	SDL_Texture* Recuerdo2 = nullptr;// Remember 2 texture 
+	SDL_Texture* Recuerdo3 = nullptr;// Remember 3 texture 
+	SDL_Texture* Recuerdo4 = nullptr;// Remember 4 texture 
+	SDL_Texture* VRecuerdo = nullptr;// Remember Hole texture 
 
 	float posx, posy;// icon player position
 	int w, h, i = 1;//renders size

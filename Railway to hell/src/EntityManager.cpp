@@ -253,3 +253,6 @@ void EntityManager :: DialogoOff() { dialogo = false; }//return movement to the 
 //Elevator sensor control
 void EntityManager::AscensorOn() { Ascensor = true; }//Open animation
 void EntityManager::AscensorOff() { Ascensor = false; }//Block open animation
+//Bullets Hurt player
+void EntityManager::BulletsOn() { BBuffon = true; }//Open animation
+void EntityManager::BulletsOff() { BBuffon = false; }//Block open animation

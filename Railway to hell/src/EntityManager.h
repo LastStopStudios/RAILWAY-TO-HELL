@@ -46,6 +46,10 @@ public:
 	void AscensorOn();
 	void AscensorOff();
 
+	//Bullets Hurt player
+	void BulletsOn();
+	void BulletsOff();
+
 public:
 
 	std::list<Entity*> entities;
@@ -53,6 +57,8 @@ public:
 	bool dialogo;
 	//elevator animation
 	bool Ascensor;
+	//Hurt bullets
+	bool BBuffon = true;
 private:
 	bool isPendingToDelente = false;
 
