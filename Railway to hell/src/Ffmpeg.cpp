@@ -291,7 +291,6 @@ bool Ffmpeg::HandleEvents()
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
-                LOG("ESC pressed - stopping video playback");
                 running = false;
                 return false;
 
@@ -300,7 +299,6 @@ bool Ffmpeg::HandleEvents()
                 if (!isSkipping && !skipCompleted) {
                     isSkipping = true;
                     skipStartTime = SDL_GetTicks();
-                    LOG("Skip initiated - hold SPACE to continue");
                 }
                 break;
 
@@ -315,7 +313,6 @@ bool Ffmpeg::HandleEvents()
                 // Cancel skip if key is released before completion
                 if (isSkipping && !skipCompleted) {
                     isSkipping = false;
-                    LOG("Skip cancelled - SPACE released");
                 }
                 break;
             default:
