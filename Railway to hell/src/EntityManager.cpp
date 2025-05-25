@@ -20,6 +20,7 @@
 #include "MosaicPiece.h"
 #include "MosaicLevers.h"
 #include "MosaicPuzzle.h"
+#include "Estatua.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -111,6 +112,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::DOORS:
 		entity = new Doors();
+		break;
+	case EntityType::ESTATUA:
+		entity = new Estatua();
 		break;
 	case EntityType::LEVER:
 		entity = new Levers();
