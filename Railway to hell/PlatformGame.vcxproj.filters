@@ -118,6 +118,7 @@
     <ClCompile Include="src\Checkpoints.cpp">
       <Filter>Source Filles\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Estatua.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -249,6 +250,7 @@
     <ClInclude Include="src\Checkpoints.h">
       <Filter>Source Filles\Game</Filter>
     </ClInclude>
+    <ClInclude Include="src\Estatua.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">

@@ -25,12 +25,12 @@ bool Estatua::Start() {
 	return true;
 }
 
-bool Doors::Update(float dt){
+bool Estatua::Update(float dt){
 
 	return true;
 }
 
-bool Doors::CleanUp()
+bool Estatua::CleanUp()
 {
 
 	return true;
