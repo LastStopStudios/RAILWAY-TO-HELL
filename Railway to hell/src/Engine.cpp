@@ -17,6 +17,7 @@
 #include "Mapa.h"
 #include "UI.h"
 #include "SDL2/SDL.h"
+#include "Ffmpeg.h"
 
 // Constructor
 Engine::Engine() {
@@ -47,6 +48,7 @@ Engine::Engine() {
     dialogoM = std::make_shared<DialogoM>();
     mapa = std::make_shared<Mapa>();
     ui = std::make_shared<UI>();
+    ffmpeg = std::make_shared<Ffmpeg>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -63,6 +65,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(mapa));
     AddModule(std::static_pointer_cast<Module>(ui));
 
+    AddModule(std::static_pointer_cast<Module>(ffmpeg));
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
 
@@ -136,7 +139,7 @@ bool Engine::Start() {
 }
 
 void Engine::InitGameController() {
-    // Asegurarse de que el subsistema de Game Controller esté inicializado
+    // Asegurarse de que el subsistema de Game Controller estï¿½ inicializado
     if (!(SDL_WasInit(SDL_INIT_GAMECONTROLLER))) {
         if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0) {
             LOG("Error al inicializar SDL_INIT_GAMECONTROLLER: %s", SDL_GetError());
@@ -144,9 +147,9 @@ void Engine::InitGameController() {
         }
     }
 
-    // Comprobar cuántos joysticks/mandos hay conectados
+    // Comprobar cuï¿½ntos joysticks/mandos hay conectados
     int numJoysticks = SDL_NumJoysticks();
-    LOG("Número de joysticks/mandos detectados: %d", numJoysticks);
+    LOG("Nï¿½mero de joysticks/mandos detectados: %d", numJoysticks);
 
     // Inicializar el primer mando encontrado
     gameController = nullptr;

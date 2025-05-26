@@ -19,6 +19,7 @@
 #include "Volador.h"
 #include "Elevators.h"
 #include "Explosivo.h"
+#include "Ffmpeg.h"
 
 Scene::Scene() : Module()
 {
@@ -176,6 +177,8 @@ bool Scene::Start()
 	Engine::GetInstance().render.get()->camera.x = 0;
 	Engine::GetInstance().render.get()->camera.y = 0;
 
+	Engine::GetInstance().ffmpeg->Awake();
+	Engine::GetInstance().ffmpeg->Start(); 
 
 	//Draw player
 	dibujar = false;
@@ -227,17 +230,9 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
+		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test5.mp4");
 
-		if (!textMusicPlaying) {
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Nothing.ogg", 1.0f);
-			textMusicPlaying = true;
-			introMusicPlaying = false;
-			currentMusic = "text";
-			Engine::GetInstance().sceneLoader->FadeOut(2.5, false);// Animation speed (FadeOut)
-		}
-		if (textMusicPlaying) {
-			DrawCurrentScene();
-		}
+		currentState = SceneState::GAMEPLAY;
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
@@ -254,9 +249,9 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::GAMEPLAY:
-		if (currentMusic == "text") {
+		if (currentMusic != "caronte") {
 			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
-			currentMusic = "";
+			currentMusic = "caronte";
 		}
 		for (auto puzzle : mosaicPuzzleList) {
 			puzzle->Update(dt);
