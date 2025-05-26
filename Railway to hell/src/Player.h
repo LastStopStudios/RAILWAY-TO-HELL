@@ -269,6 +269,10 @@ private:
 	bool hasDeathStarted = false;
 	bool hasDied = false;
 
+	// Throw
+	Animation throwAnim;
+	SDL_Texture* throwTexture;
+
 	// items booleans
 	bool Dash = false;
 	bool WhipAttack = false;

@@ -208,6 +208,11 @@ bool Player::Start() {
     auto wakeupNode = parameters.child("animations").child("wakeup");
     wakeupTexture = wakeupNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(wakeupNode.attribute("texture").as_string()) : texture;
 
+    // Throw animation
+    throwAnim.LoadAnimations(parameters.child("animations").child("throw"));
+    auto throwNode = parameters.child("animations").child("throw");
+    throwTexture = throwNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(throwNode.attribute("texture").as_string()) : texture;
+
     // Initialize wakeup animation
     isWakingUp = true;
     hasWakeupStarted = false;
@@ -1272,6 +1277,10 @@ void Player::HandleBallAttack(float dt) {
         else playerPosition.setX(playerPosition.getX() + 20);
         projectile->SetPosition(playerPosition);
         projectile->SetDirection(facingRight);
+
+        throwAnim.Reset();
+        currentAnimation = &throwAnim;
+        texture = throwTexture;
     }
 }
 
@@ -1367,6 +1376,13 @@ void Player::DrawPlayer() {
         }
         walk.Update();
     }
+    else if (currentAnimation == &throwAnim) {
+        throwAnim.Update();
+        if (throwAnim.HasFinished()) {
+            currentAnimation = &idle;
+            texture = idleTexture;
+        }
+    }
     else {
         if (currentAnimation != &idle) {
             currentAnimation = &idle;
@@ -1426,7 +1442,16 @@ void Player::DrawPlayer() {
 
         }
     }
-
+    if (currentAnimation == &throwAnim) {
+        if (facingRight) {
+            drawX = position.getX() - 7;  // Puedes ajustar este valor
+          
+        }
+        else {
+            drawX = position.getX() + 7;  // Ajuste cuando mira a la izquierda
+          
+        }
+    }
     if (!facingRight) {
         offsetX = (frame.w - texW); // Adjust for sprite width difference when flipped
     }
