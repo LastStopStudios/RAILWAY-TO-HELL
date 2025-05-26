@@ -1444,11 +1444,10 @@ void Player::DrawPlayer() {
     }
     if (currentAnimation == &throwAnim) {
         if (facingRight) {
-            drawX = position.getX() - 7;  // Puedes ajustar este valor
-          
+            drawX = position.getX() - 7;  
         }
         else {
-            drawX = position.getX() + 7;  // Ajuste cuando mira a la izquierda
+            drawX = position.getX() + 7;  
           
         }
     }

@@ -119,7 +119,7 @@
 						<frame x="128" y="929" w="64" h="96" />
 						<frame x="192" y="929" w="64" h="96" />
 					</wakeup>
-					<throw loop="false" speed="0.10">
+					<throw loop="false" speed="0.05">
 						<frame x="0" y="1121" w="96" h="96" />
 						<frame x="96" y="1121" w="96" h="96" />
 						<frame x="192" y="1121" w="96" h="96" />
