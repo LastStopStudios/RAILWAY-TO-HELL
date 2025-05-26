@@ -2,299 +2,303 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Ffmpeg.cpp">
-      <Filter>Source Filles\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Log.cpp">
-      <Filter>Source Filles\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Item.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Player.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Filles\Game</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\DialogoM.cpp">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Map.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PlatformGame.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SceneLoader.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Textures.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window.cpp">
-      <Filter>Source Filles\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Timer.cpp">
-      <Filter>Source Filles\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vector2D.cpp">
-      <Filter>Source Filles\Utils</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Input.cpp">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\PerfTimer.cpp">
-      <Filter>Source Filles\Utils</Filter>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics.cpp">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlatformGame.cpp">
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Render.cpp">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Doors.cpp">
-      <Filter>Source Filles\Game</Filter>
+    <ClCompile Include="src\SceneLoader.cpp">
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Levers.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Projectiles.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiControlButton.cpp">
-      <Filter>Source Filles\Engine\Gui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GuiManager.cpp">
-      <Filter>Source Filles\Engine\Gui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EntityManager.cpp">
-      <Filter>Source Filles\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pathfinding.cpp">
-      <Filter>Source Filles\Engine\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Elevators.cpp">
-      <Filter>Source Filles\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Mapa.cpp">
-      <Filter>Source Filles\Game</Filter>
+    <ClCompile Include="src\Textures.cpp">
+      <Filter>SourceFilles\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\UI.cpp">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlButton.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiManager.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>SourceFilles\Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pathfinding.cpp">
+      <Filter>SourceFilles\Engine\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Boss.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Bufon.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Caronte.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Explosivo.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Terrestre.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Volador.cpp">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\MosaicLevers.cpp">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClCompile>
     <ClCompile Include="src\MosaicPiece.cpp">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClCompile>
     <ClCompile Include="src\MosaicPuzzle.cpp">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClCompile>
     <ClCompile Include="src\Checkpoints.cpp">
-      <Filter>Source Filles\Game</Filter>
+      <Filter>SourceFilles\Game</Filter>
     </ClCompile>
-    <ClCompile Include="src\Estatua.cpp" />
+    <ClCompile Include="src\Doors.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Elevators.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Estatua.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Levers.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Item.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mapa.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Projectiles.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>SourceFilles\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Ffmpeg.cpp">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Log.cpp">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PerfTimer.cpp">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Timer.cpp">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector2D.cpp">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Animation.h">
-      <Filter>Source Filles\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Ffmpeg.h">
-      <Filter>Source Filles\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Log.h">
-      <Filter>Source Filles\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Source Filles\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Item.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Player.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>Source Filles\Game</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\DialogoM.h">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Map.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Module.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SceneLoader.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Textures.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window.h">
-      <Filter>Source Filles\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vector2D.h">
-      <Filter>Source Filles\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Timer.h">
-      <Filter>Source Filles\Utils</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Input.h">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\PerfTimer.h">
-      <Filter>Source Filles\Utils</Filter>
+    <ClInclude Include="src\Map.h">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Module.h">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics.h">
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Render.h">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Doors.h">
-      <Filter>Source Filles\Game</Filter>
+    <ClInclude Include="src\SceneLoader.h">
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Levers.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Projectiles.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControl.h">
-      <Filter>Source Filles\Engine\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiControlButton.h">
-      <Filter>Source Filles\Engine\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GuiManager.h">
-      <Filter>Source Filles\Engine\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity.h">
-      <Filter>Source Filles\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityManager.h">
-      <Filter>Source Filles\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pathfinding.h">
-      <Filter>Source Filles\Engine\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Elevators.h">
-      <Filter>Source Filles\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mapa.h">
-      <Filter>Source Filles\Game</Filter>
+    <ClInclude Include="src\Textures.h">
+      <Filter>SourceFilles\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\UI.h">
-      <Filter>Source Filles\Engine</Filter>
+      <Filter>SourceFilles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window.h">
+      <Filter>SourceFilles\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControl.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlButton.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiManager.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>SourceFilles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pathfinding.h">
+      <Filter>SourceFilles\Engine\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Boss.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Bufon.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Caronte.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Explosivo.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Terrestre.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Volador.h">
-      <Filter>Source Filles\Game\Enemies</Filter>
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\MosaicLevers.h">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClInclude>
     <ClInclude Include="src\MosaicPiece.h">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClInclude>
     <ClInclude Include="src\MosaicPuzzle.h">
-      <Filter>Source Filles\Game\Mosaic</Filter>
+      <Filter>SourceFilles\Game\Mosaic</Filter>
     </ClInclude>
     <ClInclude Include="src\Checkpoints.h">
-      <Filter>Source Filles\Game</Filter>
+      <Filter>SourceFilles\Game</Filter>
     </ClInclude>
-    <ClInclude Include="src\Estatua.h" />
+    <ClInclude Include="src\Doors.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Elevators.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Estatua.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Levers.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Item.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mapa.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Projectiles.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>SourceFilles\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity.h">
+      <Filter>SourceFilles\Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ffmpeg.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Log.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PerfTimer.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Timer.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector2D.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">
-      <Filter>Configuration Files</Filter>
-    </None>
-    <None Include="vcpkg-configuration.json">
-      <Filter>Configuration Files</Filter>
+      <Filter>ConfigurationFilles</Filter>
     </None>
     <None Include="vcpkg.json">
-      <Filter>Configuration Files</Filter>
+      <Filter>ConfigurationFilles</Filter>
+    </None>
+    <None Include="vcpkg-configuration.json">
+      <Filter>ConfigurationFilles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source Filles">
-      <UniqueIdentifier>{007fa80e-eb5d-4aee-bb91-cfc4f0ac7eb6}</UniqueIdentifier>
+    <Filter Include="SourceFilles">
+      <UniqueIdentifier>{07a7569f-bc66-4367-980a-a3d2156b15d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Game">
-      <UniqueIdentifier>{a6ec0840-106d-4e9e-acb1-f642d2aefc15}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Engine">
+      <UniqueIdentifier>{101ffafd-c945-4bfd-bca9-4e0be3d93b82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Utils">
-      <UniqueIdentifier>{54d285fe-0158-47d3-9ac0-a81c4bc0ef04}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Engine\Gui">
+      <UniqueIdentifier>{9d485bcd-d7b9-4268-9304-5b9f60d6e8f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Configuration Files">
-      <UniqueIdentifier>{3bda0684-3b68-4d85-b303-f1d1f82fe9c3}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Engine\Entities">
+      <UniqueIdentifier>{d10ca028-971c-4cf3-b1c7-8c1ee66843ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Engine">
-      <UniqueIdentifier>{0345ce0b-58d7-4d67-95d1-7c0f5a1be4a6}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Game">
+      <UniqueIdentifier>{34429da5-2839-4761-8cfe-7342dde45bb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Engine\Gui">
-      <UniqueIdentifier>{6cc908a6-7228-492f-ac17-a34d245704b9}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Game\Enemies">
+      <UniqueIdentifier>{916b306a-69b7-46c5-a397-7583aee4c2c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Engine\Entities">
-      <UniqueIdentifier>{da4651a5-73b5-4f65-b4ff-a3a6cf752fc4}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Game\Mosaic">
+      <UniqueIdentifier>{d0ac2a55-781a-4e62-b1bd-05b76cd293f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Game\Enemies">
-      <UniqueIdentifier>{733877f0-7311-4568-af93-465d7de7318c}</UniqueIdentifier>
+    <Filter Include="SourceFilles\Utils">
+      <UniqueIdentifier>{22b704c0-3b7f-4c0e-8b34-40cfba608f94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Filles\Game\Mosaic">
-      <UniqueIdentifier>{9a768c47-c11a-450d-8208-151da05b7865}</UniqueIdentifier>
+    <Filter Include="ConfigurationFilles">
+      <UniqueIdentifier>{2292ad5a-1874-41e4-b8fc-aa1c57105cc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
-      <Filter>Configuration Files</Filter>
+      <Filter>ConfigurationFilles</Filter>
     </Xml>
   </ItemGroup>
 </Project>
