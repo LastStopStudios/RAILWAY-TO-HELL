@@ -85,7 +85,7 @@ bool Ffmpeg::LoadAndPlayWavAudio(const char* wavPath)
 void Ffmpeg::StopWavAudio()
 {
     if (isAudioPlaying) {
-        // Stop current audio only, don't play "Nothing.ogg"
+       
         Mix_HaltMusic();
 
         LOG("Stopping WAV music playback");
@@ -548,7 +548,6 @@ bool Ffmpeg::ConvertPixels(int videoIndex, int audioIndex)
                 SDL_Delay(delayMs);
             }
         }
-
         av_packet_unref(packet);
     }
 

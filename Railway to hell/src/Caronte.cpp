@@ -229,7 +229,6 @@ void Caronte::OnCollision(PhysBody* physA, PhysBody* physB) {
             candie = false;
             currentAnimation = &hurt;
             hurt.Reset(); // Ensure the animation starts from the beginning
-            Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test2.mp4");
         }
         break;
     case ColliderType::ITEM:
