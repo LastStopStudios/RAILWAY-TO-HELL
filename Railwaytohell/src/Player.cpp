@@ -1266,21 +1266,42 @@ void Player::HandleBallAttack(float dt) {
     }
 
     // Add check for ball attack animation completion before allowing next shot
-    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack) {
+    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack && !isThrowing) {
         ballCounter--;
-        Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
-        projectile->SetParameters(engine.scene.get()->normalProjectileConfigNode);
-        projectile->Start();
-        Vector2D playerPosition = engine.scene.get()->GetPlayerPosition();
-        // Adjust horizontal position based on facing direction
-        if (!facingRight) playerPosition.setX(playerPosition.getX() - 50);
-        else playerPosition.setX(playerPosition.getX() + 20);
-        projectile->SetPosition(playerPosition);
-        projectile->SetDirection(facingRight);
-
+        isThrowing = true;
+        hasThrownBall = false;
+        ballToShoot = true;
         throwAnim.Reset();
         currentAnimation = &throwAnim;
         texture = throwTexture;
+    }
+
+    if (isThrowing && ballToShoot) {
+        int currentFrame = throwAnim.GetCurrentFrameIndex(); 
+
+        const int THROW_FRAME = 5; 
+
+        if (currentFrame == THROW_FRAME && !hasThrownBall) {
+
+            Projectiles* projectile = (Projectiles*)engine.entityManager->CreateEntity(EntityType::PROJECTILE);
+            projectile->SetParameters(engine.scene.get()->normalProjectileConfigNode);
+            projectile->Start();
+            Vector2D playerPosition = engine.scene.get()->GetPlayerPosition();
+            if (!facingRight) playerPosition.setX(playerPosition.getX() - 50);
+            else playerPosition.setX(playerPosition.getX() + 20);
+            projectile->SetPosition(playerPosition);
+            projectile->SetDirection(facingRight);
+
+            hasThrownBall = true;  
+        }
+
+        if (throwAnim.HasFinished()) {
+            isThrowing = false;
+            ballToShoot = false;
+            hasThrownBall = false;
+            currentAnimation = &idle;
+            texture = idleTexture;
+        }
     }
 }
 

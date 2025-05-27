@@ -272,6 +272,10 @@ private:
 	// Throw
 	Animation throwAnim;
 	SDL_Texture* throwTexture;
+	bool isThrowing = false;
+	float throwTimer = 0.0f;
+	bool ballToShoot = false;
+	bool hasThrownBall = false;
 
 	// items booleans
 	bool Dash = false;
