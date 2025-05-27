@@ -228,6 +228,9 @@ bool Scene::Update(float dt)
 				skipFirstInput = true;
 			}
 		}
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) {
+			currentState = SceneState::GAMEPLAY;
+		}
 		break;
 	case SceneState::TEXT_SCREEN:
 		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test3.mp4");
