@@ -328,4 +328,9 @@ private:
 	bool ballhurt = false; //if player is hurt by ball attack
 	bool bufonjumphurt = false; //if player is hurt by bufon jump attack
 
+
+
+	Animation slide;
+	SDL_Texture* slideTexture = nullptr;
+
 };

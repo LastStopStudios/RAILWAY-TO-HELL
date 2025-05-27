@@ -213,6 +213,13 @@ bool Player::Start() {
     auto throwNode = parameters.child("animations").child("throw");
     throwTexture = throwNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(throwNode.attribute("texture").as_string()) : texture;
 
+    // Slide animation
+    slide.LoadAnimations(parameters.child("animations").child("slide"));
+    auto slideNode = parameters.child("animations").child("slide");
+    slideTexture = slideNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(slideNode.attribute("texture").as_string()) : texture;
+
+
+
     // Initialize wakeup animation
     isWakingUp = true;
     hasWakeupStarted = false;
@@ -1386,16 +1393,26 @@ void Player::DrawPlayer() {
         }
     }
     else if (isWalking) {
-        currentAnimation = &walk;
-        texture = walkTexture;
-        if (!isJumping && isWalking && !isDashing) {
+        if (resbalar) {
+            currentAnimation = &slide;
+            texture = slideTexture;
+            slide.Update();
+           
+        }
+        else {
+            currentAnimation = &walk;
+            texture = walkTexture;
+            walk.Update();
+        }
+
+       
+        if (!resbalar && !isJumping && isWalking && !isDashing) {
             runSoundTimer += 0.0167;
             if (runSoundTimer >= runSoundInterval) {
                 Engine::GetInstance().audio.get()->PlayFx(stepFX);
                 runSoundTimer = 0.0f;
             }
         }
-        walk.Update();
     }
     else if (currentAnimation == &throwAnim) {
         throwAnim.Update();
