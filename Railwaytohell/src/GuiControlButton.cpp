@@ -11,11 +11,22 @@ GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text) : 
 
 	canClick = true;
 	drawBasic = false;
+
+	prevState = GuiControlState::NORMAL;
 }
 
 GuiControlButton::~GuiControlButton()
 {
 
+}
+
+bool GuiControlButton::Start()
+{
+	// Load the button sound effects
+	OnfocussedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-focussed.wav");
+	OnPressedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-pressed.wav");
+	OnReleasedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-focussed.wav"); 
+	return true;
 }
 
 bool GuiControlButton::Update(float dt)
@@ -26,6 +37,22 @@ bool GuiControlButton::Update(float dt)
 	}
 	if (state != GuiControlState::DISABLED)
 	{
+		// Check if the state has changed
+		if (state != prevState)
+		{
+			// Then play the corresponding sound effect
+			switch (state)
+			{
+			case GuiControlState::FOCUSED:
+				Engine::GetInstance().audio->PlayFx(OnfocussedFx);
+				break;
+			case GuiControlState::PRESSED:
+				Engine::GetInstance().audio->PlayFx(OnPressedFx);
+				break;
+			}
+			prevState = state;
+		}
+
 		//Update the state of the GUiButton according to the mouse position
 		Vector2D mousePos = Engine::GetInstance().input->GetMousePosition();
 
@@ -66,8 +93,8 @@ bool GuiControlButton::Update(float dt)
 			Engine::GetInstance().render->DrawText(text.c_str(), bounds.x, bounds.y, bounds.w, bounds.h);
 		}
 		
-
 	}
+
 
 	return false;
 }

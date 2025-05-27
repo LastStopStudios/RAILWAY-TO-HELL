@@ -213,18 +213,18 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
     if (use_camera)
     {
         // Scale both position and dimensions
-        rec.x = (int)(camera.x + rect.x * TEXTURE_SIZE_MULTIPLIER);
-        rec.y = (int)(camera.y + rect.y * TEXTURE_SIZE_MULTIPLIER);
-        rec.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
-        rec.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
-    }
+        rec.x = (int)(camera.x + rect.x );
+        rec.y = (int)(camera.y + rect.y );
+        rec.w = (int)(rect.w );
+        rec.h = (int)(rect.h );
+    } 
     else
     {
         // Scale both position and dimensions
-        rec.x = (int)(rect.x * TEXTURE_SIZE_MULTIPLIER);
-        rec.y = (int)(rect.y * TEXTURE_SIZE_MULTIPLIER);
-        rec.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
-        rec.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
+        rec.x = (int)(rect.x );
+        rec.y = (int)(rect.y );
+        rec.w = (int)(rect.w );
+        rec.h = (int)(rect.h );
     }
 
     int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);

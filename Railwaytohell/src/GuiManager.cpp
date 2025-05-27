@@ -36,6 +36,12 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	// Created GuiControls are add it to the list of controls
 	guiControlsList.push_back(guiControl);
 
+	// Initialize the control
+	if (guiControl != nullptr)
+	{
+		guiControl->Start();
+	}
+
 	return guiControl;
 }
 
