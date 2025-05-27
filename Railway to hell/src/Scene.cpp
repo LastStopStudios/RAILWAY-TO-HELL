@@ -19,6 +19,7 @@
 #include "Volador.h"
 #include "Elevators.h"
 #include "Explosivo.h"
+#include "GlobalSettings.h"
 
 Scene::Scene() : Module()
 {
@@ -300,64 +301,67 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
 	SceneState currentState = GetCurrentState();
-	if (currentState == SceneState::GAMEPLAY) {
-		// Define the zoom factor here to use it in both cases
-		const float TEXTURE_SIZE_MULTIPLIER = 1.5f;
 
-		// Get window dimensions
+	if (currentState == SceneState::GAMEPLAY) {
+		// Get current window dimensions
 		int window_width, window_height;
 		Engine::GetInstance().window.get()->GetWindowSize(window_width, window_height);
 		int center_x = window_width / 2;
 		int center_y = window_height / 2;
 
+		// Logical base offsets (not affected by zoom)
+		const int BASE_OFFSET_X = -92;
+		const int BASE_OFFSET_Y = 86;
+
 		if (BossBattle == false) {
-			// Camera follows the player
-			Engine::GetInstance().render.get()->camera.x = (int)((player->position.getX() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
-			Engine::GetInstance().render.get()->camera.y = (int)((player->position.getY() * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_y + 86;
+			// Follow player position in world space
+			float cameraBaseX = (player->position.getX() * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
+			float cameraBaseY = (player->position.getY() * -1.0f) + (center_y / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_Y;
+
+			// Apply zoom only to the final result
+			Engine::GetInstance().render.get()->camera.x = (int)(cameraBaseX * GlobalSettings::GetInstance().GetTextureMultiplier());
+			Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier());
 		}
-		else if (BossBattle == true) {
-			// Camera for Boss Battle - with limits on X axis
-			for (const auto& boss : Bosses) { // Iterate through all boss scenes
-				if (boss.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) { // If current scene matches a boss scene
-					// Keep Y fixed for the boss battle
-					Engine::GetInstance().render.get()->camera.y = (int)(-boss.y * TEXTURE_SIZE_MULTIPLIER) - 140;
+		else {
+			// Boss battle camera behavior
+			for (const auto& boss : Bosses) {
+				if (boss.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
 
-					// For X, follow the player but with boundaries
+					// Fixed Y position for boss battles (world space)
+					float cameraBaseY = (-boss.y) + (-140);
+					Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier());
+
+					// Follow player X position with constraints (world space)
 					float playerX = player->position.getX();
+					float desiredCameraBaseX = (playerX * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
 
-					// Calculate the desired camera position based on the player
-					int desiredCameraX = (int)((playerX * TEXTURE_SIZE_MULTIPLIER) * -1.0f) + center_x - 92;
+					// Clamp camera position within boss area bounds
+					float leftLimitBase = -boss.leftBoundary;
+					float rightLimitBase = -boss.rightBoundary;
 
-					// Define camera boundaries on the X axis (adjust these values as needed)
-					int leftLimit = (int)(-boss.leftBoundary * TEXTURE_SIZE_MULTIPLIER);
-					int rightLimit = (int)(-boss.rightBoundary * TEXTURE_SIZE_MULTIPLIER);
-
-					// Apply the boundaries
-					if (desiredCameraX > leftLimit) {
-						desiredCameraX = leftLimit;
+					if (desiredCameraBaseX > leftLimitBase) {
+						desiredCameraBaseX = leftLimitBase;
 					}
-					if (desiredCameraX < rightLimit) {
-						desiredCameraX = rightLimit;
+					if (desiredCameraBaseX < rightLimitBase) {
+						desiredCameraBaseX = rightLimitBase;
 					}
 
-					// Assign the limited position
-					Engine::GetInstance().render.get()->camera.x = desiredCameraX;
+					// Apply zoom to final X position
+					Engine::GetInstance().render.get()->camera.x = (int)(desiredCameraBaseX * GlobalSettings::GetInstance().GetTextureMultiplier());
 					break;
 				}
 			}
 		}
 	}
 
-
+	// Handle input
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+		ret = false; // Exit signal
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-		LoadState();
-
+		LoadState(); // Load game state
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		SaveState();
+		SaveState(); // Save game state
 
 	return ret;
 }

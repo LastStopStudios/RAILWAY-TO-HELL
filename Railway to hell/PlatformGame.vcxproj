@@ -154,6 +154,7 @@
     <ClCompile Include="src\Doors.cpp" />
     <ClCompile Include="src\Elevators.cpp" />
     <ClCompile Include="src\Explosivo.cpp" />
+    <ClCompile Include="src\GlobalSettings.cpp" />
     <ClCompile Include="src\Levers.cpp" />
     <ClCompile Include="src\Mapa.cpp" />
     <ClCompile Include="src\MosaicLevers.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="src\Doors.h" />
     <ClInclude Include="src\Elevators.h" />
     <ClInclude Include="src\Explosivo.h" />
+    <ClInclude Include="src\GlobalSettings.h" />
     <ClInclude Include="src\Levers.h" />
     <ClInclude Include="src\Mapa.h" />
     <ClInclude Include="src\MosaicLevers.h" />

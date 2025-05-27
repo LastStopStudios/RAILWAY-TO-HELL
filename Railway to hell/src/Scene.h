@@ -156,7 +156,8 @@ public:
 	std::vector<Bosses> Bosses = {
 		//scene to which it goes, x from camera, y from camera, leftBoundary, rightBoundary
 		{3, 1270, 1195, 1270, 1710.0f},
-		{ 5, 1344, 1170, 1270, 1710.0f }
+		{ 5, 1344, 1170, 1270, 1710.0f },
+		{ 12, 193, 1128, 193, 1724 }
 	};
 	//camera control
 	void EntrarBoss();

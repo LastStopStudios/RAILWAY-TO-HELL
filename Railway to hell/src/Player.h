@@ -110,7 +110,8 @@ public:
 	float Scene10InitX, Scene10InitY;
 	float Scene11InitX, Scene11InitY;
 
-	
+	bool isInZoomOut = false;
+	bool returnisInZoomOut() { return isInZoomOut; }
 
 private:
 	// Private methods
