@@ -20,6 +20,7 @@
 #include "Elevators.h"
 #include "Explosivo.h"
 #include "GlobalSettings.h"
+#include "Devil.h"
 
 Scene::Scene() : Module()
 {
@@ -139,6 +140,11 @@ bool Scene::Awake()
 			Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
 			bufon->SetParameters(enemyNode);
 			bufonList.push_back(bufon);
+		}
+		if (type == "boss" && ref == "devil") {
+			Devil* devil = (Devil*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DEVIL);
+			devil->SetParameters(enemyNode);
+			devilList.push_back(devil);
 		}
 		if (type == "guardian") {
 			Caronte* caronte = (Caronte*)Engine::GetInstance().entityManager->CreateEntity(EntityType::CARONTE);

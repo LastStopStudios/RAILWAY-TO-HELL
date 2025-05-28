@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Animation.h"
@@ -12,153 +11,141 @@ struct SDL_Texture;
 class Devil : public Entity
 {
 public:
+    Devil();
+    virtual ~Devil();
+    bool Awake();
+    bool Start();
+    bool Update(float dt);
+    bool CleanUp();
 
-	Devil();
-	virtual ~Devil();
+    void SetParameters(pugi::xml_node parameters) {
+        this->parameters = parameters;
+    }
 
-	bool Awake();
+    void SetPosition(Vector2D pos);
+    Vector2D GetPosition();
+    void ResetPath();
+    void OnCollision(PhysBody* physA, PhysBody* physB);
+    void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
 
-	bool Start();
+    // Load & save methods
+    void SetDeathInXML();
+    void SetAliveInXML();
+    void SetSavedDeathToDeathInXML();
+    void SetSavedDeathToAliveInXML();
+    void SetEnabled(bool active);
 
-	bool Update(float dt);
+    // Getters
+    bool IsEnabled() const { return isEnabled; }
+    std::string GetRef() { return ref; }
+    int GetCurrentLives() { return lives; }
+    int GetInitX() { return initX; }
+    int GetInitY() { return initY; }
 
-	bool CleanUp();
+    // Utility methods
+    void SavePosition(std::string name);
+    void ResetLives();
+    void ResetPosition();
 
-	void SetParameters(pugi::xml_node parameters) {
-		this->parameters = parameters;
-	}
-
-	void SetPosition(Vector2D pos);
-
-	Vector2D GetPosition();
-
-	void ResetPath();
-
-	void OnCollision(PhysBody* physA, PhysBody* physB);
-
-	void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
-
-	// Load & save 
-
-	void SetDeathInXML();
-
-	void SetAliveInXML();
-
-	void SetSavedDeathToDeathInXML(); // at the moment its not being used
-
-	void SetSavedDeathToAliveInXML();
-
-	void SetEnabled(bool active);
-
-	bool IsEnabled() const { return isEnabled; }
-
-	std::string GetRef() { return ref; }
-
-	void SavePosition(std::string name);
-
-	void ResetLives();
-
-	void ResetPosition();
-
-	int GetCurrentLives() { return lives; }
-
-	int GetInitX() { return initX; }
-
-	int GetInitY() { return initY; }
+    // Combat methods
+    void CreatePunchAttack();
+    void HandleDefeatState();
+    void UpdatePosition();
+    void RenderSprite();
 
 public:
+    // Load & save variables
+    bool pendingDisable = false;
+    int DeathValue = 0;
+    int SavedDeathValue = 0;
+    bool itemCreated = false;
 
-	// Load & save 
-	bool pendingDisable = false;
-	int DeathValue = 0;
-	int SavedDeathValue = 0;
-	bool itemCreated = false;
-	// death
-	int a = 0;
-	int kill = 1;
+    // Death variables
+    int a = 0;
+    int kill = 1;
 
 private:
+    // Entity identification
+    std::string enemyID;
+    std::string ref;
+    bool isEnabled = true;
 
-	// Load & save
-	std::string enemyID;
-	std::string ref;
-	bool isEnabled = true;
+    // Position and movement
+    Vector2D enemyPos;
+    float moveSpeed;
+    float patrolSpeed;
+    float savedPosX;
+    bool patroling = false;
+    bool moving = false;
+    bool isLookingLeft = false;
 
-	Vector2D enemyPos;
+    // Rendering
+    SDL_Texture* texture;
+    const char* texturePath;
+    int texW, texH;
+    int initX, initY;
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-	float moveSpeed;
-	float patrolSpeed;
-	float savedPosX;
-	bool patroling = false;
+    // Configuration
+    pugi::xml_node parameters;
 
-	SDL_RendererFlip flip = SDL_FLIP_NONE;
-	bool isLookingLeft = false;
+    // Animation system
+    Animation* currentAnimation = nullptr;
+    Animation idle, walk, punch, defeat;
 
-	SDL_Texture* texture;
-	const char* texturePath;
-	int texW, texH;
+    // Physics bodies
+    PhysBody* pbody;
+    PhysBody* jumpAttackArea;
+    PhysBody* punchAttackArea; // New punch attack area
 
-	int initX, initY;
+    // AI and pathfinding
+    Pathfinding* pathfinding;
+    float pathfindingTimer = 0.0f;
+    float maxPathfindingTime = 700.0f;
 
-	pugi::xml_node parameters;
+    // Combat system
+    int currentPhase;
+    bool isAttacking = false;
+    bool isJumpAttacking = false;
+    bool canAttack = true;
+    float attackCooldown = 3000.0f; // 3 seconds
+    float currentAttackCooldown = 0.0f;
+    float attackDistance = 14.0f;
+    int attackCounter = 0;
 
-	Animation* currentAnimation = nullptr;
-	Animation idle, hurt, die, disparoR, disparoG, jumping, going_up, going_down, impacting;
+    // State management
+    bool resting = false;
+    bool escaping = false;
+    bool isRunning = false;
+    bool ishurt = false;
+    bool isDying = false;
+    bool isDead = false;
+    bool Hiteado = false; // Collision flag
 
-	PhysBody* pbody;
-	PhysBody* jumpAttackArea;
+    // Boss specific
+    int lives = 10;
+    bool changeMusicBoss = false;
+    float intitalPosX = 0;
 
-	Pathfinding* pathfinding;
+    // Phase control (for future expansion)
+    bool phase_One = false;
+    bool phase_Two = false;
+    bool phase_Three = false;
 
-	bool moving = false;
-	bool isdeath = false;
-	bool resting = false;
-	bool isAttacking = false;
-	bool isJumpAttacking = false;
+    // Jump system (for future use)
+    bool isJumping = false;
+    float jumpTimer = 0.0f;
+    Vector2D jumpStartPos;
+    Vector2D jumpTargetPos;
+    float jumpDuration = 0.0f;
 
-	bool phase_One, phase_Two, phase_Three = false;
+    // Death timing
+    float deathTimer = 0.0f;
+    const float deathDelay = 1.0f;
+    bool dialogTriggered = false;
+    bool battleStarted = false;
 
-	float attackCooldown = 3000.0f;
-	float currentAttackCooldown = 0.0f;
-	int attackCounter = 0;
-
-	float pathfindingTimer = 0.0f;
-	float maxPathfindingTime = 700.0f;
-
-	float attackDistance = 14.0f;
-	bool canAttack = true;
-	bool escaping = false;
-	bool isRunning = false;
-
-	int lives = 10;
-
-	// jump variables
-
-	bool isJumping = false;
-	float jumpTimer = 0.0f;
-	Vector2D jumpStartPos;
-	Vector2D jumpTargetPos;
-	float jumpDuration = 0.0f;
-
-	// Función auxiliar para obtener el número total de frames
-	int GetTotalFrames() const;
-	// Función auxiliar para obtener el índice del frame actual
-	int GetCurrentFrameId() const;
-
-	bool isDying = false;
-	bool isDead = false;
-	float deathTimer = 0.0f;
-	const float deathDelay = 1.0f;
-
-	bool dialogTriggered = false;
-	bool battleStarted = false;
-
-	bool ishurt = false;
-
-	//one hit colision
-	bool Hiteado = false;
-
-	bool changeMusicBoss = false;
-
-	float intitalPosX = 0;
+    // Helper methods for animation
+    int GetTotalFrames() const;
+    int GetCurrentFrameId() const;
 };

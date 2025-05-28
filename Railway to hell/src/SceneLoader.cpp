@@ -21,6 +21,7 @@
 #include "Checkpoints.h"
 #include "Log.h"
 #include "Bufon.h"
+#include "Devil.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -124,6 +125,13 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
                 Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
                 bufon->SetParameters(enemyNode);
                 Engine::GetInstance().scene->GetBufonList().push_back(bufon);
+            }
+        }
+        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+            if (type == "boss" && ref == "devil") {
+                Devil* devil = (Devil*)Engine::GetInstance().entityManager->CreateEntity(EntityType::DEVIL);
+                devil->SetParameters(enemyNode);
+                Engine::GetInstance().scene->GetDevilList().push_back(devil);
             }
         }
         if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
@@ -307,6 +315,9 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
     for (auto bufon : Engine::GetInstance().scene->GetBufonList()) {
         bufon->Start();
     }
+    for (auto devil : Engine::GetInstance().scene->GetDevilList()) {
+        devil->Start();
+    }
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
@@ -318,7 +329,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::MOSAIC_LEVER || entity->type == EntityType::MOSAIC_PIECE || entity->type == EntityType::MOSAIC_PUZZLE) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::DEVIL || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::MOSAIC_LEVER || entity->type == EntityType::MOSAIC_PIECE || entity->type == EntityType::MOSAIC_PUZZLE) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -339,6 +350,7 @@ void SceneLoader::UnLoadEnemiesItems() {
     Engine::GetInstance().scene->GetElevatorsList().clear();
 	Engine::GetInstance().scene->GetItemList().clear();
     Engine::GetInstance().scene->GetBufonList().clear();
+    Engine::GetInstance().scene->GetDevilList().clear();
     Engine::GetInstance().scene->GetMosaicPiecesList().clear();
     Engine::GetInstance().scene->GetMosaicLeversList().clear();
     Engine::GetInstance().scene->GetMosaicPuzzleList().clear();

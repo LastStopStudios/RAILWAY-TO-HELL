@@ -1,5 +1,5 @@
+
 #include "Devil.h"
-#include "Bufon.h"
 #include "Engine.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -13,83 +13,86 @@
 
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
-
+    currentPhase = 1;
 }
 
 Devil::~Devil() {
-    delete pathfinding;
-    if (jumpAttackArea != nullptr) {
-        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+    if (punchAttackArea != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
     }
 }
+
 bool Devil::Awake() {
     return true;
 }
 
 bool Devil::Start() {
-
-    //initilize textures
+    // Initialize textures
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
+    initX = parameters.attribute("x").as_int();
+    initY = parameters.attribute("y").as_int();
     intitalPosX = parameters.attribute("x").as_int();
 
-    //Load animations
+    // Load animations
     idle.LoadAnimations(parameters.child("animations").child("idle"));
-    hurt.LoadAnimations(parameters.child("animations").child("hurt"));
-    die.LoadAnimations(parameters.child("animations").child("die"));
-    disparoR.LoadAnimations(parameters.child("animations").child("disparoR"));
-    disparoG.LoadAnimations(parameters.child("animations").child("disparoG"));
-    jumping.LoadAnimations(parameters.child("animations").child("jumping"));
-    going_up.LoadAnimations(parameters.child("animations").child("going_up"));
-    going_down.LoadAnimations(parameters.child("animations").child("going_down"));
-    impacting.LoadAnimations(parameters.child("animations").child("impacting"));
+    walk.LoadAnimations(parameters.child("animations").child("walk"));
+    punch.LoadAnimations(parameters.child("animations").child("punch"));
+    defeat.LoadAnimations(parameters.child("animations").child("defeat"));
 
     currentAnimation = &idle;
 
-    //initialize enemy parameters 
-    moveSpeed = 30.0f;
-    patrolSpeed = 30.0f;
-    savedPosX = 0.0f;
+    // Initialize enemy parameters 
+    moveSpeed = 2.0f;
+    patrolSpeed = 3.0f;
 
-    //Add a physics to an item - initialize the physics body
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::DYNAMIC);
-    jumpAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH, texW / 2 - 24, 8, bodyType::DYNAMIC);
+    // Add physics body
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+        (int)position.getX() + texW / 2,
+        (int)position.getY() + texH / 2,
+        texW / 2, texH,
+        bodyType::DYNAMIC
+    );
+
+    // Create punch attack area sensor (initially disabled)
+    punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+        (int)position.getX() + texW / 2,
+        (int)position.getY() + texH / 2,
+        texW + 20, texH / 2,
+        bodyType::DYNAMIC
+    );
 
     pbody->listener = this;
-    jumpAttackArea->listener = this;
-    //Assign collider type
-    pbody->ctype = ColliderType::BUFON;
-    jumpAttackArea->ctype = ColliderType::BUFON_JUMP_ATTACK_AREA;
+    punchAttackArea->listener = this;
+
+    // Assign collider types
+    pbody->ctype = ColliderType::DEVIL;
+    punchAttackArea->ctype = ColliderType::DEVIL_PUNCH_ATTACK1;
 
     pbody->body->SetFixedRotation(true);
-    jumpAttackArea->body->SetFixedRotation(true);
+    punchAttackArea->body->SetFixedRotation(true);
+
     pbody->body->SetGravityScale(1.0f);
     pbody->body->GetFixtureList()->SetDensity(10);
     pbody->body->ResetMassData();
 
-    //   b2Fixture* fixture = pbody->body->GetFixtureList();
-       //fixture->SetFriction(0.0f); // Set friction to 0.0f
+    // Initially disable punch attack area
+    punchAttackArea->body->SetEnabled(false);
 
-       // Set the gravity of the body
-    if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(2.0f);
-
-    // Initialize pathfinding
-    pathfinding = new Pathfinding();
-    ResetPath();
+    if (!parameters.attribute("gravity").as_bool()) {
+        pbody->body->SetGravityScale(2.0f);
+    }
 
     return true;
 }
 
-bool Devil::Update(float dt)
-{
-
+bool Devil::Update(float dt) {
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
     if (!isGameplay) {
-
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(0.0f);
@@ -97,334 +100,272 @@ bool Devil::Update(float dt)
         return true;
     }
     else {
-
         if (pbody != nullptr && pbody->body != nullptr) {
             pbody->body->SetGravityScale(1.0f);
         }
     }
 
-    if (jumpAttackArea != nullptr) {
-        int sensorX = position.getX() + texH / 2;
-        int sensorY = position.getY() + texH;
-        jumpAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(sensorX), PIXEL_TO_METERS(sensorY)), 0);
+    // Update punch attack area position
+    if (punchAttackArea != nullptr) {
+        int punchX = position.getX() + texW / 2;
+        int punchY = position.getY() + texH / 2;
+        if (!isLookingLeft) {
+            punchX += 30; // Offset punch area to the right
+        }
+        else {
+            punchX -= 30; // Offset punch area to the left
+        }
+        punchAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(punchX), PIXEL_TO_METERS(punchY)), 0);
     }
 
     enemyPos = GetPosition();
-    Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
 
     float dx = playerTilePos.getX() - enemyTilePos.getX();
-    float dy = playerTilePos.getY() - enemyTilePos.getY();
-    // Calculate the distance between the enemy and the player only on the X axis
     float distanceToPlayer = abs(dx);
 
-    // Limit movement towards the player only if within X tiles
-    float patrolDistance = 12.0f; // Set the maximum distance for the enemy to chase the player 
+    float patrolDistance = 12.0f;
 
-    if (ishurt) {
-        if (hurt.HasFinished()) {
-            ishurt = false;
-            escaping = true;
-            currentAnimation = &jumping;
-            phase_One = true;
-            currentAnimation = &jumping;
-            isJumpAttacking = true;
-            float jumpForceX = isLookingLeft ? 7.0f : 7.0f;
-            float jumpForceY = -10.0f;
-            float direction = 0;
-            float deltaX = position.getX() - intitalPosX;
-
-            if (deltaX > 0) {
-                direction = -1.0f;
-            }
-            else {
-                direction = 1.0f;
-            }
-
-            pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
-        }
-    }
-
+    // Handle defeat state
     if (isDying || isDead) {
-
-        currentAnimation->Update();
-
-        // If death animation finished, start the timer
-        if (currentAnimation->HasFinished() && isDying && !itemCreated || currentAnimation->HasFinished() && isDead && !itemCreated) {
-            // Create the key item before deleting the entity
-            itemCreated = true;
-            currentAnimation->Reset();
-            Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
-            item->SetParameters(Engine::GetInstance().scene.get()->ballItemConfigNode);
-            Engine::GetInstance().scene.get()->itemList.push_back(item);
-            item->Start();
-            Vector2D pos(position.getX() + texW / 2, position.getY());
-            item->SetPosition(pos);
-            item->SavePosition("Ball");
-            item->SetCreatedTrueInXML();
-            if (changeMusicBoss)
-            {
-                Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
-                changeMusicBoss = false;
-            }
-            if (pendingDisable) {
-                SetEnabled(false);
-                pendingDisable = false;
-                SetDeathInXML();
-            }
-        }
-
-        // Draw the death animation
-        SDL_Rect frame = currentAnimation->GetCurrentFrame();
-        int offsetX = 0;
-        if (isLookingLeft) {
-            flip = SDL_FLIP_NONE;
-            offsetX = ((frame.w - texW) / 2 - 24);
-        }
-        else {
-            flip = SDL_FLIP_HORIZONTAL;
-            offsetX = -8;
-        }
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 36 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
-
-        //UI Lives
-        Engine::GetInstance().ui->figth2 = false;
-
-        // When dying, don't process any other logic
+        HandleDefeatState();
         return true;
     }
+
+    // Update UI if fighting
     if (Engine::GetInstance().ui->figth2 == true) {
-        //UI Lives
         Engine::GetInstance().ui->vidab2 = lives;
     }
 
-    if (!ishurt) {
-        if (currentAnimation == &going_up && !escaping || currentAnimation == &going_down && !escaping) {
-            pathfindingTimer += dt;
+    // Handle hurt state
+    if (ishurt) {
+        currentAnimation->Update();
+        if (currentAnimation->HasFinished()) {
+            ishurt = false;
+            escaping = true;
+            currentAnimation = &walk;
 
-            int maxIterations = 100;
-            int iterations = 0;
-
-            while (pathfinding->pathTiles.empty() && iterations < maxIterations && pathfindingTimer < maxPathfindingTime) {
-                pathfinding->PropagateAStar(SQUARED);
-                iterations++;
-
-            }
-            if (pathfindingTimer >= maxPathfindingTime) {
-                // stop movement in X
-                b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, currentVelocity.y));
-            }
-            if (pathfinding->pathTiles.size() >= 2) {
-                auto it = pathfinding->pathTiles.end();
-                --it;
-                --it;
-                Vector2D nextTile = *it;
-                Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
-
-                float x2 = nextPos.getX();
-                float x1 = enemyPos.getX();
-                float dx = x2 - x1;
-                float distance = abs(dx);
-
-                if (distance < 5.0f) {
-                    pathfinding->pathTiles.pop_back();
-                }
-                else {
-                    float jumpForceX = isLookingLeft ? 8.0f : 8.0f;
-                    float jumpForceY = -10.0f;
-                    float direction = isLookingLeft ? -1.0f : 1.0f;
-
-                    pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, pbody->body->GetLinearVelocity().y));
-                }
-            }
-        }
-        if (currentAnimation != &going_up && currentAnimation != &going_down && !escaping) {
-            pathfindingTimer = 0.0f;
-        }
-        if (!canAttack) { // update the attack cooldown
-            currentAttackCooldown -= dt;
-            if (currentAttackCooldown <= 0) {
-                canAttack = true;
-                currentAttackCooldown = 0.0f;
-            }
+            // Move away from player after being hurt
+            float direction = (dx > 0) ? -1.0f : 1.0f;
+            pbody->body->SetLinearVelocity(b2Vec2(direction * moveSpeed * 1.2f, pbody->body->GetLinearVelocity().y));
         }
 
-        if ((isLookingLeft && dx <= -attackDistance)) {
-            //pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+        RenderSprite();
+        return true;
+    }
+
+    // Update attack cooldown
+    if (!canAttack) {
+        currentAttackCooldown -= dt;
+        if (currentAttackCooldown <= 0) {
+            canAttack = true;
+            currentAttackCooldown = 0.0f;
+        }
+    }
+
+    // Update escaping behavior
+    if (escaping) {
+        currentAnimation->Update();
+
+        // Check if far enough from initial position to stop escaping
+        float distanceFromStart = abs(position.getX() - intitalPosX);
+        if (distanceFromStart > 100.0f) {
+            escaping = false;
+            currentAnimation = &idle;
+            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
         }
 
-        isLookingLeft = dx < 0; // Set the direction of the enemy
+        RenderSprite();
+        return true;
+    }
 
-        if (distanceToPlayer <= attackDistance && canAttack && !isAttacking && !escaping) {
+    // Set looking direction
+    isLookingLeft = dx < 0;
 
-            float jumpThreshold = 10.0f;
-            if (distanceToPlayer > jumpThreshold) {
-                phase_One = true;
-                currentAnimation = &jumping;
-                isJumpAttacking = true;
-                float jumpForceX = isLookingLeft ? 5.0f : 5.0f;
-                float jumpForceY = -10.0f;
-                float direction = isLookingLeft ? -1.0f : 1.0f;
-                pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
+    // Handle punch attack
+    if (isAttacking && currentAnimation == &punch) {
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 
-            }
-            else {
-                currentAnimation = &disparoR;
-            }
-
-            isAttacking = true;
+        if (currentAnimation->HasFinished()) {
+            isAttacking = false;
             canAttack = false;
             currentAttackCooldown = attackCooldown;
-            currentAnimation->Reset();
-        }
+            currentAnimation = &idle;
 
-        if (jumping.HasFinished()) {
-            phase_Two = true;
-            currentAnimation = &going_up;
-
-
-            //float jumpForceY = -10.0f;
-            //float direction = isLookingLeft ? -1.0f : 1.0f;
-
-            //pbody->body->SetLinearVelocity(b2Vec2(direction * jumpForceX, jumpForceY));
-           // pbody->body->ApplyLinearImpulse(b2Vec2(direction * jumpForceX, jumpForceY), pbody->body->GetWorldCenter(), true);
-            jumping.Reset();
-
-        }
-        if (going_up.HasFinished() && pbody->body->GetLinearVelocity().y > 0) {
-            phase_Three = true;
-            currentAnimation = &going_down;
-            going_up.Reset();
-        }
-
-
-        if (isAttacking) {
-            if (currentAnimation == &going_up && !escaping) {
-                pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
-
-            }
-            else {
-                pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
+            // Asegurar que la caja de punch se deshabilite
+            if (punchAttackArea != nullptr && punchAttackArea->body != nullptr) {
+                punchAttackArea->body->SetEnabled(false);
             }
 
-            if (disparoR.HasFinished()) { // stop attacking
-                Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
-                projectile->SetParameters(Engine::GetInstance().scene.get()->normalProjectileConfigNode);
-                projectile->Start();
-                Vector2D bufonPosition = GetPosition();
-                // Adjust horizontal position based on facing direction
-                if (isLookingLeft) bufonPosition.setX(bufonPosition.getX() - 50);
-                else bufonPosition.setX(bufonPosition.getX() + 20);
-                projectile->SetPosition(bufonPosition);
-                projectile->SetDirection(!isLookingLeft);
-                isAttacking = false;
-                currentAnimation = &idle;
-                disparoR.Reset();
-            }
-            if (impacting.HasFinished() && isRunning) {
-                phase_One, phase_Two, phase_Three = false;
-                isJumpAttacking = false;
-                isAttacking = false;
-                idle.Reset();
-                currentAnimation = &idle;
-                escaping = false;
-                canAttack = true;
-                currentAttackCooldown = 0.0f;
-                impacting.Reset();
-                pbody->body->GetFixtureList()->SetDensity(500);
-                pbody->body->ResetMassData();
-            }
-            if (impacting.HasFinished() && !escaping && !isRunning) { // stop attacking
-                phase_One, phase_Two, phase_Three = false;
-                isJumpAttacking = false;
-                isAttacking = false;
-                idle.Reset();
-                currentAnimation = &idle;
-                impacting.Reset();
-                pbody->body->GetFixtureList()->SetDensity(500);
-                pbody->body->ResetMassData();
-            }
-
-        }
-
-        if (!isAttacking) {
-            if (distanceToPlayer <= patrolDistance) { // if player is within patrol distance
-                //if (!resting) { // start chasing player
-                //    resting = true;
-                //    currentAnimation = &salto;
-                //    salto.Reset();
-                //}
-            }
-            else { // idle (not chasing player)
-                if (resting) {
-                    resting = false;
-                    currentAnimation = &idle;
-                    idle.Reset();
-                }
-                b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
-                pbody->body->SetLinearVelocity(velocity);
-            }
+            punch.Reset();
         }
     }
-
-    SDL_Rect frame = currentAnimation->GetCurrentFrame();
-    int offsetX = 0; // used to adjust the position of the sprite
-
-    // change sprite direction
-    if (currentAnimation == &idle || currentAnimation == &hurt) {
-        if (isLookingLeft) {
-            flip = SDL_FLIP_NONE;
-            offsetX = (frame.w - texW);
+    // Combat behavior - simplified logic
+    else if (!isAttacking) {
+        // Si puede atacar y está muy cerca, atacar
+        if (distanceToPlayer <= 3.0f && canAttack) {
+            CreatePunchAttack();
         }
+        // Si ve al jugador (dentro del rango de detección), perseguir
+        else if (distanceToPlayer <= patrolDistance) {
+            currentAnimation = &walk;
+            float direction = isLookingLeft ? -1.0f : 1.0f;
+            pbody->body->SetLinearVelocity(b2Vec2(direction * moveSpeed, pbody->body->GetLinearVelocity().y));
+        }
+        // Si no ve al jugador, idle
         else {
-            flip = SDL_FLIP_HORIZONTAL;
-            offsetX = -8;
+            currentAnimation = &idle;
+            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
         }
-    }
-    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting || currentAnimation == &die) {
-        if (isLookingLeft) {
-            flip = SDL_FLIP_NONE;
-            offsetX = ((frame.w - texW) / 2 - 24);
-        }
-        else {
-            flip = SDL_FLIP_HORIZONTAL;
-            offsetX = -8;
-        }
-    }
-    b2Transform pbodyPos = pbody->body->GetTransform();
-    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-    if (currentAnimation == &idle || currentAnimation == &hurt) { // 192, 192
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 4 - offsetX, (int)position.getY(), &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
-    }  // 256, 256
-    else if (currentAnimation == &disparoR || currentAnimation == &disparoG || currentAnimation == &jumping || currentAnimation == &going_up || currentAnimation == &going_down || currentAnimation == &impacting) {
-        Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() - 36 + offsetX, (int)position.getY() - 64, &currentAnimation->GetCurrentFrame(), 1.0f, 0.0, INT_MAX, INT_MAX, flip);
     }
 
+    UpdatePosition();
+    RenderSprite();
     currentAnimation->Update();
 
-    // pathfinding drawing
-    pathfinding->DrawPath();
-    pathfinding->ResetPath(enemyTilePos);
+    return true;
+}
+void Devil::CreatePunchAttack() {
+    isAttacking = true;
+    currentAnimation = &punch;
+    currentAnimation->Reset();
 
-    //Inside isDying add
-    /* //UI Lives
-    Engine::GetInstance().ui->figth2 = false;*/
+    // Enable punch attack area for damage detection
+    punchAttackArea->body->SetEnabled(true);
+}
 
-    if (Engine::GetInstance().ui->figth2 == true) {
-        //UI Lives
-        Engine::GetInstance().ui->vidab2 = lives;
+void Devil::HandleDefeatState() {
+    currentAnimation->Update();
+
+    RenderSprite();
+    Engine::GetInstance().ui->figth2 = false;
+}
+
+void Devil::UpdatePosition() {
+    b2Transform pbodyPos = pbody->body->GetTransform();
+    position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
+    position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+}
+
+void Devil::RenderSprite() {
+    SDL_Rect frame = currentAnimation->GetCurrentFrame();
+    int offsetX = 0;
+
+    // Adjust sprite direction and offset
+    if (isLookingLeft) {
+        flip = SDL_FLIP_HORIZONTAL;
+        offsetX = (frame.w - texW) / 2;
+    }
+    else {
+        flip = SDL_FLIP_NONE;
+        offsetX = -(frame.w - texW) / 2;
     }
 
-    //TO SHOW BOSS LIVE ADD On his dialogue before the figth o whatever happens before the boss fight starts
-    /*Engine::GetInstance().ui->figth2 = true;//show boss2 health*/
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,
+        (int)position.getX() + offsetX,
+        (int)position.getY(),
+        &currentAnimation->GetCurrentFrame(),
+        1.0f, 0.0, INT_MAX, INT_MAX, flip
+    );
+}
 
+void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
+    switch (physB->ctype) {
+    case ColliderType::PLAYER:
+        // Handle player collision if needed
+        break;
+
+    case ColliderType::PLATFORM:
+        break;
+
+    case ColliderType::PLAYER_ATTACK:
+        
+        break;
+
+    case ColliderType::PLAYER_WHIP_ATTACK:
+       
+        break;
+    }
+}
+
+void Devil::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+    switch (physB->ctype) {
+    case ColliderType::PLAYER:
+        break;
+    case ColliderType::PLAYER_WHIP_ATTACK:
+    case ColliderType::PLAYER_ATTACK:
+        break;
+    }
+}
+
+void Devil::SetEnabled(bool active) {
+    isEnabled = active;
+    pbody->body->SetEnabled(active);
+    jumpAttackArea->body->SetEnabled(active);
+    punchAttackArea->body->SetEnabled(active);
+    pbody->body->SetAwake(active);
+    jumpAttackArea->body->SetAwake(active);
+    punchAttackArea->body->SetAwake(active);
+}
+
+bool Devil::CleanUp() {
+    if (jumpAttackArea != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+        jumpAttackArea = nullptr;
+    }
+
+    if (punchAttackArea != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+        punchAttackArea = nullptr;
+    }
+
+    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
+}
+
+void Devil::SetPosition(Vector2D pos) {
+    pos.setX(pos.getX() + texW / 2);
+    pos.setY(pos.getY() + texH / 2);
+    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+    pbody->body->SetTransform(bodyPos, 0);
+}
+
+Vector2D Devil::GetPosition() {
+    b2Vec2 bodyPos = pbody->body->GetTransform().p;
+    Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
+    return pos;
+}
+
+void Devil::ResetPath() {
+    Vector2D pos = GetPosition();
+    Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
+    pathfinding->ResetPath(tilePos);
+}
+
+void Devil::ResetLives() {
+    lives = 10;
+    currentAnimation = &idle;
+    if (isDying) isDying = false;
+    if (isDead) isDead = false;
+}
+
+int Devil::GetCurrentFrameId() const {
+    if (currentAnimation != nullptr) {
+        return currentAnimation->GetCurrentFrameIndex();
+    }
+    return 0;
+}
+
+int Devil::GetTotalFrames() const {
+    if (currentAnimation != nullptr) {
+        return currentAnimation->totalFrames;
+    }
+    return 0;
 }
 
 void Devil::SetDeathInXML()
@@ -853,44 +794,6 @@ void Devil::SetSavedDeathToAliveInXML()
     SavedDeathValue = 0;
 }
 
-void Devil::SetEnabled(bool active) {
-    isEnabled = active;
-    pbody->body->SetEnabled(active);
-    jumpAttackArea->body->SetEnabled(active);
-    pbody->body->SetAwake(active);
-    jumpAttackArea->body->SetAwake(active);
-}
-
-bool Devil::CleanUp()
-{
-    if (jumpAttackArea != nullptr) {
-        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-        jumpAttackArea = nullptr;
-    }
-
-    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
-    return true;
-}
-
-void Devil::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
-}
-
-Vector2D Devil::GetPosition() {
-    b2Vec2 bodyPos = pbody->body->GetTransform().p;
-    Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
-    return pos;
-}
-
-void Devil::ResetPath() {
-    Vector2D pos = GetPosition();
-    Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
-    pathfinding->ResetPath(tilePos);
-}
-
 void Devil::ResetPosition() {
     pugi::xml_document loadFile;
     pugi::xml_parse_result result = loadFile.load_file("config.xml");
@@ -1073,131 +976,4 @@ void Devil::SavePosition(std::string name) {
     if (!doc.save_file("config.xml")) {
         LOG("Error saving config.xml");
     }
-}
-
-void Devil::ResetLives() {
-    lives = 10;
-    currentAnimation = &idle;
-    if (isDying) isDying = false;
-    if (isDead) isDead = false;
-}
-
-void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
-
-    switch (physB->ctype)
-    {
-    case ColliderType::PLAYER:
-        LOG("Collided with player - DESTROY");
-
-        //Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-        break;
-
-    case ColliderType::PLATFORM:
-
-        break;
-    case ColliderType::PLAYER_ATTACK:
-        if (Hiteado == false && currentAnimation != &impacting && !escaping) {
-            isRunning = true;
-            Hiteado = true;
-            if (lives > 0) {
-                lives = lives - 1;
-                if (lives > 0) {
-                    ishurt = true;
-                    currentAnimation = &hurt;
-                    hurt.Reset();
-
-                    // stop attacking
-                    if (isAttacking) {
-                        isAttacking = false;
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-                }
-                else if (lives <= 0 && !isDying) {
-                    // Same cleanup for death case
-                    if (isAttacking) {
-                        isAttacking = false;
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-                    pendingDisable = true;
-                    isDying = true;
-                    currentAnimation = &die;
-                    currentAnimation->Reset();
-                    Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-                    // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
-                     // Engine::GetInstance().audio.get()->PlayFx(deathFx);
-                    changeMusicBoss = true;
-                }
-            }
-        }
-        break;
-
-    case ColliderType::PLAYER_WHIP_ATTACK:
-        if (Hiteado == false && currentAnimation != &impacting && !escaping) {
-            isRunning = true;
-            Hiteado = true;
-
-            if (lives > 0) {
-                lives = lives - 2;  //It should be - 2, 6 - 2 = 4 so the boss should die on the third hit but for some reason if i do it like that he dies in two hits
-                if (lives > 0) {
-                    ishurt = true;
-                    currentAnimation = &hurt;
-                    hurt.Reset();
-                    if (isAttacking) {
-                        isAttacking = false;
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-                }
-                else if (lives <= 0 && !isDead) {
-                    pendingDisable = true;
-                    isDead = true;
-                    if (isAttacking) {
-                        isAttacking = false;
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-                    currentAnimation = &die;
-                    a = 1;
-                    Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
-
-                    changeMusicBoss = true;
-                }
-            }
-        }
-        break;
-
-    }
-
-}
-
-void Devil::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
-{
-    switch (physB->ctype)
-    {
-    case ColliderType::PLAYER:
-        LOG("Collision player");
-        break;
-    case ColliderType::PLAYER_WHIP_ATTACK:
-        Hiteado = false;
-        break;
-    case ColliderType::PLAYER_ATTACK:
-        Hiteado = false;
-        break;
-    }
-
-}
-
-// Helper methods for interacting with Animation
-int Devil::GetCurrentFrameId() const {
-    if (currentAnimation != nullptr) {
-        // Use the GetCurrentFrameIndex method from Animation
-        return currentAnimation->GetCurrentFrameIndex();
-    }
-    return 0;
-}
-
-int Devil::GetTotalFrames() const {
-    if (currentAnimation != nullptr) {
-        // Access totalFrames from Animation
-        return currentAnimation->totalFrames;
-    }
-    return 0;
 }
