@@ -1273,7 +1273,7 @@ void Player::HandleBallAttack(float dt) {
     }
 
     // Add check for ball attack animation completion before allowing next shot
-    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack && !isThrowing) {
+    if (ballAttackButtonPressed && engine.scene.get()->normalProjectileConfigNode && ballCounter > 0 && BallAttack) {
         ballCounter--;
         isThrowing = true;
         hasThrownBall = false;
@@ -2387,3 +2387,9 @@ void Player::HitWcooldown(float dt) {
         damageCooldown = 0.0f;
     }*/
 }
+
+void Player::RestoreFullStats() {
+    
+    lives = 5;
+}
+

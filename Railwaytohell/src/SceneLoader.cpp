@@ -88,6 +88,7 @@ void SceneLoader::DrawScene(int level, int x, int y) {
         Player* player = Engine::GetInstance().scene->GetPlayer();
         player->SetPosition(Vector2D(x, y));
         player->ResetDoorAndLeverStates();
+        player->RestoreFullStats();
     }
     LoadEnemiesItems(sceneNode, level);
 }

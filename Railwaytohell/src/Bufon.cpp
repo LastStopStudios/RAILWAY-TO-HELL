@@ -155,7 +155,7 @@ bool Bufon::Update(float dt)
         if (currentAnimation->HasFinished() && isDying && !itemCreated || currentAnimation->HasFinished() && isDead && !itemCreated) {
             // Create the key item before deleting the entity
             itemCreated = true;
-            currentAnimation->Reset();
+         
             Item* item = (Item*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ITEM);
             item->SetParameters(Engine::GetInstance().scene.get()->ballItemConfigNode);
             Engine::GetInstance().scene.get()->itemList.push_back(item);

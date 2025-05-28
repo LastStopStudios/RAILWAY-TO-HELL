@@ -187,6 +187,7 @@ public:
 	bool returnLeverTwo() { return leverTwo; }
 	bool returnLeverThree() { return leverThree; }
 	bool returnLeverFour() { return leverFour; }
+	void RestoreFullStats();
 private:
 	// Private properties
 	Animation meleeAttack;       // Attack animation sequence
