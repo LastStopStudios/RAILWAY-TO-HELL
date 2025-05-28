@@ -911,16 +911,12 @@ void Player::HandleSceneSwitching() {
 
     if (zooming) {
         zoom -= 0.01f; // velocidad del zoom
-        if (zoom <= 1.0f) {
-            zoom = 1.0f;
+        if (zoom <= 1.09f) {
+            zoom = 1.09f;
             zooming = false;
         }
         GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
     }
-
-
-
-
 
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors

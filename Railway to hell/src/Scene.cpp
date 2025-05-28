@@ -311,11 +311,11 @@ bool Scene::PostUpdate()
 		int center_y = window_height / 2;
 
 		// Logical base offsets (not affected by zoom)
-		const int BASE_OFFSET_X = -92;
+		const int BASE_OFFSET_X = -60;
 		const int BASE_OFFSET_Y = 86;
 
 		if (BossBattle == false) {
-			// Follow player position in world space
+			// Follow player position in world space (normal gameplay - no zoom check)
 			float cameraBaseX = (player->position.getX() * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
 			float cameraBaseY = (player->position.getY() * -1.0f) + (center_y / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_Y;
 
@@ -324,31 +324,64 @@ bool Scene::PostUpdate()
 			Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier());
 		}
 		else {
-			// Boss battle camera behavior
+			// Boss battle camera behavior - check zoom level
+			float currentZoom = GlobalSettings::GetInstance().GetTextureMultiplier();
+
 			for (const auto& boss : Bosses) {
 				if (boss.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
 
-					// Fixed Y position for boss battles (world space)
-					float cameraBaseY = (-boss.y) + (-140);
-					Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier());
+					// Check if zoom is different from default (1.5f)
+					if (currentZoom != 1.5f) {
+						// Different offsets for non-default zoom in boss battles
+						const int BOSS_ZOOM_OFFSET_X = -20;  // Adjust as needed
+						const int BOSS_ZOOM_Y_OFFSET = 40;  // Adjust as needed
 
-					// Follow player X position with constraints (world space)
-					float playerX = player->position.getX();
-					float desiredCameraBaseX = (playerX * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
+						// Fixed Y position for boss battles with adjusted offset
+						float cameraBaseY = (-boss.y) + BOSS_ZOOM_Y_OFFSET;
+						Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * currentZoom);
 
-					// Clamp camera position within boss area bounds
-					float leftLimitBase = -boss.leftBoundary;
-					float rightLimitBase = -boss.rightBoundary;
+						// Follow player X position with constraints and adjusted offset
+						float playerX = player->position.getX();
+						float desiredCameraBaseX = (playerX * -1.0f) + (center_x / currentZoom) + BOSS_ZOOM_OFFSET_X;
 
-					if (desiredCameraBaseX > leftLimitBase) {
-						desiredCameraBaseX = leftLimitBase;
+						// Clamp camera position within boss area bounds
+						float leftLimitBase = -boss.leftBoundary;
+						float rightLimitBase = -boss.rightBoundary;
+
+						if (desiredCameraBaseX > leftLimitBase) {
+							desiredCameraBaseX = leftLimitBase;
+						}
+						if (desiredCameraBaseX < rightLimitBase) {
+							desiredCameraBaseX = rightLimitBase;
+						}
+
+						// Apply zoom to final X position
+						Engine::GetInstance().render.get()->camera.x = (int)(desiredCameraBaseX * currentZoom);
 					}
-					if (desiredCameraBaseX < rightLimitBase) {
-						desiredCameraBaseX = rightLimitBase;
-					}
+					else {
+						// Default boss battle camera behavior for zoom 1.5f
+						// Fixed Y position for boss battles (world space)
+						float cameraBaseY = (-boss.y) + (-140);
+						Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * currentZoom);
 
-					// Apply zoom to final X position
-					Engine::GetInstance().render.get()->camera.x = (int)(desiredCameraBaseX * GlobalSettings::GetInstance().GetTextureMultiplier());
+						// Follow player X position with constraints (world space)
+						float playerX = player->position.getX();
+						float desiredCameraBaseX = (playerX * -1.0f) + (center_x / currentZoom) + BASE_OFFSET_X;
+
+						// Clamp camera position within boss area bounds
+						float leftLimitBase = -boss.leftBoundary;
+						float rightLimitBase = -boss.rightBoundary;
+
+						if (desiredCameraBaseX > leftLimitBase) {
+							desiredCameraBaseX = leftLimitBase;
+						}
+						if (desiredCameraBaseX < rightLimitBase) {
+							desiredCameraBaseX = rightLimitBase;
+						}
+
+						// Apply zoom to final X position
+						Engine::GetInstance().render.get()->camera.x = (int)(desiredCameraBaseX * currentZoom);
+					}
 					break;
 				}
 			}

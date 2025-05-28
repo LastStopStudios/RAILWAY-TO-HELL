@@ -164,6 +164,11 @@ public:
 	void SalirBoss();
 
 private:
+	float targetCameraY = 0.0f;        // Y objetivo de la cámara
+	float currentCameraY = 0.0f;       // Y actual de la cámara (para interpolación)
+	float cameraTransitionSpeed = 5.0f; // Velocidad de transición (ajustable)
+	bool isTransitioning = false;       // Flag para saber si estamos en transición
+
 	SDL_Texture* mouseTileTex = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;
