@@ -1394,19 +1394,12 @@ void Player::DrawPlayer() {
         }
     }
     else if (isWalking) {
-        if (resbalar) {
-            currentAnimation = &slide;
-            texture = slideTexture;
-            slide.Update();
-           
-        }
-        else {
+      
             currentAnimation = &walk;
             texture = walkTexture;
             walk.Update();
-        }
+        
 
-       
         if (!resbalar && !isJumping && isWalking && !isDashing) {
             runSoundTimer += 0.0167;
             if (runSoundTimer >= runSoundInterval) {
@@ -1423,7 +1416,15 @@ void Player::DrawPlayer() {
         }
     }
     else {
-        if (currentAnimation != &idle) {
+        if (resbalar) {
+            currentAnimation = &slide;
+            texture = slideTexture;
+            slide.Update();
+
+        }
+        else {
+
+            (currentAnimation != &idle);
             currentAnimation = &idle;
             texture = originalTexture;
         }
