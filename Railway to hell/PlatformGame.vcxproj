@@ -150,6 +150,7 @@
     <ClCompile Include="src\Bufon.cpp" />
     <ClCompile Include="src\Caronte.cpp" />
     <ClCompile Include="src\Checkpoints.cpp" />
+    <ClCompile Include="src\Devil.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
     <ClCompile Include="src\Doors.cpp" />
     <ClCompile Include="src\Elevators.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Bufon.h" />
     <ClInclude Include="src\Caronte.h" />
     <ClInclude Include="src\Checkpoints.h" />
+    <ClInclude Include="src\Devil.h" />
     <ClInclude Include="src\DialogoM.h" />
     <ClInclude Include="src\Doors.h" />
     <ClInclude Include="src\Elevators.h" />
