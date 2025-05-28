@@ -1956,10 +1956,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
-               /*if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
+               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
                     Engine::GetInstance().mapa.get()->remember1 = true;
                 }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 2) {
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
                     Engine::GetInstance().mapa.get()->remember2 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
@@ -1969,17 +1969,19 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Engine::GetInstance().mapa.get()->remember4 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 8) {
-                    Engine::GetInstance().mapa.get()->remember5 = true;
+                    if (Id == "1") {
+                        Engine::GetInstance().mapa.get()->remember5 = true;
+                    }
+                    if (Id == "2") {
+                        Engine::GetInstance().mapa.get()->remember6 = true;
+                    }                    
                 } 
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 10) {
-                    Engine::GetInstance().mapa.get()->remember6 = true;
-                }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
                     Engine::GetInstance().mapa.get()->remember7 = true;
                 }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == ) {
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
                     Engine::GetInstance().mapa.get()->remember8 = true;
-                }*/
+                }
                 
             }
             if (item && item->GetItemType() == "Door key") {

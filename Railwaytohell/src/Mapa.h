@@ -149,7 +149,7 @@ private:
 	SDL_Texture* Recuerdo8 = nullptr;// Remember 8 texture 
 	SDL_Texture* VRecuerdo = nullptr;// Remember Hole texture 
 
-	float posx, posy;// icon player position
+	float  posy = 40;// icon player position
 	int w, h, i = 1;//renders size
 
 };

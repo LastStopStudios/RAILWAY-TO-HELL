@@ -31,6 +31,14 @@ bool Mapa::Awake()
 bool Mapa::Start()
 {
 	Mostrar = false;
+	remember1 = false;
+	remember2 = false;
+	remember3 = false;
+	remember4 = false;
+	remember5 = false;
+	remember6 = false;
+	remember7 = false;
+	remember8 = false;
 	return true;
 }
 
@@ -155,6 +163,38 @@ bool Mapa::CleanUp()
 		Engine::GetInstance().textures->UnLoad(MNegro12);//Unload text background
 		MNegro12 = nullptr;
 	}
+	if (Recuerdo1 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo1);//Unload text background
+		Recuerdo1 = nullptr;
+	}
+	if (Recuerdo2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo2);//Unload text background
+		Recuerdo2 = nullptr;
+	}
+	if (Recuerdo3 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo3);//Unload text background
+		Recuerdo3 = nullptr;
+	}
+	if (Recuerdo4 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo4);//Unload text background
+		Recuerdo4 = nullptr;
+	}
+	if (Recuerdo5 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo5);//Unload text background
+		Recuerdo5 = nullptr;
+	}
+	if (Recuerdo6!= nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo6);//Unload text background
+		Recuerdo6 = nullptr;
+	}
+	if (Recuerdo7 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo7);//Unload text background
+		Recuerdo7 = nullptr;
+	}
+	if (Recuerdo8 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Recuerdo8);//Unload text background
+		Recuerdo8 = nullptr;
+	}
 
 	return true;
 }
@@ -167,7 +207,6 @@ void Mapa::ShowMap() {
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);//render map
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);//render character icon
-	Remember();
 	for (const auto& negro : negro)// Iterate through all the maps
 	{
 		if (!negro.visible) {
@@ -212,6 +251,7 @@ void Mapa::ShowMap() {
 			
 		}
 	}
+	Remember();
 	
 }
 
@@ -284,25 +324,25 @@ void Mapa::LoadMap(){
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 
 
-	//Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 1
-	//Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 2
-	//Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 3
-	//Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 4
-	//Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 5
-	//Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 6
-	//Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 7
-	//Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 8
+	Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 1
+	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 2
+	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 3
+	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 4
+	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 5
+	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 6
+	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 7
+	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 8
 }
 
 void Mapa ::Remember() {
-	SDL_Rect dstRectR1 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR2 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR3 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR4 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR5 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR6 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR7 = { posx,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR8 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR1 = { 100,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR2 = { 140,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR3 = { 180,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR4 = { 220,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR5 = { 260,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR6 = { 300,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR7 = { 340,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR8 = { 380,posy, 40, 40 }; //Position and scale character icon
 	
 	if (remember1) {
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo1, nullptr, &dstRectR1);//render remember 1 texture
