@@ -161,5 +161,10 @@ private:
 	bool changeMusicBoss = false;
 
 	float intitalPosX = 0;
+
+	// Throw
+
+	bool hasFiredProjectile = false;
+	
 };
 

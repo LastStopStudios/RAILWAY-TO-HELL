@@ -312,19 +312,28 @@ bool Bufon::Update(float dt)
                 pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
             }
 
-            if (disparoR.HasFinished()) { // stop attacking
-                Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
-                projectile->SetParameters(Engine::GetInstance().scene.get()->normalProjectileConfigNode);
-                projectile->Start();
-                Vector2D bufonPosition = GetPosition();
-                // Adjust horizontal position based on facing direction
-                if (isLookingLeft) bufonPosition.setX(bufonPosition.getX() - 50);
-                else bufonPosition.setX(bufonPosition.getX() + 20);
-                projectile->SetPosition(bufonPosition);
-                projectile->SetDirection(!isLookingLeft);
-                isAttacking = false;
-                currentAnimation = &idle;
-                disparoR.Reset();
+            if (currentAnimation == &disparoR && isAttacking) {
+                const int PROJECTILE_FIRE_FRAME = 6;
+                int currentFrame = disparoR.GetCurrentFrameIndex();
+
+                if (currentFrame == PROJECTILE_FIRE_FRAME && !hasFiredProjectile) {
+                    Projectiles* projectile = (Projectiles*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PROJECTILE);
+                    projectile->SetParameters(Engine::GetInstance().scene.get()->normalProjectileConfigNode);
+                    projectile->Start();
+
+                    Vector2D bufonPosition = GetPosition();
+                    if (isLookingLeft) bufonPosition.setX(bufonPosition.getX() - 50);
+                    else bufonPosition.setX(bufonPosition.getX() + 20);
+                    projectile->SetPosition(bufonPosition);
+                    projectile->SetDirection(!isLookingLeft);
+                    hasFiredProjectile = true;
+                }
+                if (disparoR.HasFinished()) {
+                    isAttacking = false;
+                    currentAnimation = &idle;
+                    disparoR.Reset();
+                    hasFiredProjectile = false;
+                }
             }
             if (impacting.HasFinished() && isRunning) {
                 phase_One, phase_Two, phase_Three = false;
