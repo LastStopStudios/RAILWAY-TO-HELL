@@ -167,6 +167,7 @@ void Mapa::ShowMap() {
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);//render map
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);//render character icon
+	Remember();
 	for (const auto& negro : negro)// Iterate through all the maps
 	{
 		if (!negro.visible) {
@@ -287,53 +288,45 @@ void Mapa::LoadMap(){
 	//Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 2
 	//Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 3
 	//Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 4
+	//Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 5
+	//Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 6
+	//Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 7
+	//Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load Remember 8
 }
 
 void Mapa ::Remember() {
-	if (remember1 && !remember2 && !remember3 && !remember4) {//1
-
+	SDL_Rect dstRectR1 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR2 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR3 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR4 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR5 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR6 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR7 = { posx,posy, 40, 40 }; //Position and scale character icon
+	SDL_Rect dstRectR8 = { posx,posy, 40, 40 }; //Position and scale character icon
+	
+	if (remember1) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo1, nullptr, &dstRectR1);//render remember 1 texture
 	}
-	else if (!remember1 && remember2 && !remember3 && !remember4) {//2
-
+	if (remember2) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo2, nullptr, &dstRectR2);//render remember 2 texture
 	}
-	else if (!remember1 && !remember2 && remember3 && !remember4) {//3
-
+	if (remember3) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo3, nullptr, &dstRectR3);//render remember 3 texture
 	}
-	else if (!remember1 && !remember2 && !remember3 && remember4) {//4
-
+	if (remember4) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo4, nullptr, &dstRectR4);//render remember 4 texture
 	}
-	else if (remember1 && remember2 && !remember3 && !remember4) {//1,2
-
+	if (remember5) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo5, nullptr, &dstRectR5);//render remember 5 texture
 	}
-	else if (remember1 && !remember2 && remember3 && !remember4) {//1,3
-
+	if (remember6) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo6, nullptr, &dstRectR6);//render remember 6 texture
 	}
-	else if (remember1 && !remember2 && !remember3 && remember4) {//1,4
-
+	if (remember7) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo7, nullptr, &dstRectR7);//render remember 7 texture
 	}
-	else if (!remember1 && remember2 && remember3 && !remember4) {//2,3
-
-	}
-	else if (!remember1 && remember2 && !remember3 && remember4) {//2,4
-
-	}
-	else if (!remember1 && !remember2 && remember3 && remember4) {//3,4
-
-	}
-	else if (remember1 && remember2 && remember3 && !remember4) {//1,2,3
-
-	}
-	else if (remember1 && remember2 && !remember3 && remember4) {//1,2,4
-
-	}
-	else if (remember1 && !remember2 && remember3 && remember4) {//1,3,4
-
-	}
-	else if (!remember1 && remember2 && remember3 && remember4) {//2,3,4
-
-	}
-	else if (remember1 && remember2 && remember3 && remember4) {//1,2,3,4
-
+	if (remember8) {
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo8, nullptr, &dstRectR8);//render remember 8 texture
 	}
 }
 
