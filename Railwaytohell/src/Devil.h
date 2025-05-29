@@ -24,47 +24,31 @@ public:
 
     void SetPosition(Vector2D pos);
     Vector2D GetPosition();
-    void ResetPath();
     void OnCollision(PhysBody* physA, PhysBody* physB);
     void OnCollisionEnd(PhysBody* physA, PhysBody* physB);
-
-    // Load & save methods
-    void SetDeathInXML();
-    void SetAliveInXML();
-    void SetSavedDeathToDeathInXML();
-    void SetSavedDeathToAliveInXML();
-    void SetEnabled(bool active);
 
     // Getters
     bool IsEnabled() const { return isEnabled; }
     std::string GetRef() { return ref; }
     int GetCurrentLives() { return lives; }
-    int GetInitX() { return initX; }
-    int GetInitY() { return initY; }
+    int GetCurrentPhase() { return currentPhase; }
 
     // Utility methods
-    void SavePosition(std::string name);
     void ResetLives();
-    void ResetPosition();
 
     // Combat methods
     void CreatePunchAttack();
-    void HandleDefeatState();
     void UpdatePosition();
     void RenderSprite();
 
-public:
-    // Load & save variables
-    bool pendingDisable = false;
-    int DeathValue = 0;
-    int SavedDeathValue = 0;
-    bool itemCreated = false;
-
-    // Death variables
-    int a = 0;
-    int kill = 1;
-
 private:
+    // Core methods for phase system
+    void HandlePhase1(float distanceToPlayer, float dx, float dt);
+    void HandlePhase2(float distanceToPlayer, float dx, float dt);
+    void HandleTransformation(float dt);
+    void UpdatePunchAttackArea();
+    void ResizeCollisionForPhase2();
+
     // Entity identification
     std::string enemyID;
     std::string ref;
@@ -72,18 +56,14 @@ private:
 
     // Position and movement
     Vector2D enemyPos;
-    float moveSpeed;
-    float patrolSpeed;
-    float savedPosX;
-    bool patroling = false;
-    bool moving = false;
+    float moveSpeed = 2.0f;
+    float patrolSpeed = 3.0f;
     bool isLookingLeft = false;
+    int initX, initY;
 
     // Rendering
     SDL_Texture* texture;
-    const char* texturePath;
     int texW, texH;
-    int initX, initY;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     // Configuration
@@ -91,61 +71,24 @@ private:
 
     // Animation system
     Animation* currentAnimation = nullptr;
-    Animation idle, walk, punch, defeat;
+    Animation idle, walk, punch, defeat, transform, idle2;
 
     // Physics bodies
     PhysBody* pbody;
-    PhysBody* jumpAttackArea;
-    PhysBody* punchAttackArea; // New punch attack area
-
-    // AI and pathfinding
-    Pathfinding* pathfinding;
-    float pathfindingTimer = 0.0f;
-    float maxPathfindingTime = 700.0f;
+    PhysBody* punchAttackArea;
 
     // Combat system
-    int currentPhase;
+    int currentPhase = 1;
     bool isAttacking = false;
-    bool isJumpAttacking = false;
     bool canAttack = true;
     float attackCooldown = 3000.0f; // 3 seconds
     float currentAttackCooldown = 0.0f;
-    float attackDistance = 14.0f;
-    int attackCounter = 0;
 
     // State management
-    bool resting = false;
-    bool escaping = false;
-    bool isRunning = false;
-    bool ishurt = false;
     bool isDying = false;
-    bool isDead = false;
     bool Hiteado = false; // Collision flag
+    bool isTransforming = false;
 
-    // Boss specific
-    int lives = 10;
-    bool changeMusicBoss = false;
-    float intitalPosX = 0;
-
-    // Phase control (for future expansion)
-    bool phase_One = false;
-    bool phase_Two = false;
-    bool phase_Three = false;
-
-    // Jump system (for future use)
-    bool isJumping = false;
-    float jumpTimer = 0.0f;
-    Vector2D jumpStartPos;
-    Vector2D jumpTargetPos;
-    float jumpDuration = 0.0f;
-
-    // Death timing
-    float deathTimer = 0.0f;
-    const float deathDelay = 1.0f;
-    bool dialogTriggered = false;
-    bool battleStarted = false;
-
-    // Helper methods for animation
-    int GetTotalFrames() const;
-    int GetCurrentFrameId() const;
+    // Lives system
+    int lives = 2; // Phase 1: 1 hit to transform, Phase 2: 1 hit to die
 };
