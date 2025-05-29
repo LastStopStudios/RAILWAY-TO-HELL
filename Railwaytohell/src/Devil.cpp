@@ -64,10 +64,6 @@ bool Devil::Start() {
 bool Devil::Update(float dt) {
     bool isGameplay = Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY;
 
-    if (Engine::GetInstance().ui->figth2 == true) {
-        Engine::GetInstance().ui->vidab2 = lives;
-    }
-
     if (!isGameplay) {
         if (pbody && pbody->body) {
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -122,6 +118,10 @@ bool Devil::Update(float dt) {
         pathfinding->DrawPath();
     }
 
+    if (Engine::GetInstance().ui->figth3 == true) {
+        //UI Lives
+        Engine::GetInstance().ui->vidab3 = lives;
+    }
     return true;
 }
 
