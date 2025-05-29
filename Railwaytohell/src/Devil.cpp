@@ -50,41 +50,17 @@ bool Devil::Start() {
     patrolSpeed = 3.0f;
 
     // Add physics body
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+    pbody = Engine::GetInstance().physics.get()->CreateCircle(
         (int)position.getX() + texW / 2,
         (int)position.getY() + texH / 2,
-        texW / 2, texH,
+        texW / 2,
         bodyType::DYNAMIC
     );
-
-    // Create punch attack area sensor (initially disabled)
-    punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
-        (int)position.getX() + texW / 2,
-        (int)position.getY() + texH / 2,
-        texW + 20, texH / 2,
-        bodyType::DYNAMIC
-    );
-
-    pbody->listener = this;
-    punchAttackArea->listener = this;
 
     // Assign collider types
     pbody->ctype = ColliderType::DEVIL;
-    punchAttackArea->ctype = ColliderType::DEVIL_PUNCH_ATTACK1;
-
-    pbody->body->SetFixedRotation(true);
-    punchAttackArea->body->SetFixedRotation(true);
 
     pbody->body->SetGravityScale(1.0f);
-    pbody->body->GetFixtureList()->SetDensity(10);
-    pbody->body->ResetMassData();
-
-    // Initially disable punch attack area
-    punchAttackArea->body->SetEnabled(false);
-
-    if (!parameters.attribute("gravity").as_bool()) {
-        pbody->body->SetGravityScale(2.0f);
-    }
 
     return true;
 }
@@ -190,15 +166,29 @@ bool Devil::Update(float dt) {
     if (isAttacking && currentAnimation == &punch) {
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 
+        // Update punch attack area position during animation
+        if (punchAttackArea != nullptr) {
+            int punchX = position.getX() + texW / 2;
+            int punchY = position.getY() + texH / 2;
+            if (!isLookingLeft) {
+                punchX += 30; // Offset punch area to the right
+            }
+            else {
+                punchX -= 30; // Offset punch area to the left
+            }
+            punchAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(punchX), PIXEL_TO_METERS(punchY)), 0);
+        }
+
         if (currentAnimation->HasFinished()) {
             isAttacking = false;
             canAttack = false;
             currentAttackCooldown = attackCooldown;
             currentAnimation = &idle;
 
-            // Asegurar que la caja de punch se deshabilite
-            if (punchAttackArea != nullptr && punchAttackArea->body != nullptr) {
-                punchAttackArea->body->SetEnabled(false);
+            // Delete punch attack area when attack finishes
+            if (punchAttackArea != nullptr) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                punchAttackArea = nullptr;
             }
 
             punch.Reset();
@@ -234,8 +224,28 @@ void Devil::CreatePunchAttack() {
     currentAnimation = &punch;
     currentAnimation->Reset();
 
-    // Enable punch attack area for damage detection
-    punchAttackArea->body->SetEnabled(true);
+    // Create punch attack area when attack starts
+    if (punchAttackArea == nullptr) {
+        int punchX = position.getX() + texW / 2;
+        int punchY = position.getY() + texH / 2;
+
+        if (!isLookingLeft) {
+            punchX += 30; // Offset punch area to the right
+        }
+        else {
+            punchX -= 30; // Offset punch area to the left
+        }
+
+        punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+            punchX, punchY,
+            texW + 20, texH / 2,
+            bodyType::DYNAMIC
+        );
+
+        punchAttackArea->listener = this;
+        punchAttackArea->ctype = ColliderType::DEVIL_PUNCH_ATTACK1;
+        punchAttackArea->body->SetFixedRotation(true);
+    }
 }
 
 void Devil::HandleDefeatState() {

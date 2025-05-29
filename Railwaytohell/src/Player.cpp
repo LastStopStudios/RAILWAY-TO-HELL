@@ -924,8 +924,8 @@ void Player::HandleSceneSwitching() {
 
     if (zooming) {
         zoom -= 0.01f; // velocidad del zoom
-        if (zoom <= 1.09f) {
-            zoom = 1.09f;
+        if (zoom <= 1.0f) {
+            zoom = 1.0f;
             zooming = false;
         }
         GlobalSettings::GetInstance().SetTextureMultiplier(zoom);

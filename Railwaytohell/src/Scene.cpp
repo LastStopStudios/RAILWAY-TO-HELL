@@ -315,7 +315,7 @@ bool Scene::PostUpdate()
 		int center_y = window_height / 2;
 
 		// Logical base offsets (not affected by zoom)
-		const int BASE_OFFSET_X = -60;
+		const int BASE_OFFSET_X = -50;
 		const int BASE_OFFSET_Y = 86;
 
 		if (BossBattle == false) {
