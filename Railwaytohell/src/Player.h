@@ -335,4 +335,10 @@ private:
 	Animation slide;
 	SDL_Texture* slideTexture = nullptr;
 
+	Animation strongfall;
+	SDL_Texture* strongfallTexture = nullptr;
+	float timeNotGrounded = 0.0f;
+	bool isStrongFall = false;
+	float strongFallDurantion = 15.0f;
+
 };

@@ -220,7 +220,10 @@ bool Player::Start() {
     auto slideNode = parameters.child("animations").child("slide");
     slideTexture = slideNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(slideNode.attribute("texture").as_string()) : texture;
 
-
+    // Fall strong animation
+    strongfall.LoadAnimations(parameters.child("animations").child("strongfall"));
+    auto strongfallNode = parameters.child("animations").child("strongfall");
+    strongfallTexture = strongfallNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(strongfallNode.attribute("texture").as_string()) : texture;
 
     // Initialize wakeup animation
     isWakingUp = true;
@@ -789,59 +792,52 @@ void Player::HandleJump(float dt) {
             falling.Reset();
         }
     }
-
+   
     if (isFalling) {
-        // Check both bodies' vertical velocity to determine if player has actually stopped falling
-        float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
-        float lowerVelocity = pbodyLower->body->GetLinearVelocity().y;
 
-        // If both bodies have very little vertical movement and the player isn't intentionally jumping
-        if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
-            // We've probably landed but the collision wasn't registered properly
-            isJumping = false;
-            isFalling = false;
-            jumpCount = 0;      // Reset jump count on landing
-            canDoubleJump = false; // Reset double jump ability until next initial jump
-            fallingTimer = 0.0f;  // Reset the timer
+            float verticalVelocity = pbodyLower->body->GetLinearVelocity().y;
+            bool onGround = fabs(verticalVelocity) < 0.1f;
 
-            // Transition to recovering animation
-            isRecovering = true;
-            recoveringTimer = recoveringDuration;
-            recovering.Reset();
-
-            // Play the landing sound
-            Engine::GetInstance().audio.get()->PlayFx(fallFX);
-        }
-
-        fallingTimer += dt;
-        if (fallingTimer > 100.0f) {  // If we've been falling for over x seconds
-            // Check if we're not actually moving much
-            if (fabs(upperVelocity) < 0.5f && fabs(lowerVelocity) < 0.5f) {
-                isFalling = false;
-                isJumping = false;
-                jumpCount = 0;      // Reset jump count if we've been falling too long
-                canDoubleJump = false; // Reset double jump ability
-                fallingTimer = 0.0f;
+            if (onGround) {
+                timeNotGrounded = 0.0f;
             }
-        }
-    }
-    else {
-        // Reset falling timer when not falling
-        fallingTimer = 0.0f;
-    }
+            else {
+                timeNotGrounded += dt;
 
-    // Check if player is falling off a platform without jumping
-    if (!isJumping && !isDashing && !isAttacking && !isWhipAttacking && !isRecovering) {
-        float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
-        if (verticalVelocity > 1.0f) { // More significant threshold for non-jump falling
-            isJumping = true; // Technically in "air" state
-            isFalling = true;
-            jumpCount = 1;    // Consider this as first jump so player can use double jump
-            canDoubleJump = doubleJump; // Enable double jump if feature is active
-            falling.Reset();
-        }
+                if (timeNotGrounded >= 1000.0f && !isStrongFall) {
+                    isStrongFall = true;
+
+                }
+            }
+
+            // Check both bodies' vertical velocity to determine if player has actually stopped falling
+            float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
+            float lowerVelocity = pbodyLower->body->GetLinearVelocity().y;
+
+            // If both bodies have very little vertical movement and the player isn't intentionally jumping
+            if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
+                // We've probably landed but the collision wasn't registered properly
+                isJumping = false;
+                isFalling = false;
+                jumpCount = 0;      // Reset jump count on landing
+                canDoubleJump = false; // Reset double jump ability until next initial jump
+                fallingTimer = 0.0f;  // Reset the timer
+                timeNotGrounded = 0.0f;
+                // Transition to recovering animation
+                isRecovering = true;
+                if (isStrongFall) {
+                    recoveringTimer = strongFallDurantion;
+                    strongfall.Reset();
+                }
+                else {
+                    recoveringTimer = recoveringDuration;
+                    recovering.Reset();
+                }
+            }
+        
     }
-}
+   }
+
 
 void Player::HandleSceneSwitching() {
     // Level switching controls
@@ -1402,13 +1398,24 @@ void Player::DrawPlayer() {
     }
 
     else if (isRecovering) {
-        currentAnimation = &recovering;
-        texture = recoveringTexture;
-        recovering.Update();
+        if (isStrongFall) {
+            currentAnimation = &strongfall;
+            texture = strongfallTexture;
+            strongfall.Update();
+        }
+        else {
+            currentAnimation = &recovering;
+            texture = recoveringTexture;
+            recovering.Update();
+        }
 
         recoveringTimer -= 0.0167f;
-        if (recoveringTimer <= 0 || recovering.HasFinished()) {
+        if (recoveringTimer <= 0 ||
+            (isStrongFall && strongfall.HasFinished()) ||
+            (!isStrongFall && recovering.HasFinished())) {
             isRecovering = false;
+            isStrongFall = false;
+            timeNotGrounded = 0.0f;
             currentAnimation = &idle;
             idle.Reset();
         }
@@ -1488,8 +1495,19 @@ void Player::DrawPlayer() {
 
         }
     }
+    if (isRecovering && isStrongFall) {
+        if (facingRight) {
 
-    if (isJumping || isFalling || isRecovering ) {
+            drawX = position.getX() + 18;
+            drawY = position.getY() - 15;
+        }
+        else {
+            drawX = position.getX() + 12;
+            drawY = position.getY() - 15;
+        }
+    }
+
+    if (isJumping || isFalling || isRecovering && !isStrongFall) {
         if (facingRight) {
 
             drawX = position.getX() - 7 ;
@@ -2062,6 +2080,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 // Transition directly to recovering animation
                 isRecovering = true;
                 recoveringTimer = recoveringDuration;
+                recoveringTimer = strongFallDurantion;
+                strongfall.Reset();
                 recovering.Reset();
 
                 // Play the landing sound
