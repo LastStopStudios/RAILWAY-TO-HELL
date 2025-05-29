@@ -330,9 +330,10 @@ bool Scene::PostUpdate()
 		else {
 			// Boss battle camera behavior - check zoom level
 			float currentZoom = GlobalSettings::GetInstance().GetTextureMultiplier();
+			int currentLevel = Engine::GetInstance().sceneLoader->GetCurrentLevel();
 
 			for (const auto& boss : Bosses) {
-				if (boss.id == Engine::GetInstance().sceneLoader->GetCurrentLevel()) {
+				if (boss.id == currentLevel) {
 
 					// Check if zoom is different from default (1.5f)
 					if (currentZoom != 1.5f) {
@@ -364,8 +365,11 @@ bool Scene::PostUpdate()
 					}
 					else {
 						// Default boss battle camera behavior for zoom 1.5f
+						// Check if it's scene 12 for special Y offset
+						int yOffset = (currentLevel == 12) ? -190 : -115; 
+
 						// Fixed Y position for boss battles (world space)
-						float cameraBaseY = (-boss.y) + (-140);
+						float cameraBaseY = (-boss.y) + yOffset;
 						Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * currentZoom);
 
 						// Follow player X position with constraints (world space)
@@ -629,8 +633,6 @@ void Scene::LoadState() {
 			// case 3 do nothing if: death=1 & savedDeath=1
 		}
 	}
-
-
 
 	//enemies
 	pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");

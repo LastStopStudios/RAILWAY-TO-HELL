@@ -13,7 +13,7 @@
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
     currentPhase = 1;
-    lives = 2;
+    lives = 3; // 3 lives for 3 phases
 }
 
 Devil::~Devil() {
@@ -56,6 +56,8 @@ bool Devil::Start() {
     pbody->ctype = ColliderType::DEVIL;
     pbody->body->SetGravityScale(1.0f);
 
+    pathfinding = new Pathfinding();
+
     return true;
 }
 
@@ -95,23 +97,40 @@ bool Devil::Update(float dt) {
     float distanceToPlayer = abs(dx);
     isLookingLeft = dx < 0;
 
-    if (currentPhase == 1) {
+    // Phase control: 1 = Active, 2 = Static, 3 = Placeholder (future behavior)
+    switch (currentPhase) {
+    case 1:
         HandlePhase1(distanceToPlayer, dx, dt);
-    }
-    else if (currentPhase == 2) {
+        break;
+    case 2:
         HandlePhase2(distanceToPlayer, dx, dt);
+        break;
+    case 3:
+        HandlePhase3(distanceToPlayer, dx, dt);
+        break;
+    default:
+        LOG("Error: Invalid phase %d", currentPhase);
+        break;
     }
 
     UpdatePosition();
     RenderSprite();
     currentAnimation->Update();
 
+    // Debug: draw enemy path
+    if (isChasing && !pathfinding->pathTiles.empty()) {
+        pathfinding->DrawPath();
+    }
+
     return true;
 }
 
 void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
     b2Vec2 velocity = b2Vec2(0, pbody->body->GetLinearVelocity().y);
-    float patrolDistance = 12.0f;
+
+    const float DETECTION_DISTANCE = 12.0f;
+    const float CHASE_SPEED = moveSpeed;
+    const int MAX_PATHFINDING_ITERATIONS = 50;
 
     if (isAttacking && currentAnimation == &punch) {
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
@@ -141,12 +160,47 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
         if (distanceToPlayer <= 3.0f && canAttack) {
             CreatePunchAttack();
         }
-        else if (distanceToPlayer <= patrolDistance) {
+        else if (distanceToPlayer <= DETECTION_DISTANCE) {
+            isChasing = true;
+
+            Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+            Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
+            Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
+
+            ResetPath();
+
+            for (int i = 0; i < MAX_PATHFINDING_ITERATIONS; i++) {
+                pathfinding->PropagateAStar(SQUARED);
+                if (pathfinding->ReachedPlayer(playerTilePos)) {
+                    break;
+                }
+            }
+
+            pathfinding->ComputePath(playerTilePos.getX(), playerTilePos.getY());
             currentAnimation = &walk;
-            float direction = isLookingLeft ? -1.0f : 1.0f;
-            pbody->body->SetLinearVelocity(b2Vec2(direction * moveSpeed, pbody->body->GetLinearVelocity().y));
+
+            if (!pathfinding->pathTiles.empty() && pathfinding->pathTiles.size() > 1) {
+                Vector2D nextTile = *(std::next(pathfinding->pathTiles.begin(), 1));
+                Vector2D nextPos = Engine::GetInstance().map.get()->MapToWorld(nextTile.getX(), nextTile.getY());
+
+                float moveX = nextPos.getX() - enemyPos.getX();
+
+                if (moveX < -1.0f) isLookingLeft = true;
+                else if (moveX > 1.0f) isLookingLeft = false;
+
+                float velocityX = isLookingLeft ? -CHASE_SPEED : CHASE_SPEED;
+
+                if (fabs(moveX) < 5.0f) velocityX *= 0.5f;
+
+                pbody->body->SetLinearVelocity(b2Vec2(velocityX, pbody->body->GetLinearVelocity().y));
+            }
+            else {
+                float direction = isLookingLeft ? -1.0f : 1.0f;
+                pbody->body->SetLinearVelocity(b2Vec2(direction * moveSpeed, pbody->body->GetLinearVelocity().y));
+            }
         }
         else {
+            isChasing = false;
             currentAnimation = &idle;
             pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
         }
@@ -156,6 +210,19 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
 void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
     currentAnimation = &idle2;
     pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+}
+
+void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
+    currentAnimation = &idle2;
+    pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+}
+
+void Devil::ResetPath() {
+    if (pathfinding) {
+        Vector2D pos = GetPosition();
+        Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
+        pathfinding->ResetPath(tilePos);
+    }
 }
 
 void Devil::HandleTransformation(float dt) {
@@ -180,8 +247,11 @@ void Devil::HandleTransformation(float dt) {
             currentAnimation = &transform;
             transform.Reset();
             transformTimer = 0.0f;
-            ResizeCollisionForPhase2();
-            LOG("Transform started - collision resized");
+
+            if (currentPhase == 1) {
+                ResizeCollisionForPhase2();
+                LOG("Transform started - collision resized for Phase 2");
+            }
         }
 
         currentAnimation->Update();
@@ -194,13 +264,21 @@ void Devil::HandleTransformation(float dt) {
         break;
 
     case 2:
-        currentPhase = 2;
+        currentPhase++;
         isTransforming = false;
-        currentAnimation = &idle2;
+
+        if (currentPhase == 2) {
+            currentAnimation = &idle2;
+            LOG("Devil entered Phase 2!");
+        }
+        else if (currentPhase == 3) {
+            currentAnimation = &idle2;
+            LOG("Devil entered Phase 3!");
+        }
+
         transformStep = 0;
         transformTimer = 0.0f;
         Hiteado = false;
-        LOG("Devil entered Phase 2!");
         break;
     }
 }
@@ -251,7 +329,7 @@ void Devil::CreatePunchAttack() {
         punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             punchX, punchY,
             texW + 20, texH / 2,
-            bodyType::DYNAMIC
+            bodyType::KINEMATIC
         );
 
         punchAttackArea->listener = this;
@@ -273,9 +351,10 @@ void Devil::RenderSprite() {
 
     flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-    if (currentAnimation == &transform || currentPhase == 2) {
+    if (currentAnimation == &transform || currentPhase >= 2) {
         offsetY = -130;
         if (isLookingLeft) offsetX = -130;
+        if (!isLookingLeft) offsetX = -100;
     }
 
     Engine::GetInstance().render.get()->DrawTexture(
@@ -295,29 +374,28 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     case ColliderType::PLAYER_ATTACK:
     case ColliderType::PLAYER_WHIP_ATTACK:
-        if (!Hiteado && !isTransforming && currentPhase == 1) {
+        if (!Hiteado && !isTransforming) {
             Hiteado = true;
             lives--;
-            LOG("Devil hit! Lives remaining: %d", lives);
-            isTransforming = true;
+            LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
 
-            if (isAttacking) {
-                isAttacking = false;
-                if (punchAttackArea) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                    punchAttackArea = nullptr;
+            if (lives > 0) {
+                isTransforming = true;
+
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (punchAttackArea) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                        punchAttackArea = nullptr;
+                    }
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
                 }
-                pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-            }
-            LOG("Devil starting transformation to Phase 2!");
-        }
-        else if (!Hiteado && !isTransforming && currentPhase == 2) {
-            Hiteado = true;
-            lives--;
-            LOG("Devil hit in Phase 2! Lives remaining: %d", lives);
 
-            if (lives <= 0) {
+                LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+            }
+            else {
                 LOG("Devil defeated!");
+                isDying = true;
             }
         }
         break;
@@ -325,9 +403,6 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
 }
 
 void Devil::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
-    if (physB->ctype == ColliderType::PLAYER_ATTACK || physB->ctype == ColliderType::PLAYER_WHIP_ATTACK) {
-        Hiteado = false;
-    }
 }
 
 bool Devil::CleanUp() {
@@ -335,7 +410,10 @@ bool Devil::CleanUp() {
         Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
         punchAttackArea = nullptr;
     }
-
+    if (pathfinding) {
+        delete pathfinding;
+        pathfinding = nullptr;
+    }
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
 }
@@ -353,7 +431,7 @@ Vector2D Devil::GetPosition() {
 }
 
 void Devil::ResetLives() {
-    lives = 2;
+    lives = 3;
     currentPhase = 1;
     currentAnimation = &idle;
     isDying = false;

@@ -40,11 +40,13 @@ public:
     void CreatePunchAttack();
     void UpdatePosition();
     void RenderSprite();
+    void ResetPath();
 
 private:
     // Core methods for phase system
     void HandlePhase1(float distanceToPlayer, float dx, float dt);
     void HandlePhase2(float distanceToPlayer, float dx, float dt);
+    void HandlePhase3(float distanceToPlayer, float dx, float dt);
     void HandleTransformation(float dt);
     void UpdatePunchAttackArea();
     void ResizeCollisionForPhase2();
@@ -59,6 +61,7 @@ private:
     float moveSpeed = 2.0f;
     float patrolSpeed = 3.0f;
     bool isLookingLeft = false;
+    bool isChasing = false; // Added from Terrestre structure
     int initX, initY;
 
     // Rendering
@@ -76,6 +79,8 @@ private:
     // Physics bodies
     PhysBody* pbody;
     PhysBody* punchAttackArea;
+
+    Pathfinding* pathfinding;
 
     // Combat system
     int currentPhase = 1;
