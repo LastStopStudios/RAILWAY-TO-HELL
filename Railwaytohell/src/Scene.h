@@ -20,7 +20,7 @@
 #include "MosaicPiece.h"
 #include "MosaicPuzzle.h"
 #include "Checkpoints.h"
-
+#include "Devil.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -109,6 +109,7 @@ public:
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
 	std::vector<Bufon*> bufonList;
+	std::vector<Devil*> devilList;
 	std::vector<MosaicLever*> mosaicLeversList;
 	std::vector<MosaicPiece*> mosaicPiecesList;
 	std::vector<MosaicPuzzle*> mosaicPuzzleList;
@@ -128,6 +129,7 @@ public:
 	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }
 	std::vector<MosaicPuzzle*>& GetMosaicPuzzleList() { return mosaicPuzzleList; }
 	std::vector<Checkpoints*>& GetCheckpointsList() { return checkpointList; }
+	std::vector<Devil*>& GetDevilList() { return devilList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }
@@ -156,13 +158,19 @@ public:
 	std::vector<Bosses> Bosses = {
 		//scene to which it goes, x from camera, y from camera, leftBoundary, rightBoundary
 		{3, 1270, 1195, 1270, 1710.0f},
-		{ 5, 1344, 1170, 1270, 1710.0f }
+		{ 5, 1344, 1170, 1270, 1710.0f },
+		{ 12, 193, 1128, 193, 1724 }
 	};
 	//camera control
 	void EntrarBoss();
 	void SalirBoss();
 
 private:
+	float targetCameraY = 0.0f;        // Y objetivo de la cámara
+	float currentCameraY = 0.0f;       // Y actual de la cámara (para interpolación)
+	float cameraTransitionSpeed = 5.0f; // Velocidad de transición (ajustable)
+	bool isTransitioning = false;       // Flag para saber si estamos en transición
+
 	SDL_Texture* mouseTileTex = nullptr;
 	std::string tilePosDebug = "[0,0]";
 	bool once = false;

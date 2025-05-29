@@ -122,6 +122,8 @@ public:
     //Implement function to the Tileset based on a tile id
     TileSet* GetTilesetFromTileId(int gid) const;
 
+    void DrawTileWithoutGaps(SDL_Texture* texture, int x, int y, SDL_Rect* section, float scale) const;
+
     //Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
@@ -145,6 +147,10 @@ public:
 
     Vector2D WorldToMap(int x, int y);
     Vector2D MapToWorld(int x, int y) const;
+
+    void SetTargetScale(float newScale);
+    void RenderLayer(MapLayer* mapLayer, float scaleFactor);
+    float currentScaleFactor;
 
 public: 
     std::string mapFileName;

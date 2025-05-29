@@ -21,6 +21,7 @@
 #include "MosaicLevers.h"
 #include "MosaicPuzzle.h"
 #include "Estatua.h"
+#include "Devil.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -106,6 +107,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::BUFON:
 		entity = new Bufon();
+		break;
+	case EntityType::DEVIL:
+		entity = new Devil();
 		break;
 	case EntityType::CARONTE:
 		entity = new Caronte();

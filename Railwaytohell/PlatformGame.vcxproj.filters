@@ -121,6 +121,12 @@
     <ClCompile Include="src\Vector2D.cpp">
       <Filter>SourceFilles\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\GlobalSettings.cpp">
+      <Filter>Source Filles\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Devil.cpp">
+      <Filter>Source Filles\Game\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -254,6 +260,12 @@
     </ClInclude>
     <ClInclude Include="src\Animation.h">
       <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GlobalSettings.h">
+      <Filter>Source Filles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Devil.h">
+      <Filter>Source Filles\Game\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

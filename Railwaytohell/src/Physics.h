@@ -53,6 +53,8 @@ enum class ColliderType {
 	MOSAIC_PIECE,
 	MOSAIC_LEVER,
 	CHECKPOINT,
+	DEVIL,
+	DEVIL_PUNCH_ATTACK1,
 	UNKNOWN
 	// ..
 };

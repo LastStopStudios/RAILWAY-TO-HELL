@@ -14,6 +14,7 @@
 #include "Explosivo.h"
 #include "UI.h"
 #include "Mapa.h"
+#include "GlobalSettings.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -911,6 +912,25 @@ void Player::HandleSceneSwitching() {
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_I) == KEY_DOWN && currentLvl != 12 ) {
+        Engine::GetInstance().sceneLoader->LoadScene(12, 1020, 1656, false, true);
+    }
+    static float zoom = 1.5f;
+    static bool zooming = false;
+
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
+        zooming = true;
+    }
+
+    if (zooming) {
+        zoom -= 0.01f; // velocidad del zoom
+        if (zoom <= 1.09f) {
+            zoom = 1.09f;
+            zooming = false;
+        }
+        GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
+    }
+
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
