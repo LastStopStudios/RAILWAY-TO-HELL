@@ -194,6 +194,10 @@ bool Bufon::Update(float dt)
 
         //Bullets Hurt player
         Engine::GetInstance().entityManager->BulletsOff();
+
+        //glowing statue
+        Engine::GetInstance().entityManager->estatua2 = true;
+
         // When dying, don't process any other logic
         return true;
     }
