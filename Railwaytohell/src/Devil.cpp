@@ -41,6 +41,8 @@ bool Devil::Start() {
     defeat.LoadAnimations(parameters.child("animations").child("defeat"));
     transform.LoadAnimations(parameters.child("animations").child("transform"));
     idle2.LoadAnimations(parameters.child("animations").child("idle2"));
+    jump.LoadAnimations(parameters.child("animations").child("jump"));
+    land.LoadAnimations(parameters.child("animations").child("land"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -352,11 +354,19 @@ void Devil::RenderSprite() {
     flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     if (currentAnimation == &transform || currentPhase >= 2) {
-        offsetY = -130;
+        offsetY = -137;
         if (isLookingLeft) offsetX = -130;
         if (!isLookingLeft) offsetX = -100;
     }
 
+    if (currentAnimation == &idle2 ) {
+        if (isLookingLeft) offsetY = -137;
+        if (!isLookingLeft) offsetY = -137;
+    }
+    if ( currentAnimation == &jump || currentAnimation == &land) {
+        if (isLookingLeft) offsetY = -425;
+        if (!isLookingLeft) offsetY = -425;
+    }
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
         (int)position.getX() + offsetX,
