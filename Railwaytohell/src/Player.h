@@ -110,7 +110,8 @@ public:
 	float Scene10InitX, Scene10InitY;
 	float Scene11InitX, Scene11InitY;
 
-	
+	bool isInZoomOut = false;
+	bool returnisInZoomOut() { return isInZoomOut; }
 
 private:
 	// Private methods
@@ -333,5 +334,11 @@ private:
 
 	Animation slide;
 	SDL_Texture* slideTexture = nullptr;
+
+	Animation strongfall;
+	SDL_Texture* strongfallTexture = nullptr;
+	float timeNotGrounded = 0.0f;
+	bool isStrongFall = false;
+	float strongFallDurantion = 15.0f;
 
 };

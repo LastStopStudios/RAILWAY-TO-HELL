@@ -217,6 +217,10 @@ void DialogoM::UpdateTextAnimation(float dt)
 			bossFightReady = true;
 			Engine::GetInstance().ui->figth2 = true;//show boss2 health
 		}
+		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 12) {//UI Lives
+			bossFightReady = true;
+			Engine::GetInstance().ui->figth3 = true;//show boss2 health
+		}
 
 		ResetText();  // Reset the text system
 	}

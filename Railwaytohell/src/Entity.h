@@ -22,6 +22,7 @@ enum class EntityType
 	MOSAIC_LEVER,
 	CHECKPOINT,
 	ESTATUA,
+	DEVIL,
 	UNKNOWN
 };
 

@@ -13,6 +13,8 @@
 #include "dialogoM.h"
 #include "Explosivo.h"
 #include "UI.h"
+#include "Mapa.h"
+#include "GlobalSettings.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -218,7 +220,10 @@ bool Player::Start() {
     auto slideNode = parameters.child("animations").child("slide");
     slideTexture = slideNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(slideNode.attribute("texture").as_string()) : texture;
 
-
+    // Fall strong animation
+    strongfall.LoadAnimations(parameters.child("animations").child("strongfall"));
+    auto strongfallNode = parameters.child("animations").child("strongfall");
+    strongfallTexture = strongfallNode.attribute("texture") ? Engine::GetInstance().textures.get()->Load(strongfallNode.attribute("texture").as_string()) : texture;
 
     // Initialize wakeup animation
     isWakingUp = true;
@@ -791,59 +796,52 @@ void Player::HandleJump(float dt) {
             falling.Reset();
         }
     }
-
+   
     if (isFalling) {
-        // Check both bodies' vertical velocity to determine if player has actually stopped falling
-        float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
-        float lowerVelocity = pbodyLower->body->GetLinearVelocity().y;
 
-        // If both bodies have very little vertical movement and the player isn't intentionally jumping
-        if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
-            // We've probably landed but the collision wasn't registered properly
-            isJumping = false;
-            isFalling = false;
-            jumpCount = 0;      // Reset jump count on landing
-            canDoubleJump = false; // Reset double jump ability until next initial jump
-            fallingTimer = 0.0f;  // Reset the timer
+            float verticalVelocity = pbodyLower->body->GetLinearVelocity().y;
+            bool onGround = fabs(verticalVelocity) < 0.1f;
 
-            // Transition to recovering animation
-            isRecovering = true;
-            recoveringTimer = recoveringDuration;
-            recovering.Reset();
-
-            // Play the landing sound
-            Engine::GetInstance().audio.get()->PlayFx(fallFX);
-        }
-
-        fallingTimer += dt;
-        if (fallingTimer > 100.0f) {  // If we've been falling for over x seconds
-            // Check if we're not actually moving much
-            if (fabs(upperVelocity) < 0.5f && fabs(lowerVelocity) < 0.5f) {
-                isFalling = false;
-                isJumping = false;
-                jumpCount = 0;      // Reset jump count if we've been falling too long
-                canDoubleJump = false; // Reset double jump ability
-                fallingTimer = 0.0f;
+            if (onGround) {
+                timeNotGrounded = 0.0f;
             }
-        }
-    }
-    else {
-        // Reset falling timer when not falling
-        fallingTimer = 0.0f;
-    }
+            else {
+                timeNotGrounded += dt;
 
-    // Check if player is falling off a platform without jumping
-    if (!isJumping && !isDashing && !isAttacking && !isWhipAttacking && !isRecovering) {
-        float verticalVelocity = pbodyUpper->body->GetLinearVelocity().y;
-        if (verticalVelocity > 1.0f) { // More significant threshold for non-jump falling
-            isJumping = true; // Technically in "air" state
-            isFalling = true;
-            jumpCount = 1;    // Consider this as first jump so player can use double jump
-            canDoubleJump = doubleJump; // Enable double jump if feature is active
-            falling.Reset();
-        }
+                if (timeNotGrounded >= 1000.0f && !isStrongFall) {
+                    isStrongFall = true;
+
+                }
+            }
+
+            // Check both bodies' vertical velocity to determine if player has actually stopped falling
+            float upperVelocity = pbodyUpper->body->GetLinearVelocity().y;
+            float lowerVelocity = pbodyLower->body->GetLinearVelocity().y;
+
+            // If both bodies have very little vertical movement and the player isn't intentionally jumping
+            if (fabs(upperVelocity) < 0.1f && fabs(lowerVelocity) < 0.1f && !isJumping) {
+                // We've probably landed but the collision wasn't registered properly
+                isJumping = false;
+                isFalling = false;
+                jumpCount = 0;      // Reset jump count on landing
+                canDoubleJump = false; // Reset double jump ability until next initial jump
+                fallingTimer = 0.0f;  // Reset the timer
+                timeNotGrounded = 0.0f;
+                // Transition to recovering animation
+                isRecovering = true;
+                if (isStrongFall) {
+                    recoveringTimer = strongFallDurantion;
+                    strongfall.Reset();
+                }
+                else {
+                    recoveringTimer = recoveringDuration;
+                    recovering.Reset();
+                }
+            }
+        
     }
-}
+   }
+
 
 void Player::HandleSceneSwitching() {
     // Level switching controls
@@ -914,6 +912,25 @@ void Player::HandleSceneSwitching() {
         Vector2D debugPos(debugXLevelDesignInitialPositionOfLevel, debugYLevelDesignInitialPositionOfLevel);
         SetPosition(debugPos);
     }
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_I) == KEY_DOWN && currentLvl != 12 ) {
+        Engine::GetInstance().sceneLoader->LoadScene(12, 643, 1592, false, true);
+    }
+    static float zoom = 1.5f;
+    static bool zooming = false;
+
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
+        zooming = true;
+    }
+
+    if (zooming) {
+        zoom -= 0.01f; // velocidad del zoom
+        if (zoom <= 1.0f) {
+            zoom = 1.0f;
+            zooming = false;
+        }
+        GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
+    }
+
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
@@ -1385,31 +1402,35 @@ void Player::DrawPlayer() {
     }
 
     else if (isRecovering) {
-        currentAnimation = &recovering;
-        texture = recoveringTexture;
-        recovering.Update();
+        if (isStrongFall) {
+            currentAnimation = &strongfall;
+            texture = strongfallTexture;
+            strongfall.Update();
+        }
+        else {
+            currentAnimation = &recovering;
+            texture = recoveringTexture;
+            recovering.Update();
+        }
 
         recoveringTimer -= 0.0167f;
-        if (recoveringTimer <= 0 || recovering.HasFinished()) {
+        if (recoveringTimer <= 0 ||
+            (isStrongFall && strongfall.HasFinished()) ||
+            (!isStrongFall && recovering.HasFinished())) {
             isRecovering = false;
+            isStrongFall = false;
+            timeNotGrounded = 0.0f;
             currentAnimation = &idle;
             idle.Reset();
         }
     }
     else if (isWalking) {
-        if (resbalar) {
-            currentAnimation = &slide;
-            texture = slideTexture;
-            slide.Update();
-           
-        }
-        else {
+      
             currentAnimation = &walk;
             texture = walkTexture;
             walk.Update();
-        }
+        
 
-       
         if (!resbalar && !isJumping && isWalking && !isDashing) {
             runSoundTimer += 0.0167;
             if (runSoundTimer >= runSoundInterval) {
@@ -1426,7 +1447,15 @@ void Player::DrawPlayer() {
         }
     }
     else {
-        if (currentAnimation != &idle) {
+        if (resbalar) {
+            currentAnimation = &slide;
+            texture = slideTexture;
+            slide.Update();
+
+        }
+        else {
+
+            (currentAnimation != &idle);
             currentAnimation = &idle;
             texture = originalTexture;
         }
@@ -1470,8 +1499,19 @@ void Player::DrawPlayer() {
 
         }
     }
+    if (isRecovering && isStrongFall) {
+        if (facingRight) {
 
-    if (isJumping || isFalling || isRecovering ) {
+            drawX = position.getX() + 18;
+            drawY = position.getY() - 15;
+        }
+        else {
+            drawX = position.getX() + 12;
+            drawY = position.getY() - 15;
+        }
+    }
+
+    if (isJumping || isFalling || isRecovering && !isStrongFall) {
         if (facingRight) {
 
             drawX = position.getX() - 7 ;
@@ -1959,6 +1999,33 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
                 NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
                 Id = physB->ID; //ID from Item
+               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
+                    Engine::GetInstance().mapa.get()->remember1 = true;
+                }
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
+                    Engine::GetInstance().mapa.get()->remember2 = true;
+                }
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
+                    Engine::GetInstance().mapa.get()->remember3 = true;
+                }
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 6) {
+                    Engine::GetInstance().mapa.get()->remember4 = true;
+                }
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 8) {
+                    if (Id == "1") {
+                        Engine::GetInstance().mapa.get()->remember5 = true;
+                    }
+                    if (Id == "2") {
+                        Engine::GetInstance().mapa.get()->remember6 = true;
+                    }                    
+                } 
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 10) {
+                    Engine::GetInstance().mapa.get()->remember7 = true;
+                }
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
+                    Engine::GetInstance().mapa.get()->remember8 = true;
+                }
+                
             }
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
@@ -2017,6 +2084,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 // Transition directly to recovering animation
                 isRecovering = true;
                 recoveringTimer = recoveringDuration;
+                recoveringTimer = strongFallDurantion;
+                strongfall.Reset();
                 recovering.Reset();
 
                 // Play the landing sound

@@ -114,7 +114,7 @@ public:
 	bool Mostrar;
 	bool dialogoOn = false;
 
-	bool remember1, remember2, remember3, remember4;
+	bool remember1, remember2, remember3, remember4, remember5, remember6, remember7, remember8;
 
 private:
 	//Textures
@@ -143,9 +143,13 @@ private:
 	SDL_Texture* Recuerdo2 = nullptr;// Remember 2 texture 
 	SDL_Texture* Recuerdo3 = nullptr;// Remember 3 texture 
 	SDL_Texture* Recuerdo4 = nullptr;// Remember 4 texture 
+	SDL_Texture* Recuerdo5 = nullptr;// Remember 5 texture 
+	SDL_Texture* Recuerdo6 = nullptr;// Remember 6 texture 
+	SDL_Texture* Recuerdo7 = nullptr;// Remember 7 texture 
+	SDL_Texture* Recuerdo8 = nullptr;// Remember 8 texture 
 	SDL_Texture* VRecuerdo = nullptr;// Remember Hole texture 
 
-	float posx, posy;// icon player position
+	float  posy = 40;// icon player position
 	int w, h, i = 1;//renders size
 
 };
