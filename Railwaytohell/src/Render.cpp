@@ -110,8 +110,10 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 
 	// Apply scaling to both position and texture size
 	// Scale the x and y coordinates by TEXTURE_SIZE_MULTIPLIER
-	rect.x = (int)(camera.x * speed) + (int)(x * TEXTURE_SIZE_MULTIPLIER);
-	rect.y = (int)(camera.y * speed) + (int)(y * TEXTURE_SIZE_MULTIPLIER);
+    float textureMultiplier = GlobalSettings::GetInstance().GetTextureMultiplier();
+
+	rect.x = (int)(camera.x * speed) + (int)(x * textureMultiplier);
+	rect.y = (int)(camera.y * speed) + (int)(y * textureMultiplier);
 
 	if (section != NULL)
 	{
@@ -124,8 +126,8 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 	}
 
 	// Scale the texture size
-	rect.w = (int)(rect.w * TEXTURE_SIZE_MULTIPLIER);
-	rect.h = (int)(rect.h * TEXTURE_SIZE_MULTIPLIER);
+	rect.w = (int)(rect.w * textureMultiplier);
+	rect.h = (int)(rect.h * textureMultiplier);
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -133,8 +135,8 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 	if (pivotX != INT_MAX && pivotY != INT_MAX)
 	{
 		// Scale the pivot point too
-		pivot.x = (int)(pivotX * TEXTURE_SIZE_MULTIPLIER);
-		pivot.y = (int)(pivotY * TEXTURE_SIZE_MULTIPLIER);
+		pivot.x = (int)(pivotX * textureMultiplier);
+		pivot.y = (int)(pivotY * textureMultiplier);
 		p = &pivot;
 	}
 
@@ -176,51 +178,6 @@ bool Render::DrawTextureForButtons(SDL_Texture* texture, int x, int y, const SDL
     {
         pivot.x = (int)(pivotX);
         pivot.y = (int)(pivotY);
-        p = &pivot;
-    }
-
-    if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
-    {
-        LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
-        ret = false;
-    }
-
-    return ret;
-}
-
-bool Render::DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
-    float speed, double angle, int pivotX, int pivotY,
-    SDL_RendererFlip flip) const
-{
-    bool ret = true;
-    SDL_Rect rect;
-
-    float textureMultiplier = GlobalSettings::GetInstance().GetTextureMultiplier();
-
-    // Apply camera offset and scaling
-    rect.x = (int)(camera.x * speed) + (int)(x * textureMultiplier);
-    rect.y = (int)(camera.y * speed) + (int)(y * textureMultiplier);
-
-    if (section != NULL)
-    {
-        rect.w = section->w;
-        rect.h = section->h;
-    }
-    else
-    {
-        SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-    }
-
-    rect.w = (int)(rect.w * textureMultiplier);
-    rect.h = (int)(rect.h * textureMultiplier);
-
-    SDL_Point* p = NULL;
-    SDL_Point pivot;
-
-    if (pivotX != INT_MAX && pivotY != INT_MAX)
-    {
-        pivot.x = (int)(pivotX * textureMultiplier);
-        pivot.y = (int)(pivotY * textureMultiplier);
         p = &pivot;
     }
 
