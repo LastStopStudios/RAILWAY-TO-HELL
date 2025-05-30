@@ -38,8 +38,11 @@ public:
 
     // Combat methods
     void CreatePunchAttack();
+    void CreateJumpAttack(); // New jump attack method
+    void UpdateJumpAttack(float dt); // Update jump attack logic
     void UpdatePosition();
     void RenderSprite();
+    void RenderShadow(); // New method to render shadow
     void ResetPath();
 
 private:
@@ -49,6 +52,7 @@ private:
     void HandlePhase3(float distanceToPlayer, float dx, float dt);
     void HandleTransformation(float dt);
     void UpdatePunchAttackArea();
+    void UpdateJumpAttackArea(); // New method for jump attack area
     void ResizeCollisionForPhase2();
 
     // Entity identification
@@ -61,11 +65,12 @@ private:
     float moveSpeed = 2.0f;
     float patrolSpeed = 3.0f;
     bool isLookingLeft = false;
-    bool isChasing = false; // Added from Terrestre structure
+    bool isChasing = false;
     int initX, initY;
 
     // Rendering
     SDL_Texture* texture;
+    SDL_Texture* shadowTexture; // New shadow texture
     int texW, texH;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
@@ -74,11 +79,12 @@ private:
 
     // Animation system
     Animation* currentAnimation = nullptr;
-    Animation idle, walk, punch, defeat, transform, idle2;
+    Animation idle, walk, punch, defeat, transform, idle2, salto, land;
 
     // Physics bodies
     PhysBody* pbody;
     PhysBody* punchAttackArea;
+    PhysBody* jumpAttackArea; // New attack area for jump attack
 
     Pathfinding* pathfinding;
 
@@ -89,11 +95,25 @@ private:
     float attackCooldown = 3000.0f; // 3 seconds
     float currentAttackCooldown = 0.0f;
 
+    // Jump attack system
+    bool isJumping = false;
+    bool isLanding = false;
+    bool jumpAttackActive = false;
+    float jumpStartY = 0.0f;
+    float jumpHeight = 100000000000.0f; // Height of the jump in pixels
+    float jumpSpeed = 30.0f; // Speed of the jump
+    Vector2D shadowPosition; // Position of the shadow on ground
+    Vector2D targetLandingPos; // Where the devil will land
+    bool shadowVisible = false;
+    bool jumpStarted = false;        // Track if actual jump physics have started
+    bool isOnGround = false;         // Track ground contact
+    bool landingFrameHeld = false;   // Track if we're holding the first landing frame
+
     // State management
     bool isDying = false;
     bool Hiteado = false; // Collision flag
     bool isTransforming = false;
 
     // Lives system
-    int lives = 2; // Phase 1: 1 hit to transform, Phase 2: 1 hit to die
+    int lives = 3; // 3 lives for 3 phases
 };

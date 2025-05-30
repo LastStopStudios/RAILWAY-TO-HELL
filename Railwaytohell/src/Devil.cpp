@@ -20,6 +20,9 @@ Devil::~Devil() {
     if (punchAttackArea != nullptr) {
         Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
     }
+    if (jumpAttackArea != nullptr) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+    }
 }
 
 bool Devil::Awake() {
@@ -28,6 +31,7 @@ bool Devil::Awake() {
 
 bool Devil::Start() {
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
+    shadowTexture = Engine::GetInstance().textures.get()->Load("Assets/Textures/bosses/Shadow.png");
     position.setX(parameters.attribute("x").as_int());
     position.setY(parameters.attribute("y").as_int());
     texW = parameters.attribute("w").as_int();
@@ -41,6 +45,8 @@ bool Devil::Start() {
     defeat.LoadAnimations(parameters.child("animations").child("defeat"));
     transform.LoadAnimations(parameters.child("animations").child("transform"));
     idle2.LoadAnimations(parameters.child("animations").child("idle2"));
+    salto.LoadAnimations(parameters.child("animations").child("salto"));
+    land.LoadAnimations(parameters.child("animations").child("land"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -84,6 +90,18 @@ bool Devil::Update(float dt) {
         return true;
     }
 
+    // Handle jump attack if active
+    if (jumpAttackActive) {
+        UpdateJumpAttack(dt);
+        UpdatePosition();
+        RenderSprite();
+        if (shadowVisible) {
+            RenderShadow();
+        }
+        currentAnimation->Update();
+        return true;
+    }
+
     enemyPos = GetPosition();
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
@@ -111,6 +129,9 @@ bool Devil::Update(float dt) {
 
     UpdatePosition();
     RenderSprite();
+    if (shadowVisible) {
+        RenderShadow();
+    }
     currentAnimation->Update();
 
     // Debug: draw enemy path
@@ -208,13 +229,147 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
-    currentAnimation = &idle2;
-    pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+    const float JUMP_ATTACK_DISTANCE = 8.0f;
+
+    if (!canAttack) {
+        currentAttackCooldown -= dt;
+        if (currentAttackCooldown <= 0) {
+            canAttack = true;
+            currentAttackCooldown = 0.0f;
+        }
+    }
+
+    // Jump attack logic for Phase 2
+    if (distanceToPlayer <= JUMP_ATTACK_DISTANCE && canAttack && !jumpAttackActive) {
+        CreateJumpAttack();
+    }
+    else if (!jumpAttackActive) {
+        currentAnimation = &idle2;
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+    }
 }
 
 void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
     currentAnimation = &idle2;
     pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+}
+
+void Devil::CreateJumpAttack() {
+    jumpAttackActive = true;
+    isJumping = true;
+    isLanding = false;
+    canAttack = false;
+    
+    // Get player position for targeting
+    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    targetLandingPos = playerPos;
+    
+    // Set shadow position to target landing position
+    shadowPosition = targetLandingPos;
+    shadowVisible = true;
+    
+    // Start jump animation
+    currentAnimation = &salto;
+    currentAnimation->Reset();
+    
+    // Store starting position
+    jumpStartY = enemyPos.getY();
+    
+    // Apply upward force for jump
+    pbody->body->SetLinearVelocity(b2Vec2(0, -jumpSpeed));
+    pbody->body->SetGravityScale(0.5f); // Reduce gravity during jump
+    
+    LOG("Devil Phase 2: Jump attack started!");
+}
+
+void Devil::UpdateJumpAttack(float dt) {
+    Vector2D currentPos = GetPosition();
+    
+    // Always update shadow position to follow boss X position during jump attack
+    if (shadowVisible) {
+        shadowPosition.setX(currentPos.getX());
+        // Keep the same Y position (ground level) for shadow
+    }
+    
+    if (isJumping) {
+        // Check if we've reached peak height or jump animation finished
+        if (currentPos.getY() <= jumpStartY - jumpHeight || currentAnimation->HasFinished()) {
+            isJumping = false;
+            isLanding = true;
+            
+            // Start landing animation
+            currentAnimation = &land;
+            currentAnimation->Reset();
+            
+            // Calculate horizontal movement towards target
+            float horizontalDistance = targetLandingPos.getX() - currentPos.getX();
+            float landingVelocityX = horizontalDistance * 0.05f; // Adjust speed as needed
+            
+            // Apply landing velocity
+            pbody->body->SetLinearVelocity(b2Vec2(landingVelocityX, jumpSpeed * 0.5f));
+            pbody->body->SetGravityScale(2.0f); // Increase gravity for faster fall
+            
+            LOG("Devil Phase 2: Starting to land!");
+        }
+    }
+    else if (isLanding) {
+        // Check if we've landed (close to ground or landing animation finished)
+        if (currentAnimation->HasFinished()) {
+            // Create attack area at landing position
+            if (!jumpAttackArea) {
+                UpdateJumpAttackArea();
+            }
+            
+            // End jump attack
+            jumpAttackActive = false;
+            isLanding = false;
+            shadowVisible = false;
+            
+            // Reset physics
+            pbody->body->SetGravityScale(1.0f);
+            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+            
+            // Set cooldown
+            currentAttackCooldown = attackCooldown;
+            currentAnimation = &idle2;
+           
+            if (jumpAttackArea) {
+                Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                jumpAttackArea = nullptr;
+            }
+            
+            LOG("Devil Phase 2: Jump attack completed!");
+        }
+    }
+}
+
+void Devil::UpdateJumpAttackArea() {
+    Vector2D currentPos = GetPosition();
+    
+    jumpAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+        currentPos.getX(),
+        currentPos.getY(),
+        texW + 50, texH + 50, // Larger attack area for jump attack
+        bodyType::KINEMATIC
+    );
+    
+    jumpAttackArea->listener = this;
+    jumpAttackArea->ctype = ColliderType::DEVIL_JUMP_ATTACK2;
+    jumpAttackArea->body->SetFixedRotation(true);
+}
+
+void Devil::RenderShadow() {
+    if (shadowVisible && shadowTexture) {
+        int groundY = initY + texH; // Simple ground calculation (falta ajustarlo)
+        
+        Engine::GetInstance().render.get()->DrawTexture(
+            shadowTexture,
+            (int)shadowPosition.getX() - 32, 
+            groundY - 16,
+            nullptr, // Full texture
+            1.0f, 0.0, INT_MAX, INT_MAX, SDL_FLIP_NONE
+        );
+    }
 }
 
 void Devil::ResetPath() {
@@ -391,6 +546,19 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                     pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
                 }
 
+                // Cancel jump attack if active
+                if (jumpAttackActive) {
+                    jumpAttackActive = false;
+                    isJumping = false;
+                    isLanding = false;
+                    shadowVisible = false;
+                    if (jumpAttackArea) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                        jumpAttackArea = nullptr;
+                    }
+                    pbody->body->SetGravityScale(1.0f);
+                }
+
                 LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
             }
             else {
@@ -409,6 +577,10 @@ bool Devil::CleanUp() {
     if (punchAttackArea) {
         Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
         punchAttackArea = nullptr;
+    }
+    if (jumpAttackArea) {
+        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+        jumpAttackArea = nullptr;
     }
     if (pathfinding) {
         delete pathfinding;
@@ -436,4 +608,8 @@ void Devil::ResetLives() {
     currentAnimation = &idle;
     isDying = false;
     isTransforming = false;
+    jumpAttackActive = false;
+    isJumping = false;
+    isLanding = false;
+    shadowVisible = false;
 }
