@@ -190,6 +190,11 @@ bool EntityManager::PreUpdate(){
 }
 bool EntityManager::Update(float dt)
 {
+
+	if (Engine::GetInstance().scene->IsPaused()) {
+		return true;
+	}
+
 	bool ret = true;
 
 	// Create a sorted copy of the entities for update and render

@@ -13,11 +13,20 @@ GuiControlButton::GuiControlButton(int id, SDL_Rect bounds, const char* text) : 
 	drawBasic = false;
 
 	prevState = GuiControlState::NORMAL;
+
 }
 
 GuiControlButton::~GuiControlButton()
 {
 
+}
+
+void GuiControlButton::SetTextures(SDL_Texture* normal, SDL_Texture* focused, SDL_Texture* pressed, SDL_Texture* off)
+{
+	normalTex = normal;
+	focusedTex = focused;
+	pressedTex = pressed;
+	offTex = off;
 }
 
 bool GuiControlButton::Start()
@@ -31,11 +40,21 @@ bool GuiControlButton::Start()
 
 bool GuiControlButton::Update(float dt)
 {
-	if (Engine::GetInstance().scene->GetCurrentState() != SceneState::GAMEPLAY)
+	if (Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY)
 	{
 		return true;
 	}
-	if (state != GuiControlState::DISABLED)
+	if (state == GuiControlState::OFF) {
+		switch (state)
+		{
+		case GuiControlState::OFF:
+			if (offTex)
+				Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y);
+			break;
+		}
+	}
+
+	if (state != GuiControlState::DISABLED && state != GuiControlState::OFF)
 	{
 		// Check if the state has changed
 		if (state != prevState)
@@ -76,17 +95,17 @@ bool GuiControlButton::Update(float dt)
 		//Draw the button according the GuiControl State
 		switch (state)
 		{
-		case GuiControlState::DISABLED:
-			Engine::GetInstance().render->DrawRectangle(bounds, 200, 200, 200, 255, true, false);
-			break;
 		case GuiControlState::NORMAL:
-			Engine::GetInstance().render->DrawRectangle(bounds, 0, 0, 255, 255, true, false);
+			if (normalTex)
+				Engine::GetInstance().render->DrawTextureForButtons(normalTex, bounds.x, bounds.y);
 			break;
 		case GuiControlState::FOCUSED:
-			Engine::GetInstance().render->DrawRectangle(bounds, 0, 0, 20, 255, true, false);
+			if (focusedTex)
+				Engine::GetInstance().render->DrawTextureForButtons(focusedTex, bounds.x, bounds.y);
 			break;
 		case GuiControlState::PRESSED:
-			Engine::GetInstance().render->DrawRectangle(bounds, 0, 255, 0, 255, true, false);
+			if (pressedTex)
+				Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
 			break;
 		}
 		
@@ -94,6 +113,7 @@ bool GuiControlButton::Update(float dt)
 		}
 		
 	}
+
 
 
 	return false;

@@ -147,10 +147,7 @@ bool Scene::Awake()
 		}
 	}
 
-	// Instantiate a new GuiControlButton in the Scene
-	// Button
-//	SDL_Rect btPos = { 520, 350, 120,20 };
-//	guiBt = (GuiControlButton*) Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
+	
 
 	return ret;
 }
@@ -159,8 +156,11 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//Cargar Texturas splash screen
-	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/SplashScreen2.png");
+	introScreenTexture = Engine::GetInstance().textures->Load("Assets/Textures/Intro_Screen.png");
 	introTextoTexture = Engine::GetInstance().textures->Load("Assets/Textures/IntroTexto2.png"); //png reescale to 853 X 512 to work with camera zoom
+	settingsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Settings_Background.png");
+	creditsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Credits_Background.png");
+	pauseTexture = Engine::GetInstance().textures->Load("Assets/Textures/Pause_Background.png");
 
 	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
@@ -180,6 +180,73 @@ bool Scene::Start()
 	Engine::GetInstance().ffmpeg->Awake();
 	Engine::GetInstance().ffmpeg->Start(); 
 
+	// Instantiate a new GuiControlButton in the Scene
+// Button
+	SDL_Rect NewGamePos = { 580, 350, 120,20 };
+	SDL_Rect ContinuePos = { 580, 400, 120,20 };
+	SDL_Rect SettingsPos = { 580, 450, 120,20 };
+	SDL_Rect CreditsPos = { 580, 500, 120,20 };
+	SDL_Rect ExitGamePos = { 580, 550, 120,20 };
+
+	NewGameNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGameNormal.png");
+	NewGameFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGameFocused.png");
+	NewGamePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGamePressed.png");
+	NewGameDOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGameNormal.png");
+
+	ContinueNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ContinueNormal.png");
+	ContinueFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ContinueFocused.png");
+	ContinuePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ContinuePressed.png");
+	ContinueOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ContinueNormalOff.png");
+
+	SettingsNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SettingsNormal.png");
+	SettingsFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SettingsFocused.png");
+	SettingsPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SettingsPressed.png");
+	SettingsOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SettingsNormal.png");
+
+	CreditsNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/CreditsNormal.png");
+	CreditsFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/CreditsFocused.png");
+	CreditsPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/CreditsPressed.png");
+	CreditsOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/CreditsNormal.png");
+
+	ExitNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
+	ExitFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitFocused.png");
+	ExitPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitPressed.png");
+	ExitOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
+
+	// Create the menu buttons
+	NewGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, " ", NewGamePos, this);
+	NewGame->SetTextures(NewGameNormal, NewGameFocused, NewGamePressed, NewGameDOff);
+
+	Continue = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, " ", ContinuePos, this);
+	Continue->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
+	Continue->SetState(GuiControlState::OFF);
+
+	Settings = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, " ", SettingsPos, this);
+	Settings->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
+
+	Credits = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, " ", CreditsPos, this);
+	Credits->SetTextures(CreditsNormal, CreditsFocused, CreditsPressed, CreditsOff);
+
+	ExitGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, " ", ExitGamePos, this);
+	ExitGame->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+
+	// Create the pause menu buttons
+	ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 350, 120,20 }, this);
+	ResumeGame->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
+	ResumeGame->SetState(GuiControlState::DISABLED);
+
+	BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 400, 120,20 }, this);
+	BackToTitle->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+	BackToTitle->SetState(GuiControlState::DISABLED);
+
+	SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 450, 120,20 }, this);
+	SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
+	SettingsPause->SetState(GuiControlState::DISABLED);
+
+	ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 500, 120,20 }, this);
+	ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+	ExitGamePause->SetState(GuiControlState::DISABLED);
+
 	//Draw player
 	dibujar = false;
 
@@ -195,9 +262,24 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (currentState == SceneState::GAMEPLAY) {
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			pauseMenuOn = !pauseMenuOn;
+			if (pauseMenuOn) {
+				EnablePauseButtons();
+			}
+			else {
+				DisablePauseButtons();
+			}
+		}
+	}
 	switch (currentState)
 	{
 	case SceneState::INTRO_SCREEN:
+
+		if (hasStartedGame && Continue->state == GuiControlState::OFF) {
+			Continue->SetState(GuiControlState::NORMAL);
+		}
 
 		if (!introMusicPlaying) {
 
@@ -215,7 +297,7 @@ bool Scene::Update(float dt)
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
-			currentState = SceneState::TEXT_SCREEN;
+			SetCurrentState(SceneState::TEXT_SCREEN);
 			skipFirstInput = true;
 		}
 		//Check controller input
@@ -224,22 +306,44 @@ bool Scene::Update(float dt)
 			// SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
 			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
 				Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
-				currentState = SceneState::TEXT_SCREEN;
+				SetCurrentState(SceneState::TEXT_SCREEN);
 				skipFirstInput = true;
 			}
 		}
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) {
-			currentState = SceneState::GAMEPLAY;
+			SetCurrentState(SceneState::GAMEPLAY);
 		}
+		dibujar = true;
+		break;
+	case SceneState::SETTINGS_MENU:
+			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+				SetCurrentState(SceneState::INTRO_SCREEN);
+			}
+
+			DrawCurrentScene();
+
+			break;
+	case SceneState::CREDITS_MENU:
+			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+				SetCurrentState(SceneState::INTRO_SCREEN);
+			}
+
+			DrawCurrentScene();
+
+			break;
+	case SceneState::EXIT_MENU:
+		break;
+	case SceneState::BACKTOTITTLE_MENU:
+		SetCurrentState(SceneState::INTRO_SCREEN);
 		break;
 	case SceneState::TEXT_SCREEN:
 		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test3.mp4");
 
-		currentState = SceneState::GAMEPLAY;
+		SetCurrentState(SceneState::GAMEPLAY);
 		// Original keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
-			currentState = SceneState::GAMEPLAY;
+			SetCurrentState(SceneState::GAMEPLAY);
 		}
 		//Check controller input
 		if (Engine::GetInstance().IsControllerConnected()) {
@@ -247,42 +351,44 @@ bool Scene::Update(float dt)
 			// SDL_CONTROLLER_BUTTON_A corresponds to the bottom button (X on PlayStation, A on Xbox)
 			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A)) {
 				Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
-				currentState = SceneState::GAMEPLAY;
+				SetCurrentState(SceneState::GAMEPLAY);
 			}
 		}
 		break;
 	case SceneState::GAMEPLAY:
-		if (currentMusic != "caronte") {
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
-			currentMusic = "caronte";
-		}
-		for (auto puzzle : mosaicPuzzleList) {
-			puzzle->Update(dt);
-		}
-		//Make the camera movement independent of framerate
-		float camSpeed = 1;
-		//Implement a method that repositions the player in the map with a mouse click
 
-		//Get mouse position and obtain the map coordinate
-		int scale = Engine::GetInstance().window.get()->GetScale();
-		Vector2D mousePos = Engine::GetInstance().input.get()->GetMousePosition();
-		Vector2D mouseTile = Engine::GetInstance().map.get()->WorldToMap(mousePos.getX() - Engine::GetInstance().render.get()->camera.x / scale,
-			mousePos.getY() - Engine::GetInstance().render.get()->camera.y / scale);
+		if (!pauseMenuOn) {
+			if (currentMusic != "caronte") {
+				Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
+				currentMusic = "caronte";
+			}
+			for (auto puzzle : mosaicPuzzleList) {
+				puzzle->Update(dt);
+			}
+			//Make the camera movement independent of framerate
+			float camSpeed = 1;
+			//Implement a method that repositions the player in the map with a mouse click
 
-		//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
-		Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(), mouseTile.getY());
-		SDL_Rect rect = { 0,0,32,32 };
-		/*Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
-			highlightTile.getX(),
-			highlightTile.getY(),
-			&rect);*/
+			//Get mouse position and obtain the map coordinate
+			int scale = Engine::GetInstance().window.get()->GetScale();
+			Vector2D mousePos = Engine::GetInstance().input.get()->GetMousePosition();
+			Vector2D mouseTile = Engine::GetInstance().map.get()->WorldToMap(mousePos.getX() - Engine::GetInstance().render.get()->camera.x / scale,
+				mousePos.getY() - Engine::GetInstance().render.get()->camera.y / scale);
 
-		// saves the tile pos for debugging purposes
-		if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
-			tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
-			once = true;
+			//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
+			Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(), mouseTile.getY());
+			SDL_Rect rect = { 0,0,32,32 };
+			/*Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
+				highlightTile.getX(),
+				highlightTile.getY(),
+				&rect);*/
+
+				// saves the tile pos for debugging purposes
+			if (mouseTile.getX() >= 0 && mouseTile.getY() >= 0 || once) {
+				tilePosDebug = "[" + std::to_string((int)mouseTile.getX()) + "," + std::to_string((int)mouseTile.getY()) + "] ";
+				once = true;
+			}
 		}
-		dibujar = true;
 		//If mouse button is pressed modify enemy position
 		/*if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
@@ -291,6 +397,7 @@ bool Scene::Update(float dt)
 
 		break;
 	}
+
 	return true;
 }
 
@@ -349,8 +456,15 @@ bool Scene::PostUpdate()
 	}
 
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+
+	if (exitRequested) {
+		ret = false; // Exit the game
+	}
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
 		ret = false;
+	}
+
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		LoadState();
 
@@ -384,6 +498,32 @@ bool Scene::CleanUp()
 		Engine::GetInstance().textures->UnLoad(introTextoTexture);
 		//introTextoTexture = nullptr;
 	}
+
+	Engine::GetInstance().textures->UnLoad(NewGameNormal);
+	Engine::GetInstance().textures->UnLoad(NewGameFocused);
+	Engine::GetInstance().textures->UnLoad(NewGamePressed);
+	Engine::GetInstance().textures->UnLoad(NewGameDOff);
+
+	Engine::GetInstance().textures->UnLoad(ContinueNormal);
+	Engine::GetInstance().textures->UnLoad(ContinueFocused);
+	Engine::GetInstance().textures->UnLoad(ContinuePressed);
+	Engine::GetInstance().textures->UnLoad(ContinueOff);
+
+	Engine::GetInstance().textures->UnLoad(SettingsNormal);
+	Engine::GetInstance().textures->UnLoad(SettingsFocused);
+	Engine::GetInstance().textures->UnLoad(SettingsPressed);
+	Engine::GetInstance().textures->UnLoad(SettingsOff);
+
+	Engine::GetInstance().textures->UnLoad(CreditsNormal);
+	Engine::GetInstance().textures->UnLoad(CreditsFocused);
+	Engine::GetInstance().textures->UnLoad(CreditsPressed);
+	Engine::GetInstance().textures->UnLoad(CreditsOff);
+
+	Engine::GetInstance().textures->UnLoad(ExitNormal);
+	Engine::GetInstance().textures->UnLoad(ExitFocused);
+	Engine::GetInstance().textures->UnLoad(ExitPressed);
+	Engine::GetInstance().textures->UnLoad(ExitOff);
+
 	for (auto puzzle : mosaicPuzzleList) {
 		puzzle->CleanUp();
 		delete puzzle; 
@@ -756,8 +896,44 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 {
 
 
-	if (control->id == 1) {
-		Engine::GetInstance().dialogoM->Texto("1"); // Call Text
+	switch (control->id)
+	{
+	case 2: // NewGame
+		currentState = SceneState::TEXT_SCREEN;
+		hasStartedGame = true;
+		DisableMenuButtons();
+		break;
+	case 3: // Continue
+		currentState = SceneState::GAMEPLAY;
+		DisableMenuButtons();
+		break;
+	case 4: // Settings
+		currentState = SceneState::SETTINGS_MENU;
+		DisableMenuButtons();
+		break;
+	case 5: // Credits
+		currentState = SceneState::CREDITS_MENU;
+		DisableMenuButtons();
+		break;
+	case 6: // Exit
+		exitRequested = true;
+		break;
+	case 7: // ResumeGame 
+		pauseMenuOn = false;
+		DisablePauseButtons();
+		break;
+	case 8: // BackToTitle 
+		SetCurrentState(SceneState::INTRO_SCREEN);
+		pauseMenuOn = false;
+		DisablePauseButtons();
+		break;
+	case 9: // SettingsPause 
+		currentState = SceneState::SETTINGS_MENU;
+		DisablePauseButtons();
+		break;
+	case 10: // ExitGamePause
+		exitRequested = true;
+		break;
 	}
 	return true;
 }
@@ -769,6 +945,9 @@ SceneState Scene::GetCurrentState() const
 
 void Scene::SetCurrentState(SceneState state)
 {
+	if (state == SceneState::INTRO_SCREEN) {
+		EnableMenuButtons();
+	}
 	currentState = state;
 }
 
@@ -782,11 +961,68 @@ void Scene::DrawCurrentScene()
 			Engine::GetInstance().render->DrawTexture(introScreenTexture, -50, 0);
 		}
 		break;
+	case SceneState::SETTINGS_MENU:
+		if (settingsTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(settingsTexture, -50, 0);
+		}
+		break;
+	case SceneState::CREDITS_MENU:
+		if (creditsTexture != nullptr)
+		{
+			Engine::GetInstance().render->DrawTexture(creditsTexture, -50, 0);
+		}
+		break;
 	case SceneState::TEXT_SCREEN:
 		if (introTextoTexture != nullptr)
 		{
 			Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
 		}
 		break;
+	case SceneState::GAMEPLAY:
+		if (pauseMenuOn) {
+			if (pauseTexture != nullptr) {
+				Engine::GetInstance().render->DrawTexture(pauseTexture, 0, 0);
+			}
+		}
+		break;
 	}
+
+}
+
+void Scene::DisableMenuButtons() {
+	if (NewGame) NewGame->SetState(GuiControlState::DISABLED);
+	if (Continue) Continue->SetState(GuiControlState::DISABLED);
+	if (Settings) Settings->SetState(GuiControlState::DISABLED);
+	if (Credits) Credits->SetState(GuiControlState::DISABLED);
+	if (ExitGame) ExitGame->SetState(GuiControlState::DISABLED);
+}
+
+void Scene::EnableMenuButtons() {
+	if (NewGame) NewGame->SetState(GuiControlState::NORMAL);
+	if (Continue) {
+		if (hasStartedGame) {
+			Continue->SetState(GuiControlState::NORMAL);
+		}
+		else {
+			Continue->SetState(GuiControlState::OFF);
+		}
+	}
+	if (Settings) Settings->SetState(GuiControlState::NORMAL);
+	if (Credits) Credits->SetState(GuiControlState::NORMAL);
+	if (ExitGame) ExitGame->SetState(GuiControlState::NORMAL);
+}
+
+void Scene::DisablePauseButtons() {
+	if (ResumeGame) ResumeGame->SetState(GuiControlState::DISABLED);
+	if (BackToTitle) BackToTitle->SetState(GuiControlState::DISABLED);
+	if (SettingsPause) SettingsPause->SetState(GuiControlState::DISABLED);
+	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::DISABLED);
+}
+
+void Scene::EnablePauseButtons() {
+	if (ResumeGame) ResumeGame->SetState(GuiControlState::NORMAL);
+	if (BackToTitle) BackToTitle->SetState(GuiControlState::NORMAL);
+	if (SettingsPause) SettingsPause->SetState(GuiControlState::NORMAL);
+	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::NORMAL);
 }

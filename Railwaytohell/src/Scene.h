@@ -27,7 +27,12 @@ enum class SceneState
 {
 	INTRO_SCREEN,
 	TEXT_SCREEN,
-	GAMEPLAY
+	GAMEPLAY,
+	PAUSE_MENU,
+	SETTINGS_MENU,
+	CREDITS_MENU,
+	EXIT_MENU,
+	BACKTOTITTLE_MENU
 };
 
 class Scene : public Module
@@ -86,6 +91,13 @@ public:
 	bool OpenDoors() { return OpenDoor; }
 	void SetOpenDoors() {  OpenDoor = true; }
 
+	void DisableMenuButtons(); 
+	void EnableMenuButtons();
+
+	void DisablePauseButtons();
+	void EnablePauseButtons();
+
+	bool IsPaused() const { return pauseMenuOn; }
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;
@@ -141,6 +153,10 @@ public:
 	//Loading textures
 	SDL_Texture* introScreenTexture = nullptr;
 	SDL_Texture* introTextoTexture = nullptr;
+	SDL_Texture* settingsTexture = nullptr;
+	SDL_Texture* creditsTexture = nullptr;
+	SDL_Texture* pauseTexture = nullptr;
+
 	float introTimeElapsed;
 	//boss fight camera
 	bool BossBattle = false;
@@ -173,8 +189,55 @@ private:
 	//change scenes
 	SceneState currentState;
 
-	//Declare a GUI Control Button 
-	GuiControlButton* guiBt;
+	//Declare GUI Control Buttons 
+	GuiControlButton* NewGame;
+	GuiControlButton* Continue;
+	GuiControlButton* Settings;
+	GuiControlButton* Credits;
+	GuiControlButton* ExitGame;
+
+	//Pause Menu Buttons
+	GuiControlButton* ResumeGame;
+	GuiControlButton* BackToTitle;
+	GuiControlButton* SettingsPause;
+	GuiControlButton* ExitGamePause;
+
+	// Buttons Texture
+	SDL_Texture* NewGameNormal = nullptr;
+	SDL_Texture* NewGameFocused = nullptr;
+	SDL_Texture* NewGamePressed = nullptr;
+	SDL_Texture* NewGameDOff = nullptr;
+
+	SDL_Texture* ContinueNormal = nullptr;
+	SDL_Texture* ContinueFocused = nullptr;
+	SDL_Texture* ContinuePressed = nullptr;
+	SDL_Texture* ContinueOff = nullptr;
+
+	SDL_Texture* SettingsNormal = nullptr;
+	SDL_Texture* SettingsFocused = nullptr;
+	SDL_Texture* SettingsPressed = nullptr;
+	SDL_Texture* SettingsOff = nullptr;
+
+	SDL_Texture* CreditsNormal = nullptr;
+	SDL_Texture* CreditsFocused = nullptr;
+	SDL_Texture* CreditsPressed = nullptr;
+	SDL_Texture* CreditsOff = nullptr;
+
+	SDL_Texture* ExitNormal = nullptr;
+	SDL_Texture* ExitFocused = nullptr;
+	SDL_Texture* ExitPressed = nullptr;
+	SDL_Texture* ExitOff = nullptr;
+
+	SDL_Rect NewGamePos = { 520, 300, 120,20 };
+	SDL_Rect ContinuePos = { 520, 350, 120,20 };
+	SDL_Rect SettingsPos = { 520, 400, 120,20 };
+	SDL_Rect CreditsPos = { 520, 450, 120,20 };
+	SDL_Rect ExitGamePos = { 520, 500, 120,20 };
+
+	bool hasStartedGame = false;
+	bool exitRequested = false;
+
+	bool pauseMenuOn = false;
 
 	Player* player;
 	Boss* boss;

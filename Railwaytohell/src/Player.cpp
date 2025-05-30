@@ -261,6 +261,10 @@ bool Player::Update(float dt)
         return true;
     }
 
+    if (Engine::GetInstance().scene->IsPaused()) {
+        return true; 
+    }
+
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {
         Engine::GetInstance().scene->ResetSkipInput();
         return true;
