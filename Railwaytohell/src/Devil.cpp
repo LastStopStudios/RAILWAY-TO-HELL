@@ -388,7 +388,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             lives--;
             LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
 
-            if (lives > 0) {
+            if (lives == 2) {
                 isTransforming = true;
 
                 if (isAttacking) {
