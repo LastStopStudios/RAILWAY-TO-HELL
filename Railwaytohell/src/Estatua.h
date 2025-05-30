@@ -23,9 +23,8 @@ public:
 		this->parameters = parameters;
 	}
 
-	const std::string& GetType() const { return Type; }
-
 	bool CleanUp();
+
 private:
 
 public:
@@ -39,7 +38,5 @@ private:
 	Animation idle, activated;
 
 	PhysBody* pbody;
-
-	std::string Type;
 };
 

@@ -28,7 +28,6 @@ bool Estatua::Start() {
 	position.setY(parameters.attribute("y").as_int());
 	texW = parameters.attribute("w").as_int();
 	texH = parameters.attribute("h").as_int();
-	Type = parameters.attribute("name").as_string();
 
 	//Load animations
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
@@ -62,12 +61,8 @@ bool Estatua::Update(float dt){
 		return false;
 	}
 
-	if (GetType() == "estatua1") {
-		if (Engine::GetInstance().entityManager->estatua1){currentAnimation = &activated;}
-	}
-
-	if (GetType() == "estatua2") {
-		if (Engine::GetInstance().entityManager->estatua2) { currentAnimation = &activated; }
+	if (Engine::GetInstance().entityManager->estatua1){
+		currentAnimation = &activated;
 	}
 
 	return true;

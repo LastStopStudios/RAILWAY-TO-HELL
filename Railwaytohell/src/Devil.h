@@ -115,5 +115,7 @@ private:
     bool isTransforming = false;
 
     // Lives system
-    int lives = 3; // 3 lives for 3 phases
+    int lives = 3;
+    int live1 = 1, live2, live3; // Phase 1: 1 hit to transform, Phase 2: 1 hit to die
+
 };

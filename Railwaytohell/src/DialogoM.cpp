@@ -219,6 +219,7 @@ void DialogoM::UpdateTextAnimation(float dt)
 		}
 		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 12) {//UI Lives
 			bossFightReady = true;
+			Engine::GetInstance().ui->fase1 = true;//Put live boss UI from Phase 2 in screen
 			Engine::GetInstance().ui->figth3 = true;//show boss2 health
 		}
 

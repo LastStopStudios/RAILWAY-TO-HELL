@@ -14,6 +14,9 @@ Devil::Devil() : Entity(EntityType::DEVIL)
 {
     currentPhase = 1;
     lives = 3; // 3 lives for 3 phases
+    live1 = 1;//Live for phase 1
+    live2;//Live for phase 2
+    live3;//live for phase 3
 }
 
 Devil::~Devil() {
@@ -141,7 +144,10 @@ bool Devil::Update(float dt) {
 
     if (Engine::GetInstance().ui->figth3 == true) {
         //UI Lives
-        Engine::GetInstance().ui->vidab3 = lives;
+        if(currentPhase == 1){ Engine::GetInstance().ui->vidab3 = live1; }
+        if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = lives; /* live2; */ }
+        if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = lives; /*live3;*/ }
+        
     }
     return true;
 }
@@ -424,10 +430,14 @@ void Devil::HandleTransformation(float dt) {
 
         if (currentPhase == 2) {
             currentAnimation = &idle2;
+            Engine::GetInstance().ui->fase1 = false;//Quit live boss UI from Phase 1 from the screen 
+            Engine::GetInstance().ui->fase2 = true;//Put live boss UI from Phase 2 in screen
             LOG("Devil entered Phase 2!");
         }
         else if (currentPhase == 3) {
             currentAnimation = &idle2;
+            Engine::GetInstance().ui->fase2 = false;//Quit live bar boss UI from Phase 2 from the screen 
+            Engine::GetInstance().ui->fase3 = true;//Put live bar boss UI from Phase 3 in screen
             LOG("Devil entered Phase 3!");
         }
 
@@ -539,9 +549,10 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         if (!Hiteado && !isTransforming) {
             Hiteado = true;
             lives--;
+            live1--;
             LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
 
-            if (lives == 2) {
+            if (live1 == 0) {
                 isTransforming = true;
 
                 if (isAttacking) {

@@ -43,7 +43,7 @@ private:
 
 public:
 	bool dialogoOn = false;
-	bool figth = false, figth2 = false, figth3 = false;
+	bool figth = false, figth2 = false, figth3 = false, fase1 = false, fase2 = false, fase3 = false;
 	int vidap, vidab1, vidab2, vidab3;//Entities health
 
 	//to get boss healt put in boss's update this
