@@ -35,13 +35,10 @@ bool Estatua::Start() {
 
 	currentAnimation = &idle;
 
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::KINEMATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH , (int)position.getY() + texH / 2, 0, 0, bodyType::KINEMATIC);
 
-	// Assign collider type
-	if (pbody != nullptr) {
-		pbody->listener = this;
-		pbody->ctype = ColliderType::ESTATUAS;
-	}
+	pbody->listener = this;
+	pbody->ctype = ColliderType::ESTATUAS;
 	
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
@@ -57,13 +54,22 @@ bool Estatua::Update(float dt){
 	}
 
 	if (pbody == nullptr) {
-		LOG("Enemy pbody is null!");
 		return false;
 	}
+
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
 	if (Engine::GetInstance().entityManager->estatua1){
 		currentAnimation = &activated;
 	}
+
+	
+
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+
+	currentAnimation->Update();
 
 	return true;
 }

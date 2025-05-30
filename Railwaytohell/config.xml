@@ -2296,7 +2296,7 @@
 	</scene5>
 	<scene6>
 		<map path="Assets/Maps/" name="EC.tmx" />
-		<visibility accessed="false" />
+		<visibility accessed="true" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -2413,6 +2413,18 @@
 					</animations>
 				</checkpoint>
 			</checkpoints>
+			<estatuas>
+				<estatua name="estatua" x="1400" y="2590" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
+					<animations>
+						<idle loop="false" speed="0.2">
+							<frame x="0" y="0" w="160" h="160" />
+						</idle>
+						<activated loop="false" speed="0.2">
+							<frame x="160" y="0" w="160" h="160" />
+						</activated>
+					</animations>
+				</estatua>
+			</estatuas>
 			<items>
 				<item name="Remember1" death="0" savedDeath="0" x="2150" y="1670" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="2" ref="remember1_item">
 					<animations>
@@ -2430,18 +2442,6 @@
 					</animations>
 				</item>
 			</items>
-			<estatuas>
-				<estatua name="estatua" x="1711" y="2736" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
-					<animations>
-						<idle loop="false" speed="0.2">
-							<frame x="0" y="0" w="160" h="160" />
-						</idle>
-						<activated loop="false" speed="0.2">
-							<frame x="160" y="0" w="160" h="160" />
-						</activated>
-					</animations>
-				</estatua>
-			</estatuas>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />

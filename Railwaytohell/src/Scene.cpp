@@ -112,6 +112,13 @@ bool Scene::Awake()
 		elevatorList.push_back(elevator);
 	}
 
+	for (pugi::xml_node estatuaNode = configParameters.child("entities").child("estatuas").child("estatua"); estatuaNode; estatuaNode = estatuaNode.next_sibling("estatua"))
+	{
+		Estatua* estatua = (Estatua*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ESTATUA);
+		estatua->SetParameters(estatuaNode);
+		estatuaList.push_back(estatua);
+	}
+
 	// Create a enemy using the entity manager 
 	for (pugi::xml_node enemyNode = configParameters.child("entities").child("enemies").child("enemy"); enemyNode; enemyNode = enemyNode.next_sibling("enemy"))
 	{

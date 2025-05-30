@@ -119,9 +119,6 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::DOORS:
 		entity = new Doors();
 		break;
-	case EntityType::ESTATUA:
-		entity = new Estatua();
-		break;
 	case EntityType::LEVER:
 		entity = new Levers();
 		break;
@@ -141,6 +138,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ELEVATORS:
 		entity = new Elevators();
 		entity->renderPriority = 5;
+		break;
+	case EntityType::ESTATUA:
+		entity = new Estatua();
 		break;
 	default:
 		break;

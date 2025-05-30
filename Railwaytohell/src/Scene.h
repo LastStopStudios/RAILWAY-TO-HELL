@@ -12,6 +12,7 @@
 #include "Item.h"
 #include "Caronte.h"
 #include "Doors.h"
+#include "Estatua.h"
 #include "Levers.h"
 #include "Elevators.h"
 #include "Projectiles.h"
@@ -120,6 +121,7 @@ public:
 	std::vector<Doors*> doorList;
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
+	std::vector<Estatua*> estatuaList;
 	std::vector<Bufon*> bufonList;
 	std::vector<Devil*> devilList;
 	std::vector<MosaicLever*> mosaicLeversList;
@@ -136,6 +138,7 @@ public:
 	std::vector<Doors*>& GetDoorsList() { return doorList; }
 	std::vector<Levers*>& GetLeversList() { return leverList; }
 	std::vector<Elevators*>& GetElevatorsList() { return elevatorList; }
+	std::vector<Estatua*>& GetEstatuaList() { return estatuaList; }
 	std::vector<Bufon*>& GetBufonList() { return bufonList; }
 	std::vector<MosaicLever*>& GetMosaicLeversList() { return mosaicLeversList; }
 	std::vector<MosaicPiece*>& GetMosaicPiecesList() { return mosaicPiecesList; }

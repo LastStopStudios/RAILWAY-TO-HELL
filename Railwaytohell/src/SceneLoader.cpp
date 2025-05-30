@@ -270,6 +270,16 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
         }
     }
 
+    pugi::xml_node estatuaNode = sceneNode.child("entities").child("estatuas");
+    if (estatuaNode) {
+        for (pugi::xml_node estatuNode = estatuaNode.child("estatua"); estatuNode; estatuNode = estatuNode.next_sibling("estatua"))
+        {
+            Estatua* estatua = (Estatua*)Engine::GetInstance().entityManager->CreateEntity(EntityType::ESTATUA);
+            estatua->SetParameters(estatuNode);
+            Engine::GetInstance().scene->GetEstatuaList().push_back(estatua);
+        }
+    }
+
     // Initialize enemies
     for (auto enemy : Engine::GetInstance().scene->GetEnemyList()) {
         enemy->Start();
@@ -319,6 +329,10 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
     for (auto devil : Engine::GetInstance().scene->GetDevilList()) {
         devil->Start();
     }
+    // Initialize statues
+    for (auto estatua : Engine::GetInstance().scene->GetEstatuaList()) {
+        estatua->Start();
+    }
 }
 
 void SceneLoader::UnLoadEnemiesItems() {
@@ -330,7 +344,7 @@ void SceneLoader::UnLoadEnemiesItems() {
 
     // Find all enemies and items (skip the player)
     for (auto entity : entityManager->entities) {
-        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::DEVIL || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::BUFON || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::MOSAIC_LEVER || entity->type == EntityType::MOSAIC_PIECE || entity->type == EntityType::MOSAIC_PUZZLE) {
+        if (entity->type == EntityType::TERRESTRE || entity->type == EntityType::EXPLOSIVO || entity->type == EntityType::ITEM || entity->type == EntityType::VOLADOR || entity->type == EntityType::DEVIL || entity->type == EntityType::BOSS || entity->type == EntityType::CARONTE || entity->type == EntityType::DOORS || entity->type == EntityType::LEVER || entity->type == EntityType::ELEVATORS || entity->type == EntityType::ESTATUA || entity->type == EntityType::BUFON || entity->type == EntityType::CHECKPOINT || entity->type == EntityType::MOSAIC_LEVER || entity->type == EntityType::MOSAIC_PIECE || entity->type == EntityType::MOSAIC_PUZZLE) {
             entitiesToRemove.push_back(entity);
         }
     }
@@ -356,6 +370,7 @@ void SceneLoader::UnLoadEnemiesItems() {
     Engine::GetInstance().scene->GetMosaicLeversList().clear();
     Engine::GetInstance().scene->GetMosaicPuzzleList().clear();
     Engine::GetInstance().scene->GetCheckpointsList().clear();
+    Engine::GetInstance().scene->GetEstatuaList().clear();
 }
 void SceneLoader::SetCurrentScene(int level)
 {
