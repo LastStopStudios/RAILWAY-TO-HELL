@@ -329,6 +329,7 @@ private:
 
 	bool ballhurt = false; //if player is hurt by ball attack
 	bool bufonjumphurt = false; //if player is hurt by bufon jump attack
+	bool demopunch = false; // if player is hurt by the punch of the demon in his first phase
 
 
 

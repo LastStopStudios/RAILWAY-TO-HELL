@@ -383,6 +383,31 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLAYER_ATTACK:
+        if (!Hiteado && !isTransforming) {
+            Hiteado = true;
+            lives--;
+            LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
+
+            if (lives > 0) {
+                isTransforming = true;
+
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (punchAttackArea) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                        punchAttackArea = nullptr;
+                    }
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                }
+
+                LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+            }
+            else {
+                LOG("Devil defeated!");
+                isDying = true;
+            }
+        }
+        break;
     case ColliderType::PLAYER_WHIP_ATTACK:
         if (!Hiteado && !isTransforming) {
             Hiteado = true;
