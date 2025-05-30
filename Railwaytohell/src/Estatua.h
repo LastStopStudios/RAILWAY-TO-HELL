@@ -19,11 +19,27 @@ public:
 
 	bool Update(float dt);
 
+	void SetParameters(pugi::xml_node parameters) {
+		this->parameters = parameters;
+	}
+
+	const std::string& GetType() const { return Type; }
+
 	bool CleanUp();
 private:
 
 public:
 
 private:
+	SDL_Texture* texture;
+	const char* texturePath;
+	int texW, texH;
+	pugi::xml_node parameters;
+	Animation* currentAnimation = nullptr;
+	Animation idle, activated;
+
+	PhysBody* pbody;
+
+	std::string Type;
 };
 

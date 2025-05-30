@@ -961,6 +961,9 @@ void Player::HandleHurt(float dt) {
                 else if(bufonjumphurt) {
                     lives -= 2;
                 }
+                else if (demopunch) {
+                    lives -= 1;
+                }
                 else {
                     lives -= 2;
                 }
@@ -1006,11 +1009,13 @@ void Player::HandleHurt(float dt) {
             hurted = false;
             freezeWhileHurting = false;
             ballhurt = false;
-            bufonjumphurt = false; 
+            bufonjumphurt = false;
+            demopunch = false;
             currentHurtDelay = 0.0f;
             isHurtDelayed = false;
             currentAnimation = &idle;
             idle.Reset();
+            hurt.Reset();
         }   
     }
     }
@@ -1046,7 +1051,11 @@ void Player::HandleDeath(float dt) {
     if (death.HasFinished()) {
 		hasDied = true;
         isDying = false;
+        isHurt = false;
+        hasHurtStarted = false;
+        hurted = false;
 		hasDeathStarted = false;
+        hurt.Reset();
         ResetLives();
         isWakingUp = true;
 		currentAnimation = &wakeupAnim;
@@ -2093,33 +2102,59 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-    case ColliderType::BOSS_ATTACK: {
+    case ColliderType::BOSS_ATTACK:
         if(!godMode){
-        if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
-            isHurtDelayed = true;
-            currentHurtDelay = 0.0f;
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
             //freezeWhileHurting = true;
 
             // Cancel any ongoing attack
-            if (isAttacking) {
-                isAttacking = false;
-                if (attackHitbox) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
-                    attackHitbox = nullptr;
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
                 }
-            }
-            if (isWhipAttacking) {
-                isWhipAttacking = false;
-                if (whipAttackHitbox) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
-                    whipAttackHitbox = nullptr;
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
                 }
             }
         }
-        }
-
         break;
-    }
+
+    case ColliderType::DEVIL_PUNCH_ATTACK1:
+        if (!godMode) {
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
+                demopunch = true;
+                //freezeWhileHurting = true;
+
+                // Cancel any ongoing attack
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
+                }
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
+                }
+            }
+        }
+        break;
+
     case ColliderType::PROJECTILE:
 
         if (Engine::GetInstance().entityManager->BBuffon) {//Stop the bullets from hurting the player when the boss is dead
@@ -2148,7 +2183,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
 
-    case ColliderType::BUFON_JUMP_ATTACK_AREA: {
+    case ColliderType::BUFON_JUMP_ATTACK_AREA:
         if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
             isHurtDelayed = true;
             currentHurtDelay = 0.0f;
@@ -2179,7 +2214,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
-    }
+
     case ColliderType::LEVER: {
         break;
     }

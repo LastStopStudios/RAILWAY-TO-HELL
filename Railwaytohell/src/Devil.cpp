@@ -507,11 +507,19 @@ void Devil::RenderSprite() {
     flip = isLookingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
     if (currentAnimation == &transform || currentPhase >= 2) {
-        offsetY = -130;
+        offsetY = -137;
         if (isLookingLeft) offsetX = -130;
         if (!isLookingLeft) offsetX = -100;
     }
 
+    if (currentAnimation == &idle2 ) {
+        if (isLookingLeft) offsetY = -137;
+        if (!isLookingLeft) offsetY = -137;
+    }
+    if ( currentAnimation == &salto || currentAnimation == &land) {
+        if (isLookingLeft) offsetY = -425;
+        if (!isLookingLeft) offsetY = -425;
+    }
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
         (int)position.getX() + offsetX,
@@ -528,6 +536,31 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLAYER_ATTACK:
+        if (!Hiteado && !isTransforming) {
+            Hiteado = true;
+            lives--;
+            LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
+
+            if (lives == 2) {
+                isTransforming = true;
+
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (punchAttackArea) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                        punchAttackArea = nullptr;
+                    }
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                }
+
+                LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+            }
+            else {
+                LOG("Devil defeated!");
+                isDying = true;
+            }
+        }
+        break;
     case ColliderType::PLAYER_WHIP_ATTACK:
         if (!Hiteado && !isTransforming) {
             Hiteado = true;

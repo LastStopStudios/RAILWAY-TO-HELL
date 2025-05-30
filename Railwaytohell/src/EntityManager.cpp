@@ -52,6 +52,8 @@ bool EntityManager::Start() {
 	bool ret = true; 
 	dialogo = false;
 	Ascensor = true;
+	estatua1 = false;
+	estatua2 = false;
 	//Iterates over the entities and calls Start
 	for(const auto entity : entities)
 	{
