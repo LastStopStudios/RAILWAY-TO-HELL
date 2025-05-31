@@ -38,11 +38,11 @@ public:
 
     // Combat methods
     void CreatePunchAttack();
-    void CreateJumpAttack(); 
-    void UpdateJumpAttack(float dt); 
+    void CreateJumpAttack();
+    void UpdateJumpAttack(float dt);
     void UpdatePosition();
     void RenderSprite();
-    void RenderShadow(); 
+    void RenderShadow();
     void ResetPath();
 
 private:
@@ -52,7 +52,7 @@ private:
     void HandlePhase3(float distanceToPlayer, float dx, float dt);
     void HandleTransformation(float dt);
     void UpdatePunchAttackArea();
-    void UpdateJumpAttackArea(); 
+    void UpdateJumpAttackArea();
     void ResizeCollisionForPhase2();
 
     // Entity identification
@@ -92,9 +92,10 @@ private:
     int currentPhase = 1;
     bool isAttacking = false;
     bool canAttack = true;
-    float attackCooldown = 3000.0f; // 3 seconds
+    float attackCooldown = 1000.0f; // 3 seconds
     float currentAttackCooldown = 0.0f;
 
+    // Jump attack variables
     bool isJumping = false;
     bool isLanding = false;
     bool jumpAttackActive = false;
@@ -109,6 +110,12 @@ private:
     // Nuevas variables para el movimiento horizontal
     bool horizontalMovementStarted = false;
     float horizontalDistance = 0.0f;
+
+    // Cosas para el ataque de cola de la F2
+    void CreateTailAttack();
+    void UpdateTailAttackArea();
+    PhysBody* tailAttackArea;
+    bool isTailAttacking = false;
 
     // State management
     bool isDying = false;

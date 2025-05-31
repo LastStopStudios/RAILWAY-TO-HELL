@@ -57,6 +57,7 @@ enum class ColliderType {
 	DEVIL_PUNCH_ATTACK1,
 	DEVIL_JUMP_ATTACK2,
 	ESTATUAS,
+	DEVIL_TAIL_ATTACK,
 	UNKNOWN
 	// ..
 };
