@@ -204,7 +204,7 @@ void Mapa::ShowMap() {
 	//SDL_Rect dstRect2 = { posx,posy, 40, 40 }; //Position and scale character icon
 	
 
-	//SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
+	SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);//render map
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);//render character icon
 	for (const auto& negro : negro)// Iterate through all the maps
@@ -306,7 +306,7 @@ void Mapa::LoadMap(){
 	CoverXML(); //needs fixing
 
 	//Textures to load
-	fondo = Engine::GetInstance().textures->Load("Assets/Textures/mapa/MapBackground.png "); //Load texture for map background
+	fondo = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Background.png "); //Load texture for map background
 	mapa = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Mapa.png"); //Load texture for map
 	//cobertura = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Cobertura.png"); //Load black texture to cover unknow parts of the map
 	MNegro = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black.png"); //Load black texture to cover unknow parts of the map
