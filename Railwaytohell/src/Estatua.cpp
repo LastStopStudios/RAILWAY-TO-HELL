@@ -74,6 +74,14 @@ bool Estatua::Update(float dt){
 	return true;
 }
 
+void Estatua::OnCollision(PhysBody* physA, PhysBody* physB) {
+
+}
+
+void Estatua::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
+
+}
+
 bool Estatua::CleanUp()
 {
 
