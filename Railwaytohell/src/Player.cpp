@@ -1205,6 +1205,8 @@ void Player::UpdateMeleeAttack(float dt) {
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (attackButtonPressed && canAttack && !isAttacking && !isWhipAttacking && !isDashing && !isHurt) {
 
+        LOG("Golpisa");
+
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
 
         isAttacking = true;
