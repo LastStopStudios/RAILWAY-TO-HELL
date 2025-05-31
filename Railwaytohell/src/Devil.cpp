@@ -50,6 +50,10 @@ bool Devil::Start() {
     idle2.LoadAnimations(parameters.child("animations").child("idle2"));
     salto.LoadAnimations(parameters.child("animations").child("salto"));
     land.LoadAnimations(parameters.child("animations").child("land"));
+    colatazo.LoadAnimations(parameters.child("animations").child("colatazo"));
+    transform2.LoadAnimations(parameters.child("animations").child("transform2"));
+    idle3.LoadAnimations(parameters.child("animations").child("idle3"));
+    attack.LoadAnimations(parameters.child("animations").child("attack"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -435,7 +439,7 @@ void Devil::HandleTransformation(float dt) {
             LOG("Devil entered Phase 2!");
         }
         else if (currentPhase == 3) {
-            currentAnimation = &idle2;
+            currentAnimation = &idle3;
             Engine::GetInstance().ui->fase2 = false;//Quit live bar boss UI from Phase 2 from the screen 
             Engine::GetInstance().ui->fase3 = true;//Put live bar boss UI from Phase 3 in screen
             LOG("Devil entered Phase 3!");
@@ -529,6 +533,11 @@ void Devil::RenderSprite() {
     if ( currentAnimation == &salto || currentAnimation == &land) {
         if (isLookingLeft) offsetY = -425;
         if (!isLookingLeft) offsetY = -425;
+       
+    }
+    if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation == &attack) {
+        if (isLookingLeft) offsetY = -325;
+        if (!isLookingLeft) offsetY = -325;
     }
     Engine::GetInstance().render.get()->DrawTexture(
         texture,

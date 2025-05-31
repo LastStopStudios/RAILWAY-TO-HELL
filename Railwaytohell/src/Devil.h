@@ -79,7 +79,7 @@ private:
 
     // Animation system
     Animation* currentAnimation = nullptr;
-    Animation idle, walk, punch, defeat, transform, idle2, salto, land;
+    Animation idle, walk, punch, defeat, transform, idle2, salto, land, colatazo, transform2, idle3, attack;
 
     // Physics bodies
     PhysBody* pbody;
