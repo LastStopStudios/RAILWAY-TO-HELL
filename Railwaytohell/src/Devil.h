@@ -38,11 +38,11 @@ public:
 
     // Combat methods
     void CreatePunchAttack();
-    void CreateJumpAttack(); // New jump attack method
-    void UpdateJumpAttack(float dt); // Update jump attack logic
+    void CreateJumpAttack(); 
+    void UpdateJumpAttack(float dt); 
     void UpdatePosition();
     void RenderSprite();
-    void RenderShadow(); // New method to render shadow
+    void RenderShadow(); 
     void ResetPath();
 
 private:
@@ -52,7 +52,7 @@ private:
     void HandlePhase3(float distanceToPlayer, float dx, float dt);
     void HandleTransformation(float dt);
     void UpdatePunchAttackArea();
-    void UpdateJumpAttackArea(); // New method for jump attack area
+    void UpdateJumpAttackArea(); 
     void ResizeCollisionForPhase2();
 
     // Entity identification
@@ -84,7 +84,7 @@ private:
     // Physics bodies
     PhysBody* pbody;
     PhysBody* punchAttackArea;
-    PhysBody* jumpAttackArea; // New attack area for jump attack
+    PhysBody* jumpAttackArea;
 
     Pathfinding* pathfinding;
 
@@ -95,19 +95,20 @@ private:
     float attackCooldown = 3000.0f; // 3 seconds
     float currentAttackCooldown = 0.0f;
 
-    // Jump attack system
     bool isJumping = false;
     bool isLanding = false;
     bool jumpAttackActive = false;
-    float jumpStartY = 0.0f;
-    float jumpHeight = 100000000000.0f; // Height of the jump in pixels
-    float jumpSpeed = 30.0f; // Speed of the jump
-    Vector2D shadowPosition; // Position of the shadow on ground
-    Vector2D targetLandingPos; // Where the devil will land
+    Vector2D jumpStartPos;        // Posición inicial del salto
+    Vector2D targetLandingPos;    // Posición objetivo (jugador)
+    Vector2D shadowPosition;      // Posición de la sombra
     bool shadowVisible = false;
-    bool jumpStarted = false;        // Track if actual jump physics have started
-    bool isOnGround = false;         // Track ground contact
-    bool landingFrameHeld = false;   // Track if we're holding the first landing frame
+    bool hasReachedPeak = false;        // Si ya llegó al punto más alto del salto
+    bool startFalling = false;         // Si debe empezar a caer en picado
+    float targetPlayerX = 0.0f;        // Posición X objetivo del jugador
+
+    // Nuevas variables para el movimiento horizontal
+    bool horizontalMovementStarted = false;
+    float horizontalDistance = 0.0f;
 
     // State management
     bool isDying = false;
@@ -117,5 +118,4 @@ private:
     // Lives system
     int lives = 3;
     int live1 = 1, live2, live3; // Phase 1: 1 hit to transform, Phase 2: 1 hit to die
-
 };
