@@ -2397,7 +2397,7 @@
 				</animations>
 			</player>
 			<checkpoints>
-				<checkpoint name="checkpoint6" x="1886" y="665" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="6">
+				<checkpoint name="checkpoint6" x="1886" y="668" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="6">
 					<animations>
 						<idle loop="false" speed="0.2">
 							<frame x="0" y="224" w="80" h="128" />
@@ -2414,7 +2414,7 @@
 				</checkpoint>
 			</checkpoints>
 			<estatuas>
-				<estatua name="estatua" x="1400" y="2590" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
+				<estatua name="estatua" x="1700" y="2590" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.2">
 							<frame x="0" y="0" w="160" h="160" />

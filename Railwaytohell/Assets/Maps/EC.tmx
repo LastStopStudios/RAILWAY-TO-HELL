@@ -74561,9 +74561,9 @@
    <tile gid="16417"/>
    <tile gid="16418"/>
    <tile gid="16419"/>
-   <tile gid="20606"/>
+   <tile/>
    <tile gid="20607"/>
-   <tile gid="20608"/>
+   <tile/>
    <tile gid="16413"/>
    <tile gid="16414"/>
    <tile gid="16415"/>
@@ -74681,9 +74681,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20765"/>
-   <tile gid="20766"/>
-   <tile gid="20767"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -74801,9 +74801,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20924"/>
-   <tile gid="20925"/>
-   <tile gid="20926"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -74921,9 +74921,9 @@
    <tile gid="19240"/>
    <tile gid="19714"/>
    <tile/>
-   <tile gid="21083"/>
-   <tile gid="21084"/>
-   <tile gid="21085"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="19238"/>
@@ -75041,9 +75041,9 @@
    <tile gid="19399"/>
    <tile gid="19873"/>
    <tile/>
-   <tile gid="21242"/>
-   <tile gid="21243"/>
-   <tile gid="21244"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile gid="19397"/>
@@ -144133,7 +144133,7 @@
   </data>
  </layer>
  <objectgroup id="17" name="Ascensores" visible="0">
-  <object id="306" x="2496" y="640" width="96" height="144.75">
+  <object id="306" x="2464" y="640" width="96" height="144.75">
    <properties>
     <property name="Sensor" value="ECP1AP2"/>
    </properties>
@@ -144143,12 +144143,12 @@
     <property name="Sensor" value="ECP2AP1"/>
    </properties>
   </object>
-  <object id="308" x="1056" y="1600" width="96" height="147.125">
+  <object id="308" x="1184" y="1600" width="96" height="147.125">
    <properties>
     <property name="Sensor" value="ECP2AP3"/>
    </properties>
   </object>
-  <object id="309" x="1056" y="2592" width="96" height="147.25">
+  <object id="309" x="1184" y="2592" width="96" height="147.25">
    <properties>
     <property name="Sensor" value="ECP3AP2"/>
    </properties>
@@ -144156,12 +144156,12 @@
  </objectgroup>
  <objectgroup id="32" name="Giro" visible="0"/>
  <objectgroup id="27" name="Dialogos" visible="0">
-  <object id="364" x="2688" y="416" width="32" height="480">
+  <object id="364" x="2688" y="384" width="32" height="480">
    <properties>
     <property name="ID" value="1"/>
    </properties>
   </object>
-  <object id="365" x="1536" y="2496" width="32" height="352">
+  <object id="365" x="1536" y="2432" width="32" height="352">
    <properties>
     <property name="ID" value="3"/>
    </properties>

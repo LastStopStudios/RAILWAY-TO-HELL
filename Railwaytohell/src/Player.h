@@ -68,9 +68,9 @@ public:
 	{"IT1L2IE1L2",5,3123,665,true,false},
 	{"IT1L2ITL1L2",9,2648,2414,true,false},
 	{"ECP1AP2",6,2571,1633,true,false},// Stairs EC
-	{"ECP2AP1",6,2542,663,true,false},// Stairs EC
-	{"ECP2AP3",6,1098,2622,true,false},// Stairs EC
-	{"ECP3AP2",6,1101,1615,true,false},// Stairs EC
+	{"ECP2AP1",6,2515,663,true,false},// Stairs EC
+	{"ECP2AP3",6,1230,2622,true,false},// Stairs EC
+	{"ECP3AP2",6,1230,1615,true,false},// Stairs EC
 	{"DE2L1BOSS1",3,1381,1573,true,true},// Elevator first floor first boss
 	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	{"IE1L2BOSS2",5,1400,1550,true,true},// Elevator first floor SECOND boss
