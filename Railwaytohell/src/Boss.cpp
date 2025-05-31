@@ -242,8 +242,7 @@ bool Boss::Update(float dt)
 
         //UI Lives
         Engine::GetInstance().ui->figth = false;
-        //glowing statue
-        Engine::GetInstance().entityManager->estatua1 = true;
+
 
         // When dying, don't process any other logic
         return true;

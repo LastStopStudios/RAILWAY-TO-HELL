@@ -58,16 +58,16 @@ bool Estatua::Update(float dt){
 	}
 
 	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
-	if (Engine::GetInstance().entityManager->estatua1){
+	if (Engine::GetInstance().entityManager->estatua2){
 		currentAnimation = &activated;
 	}
 
 	
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX() + texW, (int)position.getY(), &currentAnimation->GetCurrentFrame());
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 
 	currentAnimation->Update();
 

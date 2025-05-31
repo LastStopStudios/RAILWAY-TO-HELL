@@ -59,8 +59,7 @@ public:
 	bool Ascensor;
 	//Hurt bullets
 	bool BBuffon = true;
-	//Estatuas
-	bool estatua1;
+	//Estatua
 	bool estatua2;
 private:
 	bool isPendingToDelente = false;
