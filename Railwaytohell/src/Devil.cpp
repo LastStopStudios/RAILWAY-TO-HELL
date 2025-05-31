@@ -600,11 +600,11 @@ void Devil::CreatePunchAttack() {
     if (!punchAttackArea) {
         int punchX = position.getX() + texW / 2;
         int punchY = position.getY() + texH / 2;
-        punchX += isLookingLeft ? -10 : 10;
+        punchX += isLookingLeft ? -20 : 20;
 
         punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             punchX, punchY,
-            texW + 20, texH / 2,
+            30,30,
             bodyType::KINEMATIC
         );
 
