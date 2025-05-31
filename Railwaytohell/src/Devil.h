@@ -117,5 +117,6 @@ private:
 
     // Lives system
     int lives = 3;
-    int live1 = 1, live2, live3; // Phase 1: 1 hit to transform, Phase 2: 1 hit to die
+    int live1 = 1, live2 = 6, live3 = 7; // Phase 1: 1 hit to transform, Phase 2: 2 hit to phase 3, phase 3 3 hits to die
+
 };

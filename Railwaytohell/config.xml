@@ -2296,7 +2296,7 @@
 	</scene5>
 	<scene6>
 		<map path="Assets/Maps/" name="EC.tmx" />
-		<visibility accessed="true" />
+		<visibility accessed="false" />
 		<entities>
 			<player x="766" y="429" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
