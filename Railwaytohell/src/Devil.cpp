@@ -665,115 +665,115 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Golpeado");
         LOG("Hiteado %s", Hiteado ? "true" : "false");
         if (!Hiteado && !isTransforming) {
-           // lives--;
-            if(currentPhase == 1){ 
+            // lives--;
+            if (currentPhase == 1) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
                 live1--;
                 if (live1 <= 0) {
                     isTransforming = true;
 
-            // Cancel tail attack if active
-            if (isTailAttacking) {
-                isTailAttacking = false;
-                if (tailAttackArea) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
-                    tailAttackArea = nullptr;
+                    // Cancel tail attack if active
+                    if (isTailAttacking) {
+                        isTailAttacking = false;
+                        if (tailAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                            tailAttackArea = nullptr;
+                        }
+                        colatazo.Reset();
+                    }
+
+                    if (live1 == 0) {
+                        isTransforming = true;
+
+                        // Cancel current attack
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+
+                            // Cancel jump attack if active
+                            if (jumpAttackActive) {
+                                jumpAttackActive = false;
+                                isJumping = false;
+                                isLanding = false;
+                                shadowVisible = false;
+                                if (jumpAttackArea) {
+                                    Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                    jumpAttackArea = nullptr;
+                                }
+                                pbody->body->SetGravityScale(1.0f);
+                            }
+
+                            LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                        }
+                    }
+                    if (currentPhase == 2) {
+                        LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
+                        live2--;
+                        if (live2 <= 0) {
+                            isTransforming = true;
+
+                            // Cancel current attack if active
+                            if (isAttacking) {
+                                isAttacking = false;
+                                if (punchAttackArea) {
+                                    Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                    punchAttackArea = nullptr;
+                                }
+                                pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                            }
+                            // Cancel jump attack if active
+                            if (jumpAttackActive) {
+                                jumpAttackActive = false;
+                                isJumping = false;
+                                isLanding = false;
+                                shadowVisible = false;
+                                if (jumpAttackArea) {
+                                    Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                    jumpAttackArea = nullptr;
+                                }
+                                pbody->body->SetGravityScale(1.0f);
+                            }
+
+                            LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                        }
+                    }
+                    if (currentPhase == 3) {
+                        LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
+                        live3--;
+                        if (live3 <= 0) {
+                            LOG("Devil defeated!");
+
+                            // Cancel current attack if active
+                            if (isAttacking) {
+                                isAttacking = false;
+                                if (punchAttackArea) {
+                                    Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                    punchAttackArea = nullptr;
+                                }
+                                pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                            }
+
+                            // Cancel jump attack if active
+                            if (jumpAttackActive) {
+                                jumpAttackActive = false;
+                                isJumping = false;
+                                isLanding = false;
+                                shadowVisible = false;
+                                if (jumpAttackArea) {
+                                    Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                    jumpAttackArea = nullptr;
+                                }
+                                pbody->body->SetGravityScale(1.0f);
+                            }
+
+                            isDying = true;
+                        }
+                    }
                 }
-                colatazo.Reset();
-            }
-
-            if (live1 == 0) {
-                isTransforming = true;
-
-                // Cancel current attack
-                if (isAttacking) {
-                    isAttacking = false;
-                    if (punchAttackArea) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                        punchAttackArea = nullptr;
-                    }
-
-                    // Cancel jump attack if active
-                    if (jumpAttackActive) {
-                        jumpAttackActive = false;
-                        isJumping = false;
-                        isLanding = false;
-                        shadowVisible = false;
-                        if (jumpAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                            jumpAttackArea = nullptr;
-                        }
-                        pbody->body->SetGravityScale(1.0f);
-                    }
-
-                    LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
-                }
-            }
-            if (currentPhase == 2) {
-                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
-                live2--;
-                if (live2 <= 0) {
-                    isTransforming = true;
-
-                    // Cancel current attack if active
-                    if (isAttacking) {
-                        isAttacking = false;
-                        if (punchAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                            punchAttackArea = nullptr;
-                        }
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-                    // Cancel jump attack if active
-                    if (jumpAttackActive) {
-                        jumpAttackActive = false;
-                        isJumping = false;
-                        isLanding = false;
-                        shadowVisible = false;
-                        if (jumpAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                            jumpAttackArea = nullptr;
-                        }
-                        pbody->body->SetGravityScale(1.0f);
-                    }
-
-                    LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
-                }
-            }
-            if (currentPhase == 3) {
-                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
-                live3--;
-                if (live3 <= 0) {
-                    LOG("Devil defeated!");
-                    
-                    // Cancel current attack if active
-                    if (isAttacking) {
-                        isAttacking = false;
-                        if (punchAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                            punchAttackArea = nullptr;
-                        }
-                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    }
-
-                    // Cancel jump attack if active
-                    if (jumpAttackActive) {
-                        jumpAttackActive = false;
-                        isJumping = false;
-                        isLanding = false;
-                        shadowVisible = false;
-                        if (jumpAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                            jumpAttackArea = nullptr;
-                        }
-                        pbody->body->SetGravityScale(1.0f);
-                    }
-
-                    isDying = true;
-                }
-            }
-        }
-        break;
+                break;
 
     case ColliderType::PLAYER_WHIP_ATTACK:
         if (!Hiteado && !isTransforming) {
@@ -825,9 +825,10 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
         }
         break;
+            }
+        }
     }
 }
-
 void Devil::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
