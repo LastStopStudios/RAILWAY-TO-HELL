@@ -4642,7 +4642,7 @@
 							<frame x="2592" y="544" w="288" h="288" />
 							<frame x="2880" y="544" w="288" h="288" />
 						</idle2>
-						<salto loop="true" speed="0.1">
+						<salto loop="true" speed="0.06">
 							<frame x="0" y="832" w="288" h="576" />
 							<frame x="288" y="832" w="288" h="576" />
 							<frame x="576" y="832" w="288" h="576" />

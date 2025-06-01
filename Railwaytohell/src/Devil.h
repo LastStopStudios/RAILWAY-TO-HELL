@@ -46,7 +46,7 @@ public:
     void ResetPath();
 
 private:
-    // Core methods for phase system
+    // Phase-specific behavior handlers
     void HandlePhase1(float distanceToPlayer, float dx, float dt);
     void HandlePhase2(float distanceToPlayer, float dx, float dt);
     void HandlePhase3(float distanceToPlayer, float dx, float dt);
@@ -70,7 +70,7 @@ private:
 
     // Rendering
     SDL_Texture* texture;
-    SDL_Texture* shadowTexture; // New shadow texture
+    SDL_Texture* shadowTexture;
     int texW, texH;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
@@ -91,28 +91,31 @@ private:
     int currentPhase = 1;
     bool isAttacking = false;
     bool canAttack = true;
-    float attackCooldown = 500.0f; // 3 seconds
+    float attackCooldown = 100.0f;
     float currentAttackCooldown = 0.0f;
 
-    // Jump attack variables
+    // Jump attack system
     bool isJumping = false;
     bool isLanding = false;
     bool jumpAttackActive = false;
-    Vector2D jumpStartPos;        // Posición inicial del salto
-    Vector2D targetLandingPos;    // Posición objetivo (jugador)
-    Vector2D shadowPosition;      // Posición de la sombra
+    Vector2D jumpStartPos;
+    Vector2D targetLandingPos;
+    Vector2D shadowPosition;
     bool shadowVisible = false;
-    bool hasReachedPeak = false;        // Si ya llegó al punto más alto del salto
-    bool startFalling = false;         // Si debe empezar a caer en picado
-    float targetPlayerX = 0.0f;        // Posición X objetivo del jugador
-    bool jumpPreparation = false;     
-    bool landingComplete = false;     
-    bool fallAnimationLocked = false; 
+    bool hasReachedPeak = false;
+    bool startFalling = false;
+    float targetPlayerX = 0.0f;
+    bool jumpPreparation = false;
+    bool landingComplete = false;
+    bool fallAnimationLocked = false;
     bool jumpAnimationLocked = false;
     bool horizontalMovementStarted = false;
     float horizontalDistance = 0.0f;
+    float maxJumpHeight = 1000.0f;
+    float currentJumpHeight = 0.0f;
+    bool hasReachedMaxHeight = false;
 
-    // Cosas para el ataque de cola de la F2
+    // Tail attack system
     void CreateTailAttack();
     void UpdateTailAttackArea();
     PhysBody* tailAttackArea;
@@ -120,11 +123,11 @@ private:
 
     // State management
     bool isDying = false;
-    bool Hiteado = false; // Collision flag
+    bool Hiteado = false;
     bool isTransforming = false;
 
     // Lives system
     int lives = 3;
-    int live1 = 1, live2 = 6, live3 = 7; // Phase 1: 1 hit to transform, Phase 2: 2 hit to phase 3, phase 3 3 hits to die
+    int live1 = 1, live2 = 6, live3 = 7;
 
 };

@@ -256,8 +256,8 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
-    const float TAIL_ATTACK_DISTANCE = 6.0f;
-    const float JUMP_ATTACK_DISTANCE = 10.0f;
+    const float TAIL_ATTACK_DISTANCE = 8.0f;
+    const float JUMP_ATTACK_DISTANCE = 100.0f;
 
     // Update attack cooldown
     if (!canAttack) {
@@ -313,14 +313,16 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
 
 void Devil::CreateJumpAttack() {
     jumpAttackActive = true;
-    jumpPreparation = true;        
-    isJumping = false;            
+    jumpPreparation = true;
+    isJumping = false;
     isLanding = false;
     landingComplete = false;
     fallAnimationLocked = false;
     canAttack = false;
     hasReachedPeak = false;
     startFalling = false;
+    hasReachedMaxHeight = false;
+    currentJumpHeight = 0.0f;
 
     // Target player position
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
@@ -359,7 +361,7 @@ void Devil::UpdateJumpAttack(float dt) {
         if (currentAnimation->GetCurrentFrameIndex() >= 6) {
             jumpPreparation = false;
             isJumping = true;
-            pbody->body->SetLinearVelocity(b2Vec2(0.0f, -20.0f));
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, -40.0f));
             pbody->body->SetGravityScale(1.0f);
         }
         return;
@@ -376,6 +378,8 @@ void Devil::UpdateJumpAttack(float dt) {
             shadowVisible = false;
             fallAnimationLocked = false;
             jumpAnimationLocked = false;
+            hasReachedMaxHeight = false;
+            currentJumpHeight = 0.0f;
 
             pbody->body->SetGravityScale(1.0f);
             currentAttackCooldown = attackCooldown;
@@ -390,8 +394,28 @@ void Devil::UpdateJumpAttack(float dt) {
         return;
     }
 
+    // Calculate current jump height
+    if (isJumping) {
+        currentJumpHeight = jumpStartPos.getY() - currentPos.getY();
+
+        // Check if reached maximum height
+        if (currentJumpHeight >= maxJumpHeight && !hasReachedMaxHeight) {
+            hasReachedMaxHeight = true;
+            hasReachedPeak = true;
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+
+            // Lock animation at frame 8
+            if (currentAnimation == &salto) {
+                currentAnimation->currentFrame = 8.0f;
+                jumpAnimationLocked = true;
+            }
+
+            LOG("Devil reached maximum jump height: %.2f", currentJumpHeight);
+        }
+    }
+
     // Check if reached peak of jump
-    if (!hasReachedPeak && currentVelocity.y >= 0 && isJumping) {
+    if (!hasReachedPeak && (currentVelocity.y >= 0 || hasReachedMaxHeight) && isJumping) {
         hasReachedPeak = true;
         Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
         targetPlayerX = playerPos.getX();
@@ -404,7 +428,7 @@ void Devil::UpdateJumpAttack(float dt) {
     }
 
     // Update animation during upward movement only
-    if (isJumping && !hasReachedPeak && !jumpAnimationLocked) {
+    if (isJumping && !hasReachedPeak && !jumpAnimationLocked && !hasReachedMaxHeight) {
         currentAnimation->Update();
     }
     else if (startFalling && fallAnimationLocked && currentAnimation == &land) {
@@ -444,7 +468,7 @@ void Devil::UpdateJumpAttack(float dt) {
         else {
             // Continue horizontal movement
             float horizontalDirection = (targetPlayerX > currentPos.getX()) ? 1.0f : -1.0f;
-            pbody->body->SetLinearVelocity(b2Vec2(horizontalDirection * 3.0f, 0.0f));
+            pbody->body->SetLinearVelocity(b2Vec2(horizontalDirection * 8.0f, 0.0f));
             pbody->body->SetGravityScale(0.0f);
 
             // Lock animation frame
@@ -488,6 +512,8 @@ void Devil::UpdateJumpAttack(float dt) {
             startFalling = false;
             fallAnimationLocked = false;
             jumpAnimationLocked = false;
+            hasReachedMaxHeight = false;
+            currentJumpHeight = 0.0f;
 
             pbody->body->SetLinearVelocity(b2Vec2(0, 0));
             pbody->body->SetGravityScale(1.0f);
