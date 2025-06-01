@@ -1106,7 +1106,7 @@
 			</checkpoints>
 			<mosaicPuzzle name="main_puzzle" solve_fx="Assets/Audio/Fx/puzzle_solved.wav" rotate_fx="Assets/Audio/Fx/piece_rotate.wav" />
 			<mosaicPieces>
-				<mosaicPiece name="mosaic_piece_1" x="1344" y="673" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_1" x="1344" y="670" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="1" piece_type="0" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="96" w="96" h="96" />
@@ -1118,7 +1118,7 @@
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_2" x="1746" y="649" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_2" x="1749" y="650" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="96" h="96" />
@@ -1130,7 +1130,7 @@
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_3" x="1975" y="570" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_3" x="1976" y="569" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="192" w="96" h="96" />
@@ -1142,7 +1142,7 @@
 						</rotating>
 					</animations>
 				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_4" x="2347" y="630" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
+				<mosaicPiece name="mosaic_piece_4" x="2348" y="631" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="288" w="96" h="96" />
