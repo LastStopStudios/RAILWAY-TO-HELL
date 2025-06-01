@@ -331,7 +331,7 @@ private:
 	bool bufonjumphurt = false; //if player is hurt by bufon jump attack
 	bool demopunch = false; // if player is hurt by the punch of the demon in his first phase
 
-
+	bool itempop = false;//PopUp Items
 
 	Animation slide;
 	SDL_Texture* slideTexture = nullptr;

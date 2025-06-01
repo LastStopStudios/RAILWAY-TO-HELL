@@ -59,6 +59,8 @@ bool UI::PostUpdate()
 	}
 
 	renderUI();
+
+	if (PopeadaTime) { PopUps(); }
 	return true;
 }
 
@@ -97,15 +99,29 @@ bool UI::CleanUp()
 
 void UI::LoadTUi()
 {
+	//Player
 	vidapl = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Empty.png"); //Load life of the player
 	vidapl2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Empty life of the player
+
+	//Bosses
 	vidaB1 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Noma_Full.png"); //Load boss 1 life 
 	vidaB2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Asmodeos_Full.png"); //Load boss 2 life 
 	vidaB3 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Satanas_Full.png"); //Load boss 3 life 
 	vidaB4 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Satanas_Full_V2.png"); //Load boss 4 life 
 	Evida = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Boss_Health_Heart_Empty.png"); //Load Empty boss life 
+
 	//amo = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load stamina of the player
-	//boss = Engine::GetInstance().textures->Load("Assets/Textures/UI "); //Load life of the player
+		
+	//PopUps
+	Ball = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load ball keyboard PopUp texture
+	Ball2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load ball Controller PopUp texture
+	Dash = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Dash keyboard PopUp texture
+	Dash2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Dash Controller PopUp texture
+	DJump = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Double jump keyboard PopUp texture
+	DJump2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Double jump Controller PopUp texture
+	Whip = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Whip keyboard PopUp texture
+	Whip2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Whip Controller PopUp texture
+	Puzzle = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/puzzle.png"); //Load Puzzle complete PopUp texture
 }
 
 void UI::renderUI()
@@ -115,7 +131,73 @@ void UI::renderUI()
 	if (figth2) { Boss2(); }
 	if (figth3) { Boss3(); }
 }
+void UI::PopUps() {
 
+	SDL_Rect PopRect = { 0,0, 1300, 800 }; //Position and scale Pop Up
+	Engine::GetInstance().entityManager->DialogoOn();//stop entities
+
+
+
+	if (Engine::GetInstance().IsControllerConnected()) {//controller input
+		switch (item)
+		{
+		case 1:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Ball2, nullptr, &PopRect);
+			break;
+		case 2:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Dash2, nullptr, &PopRect);
+			break;
+		case 3:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, DJump2, nullptr, &PopRect);
+			break;
+		case 4:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Whip2, nullptr, &PopRect);
+			break;
+		case 5:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Puzzle, nullptr, &PopRect);
+			break;
+		}
+	}
+	else {//Keyboard input
+		switch (item)
+		{
+		case 1:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Ball, nullptr, &PopRect);
+			break;
+		case 2:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Dash, nullptr, &PopRect);
+			break;
+		case 3:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, DJump, nullptr, &PopRect);
+			break;
+		case 4:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Whip, nullptr, &PopRect);
+			break;
+		case 5:
+			SDL_RenderCopy(Engine::GetInstance().render->renderer, Puzzle, nullptr, &PopRect);
+			break;
+		}
+	}
+
+	if (PopeadaTime) {
+		//End PopUp
+	// Check controller input
+		if (Engine::GetInstance().IsControllerConnected()) {
+			SDL_GameController* controller = Engine::GetInstance().GetGameController();
+			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
+				Engine::GetInstance().entityManager->DialogoOff();
+				PopeadaTime = false;
+			}
+		}
+		// keyboard input
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			Engine::GetInstance().entityManager->DialogoOff();
+			PopeadaTime = false;
+		}
+	}
+
+	
+}
 void UI::PJs() {
 	SDL_Rect dstRect = { posx,posy, w, h }; //Position and scale character health
 	SDL_Rect dstRect2 = { posx2,posy, w, h }; //Position and scale character health

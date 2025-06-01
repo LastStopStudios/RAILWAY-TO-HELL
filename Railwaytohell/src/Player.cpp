@@ -1034,6 +1034,8 @@ void Player::HandlePickup(float dt) {
             hasPickupStarted = false;
             idle.Reset();
             currentAnimation = &idle;
+            if(itempop){ Engine::GetInstance().ui->PopeadaTime = true;}
+            itempop = false;
             
         }
     }
@@ -1993,11 +1995,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Dash ability") {
                 Dash = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
+                Engine::GetInstance().ui->item = 2;
+                itempop = true;
 
             }
 			if (item && item->GetItemType() == "Double jump") {
 				doubleJump = true;
 				Engine::GetInstance().audio.get()->PlayFx(itemFX);
+                Engine::GetInstance().ui->item = 3;
+                itempop = true;
 			}
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
@@ -2048,6 +2054,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Ball") {
 				BallAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
+                Engine::GetInstance().ui->item = 1;
+                itempop = true;
             }
         }
         return;

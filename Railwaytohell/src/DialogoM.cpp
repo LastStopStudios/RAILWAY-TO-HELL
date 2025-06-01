@@ -208,19 +208,23 @@ void DialogoM::UpdateTextAnimation(float dt)
 		Engine::GetInstance().scene->DialogoOff(); // Return control to all entities
 		Engine::GetInstance().mapa->DialogoOff(); // Return control to Map
 
-		// If the dialogue was the boss fight dialogue (ID "1")
-		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UI Lives
+		// If the dialogue was X then...
+		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UI Lives Noma
 			bossFightReady = true;
 			Engine::GetInstance().ui->figth = true;//show boss1 health
 		}
-		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 5) {//UI Lives
+		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 5) {//UI Lives Bufon
 			bossFightReady = true;
 			Engine::GetInstance().ui->figth2 = true;//show boss2 health
 		}
-		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 12) {//UI Lives
+		if (lastDialogID == "1" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 12) {//UI Lives Devil
 			bossFightReady = true;
 			Engine::GetInstance().ui->fase1 = true;//Put live boss UI from Phase 2 in screen
 			Engine::GetInstance().ui->figth3 = true;//show boss2 health
+		}
+		if (lastDialogID == "2" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UPop Up Whip
+			Engine::GetInstance().ui->item = 4;//pickUp whip
+			Engine::GetInstance().ui->PopeadaTime = true;
 		}
 
 		ResetText();  // Reset the text system

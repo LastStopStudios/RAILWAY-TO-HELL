@@ -3,6 +3,7 @@
 #include "Audio.h"
 #include "Log.h"
 #include "Scene.h"
+#include "UI.h"
 
 MosaicPuzzle::MosaicPuzzle() : solved(false), solveFxId(0), rotateFxId(0)
 {
@@ -52,6 +53,8 @@ void MosaicPuzzle::RotatePiece(int pieceId)
         // Check if the puzzle is solved after rotation
         if (IsSolved() && !solved) {
             OnPuzzleSolved();
+            Engine::GetInstance().ui->item = 5;
+            Engine::GetInstance().ui->PopeadaTime = true;
         }
     }
 }
