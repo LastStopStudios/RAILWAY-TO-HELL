@@ -74,7 +74,6 @@ private:
     int texW, texH;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
-    // Configuration
     pugi::xml_node parameters;
 
     // Animation system
@@ -92,7 +91,7 @@ private:
     int currentPhase = 1;
     bool isAttacking = false;
     bool canAttack = true;
-    float attackCooldown = 1000.0f; // 3 seconds
+    float attackCooldown = 500.0f; // 3 seconds
     float currentAttackCooldown = 0.0f;
 
     // Jump attack variables
@@ -106,8 +105,10 @@ private:
     bool hasReachedPeak = false;        // Si ya llegó al punto más alto del salto
     bool startFalling = false;         // Si debe empezar a caer en picado
     float targetPlayerX = 0.0f;        // Posición X objetivo del jugador
-
-    // Nuevas variables para el movimiento horizontal
+    bool jumpPreparation = false;     
+    bool landingComplete = false;     
+    bool fallAnimationLocked = false; 
+    bool jumpAnimationLocked = false;
     bool horizontalMovementStarted = false;
     float horizontalDistance = 0.0f;
 
