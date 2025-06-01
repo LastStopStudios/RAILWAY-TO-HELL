@@ -1145,12 +1145,12 @@
 				<mosaicPiece name="mosaic_piece_4" x="2347" y="630" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="4" piece_type="3" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0" y="288" w="64" h="64" />
+							<frame x="0" y="288" w="96" h="96" />
 						</idle>
 						<rotating loop="false" speed="0.1">
-							<frame x="64" y="288" w="64" h="64" />
-							<frame x="128" y="288" w="64" h="64" />
-							<frame x="192" y="288" w="64" h="64" />
+							<frame x="64" y="288" w="96" h="96" />
+							<frame x="128" y="288" w="96" h="96" />
+							<frame x="192" y="288" w="96" h="96" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
