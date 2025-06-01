@@ -41,10 +41,14 @@ private:
 	void Boss2();//Only if there is a figth with Boss 2
 	void Boss3();//Only if there is a figth with Boss 3
 
+	void PopUps();//Show PopUps when items are pick up or puzzle is resolved
+
 public:
 	bool dialogoOn = false;
-	bool figth = false, figth2 = false, figth3 = false, fase1 = false, fase2 = false, fase3 = false;
+	bool PopeadaTime = false;//PopUp
+	bool figth = false, figth2 = false, figth3 = false, fase1 = false, fase2 = false, fase3 = false;//Bosses figth and phases
 	int vidap, vidab1, vidab2, vidab3;//Entities health
+	int item;
 
 	//to get boss healt put in boss's update this
 	/* if (Engine::GetInstance().ui->*figth with number* == true) {
@@ -63,8 +67,20 @@ private:
 	//Empty
 	SDL_Texture* vidapl2 = nullptr;//Empty Player health texture
 	SDL_Texture* Evida = nullptr;//Empty Boss health texture
+
 	//SDL_Texture* amo = nullptr;//stamina texture (Dash)
 	//SDL_Texture* boss = nullptr;//stamina texture (Dash)
+	
+	// PopUps
+	SDL_Texture* Ball = nullptr;// Ball keyboard texture
+	SDL_Texture* Ball2 = nullptr;// Ball controller texture
+	SDL_Texture* Dash = nullptr;// Dash  keyboard texture
+	SDL_Texture* Dash2 = nullptr;// Dash controller texture
+	SDL_Texture* DJump = nullptr;// Double Jump keyboard texture
+	SDL_Texture* DJump2 = nullptr;// Double controller texture
+	SDL_Texture* Whip = nullptr;// Whip  keyboard texture
+	SDL_Texture* Whip2 = nullptr;// Whip controller texture
+	SDL_Texture* Puzzle = nullptr;// Puzzle complete texture
 	//UI sizes
 	int w = 40, h = 40, w2, h2, wb=60, hb = 60;
 	//UI positions
