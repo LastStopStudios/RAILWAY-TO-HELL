@@ -1121,24 +1121,24 @@
 				<mosaicPiece name="mosaic_piece_2" x="1746" y="649" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="2" piece_type="1" correct_rotation="0" gravity="false">
 					<animations>
 						<idle loop="true" speed="0.1">
-							<frame x="0" y="192" w="96" h="96" />
-						</idle>
-						<rotating loop="false" speed="0.1">
-							<frame x="96" y="192" w="96" h="96" />
-							<frame x="192" y="192" w="96" h="96" />
-							<frame x="288" y="192" w="96" h="96" />
-						</rotating>
-					</animations>
-				</mosaicPiece>
-				<mosaicPiece name="mosaic_piece_3" x="1975" y="570" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
-					<animations>
-						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="96" h="96" />
 						</idle>
 						<rotating loop="false" speed="0.1">
 							<frame x="96" y="0" w="96" h="96" />
 							<frame x="192" y="0" w="96" h="96" />
 							<frame x="288" y="0" w="96" h="96" />
+						</rotating>
+					</animations>
+				</mosaicPiece>
+				<mosaicPiece name="mosaic_piece_3" x="1975" y="570" w="96" h="96" texture="Assets/Textures/Puzzles/Piezas.png" piece_id="3" piece_type="2" correct_rotation="0" gravity="false">
+					<animations>
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="192" w="96" h="96" />
+						</idle>
+						<rotating loop="false" speed="0.1">
+							<frame x="96" y="192" w="96" h="96" />
+							<frame x="192" y="192" w="96" h="96" />
+							<frame x="288" y="192" w="96" h="96" />
 						</rotating>
 					</animations>
 				</mosaicPiece>
