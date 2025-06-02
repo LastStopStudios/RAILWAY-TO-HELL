@@ -20,6 +20,7 @@
 #include "MosaicPiece.h"
 #include "MosaicPuzzle.h"
 #include "Checkpoints.h"
+#include "CheckBox.h"
 #include "Devil.h"
 
 struct SDL_Texture;
@@ -217,7 +218,7 @@ private:
 	GuiControlButton* ExitGamePause;
 
 	//Extra buttons
-	GuiControlButton* FullScreenButton = nullptr;
+	CheckBox* FullScreenCheckbox = nullptr;
 	bool fullscreenButtonsCreated = false;
 
 	SDL_Texture* FullScreenNormal = nullptr;
@@ -225,7 +226,8 @@ private:
 	SDL_Texture* FullScreenPressed = nullptr;
 	SDL_Texture* FullScreenOff = nullptr;
 
-	bool FullscreenEnabled = false;
+	bool FullscreenEnabled = false; // State of the fullscreen checkbox (checked or not checked)
+	bool fullscreenState = false; // State of the fullscreen button (pressed or not pressed)
 
 	bool isOn = false;
 

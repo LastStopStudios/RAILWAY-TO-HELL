@@ -221,7 +221,7 @@ bool Scene::Start()
 	ExitOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
 
 	FullScreenNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
-	FullScreenFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+	FullScreenFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
 	FullScreenPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
 	FullScreenOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
 
@@ -242,11 +242,13 @@ bool Scene::Start()
 	ExitGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, " ", ExitGamePos, this);
 	ExitGame->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
 
-	SDL_Rect fullscreenPos = { 580, 350, 120, 20 };
-	FullScreenButton = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, " ", fullscreenPos, this);
 
-	FullScreenButton->SetTextures(FullScreenNormal, FullScreenFocused, FullScreenPressed, FullScreenOff);
+	fullscreenState = Engine::GetInstance().window->IsFullscreen();
 
+	SDL_Rect fullscreenPos = { 580, 350, 40, 40 };
+	FullScreenCheckbox = (CheckBox*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, " ", fullscreenPos, this);
+	FullScreenCheckbox->SetTextures(FullScreenNormal, FullScreenPressed);
+	FullScreenCheckbox->SetState(GuiControlState::DISABLED);
 
 	//Draw player
 	dibujar = false;
@@ -309,7 +311,6 @@ bool Scene::Update(float dt)
 			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 				SetCurrentState(SceneState::INTRO_SCREEN);
 			}
-
 			DrawCurrentScene();
 
 			break;
@@ -949,6 +950,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 	case 4: // Settings
 		currentState = SceneState::SETTINGS_MENU;
 		DisableMenuButtons();
+		EnableFullscreenButton();
 		break;
 	case 5: // Credits
 		currentState = SceneState::CREDITS_MENU;
@@ -974,6 +976,8 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		exitRequested = true;
 		break;
 	case 11: // FullScreen
+		fullscreenState = !fullscreenState;
+
 		Engine::GetInstance().window->ToggleFullscreen();
 		EnableFullscreenButton();
 
@@ -990,6 +994,12 @@ SceneState Scene::GetCurrentState() const
 
 void Scene::SetCurrentState(SceneState state)
 {
+	if (state == SceneState::SETTINGS_MENU) {
+		EnableFullscreenButton();
+	}
+	else if (currentState == SceneState::SETTINGS_MENU && state != SceneState::SETTINGS_MENU) {
+		DisableFullscreenButton();
+	}
 	if (state == SceneState::INTRO_SCREEN) {
 		EnableMenuButtons();
 	}
@@ -1002,42 +1012,31 @@ void Scene::SetCurrentState(SceneState state)
 	else if (currentState == SceneState::PAUSE_MENU && state != SceneState::PAUSE_MENU){
 		DisablePauseButtons();
 	}
-	if (state == SceneState::SETTINGS_MENU) {
-		CreateFullscreenButton();
-		EnableFullscreenButton();
-	}
-	else if (currentState == SceneState::SETTINGS_MENU && state != SceneState::SETTINGS_MENU) {
-		DisableFullscreenButton();
-	}
+
+
 	currentState = state;
 }
 
 void Scene::CreateFullscreenButton()
 {
 	if (!fullscreenButtonsCreated) {
-		//SDL_Rect fullscreenPos = { 580, 350, 120, 20 };
-		//FullScreenButton = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, " ", fullscreenPos, this);
 
-		//FullScreenButton->SetTextures(FullScreenNormal, FullScreenFocused, FullScreenPressed, FullScreenOff);
-		//FullScreenButton->SetState(GuiControlState::DISABLED);
 		fullscreenButtonsCreated = true;
 	}
 }
 
 void Scene::EnableFullscreenButton()
 {
-	if (FullScreenButton) {
-		bool isFullscreen = Engine::GetInstance().window->IsFullscreen();
-		isOn = isFullscreen; 
-		FullScreenButton->SetState(isFullscreen ? GuiControlState::ON : GuiControlState::NORMAL
-		);
+	if (FullScreenCheckbox) {
+		FullScreenCheckbox->SetChecked(fullscreenState);
+		//FullScreenCheckbox->SetState(GuiControlState::NORMAL);
 	}
 }
 
 void Scene::DisableFullscreenButton()
 {
-	if (FullScreenButton) {
-		FullScreenButton->SetState(GuiControlState::DISABLED);
+	if (FullScreenCheckbox) {
+		FullScreenCheckbox->SetState(GuiControlState::DISABLED);
 	}
 }
 
