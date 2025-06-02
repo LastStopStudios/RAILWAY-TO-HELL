@@ -27,6 +27,7 @@ enum class GuiControlState
 	FOCUSED,
 	PRESSED,
 	SELECTED,
+	ON,
 	OFF
 };
 
@@ -54,6 +55,11 @@ public:
 
 	// Called each loop iteration
 	virtual bool Update(float dt)
+	{
+		return true;
+	}
+
+	virtual bool PostUpdate()
 	{
 		return true;
 	}

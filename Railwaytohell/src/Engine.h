@@ -19,9 +19,9 @@ class EntityManager;
 class SceneLoader;
 class Map;
 class Physics;
-class GuiManager;
 class DialogoM;
 class Mapa;
+class GuiManager;
 class UI;
 class Ffmpeg;
 
@@ -110,9 +110,9 @@ public:
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Physics> physics;
-	std::shared_ptr<GuiManager> guiManager;
 	std::shared_ptr<DialogoM> dialogoM;
 	std::shared_ptr<Mapa> mapa;
+	std::shared_ptr<GuiManager> guiManager;
 	std::shared_ptr<UI> ui;
 	std::shared_ptr<Ffmpeg> ffmpeg;
 

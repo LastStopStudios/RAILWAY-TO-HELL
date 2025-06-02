@@ -28,9 +28,15 @@ public:
 	// Retrieve window scale
 	int GetScale() const;
 
+	void ToggleFullscreen();
+
+	bool IsFullscreen() const;
+
 public:
 	// The window we'll be rendering to
 	SDL_Window* window;
+
+
 
 	std::string title;
 	int width = 1280;

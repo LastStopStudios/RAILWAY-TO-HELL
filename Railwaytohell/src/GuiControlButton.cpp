@@ -44,17 +44,12 @@ bool GuiControlButton::Update(float dt)
 	{
 		return true;
 	}
-	if (state == GuiControlState::OFF) {
-		switch (state)
-		{
-		case GuiControlState::OFF:
-			if (offTex)
-				Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y);
-			break;
-		}
+	if (state == GuiControlState::ON || state == GuiControlState::OFF)
+	{
+		return false;
 	}
 
-	if (state != GuiControlState::DISABLED && state != GuiControlState::OFF)
+	if (state != GuiControlState::DISABLED && state != GuiControlState::OFF )
 	{
 		// Check if the state has changed
 		if (state != prevState)
@@ -91,26 +86,6 @@ bool GuiControlButton::Update(float dt)
 		else {
 			state = GuiControlState::NORMAL;
 		}
-		if (Engine::GetInstance().scene->dibujar == true) {//make the drawing not appear until you enter the gameplay scene 100%.
-		//Draw the button according the GuiControl State
-		switch (state)
-		{
-		case GuiControlState::NORMAL:
-			if (normalTex)
-				Engine::GetInstance().render->DrawTextureForButtons(normalTex, bounds.x, bounds.y);
-			break;
-		case GuiControlState::FOCUSED:
-			if (focusedTex)
-				Engine::GetInstance().render->DrawTextureForButtons(focusedTex, bounds.x, bounds.y);
-			break;
-		case GuiControlState::PRESSED:
-			if (pressedTex)
-				Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
-			break;
-		}
-		
-			Engine::GetInstance().render->DrawText(text.c_str(), bounds.x, bounds.y, bounds.w, bounds.h);
-		}
 		
 	}
 
@@ -119,3 +94,55 @@ bool GuiControlButton::Update(float dt)
 	return false;
 }
 
+bool GuiControlButton::PostUpdate()
+{
+	if (Engine::GetInstance().scene->GetCurrentState() == SceneState::GAMEPLAY)
+	{
+		return true;
+	}
+
+	if (state == GuiControlState::OFF) {
+		switch (state)
+		{
+		case GuiControlState::OFF:
+			if (offTex)
+				Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y);
+			break;
+		}
+	}
+
+	if (state != GuiControlState::DISABLED && state != GuiControlState::OFF)
+	{
+		if (Engine::GetInstance().scene->dibujar)
+		{
+
+			switch (state)
+			{
+			case GuiControlState::OFF:
+				if (offTex)
+					Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y);
+				break;
+			case GuiControlState::NORMAL:
+				if (normalTex)
+					Engine::GetInstance().render->DrawTextureForButtons(normalTex, bounds.x, bounds.y);
+				break;
+			case GuiControlState::FOCUSED:
+				if (focusedTex)
+					Engine::GetInstance().render->DrawTextureForButtons(focusedTex, bounds.x, bounds.y);
+				break;
+			case GuiControlState::PRESSED:
+				if (pressedTex)
+					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
+				break;
+			case GuiControlState::ON:
+				if (pressedTex)
+					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
+				break;
+			}
+
+			Engine::GetInstance().render->DrawText(text.c_str(), bounds.x, bounds.y, bounds.w, bounds.h);
+		}
+	}
+
+	return true;
+}

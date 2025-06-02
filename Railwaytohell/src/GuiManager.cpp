@@ -55,6 +55,16 @@ bool GuiManager::Update(float dt)
 	return true;
 }
 
+bool GuiManager::PostUpdate()
+{
+	// Draw all the controls
+	for (const auto& control : guiControlsList)
+	{
+		control->PostUpdate();
+	}
+	return true;
+}
+
 bool GuiManager::CleanUp()
 {
 	for (const auto& control : guiControlsList)

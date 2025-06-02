@@ -220,6 +220,11 @@ bool Scene::Start()
 	ExitPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitPressed.png");
 	ExitOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
 
+	FullScreenNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+	FullScreenFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+	FullScreenPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
+	FullScreenOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+
 	// Create the menu buttons
 	NewGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, " ", NewGamePos, this);
 	NewGame->SetTextures(NewGameNormal, NewGameFocused, NewGamePressed, NewGameDOff);
@@ -237,22 +242,11 @@ bool Scene::Start()
 	ExitGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, " ", ExitGamePos, this);
 	ExitGame->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
 
-	// Create the pause menu buttons
-	ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 350, 120,20 }, this);
-	ResumeGame->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
-	ResumeGame->SetState(GuiControlState::DISABLED);
+	SDL_Rect fullscreenPos = { 580, 350, 120, 20 };
+	FullScreenButton = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, " ", fullscreenPos, this);
 
-	BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 400, 120,20 }, this);
-	BackToTitle->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
-	BackToTitle->SetState(GuiControlState::DISABLED);
+	FullScreenButton->SetTextures(FullScreenNormal, FullScreenFocused, FullScreenPressed, FullScreenOff);
 
-	SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 450, 120,20 }, this);
-	SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
-	SettingsPause->SetState(GuiControlState::DISABLED);
-
-	ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 500, 120,20 }, this);
-	ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
-	ExitGamePause->SetState(GuiControlState::DISABLED);
 
 	//Draw player
 	dibujar = false;
@@ -269,17 +263,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	if (currentState == SceneState::GAMEPLAY) {
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-			pauseMenuOn = !pauseMenuOn;
-			if (pauseMenuOn) {
-				EnablePauseButtons();
-			}
-			else {
-				DisablePauseButtons();
-			}
-		}
-	}
 	switch (currentState)
 	{
 	case SceneState::INTRO_SCREEN:
@@ -364,6 +347,10 @@ bool Scene::Update(float dt)
 		break;
 	case SceneState::GAMEPLAY:
 
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(SceneState::PAUSE_MENU);
+		}
+
 		if (!pauseMenuOn) {
 			if (currentMusic != "caronte") {
 				Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
@@ -403,7 +390,14 @@ bool Scene::Update(float dt)
 		}*/
 
 		break;
+	case SceneState::PAUSE_MENU:
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(SceneState::GAMEPLAY);
+		}
+		DrawCurrentScene();
+		break;
 	}
+
 
 	return true;
 }
@@ -965,7 +959,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		break;
 	case 7: // ResumeGame 
 		pauseMenuOn = false;
-		DisablePauseButtons();
+		SetCurrentState(SceneState::GAMEPLAY);
 		break;
 	case 8: // BackToTitle 
 		SetCurrentState(SceneState::INTRO_SCREEN);
@@ -979,7 +973,13 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 	case 10: // ExitGamePause
 		exitRequested = true;
 		break;
+	case 11: // FullScreen
+		Engine::GetInstance().window->ToggleFullscreen();
+		EnableFullscreenButton();
+
+		break;
 	}
+
 	return true;
 }
 
@@ -993,7 +993,52 @@ void Scene::SetCurrentState(SceneState state)
 	if (state == SceneState::INTRO_SCREEN) {
 		EnableMenuButtons();
 	}
+	if (state == SceneState::PAUSE_MENU) {
+		CreatePauseMenu();
+	}
+	if (state == SceneState::PAUSE_MENU) {
+		EnablePauseButtons();
+	}
+	else if (currentState == SceneState::PAUSE_MENU && state != SceneState::PAUSE_MENU){
+		DisablePauseButtons();
+	}
+	if (state == SceneState::SETTINGS_MENU) {
+		CreateFullscreenButton();
+		EnableFullscreenButton();
+	}
+	else if (currentState == SceneState::SETTINGS_MENU && state != SceneState::SETTINGS_MENU) {
+		DisableFullscreenButton();
+	}
 	currentState = state;
+}
+
+void Scene::CreateFullscreenButton()
+{
+	if (!fullscreenButtonsCreated) {
+		//SDL_Rect fullscreenPos = { 580, 350, 120, 20 };
+		//FullScreenButton = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, " ", fullscreenPos, this);
+
+		//FullScreenButton->SetTextures(FullScreenNormal, FullScreenFocused, FullScreenPressed, FullScreenOff);
+		//FullScreenButton->SetState(GuiControlState::DISABLED);
+		fullscreenButtonsCreated = true;
+	}
+}
+
+void Scene::EnableFullscreenButton()
+{
+	if (FullScreenButton) {
+		bool isFullscreen = Engine::GetInstance().window->IsFullscreen();
+		isOn = isFullscreen; 
+		FullScreenButton->SetState(isFullscreen ? GuiControlState::ON : GuiControlState::NORMAL
+		);
+	}
+}
+
+void Scene::DisableFullscreenButton()
+{
+	if (FullScreenButton) {
+		FullScreenButton->SetState(GuiControlState::DISABLED);
+	}
 }
 
 void Scene::DrawCurrentScene()
@@ -1025,16 +1070,38 @@ void Scene::DrawCurrentScene()
 		}
 		break;
 	case SceneState::GAMEPLAY:
-		if (pauseMenuOn) {
-			if (pauseTexture != nullptr) {
-				Engine::GetInstance().render->DrawTexture(pauseTexture, 0, 0);
-			}
+		break;
+	case SceneState::PAUSE_MENU:
+		if (pauseTexture != nullptr) {
+			Engine::GetInstance().render->DrawTexture(pauseTexture, 0, 0);
 		}
 		break;
 	}
 
 }
 
+void Scene::CreatePauseMenu() {
+	if (!pauseButtonsCreated) {
+		// Create the pause menu buttons
+		ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 350, 120,20 }, this);
+		ResumeGame->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
+		ResumeGame->SetState(GuiControlState::DISABLED);
+
+		BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 400, 120,20 }, this);
+		BackToTitle->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+		BackToTitle->SetState(GuiControlState::DISABLED);
+
+		SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 450, 120,20 }, this);
+		SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
+		SettingsPause->SetState(GuiControlState::DISABLED);
+
+		ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 500, 120,20 }, this);
+		ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+		ExitGamePause->SetState(GuiControlState::DISABLED);
+		pauseButtonsCreated = true;
+	}
+	EnablePauseButtons();
+}
 void Scene::DisableMenuButtons() {
 	if (NewGame) NewGame->SetState(GuiControlState::DISABLED);
 	if (Continue) Continue->SetState(GuiControlState::DISABLED);

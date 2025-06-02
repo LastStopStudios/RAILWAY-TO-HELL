@@ -98,6 +98,12 @@ public:
 	void EnablePauseButtons();
 
 	bool IsPaused() const { return pauseMenuOn; }
+
+	void CreatePauseMenu();
+	void CreateFullscreenButton();
+
+	void EnableFullscreenButton();
+	void DisableFullscreenButton();
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;
@@ -210,6 +216,19 @@ private:
 	GuiControlButton* SettingsPause;
 	GuiControlButton* ExitGamePause;
 
+	//Extra buttons
+	GuiControlButton* FullScreenButton = nullptr;
+	bool fullscreenButtonsCreated = false;
+
+	SDL_Texture* FullScreenNormal = nullptr;
+	SDL_Texture* FullScreenFocused = nullptr;
+	SDL_Texture* FullScreenPressed = nullptr;
+	SDL_Texture* FullScreenOff = nullptr;
+
+	bool FullscreenEnabled = false;
+
+	bool isOn = false;
+
 	// Buttons Texture
 	SDL_Texture* NewGameNormal = nullptr;
 	SDL_Texture* NewGameFocused = nullptr;
@@ -242,10 +261,12 @@ private:
 	SDL_Rect CreditsPos = { 520, 450, 120,20 };
 	SDL_Rect ExitGamePos = { 520, 500, 120,20 };
 
+
 	bool hasStartedGame = false;
 	bool exitRequested = false;
 
 	bool pauseMenuOn = false;
+	bool pauseButtonsCreated = false;
 
 	Player* player;
 	Boss* boss;
