@@ -918,7 +918,7 @@ void Player::HandleSceneSwitching() {
     static float zoom = 1.5f;
     static bool zooming = false;
 
-    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN) {
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_O) == KEY_DOWN) {
         zooming = true;
     }
 

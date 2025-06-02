@@ -902,6 +902,9 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
 
                     LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
                 }
+                else {
+                    Hiteado = false;
+                }
             }
             else if (currentPhase == 2) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
@@ -981,6 +984,9 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                     }
 
                     pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                }
+                else {
+                    Hiteado = false;
                 }
             }
         }
