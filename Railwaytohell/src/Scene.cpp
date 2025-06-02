@@ -245,7 +245,7 @@ bool Scene::Start()
 
 	fullscreenState = Engine::GetInstance().window->IsFullscreen();
 
-	SDL_Rect fullscreenPos = { 580, 350, 40, 40 };
+	SDL_Rect fullscreenPos = { 630, 350, 40, 40 };
 	FullScreenCheckbox = (CheckBox*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, " ", fullscreenPos, this);
 	FullScreenCheckbox->SetTextures(FullScreenNormal, FullScreenPressed);
 	FullScreenCheckbox->SetState(GuiControlState::DISABLED);

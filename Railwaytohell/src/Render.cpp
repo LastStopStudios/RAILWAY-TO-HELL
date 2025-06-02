@@ -196,8 +196,8 @@ bool Render::DrawTextureForCheckBox(SDL_Texture* texture, int x, int y, const SD
 
     SDL_Rect rect;
 
-    rect.x = (int)(camera.x * speed) + (int)(x - 10);
-    rect.y = (int)(camera.y * speed) + (int)(y - 5);
+    rect.x = (int)(camera.x * speed) + (int)(x - 2);
+    rect.y = (int)(camera.y * speed) + (int)(y );
 
     if (section != NULL)
     {
