@@ -54,6 +54,7 @@ private:
     void UpdatePunchAttackArea();
     void UpdateJumpAttackArea();
     void ResizeCollisionForPhase2();
+    void ResizeCollisionForPhase3(); 
 
     // Entity identification
     std::string enemyID;
@@ -75,6 +76,12 @@ private:
     SDL_RendererFlip flip = SDL_FLIP_NONE;
 
     pugi::xml_node parameters;
+
+    int transformStep = 0;
+    float transformTimer = 0.0f;
+    bool transformationStarted = false;
+    bool zooming = true;
+    float zoom;
 
     // Animation system
     Animation* currentAnimation = nullptr;
@@ -125,9 +132,9 @@ private:
     bool isDying = false;
     bool Hiteado = false;
     bool isTransforming = false;
+    bool pendingTransformation = false;  
 
     // Lives system
     int lives = 3;
     int live1 = 1, live2 = 6, live3 = 7;
-
 };

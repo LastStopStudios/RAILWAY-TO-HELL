@@ -9,6 +9,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "EntityManager.h"
+#include "GlobalSettings.h"
 
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
@@ -306,8 +307,12 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
-    // Phase 3 - currently idle placeholder
-    currentAnimation = &idle2;
+
+    if (currentAnimation != &idle3) {
+        currentAnimation = &idle3;
+        currentAnimation->Reset();
+    }
+
     pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 }
 
@@ -324,19 +329,26 @@ void Devil::CreateJumpAttack() {
     hasReachedMaxHeight = false;
     currentJumpHeight = 0.0f;
 
-    // Target player position
-    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
-
     jumpStartPos = currentPos;
-    targetLandingPos = playerPos;
-    targetPlayerX = playerPos.getX();
+
+    // Si hay una transformación pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
+    if (pendingTransformation) {
+        targetLandingPos = Vector2D(1200, currentPos.getY());
+        targetPlayerX = 1200;
+    }
+    else {
+        // Comportamiento normal: saltar hacia el jugador
+        Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+        targetLandingPos = playerPos;
+        targetPlayerX = playerPos.getX();
+    }
 
     // Shadow shows where attack will land
     shadowPosition = targetLandingPos;
     shadowVisible = true;
 
-    // Start with salto animation for preparation
+    // Start with jump animation for preparation
     currentAnimation = &salto;
     currentAnimation->Reset();
 
@@ -382,9 +394,18 @@ void Devil::UpdateJumpAttack(float dt) {
             currentJumpHeight = 0.0f;
 
             pbody->body->SetGravityScale(1.0f);
-            currentAttackCooldown = attackCooldown;
-            currentAnimation = &idle2;
-            currentAnimation->Reset();
+
+            // Si había una transformación pendiente, activarla ahora
+            if (pendingTransformation) {
+                isTransforming = true;
+                pendingTransformation = false;
+                LOG("Jump completed, starting transformation to Phase 3!");
+            }
+            else {
+                currentAttackCooldown = attackCooldown;
+                currentAnimation = &idle2;
+                currentAnimation->Reset();
+            }
 
             if (jumpAttackArea) {
                 Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
@@ -606,43 +627,85 @@ void Devil::ResetPath() {
 }
 
 void Devil::HandleTransformation(float dt) {
-    static int transformStep = 0;
-    static float transformTimer = 0.0f;
-
     switch (transformStep) {
     case 0:
-        // Play defeat animation
-        currentAnimation = &defeat;
-        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
-        currentAnimation->Update();
+        if (currentPhase == 1) {
+            if (currentAnimation != &defeat) {
+                currentAnimation = &defeat;
+                defeat.Reset();
+                LOG("Starting defeat animation for Phase 1->2 transformation");
+            }
 
-        if (currentAnimation->HasFinished()) {
-            defeat.Reset();
-            transformStep = 1;
+            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+            currentAnimation->Update();
+
+            if (currentAnimation->HasFinished()) {
+                LOG("Defeat animation finished, moving to transformation step 1");
+                defeat.Reset();
+                transformStep = 1;
+            }
+        }
+        else if (currentPhase == 2) {
+            // Para transformación 2->3, hacer zoom gradual
+            LOG("Phase 2->3 transformation: Applying gradual zoom");
+
+            // Initialize zoom if not started
+            if (!zooming) {
+                zooming = true;
+                zoom = GlobalSettings::GetInstance().GetTextureMultiplier(); // Get current zoom level
+                LOG("Starting zoom from: %.2f", zoom);
+            }
+
+            if (zooming) {
+                zoom -= 0.01f; // velocidad del zoom
+                if (zoom <= 1.0f) {
+                    zoom = 1.0f;
+                    zooming = false;
+                    transformStep = 1; // Only move to next step when zoom is complete
+                    LOG("Zoom completed, moving to transform step 1");
+                }
+                GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
+            }
         }
         break;
 
     case 1:
-        // Play transformation animation
-        if (currentAnimation != &transform) {
-            currentAnimation = &transform;
-            transform.Reset();
-            transformTimer = 0.0f;
+        LOG("Transform step 1 - Current phase: %d", currentPhase);
 
-            if (currentPhase == 1) {
+        if (currentPhase == 1) {
+            // Phase 1 -> Phase 2: use transform animation
+            if (currentAnimation != &transform) {
+                currentAnimation = &transform;
+                transform.Reset();
+                transformTimer = 0.0f;
                 ResizeCollisionForPhase2();
+                LOG("Starting transformation 1->2 with transform animation");
             }
+            currentAnimation->Update();
+        }
+        else if (currentPhase == 2) {
+            // Phase 2 -> Phase 3: use transform2 animation
+            if (currentAnimation != &transform2) {
+                currentAnimation = &transform2;
+                transform2.Reset();
+                transformTimer = 0.0f;
+                ResizeCollisionForPhase3();
+                LOG("Starting transformation 2->3 with transform2 animation");
+            }
+            currentAnimation->Update();
         }
 
-        currentAnimation->Update();
         transformTimer += dt;
 
         if (currentAnimation->HasFinished()) {
+            LOG("Transform animation finished, moving to step 2");
             transformStep = 2;
         }
         break;
 
     case 2:
+        LOG("Transform step 2 - Completing transformation from phase %d to %d", currentPhase, currentPhase + 1);
+
         // Complete transformation
         currentPhase++;
         isTransforming = false;
@@ -651,17 +714,49 @@ void Devil::HandleTransformation(float dt) {
             currentAnimation = &idle2;
             Engine::GetInstance().ui->fase1 = false;
             Engine::GetInstance().ui->fase2 = true;
+            LOG("Transformation completed: Now in Phase 2");
         }
         else if (currentPhase == 3) {
             currentAnimation = &idle3;
             Engine::GetInstance().ui->fase2 = false;
             Engine::GetInstance().ui->fase3 = true;
+            LOG("Transformation completed: Now in Phase 3");
         }
 
         transformStep = 0;
         transformTimer = 0.0f;
+        transformationStarted = false;
         Hiteado = false;
+
+        zooming = false;
         break;
+    }
+}
+
+void Devil::ResizeCollisionForPhase3() {
+    if (pbody) {
+        // Store current position
+        b2Vec2 currentPos = pbody->body->GetTransform().p;
+
+        // Delete old physics body
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+
+        // Create new rectangular collision body for phase 3
+        int newWidth = texW + 140;   // Adjust width as needed
+        int newHeight = texH + 350;  // Adjust height as needed
+
+        pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+            METERS_TO_PIXELS(currentPos.x) + 200,
+            METERS_TO_PIXELS(currentPos.y),
+            newWidth,
+            newHeight,
+            bodyType::DYNAMIC
+        );
+
+        pbody->ctype = ColliderType::DEVIL;
+        pbody->body->SetGravityScale(1.0f);
+        pbody->listener = this;
+        pbody->body->SetFixedRotation(true); // Prevent rotation for rectangular body
     }
 }
 
@@ -738,6 +833,10 @@ void Devil::RenderSprite() {
         if (!isLookingLeft) offsetX = -100;
     }
 
+    if (currentPhase == 3) {
+        if (isLookingLeft) offsetX = -150;
+    }
+
     if (currentAnimation == &idle2) {
         offsetY = -137;
     }
@@ -747,7 +846,7 @@ void Devil::RenderSprite() {
     }
 
     if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation == &attack) {
-        offsetY = -325;
+        offsetY = -240;
     }
 
     Engine::GetInstance().render.get()->DrawTexture(
@@ -808,7 +907,8 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
                 live2--;
                 if (live2 <= 0) {
-                    isTransforming = true;
+                    // Establecer la transformación como pendiente ANTES de crear el salto
+                    pendingTransformation = true;
 
                     // Cancel any active attacks
                     if (isAttacking) {
@@ -829,21 +929,16 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                         colatazo.Reset();
                     }
 
-                    // Cancel jump attack if active
-                    if (jumpAttackActive) {
-                        jumpAttackActive = false;
-                        isJumping = false;
-                        isLanding = false;
-                        shadowVisible = false;
-                        if (jumpAttackArea) {
-                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                            jumpAttackArea = nullptr;
-                        }
-                        pbody->body->SetGravityScale(1.0f);
+                    // Crear el salto hacia x=1200 (el salto detectará pendingTransformation)
+                    if (!jumpAttackActive) {
+                        CreateJumpAttack();
                     }
 
                     pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
-                    LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                    LOG("Devil starting jump to x=1200 before transformation to Phase %d!", currentPhase + 1);
+                }
+                else {
+                    Hiteado = false;
                 }
             }
             else if (currentPhase == 3) {
