@@ -168,12 +168,12 @@ bool GuiControlSlider::PostUpdate()
 
     // Draw slider base
     if (baseTexture) {
-        Engine::GetInstance().render->DrawTextureForCheckBox(baseTexture, bounds.x, bounds.y + (bounds.h / 2) - 9);
+        Engine::GetInstance().render->DrawTextureForCheckBox(baseTexture, bounds.x, bounds.y + (bounds.h / 2) - 9, nullptr, 0.0f);
     }
 
     // Draw slider handle
     if (handleTexture) {
-        Engine::GetInstance().render->DrawTextureForCheckBox(handleTexture, handleBounds.x, handleBounds.y);
+        Engine::GetInstance().render->DrawTextureForCheckBox(handleTexture, handleBounds.x, handleBounds.y, nullptr, 0.0f);
     }
 
     return true;

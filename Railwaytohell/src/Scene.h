@@ -110,6 +110,14 @@ public:
 
 	void EnableSettingsControls();
 	void DisableSettingsControls();
+
+	// Pause menu
+
+	void EnableFullscreenButtonPauseMenu();
+	void DisableFullscreenButtonPauseMenu();
+
+	void EnableSettingsControlsPauseMenu();
+	void DisableSettingsControlsPauseMenu();
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;
@@ -173,6 +181,9 @@ public:
 	SDL_Texture* controlsTexture1 = nullptr;
 	SDL_Texture* controlsTexture2 = nullptr;
 	SDL_Texture* controlsTexture3 = nullptr;
+	SDL_Texture* settingsPauseMenu = nullptr;
+	SDL_Texture* sliderBase = nullptr;
+	SDL_Texture* sliderHandle = nullptr;
 
 	float introTimeElapsed;
 	//boss fight camera
@@ -215,6 +226,7 @@ private:
 	//Declare GUI Control Buttons 
 	GuiControlButton* NewGame;
 	GuiControlButton* Continue;
+	GuiControlButton* ControlsMainMenu;
 	GuiControlButton* Settings;
 	GuiControlButton* Credits;
 	GuiControlButton* ExitGame;
@@ -222,16 +234,19 @@ private:
 	//Pause Menu Buttons
 	GuiControlButton* ResumeGame;
 	GuiControlButton* BackToTitle;
-	GuiControlButton* Controls;
+	GuiControlButton* ControlsPauseMenu;
 	GuiControlButton* SettingsPause;
 	GuiControlButton* ExitGamePause;
 
 	//Extra buttons
 	CheckBox* FullScreenCheckbox = nullptr;
+	CheckBox* FullScreenCheckboxPauseMenu = nullptr;
 	bool fullscreenButtonsCreated = false;
 
 	GuiControlSlider* musicSlider = nullptr;
+	GuiControlSlider* musicSliderPauseMenu = nullptr;
 	GuiControlSlider* fxSlider = nullptr;
+	GuiControlSlider* fxSliderPauseMenu = nullptr;
 
 	SDL_Texture* FullScreenNormal = nullptr;
 	SDL_Texture* FullScreenFocused = nullptr;
@@ -242,6 +257,10 @@ private:
 	bool fullscreenState = false; // State of the fullscreen button (pressed or not pressed)
 
 	bool isOn = false;
+
+	int currentControlsPage = 0; // Current page of controls being displayed (0, 1, or 2) for the three pages of controls
+
+	SceneState previousState;
 
 	// Buttons Texture
 	SDL_Texture* NewGameNormal = nullptr;

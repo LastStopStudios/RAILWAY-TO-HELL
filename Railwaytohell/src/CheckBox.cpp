@@ -53,10 +53,10 @@ bool CheckBox::PostUpdate()
     if (state == GuiControlState::DISABLED) return true;
 
     if (state == GuiControlState::PRESSED && pressedTexture) {
-        Engine::GetInstance().render->DrawTextureForCheckBox(pressedTexture, bounds.x, bounds.y);
+        Engine::GetInstance().render->DrawTextureForCheckBox(pressedTexture, bounds.x, bounds.y, nullptr, 0.0f);
     }
     else if (normalTexture) {
-        Engine::GetInstance().render->DrawTextureForCheckBox(normalTexture, bounds.x, bounds.y);
+        Engine::GetInstance().render->DrawTextureForCheckBox(normalTexture, bounds.x, bounds.y, nullptr, 0.0f);
     }
 
     return true;
