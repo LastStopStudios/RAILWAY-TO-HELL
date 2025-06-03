@@ -26,8 +26,6 @@ bool Spears::Start() {
         return false;
     }
 
-
-    // Inicializar textura con verificación
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 
     // Si no hay posición personalizada, usar la del XML
@@ -41,15 +39,8 @@ bool Spears::Start() {
 
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
-    texRadius = parameters.attribute("radius").as_int();
 
-    // Verificar que las dimensiones sean válidas
-    if (texW <= 0 || texH <= 0) {
-        LOG("ERROR: Invalid spear texture dimensions: w=%d, h=%d", texW, texH);
-        return false;
-    }
-
-    // Cargar animaciones con verificación
+    // Cargar animaciones 
     pugi::xml_node fallingNode = parameters.child("animations").child("falling");
     pugi::xml_node disappearNode = parameters.child("animations").child("disappear");
 
@@ -69,13 +60,8 @@ bool Spears::Start() {
         return false;
     }
 
-    // Crear cuerpo físico con verificación
-    pbody = Engine::GetInstance().physics.get()->CreateCircle(
-        (int)position.getX() + texH / 2,
-        (int)position.getY() + texH / 2,
-        texH / 2,
-        bodyType::DYNAMIC
-    );
+    // Crear cuerpo físico 
+    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::DYNAMIC);
 
     if (pbody == nullptr) {
         LOG("ERROR: Failed to create physics body for spear");

@@ -376,16 +376,13 @@ void Devil::CreateVerticalSpearAttack() {
     currentAnimation = &attackV;
     currentAnimation->Reset();
 
-    LOG("Devil starting vertical spear attack!");
-
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    int numSpears = 5 + (rand() % 3);
+    int numSpears = 5 + (rand() % 3); // Spawn between 5 and 7 spears
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-            
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -393,20 +390,16 @@ void Devil::CreateVerticalSpearAttack() {
                 float spearX = playerPos.getX() + offsetX;
                 float spearY = playerPos.getY() - 600;
 
-              
                 spear->SetDirection(SpearDirection::VERTICAL_DOWN);
                 spear->SetPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
-                LOG("Created vertical spear at position (%.2f, %.2f)", spearX, spearY);
             }
             else {
-                LOG("ERROR: Failed to initialize vertical spear, destroying entity");
-                Engine::GetInstance().entityManager.get()->DestroyEntity(spear);
+                spear->pendingToDelete = true;
             }
         }
     }
 }
-
 
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
@@ -417,18 +410,15 @@ void Devil::CreateHorizontalSpearAttack() {
     currentAnimation = &attackH;
     currentAnimation->Reset();
 
-    LOG("Devil starting horizontal spear attack!");
-
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    int numSpears = 3 + (rand() % 2);
+    int numSpears = 3 + (rand() % 2); // Spawn between 3 and 4 spears
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -436,6 +426,7 @@ void Devil::CreateHorizontalSpearAttack() {
                 float spearX;
                 SpearDirection direction;
 
+                // Alternate spears: even indexes come from left, odd from right
                 if (i % 2 == 0) {
                     spearX = currentPos.getX() - 800;
                     direction = SpearDirection::HORIZONTAL_RIGHT;
@@ -445,96 +436,83 @@ void Devil::CreateHorizontalSpearAttack() {
                     direction = SpearDirection::HORIZONTAL_LEFT;
                 }
 
-             
                 spear->SetDirection(direction);
                 spear->SetOriginPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
-                LOG("Created horizontal spear at position (%.2f, %.2f) moving %s",
-                    spearX, spearY, (direction == SpearDirection::HORIZONTAL_RIGHT) ? "right" : "left");
             }
             else {
-                LOG("ERROR: Failed to initialize horizontal spear, destroying entity");
-                Engine::GetInstance().entityManager.get()->DestroyEntity(spear);
+                spear->pendingToDelete = true;
             }
         }
     }
 }
 
 void Devil::UpdateSpearAttacks(float dt) {
-    // Update Devil's attack animation
     currentAnimation->Update();
 
-    // Update all active spears and remove destroyed ones
     for (auto it = activeSpears.begin(); it != activeSpears.end();) {
         Spears* spear = *it;
 
-        // Verificar si la lanza a�n existe antes de actualizarla
-        if (spear != nullptr) {
-            // Update spear
-            bool spearStillActive = spear->Update(dt);
-
-            // Check if spear should be removed
-            Vector2D spearPos = spear->GetPosition();
-            bool shouldRemove = false;
-
-            // Check if spear is disappearing
-            if (spear->isDisappearing) {
-                shouldRemove = true;
-            }
-            // Check bounds
-            else if (isVerticalSpearAttack) {
-                // Remove vertical spears if they go too far down
-                if (spearPos.getY() > initY + 400) {
-                    shouldRemove = true;
-                }
-            }
-            else if (isHorizontalSpearAttack) {
-                // Remove horizontal spears if they go off-screen
-                if (spearPos.getX() < -300 || spearPos.getX() > 2200) {
-                    shouldRemove = true;
-                }
-            }
-
-            if (shouldRemove || !spearStillActive) {
-                it = activeSpears.erase(it);
-            }
-            else {
-                ++it;
-            }
-        }
-        else {
-            // Remove null spears
+        if (spear == nullptr || spear->pendingToDelete) {
             it = activeSpears.erase(it);
+            continue;
         }
+
+        Vector2D spearPos = spear->GetPosition();
+        bool shouldDelete = false;
+
+        // Out-of-bounds check depending on attack type
+        if (isVerticalSpearAttack && spearPos.getY() > initY + 400) {
+            shouldDelete = true;
+        }
+        else if (isHorizontalSpearAttack &&
+            (spearPos.getX() < -300 || spearPos.getX() > 2200)) {
+            shouldDelete = true;
+        }
+
+        if (spear->isDisappearing) {
+            shouldDelete = true;
+        }
+
+        if (shouldDelete) {
+            spear->pendingToDelete = true;
+            it = activeSpears.erase(it);
+            continue;
+        }
+
+        ++it;
     }
 
-    // Check if attack should end
-    bool animationFinished = currentAnimation->HasFinished();
-    bool allSpearsGone = activeSpears.empty();
-
-    // End attack when animation finishes AND most spears are gone (or after timeout)
     static float attackTimeout = 0.0f;
     attackTimeout += dt;
 
+    bool animationFinished = currentAnimation->HasFinished();
+    bool allSpearsGone = activeSpears.empty();
+
+    // End attack if animation is done and spears are gone, or after timeout
     if ((animationFinished && allSpearsGone) || attackTimeout > 5.0f) {
-        // Reset attack state
         isSpearAttacking = false;
         isVerticalSpearAttack = false;
         isHorizontalSpearAttack = false;
         currentSpearCooldown = spearAttackCooldown;
         attackTimeout = 0.0f;
 
-        // Return to idle
         currentAnimation = &idle3;
         currentAnimation->Reset();
-
-        LOG("Spear attack finished, returning to idle");
     }
 }
+
 void Devil::CleanupSpears() {
-    // Clear the active spears list - EntityManager will handle cleanup
+    // Mark all remaining spears for deletion
+    for (Spears* spear : activeSpears) {
+        if (spear && !spear->pendingToDelete) {
+            spear->pendingToDelete = true;
+        }
+    }
+
     activeSpears.clear();
 }
+
 void Devil::CreateJumpAttack() {
     jumpAttackActive = true;
     jumpPreparation = true;
@@ -1084,7 +1062,6 @@ void Devil::RenderSprite() {
         &frame,
         1.0f, 0.0, INT_MAX, INT_MAX, flip
     );
-
 }
 
 void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {

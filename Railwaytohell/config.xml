@@ -2414,7 +2414,7 @@
 				</checkpoint>
 			</checkpoints>
 			<estatuas>
-				<estatua name="estatua" x="1700" y="2590" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
+				<estatua name="estatua" x="1500" y="2590" w="160" h="160" texture="Assets/Textures/background/Estatua2.png" gravity="false">
 					<animations>
 						<idle loop="false" speed="0.2">
 							<frame x="0" y="0" w="160" h="160" />
