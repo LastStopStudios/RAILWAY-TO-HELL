@@ -11,7 +11,11 @@
 
 Spears::Spears() : Entity(EntityType::SPEAR)
 {
-
+    lifeTimer = 0.0f;
+    maxLifeTime = 3000.0f;  // 4 segundos
+    useLifeTimer = false;
+    platformCollisionCount = 0;
+    maxPlatformCollisions = 2;  // Se borra en la segundacolison
 }
 
 Spears::~Spears() {}
@@ -77,6 +81,16 @@ bool Spears::Start() {
         pbody->body->SetGravityScale(0);
     }
 
+    // Configurar timer para lanzas horizontales
+    if (spearDirection == SpearDirection::HORIZONTAL_LEFT || 
+        spearDirection == SpearDirection::HORIZONTAL_RIGHT) {
+        useLifeTimer = true;
+        lifeTimer = 0.0f;
+        platformCollisionCount = 0;  // Reset collision counter
+        LOG("Horizontal spear will auto-delete after %f seconds or %d platform collisions", 
+            maxLifeTime, maxPlatformCollisions);
+    }
+
     moveSpeed = 400.0f;
 
     LOG("Spear initialized successfully at position: (%f, %f)", position.getX(), position.getY());
@@ -114,6 +128,7 @@ void Spears::CreatePhysicsBody() {
             bodyHeight / 2,
             bodyType::DYNAMIC
         );
+        isSensorBody = true;
     }
     else {
         pbody = Engine::GetInstance().physics.get()->CreateRectangle(
@@ -123,6 +138,7 @@ void Spears::CreatePhysicsBody() {
             bodyHeight / 2,
             bodyType::DYNAMIC
         );
+        isSensorBody = false;
     }
 
     if (pbody != nullptr) {
@@ -148,6 +164,15 @@ bool Spears::Update(float dt)
         return false;
     }
 
+    // Verificar timer de vida para lanzas horizontales
+    if (useLifeTimer && !isDisappearing) {
+        lifeTimer += dt;
+        if (lifeTimer >= maxLifeTime) {
+            LOG("Horizontal spear life timer expired, starting disappear animation");
+            startDisappearAnimation();
+        }
+    }
+
     // Si está desapareciendo, no aplicar movimiento
     if (isDisappearing) {
         if (currentAnimation->HasFinished()) {
@@ -160,7 +185,7 @@ bool Spears::Update(float dt)
         }
     }
     else {
-        // Aplicar movimiento segúnl?a dirección configurada
+        // Aplicar movimiento según la dirección configurada
         b2Vec2 velocity(0, 0);
 
         switch (spearDirection) {
@@ -280,10 +305,27 @@ bool Spears::CleanUp() {
 
     return true;
 }
+
 void Spears::OnCollision(PhysBody* physA, PhysBody* physB) {
+    if (isSensorBody) {
+        // Lógica especial para lanzas horizontales (sensores)
+        LOG("Spear sensor detected collision with %d", physB->ctype);
+        
+        // Solo contar colisiones con plataformas
+        if (physB->ctype == ColliderType::PLATFORM) {
+            startDisappearAnimation();
+        }
+        return; 
+    }
+    
+    // Lógica original para lanzas verticales
     switch (physB->ctype)
     {
     case ColliderType::PLATFORM:
+        LOG("Spear Collision PLATFORM");
+        startDisappearAnimation();
+        break;
+    case ColliderType::DEVIL:
         LOG("Spear Collision PLATFORM");
         startDisappearAnimation();
         break;
@@ -402,6 +444,18 @@ Vector2D Spears::GetPosition() {
 
 void Spears::SetDirection(SpearDirection direction) {
     spearDirection = direction;
+
+    // Configurar timer según la nueva dirección
+    if (direction == SpearDirection::HORIZONTAL_LEFT || 
+        direction == SpearDirection::HORIZONTAL_RIGHT) {
+        useLifeTimer = true;
+        lifeTimer = 0.0f;
+        platformCollisionCount = 0;  // Reset collision counter
+    } else {
+        useLifeTimer = false;
+        lifeTimer = 0.0f;
+        platformCollisionCount = 0;
+    }
 
     // Si ya existe un cuerpo físico, recrearlo con las nuevas dimensiones
     if (pbody != nullptr) {

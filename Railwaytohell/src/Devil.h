@@ -112,6 +112,7 @@ private:
     std::vector<Spears*> activeSpears;
 
     // Method declarations
+
     void CreateVerticalSpearAttack();
     void CreateHorizontalSpearAttack();
     void UpdateSpearAttacks(float dt);

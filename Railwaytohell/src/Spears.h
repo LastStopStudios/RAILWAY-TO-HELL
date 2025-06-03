@@ -60,8 +60,16 @@ private:
 private:
     void CreatePhysicsBody();
     SDL_Texture* texture;
-
+    bool isSensorBody = false;
     const char* texturePath;
+
+    int platformCollisionCount;
+    int maxPlatformCollisions;
+    float lastCollisionTime;
+    float collisionCooldown;
+    float lifeTimer;
+    float maxLifeTime;
+    bool useLifeTimer;
 
     Animation* currentAnimation = nullptr;
     Animation falling;        // Animación de 1 frame cuando está cayendo/tirándose

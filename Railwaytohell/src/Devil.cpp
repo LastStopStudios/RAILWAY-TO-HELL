@@ -440,11 +440,11 @@ void Devil::CreateHorizontalSpearAttack() {
 
             // Alternate spears: even indexes come from left, odd from right
             if (i % 2 == 0) {
-                spearX = currentPos.getX() - 800;
+                spearX = currentPos.getX() - 1000;
                 direction = SpearDirection::HORIZONTAL_RIGHT;
             }
             else {
-                spearX = currentPos.getX() + 800;
+                spearX = currentPos.getX() + 600;
                 direction = SpearDirection::HORIZONTAL_LEFT;
             }
 
