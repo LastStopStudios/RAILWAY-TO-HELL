@@ -118,6 +118,7 @@ private:
     void CreateHorizontalSpearAttack();
     void UpdateSpearAttacks(float dt);
     void CleanupSpears();
+
     pugi::xml_node spearTemplateNode;
     pugi::xml_document spearConfigDoc;
 

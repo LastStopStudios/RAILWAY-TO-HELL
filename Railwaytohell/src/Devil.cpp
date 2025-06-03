@@ -398,7 +398,6 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
     }
     pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 }
-
 void Devil::CreateVerticalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = true;
@@ -409,19 +408,19 @@ void Devil::CreateVerticalSpearAttack() {
     currentAnimation->Reset();
 
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    int numSpears = 5 + (rand() % 3); // Spawn between 5 and 7 spears
+    int numSpears = 4 + (rand() % 2); // Spawn entre 3-4 lanzas (antes era 5-7)
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
             spear->SetParameters(spearTemplateNode);
-
             spear->SetDirection(SpearDirection::VERTICAL_DOWN);
 
-            float offsetX = (i - numSpears / 2) * 80.0f + ((rand() % 40) - 20);
+            // Mayor separación entre lanzas (más esparcidas)
+            float offsetX = (i - numSpears / 2) * 200.0f + ((rand() % 60) - 30); // Antes era 80.0f y ±20
             float spearX = playerPos.getX() + offsetX;
-            float spearY = playerPos.getY() - 600;
+            float spearY = playerPos.getY() - 2200;
             spear->SetOriginPosition(Vector2D(spearX, spearY));
 
             if (spear->Awake() && spear->Start()) {
@@ -434,6 +433,7 @@ void Devil::CreateVerticalSpearAttack() {
     }
 }
 
+// Función ajustada para el ataque horizontal de lanzas
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = false;
@@ -446,7 +446,14 @@ void Devil::CreateHorizontalSpearAttack() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    int numSpears = 2 + (rand() % 2); // Spawn between 2 and 3 spears
+    // Solo 2 lanzas horizontales (una por cada altura)
+    int numSpears = 2;
+
+    // Alturas fijas para las lanzas horizontales
+    float heights[2] = {
+        currentPos.getY() - 40,  // Altura media del Devil
+        currentPos.getY() + 30  // Altura baja del Devil
+    };
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
@@ -454,15 +461,14 @@ void Devil::CreateHorizontalSpearAttack() {
         if (spear) {
             spear->SetParameters(spearTemplateNode);
 
-            // Usar la altura del Devil como base, con pequeña variación aleatoria
-            float baseY = currentPos.getY() + 50; // Ajustar según el sprite del Devil
-            float spearY = baseY + (i * 80.0f) - (numSpears * 40.0f) + ((rand() % 60) - 30);
+            // Usar las alturas predefinidas
+            float spearY = heights[i];
             float spearX;
             SpearDirection direction;
 
-            // Alternate spears: even indexes come from left, odd from right
-            if (i % 2 == 0) {
-                spearX = currentPos.getX() - 1000;
+            // Alternar direcciones: primera desde la izquierda, segunda desde la derecha
+            if (i == 0) {
+                spearX = currentPos.getX() - 1100;
                 direction = SpearDirection::HORIZONTAL_RIGHT;
             }
             else {
@@ -482,7 +488,6 @@ void Devil::CreateHorizontalSpearAttack() {
         }
     }
 }
-
 void Devil::UpdateSpearAttacks(float dt) {
     currentAnimation->Update();
 

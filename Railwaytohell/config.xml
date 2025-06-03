@@ -4629,7 +4629,6 @@
 							<frame x="3168" y="256" w="288" h="288" />
 							<frame x="3456" y="256" w="288" h="288" />
 							<frame x="3744" y="256" w="288" h="288" />
-							<frame x="4032" y="256" w="288" h="288" />
 						</transform>
 						<idle2 loop="true" speed="0.15">
 							<frame x="0" y="544" w="288" h="288" />
@@ -4753,23 +4752,6 @@
 					</disappear>
 				</animations>
 			</spear>
-			<items>
-				<item name="Remember1" death="0" savedDeath="0" x="550" y="1656" w="32" h="32" texture="Assets/Textures/Items/Item_memory.png" gravity="false" ID="1" ref="remember1_item">
-					<animations>
-						<idle loop="true" speed="0.2">
-							<frame x="0" y="0" w="32" h="32" />
-							<frame x="32" y="0" w="32" h="32" />
-							<frame x="64" y="0" w="32" h="32" />
-							<frame x="96" y="0" w="32" h="32" />
-							<frame x="128" y="0" w="32" h="32" />
-							<frame x="160" y="0" w="32" h="32" />
-							<frame x="192" y="0" w="32" h="32" />
-							<frame x="224" y="0" w="32" h="32" />
-							<frame x="256" y="0" w="32" h="32" />
-						</idle>
-					</animations>
-				</item>
-			</items>
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Nadia.png" TEXT="Vampiro Esisten" />

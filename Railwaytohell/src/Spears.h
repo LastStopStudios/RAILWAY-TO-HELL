@@ -56,12 +56,27 @@ private:
     Vector2D originPosition;
     bool hasCustomOrigin = false;
 
+    //Shadow cositas
+    void SetupShadow();
+    void RenderShadow();
+    float FindGroundLevel();
+    void SetHorizontalSpeed(float speed);
+    void SetVerticalSpeed(float speed);
+    float GetHorizontalSpeed() const;
+    float GetVerticalSpeed() const;
+
+    SDL_Texture* shadowTexture;
+    bool hasShadow;
+    float shadowGroundY;
 
 private:
     void CreatePhysicsBody();
     SDL_Texture* texture;
     bool isSensorBody = false;
     const char* texturePath;
+
+    float horizontalSpeed;  // Velocidad para lanzas horizontales
+    float verticalSpeed;    // Velocidad para lanzas verticales
 
     int platformCollisionCount;
     int maxPlatformCollisions;
