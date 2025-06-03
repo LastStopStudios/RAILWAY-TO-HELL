@@ -44,9 +44,9 @@ Engine::Engine() {
     sceneLoader = std::make_shared<SceneLoader>(); 
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
-    guiManager = std::make_shared<GuiManager>();
     dialogoM = std::make_shared<DialogoM>();
     mapa = std::make_shared<Mapa>();
+    guiManager = std::make_shared<GuiManager>();
     ui = std::make_shared<UI>();
     ffmpeg = std::make_shared<Ffmpeg>();
 
@@ -60,9 +60,9 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(map));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(entityManager));
-	AddModule(std::static_pointer_cast<Module>(guiManager));
     AddModule(std::static_pointer_cast<Module>(dialogoM));
     AddModule(std::static_pointer_cast<Module>(mapa));
+    AddModule(std::static_pointer_cast<Module>(guiManager));
     AddModule(std::static_pointer_cast<Module>(ui));
 
     AddModule(std::static_pointer_cast<Module>(ffmpeg));

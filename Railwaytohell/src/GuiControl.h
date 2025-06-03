@@ -27,6 +27,7 @@ enum class GuiControlState
 	FOCUSED,
 	PRESSED,
 	SELECTED,
+	ON,
 	OFF
 };
 
@@ -58,6 +59,11 @@ public:
 		return true;
 	}
 
+	virtual bool PostUpdate()
+	{
+		return true;
+	}
+
 	// 
 	void SetTexture(SDL_Texture* tex)
 	{
@@ -77,18 +83,20 @@ public:
 		observer->OnGuiMouseClickEvent(this);
 	}
 
+	virtual int GetValue() const { return 0; }
+
 public:
 
 	int id;
 	GuiControlType type;
 	GuiControlState state;
 
-	std::string text;           // Control text (if required)
-	SDL_Rect bounds;        // Position and size
-	SDL_Color color;        // Tint color
+	std::string text;           
+	SDL_Rect bounds;        
+	SDL_Color color;        
 
-	SDL_Texture* texture;   // Texture atlas reference
-	SDL_Rect section;       // Texture atlas base section
+	SDL_Texture* texture;  
+	SDL_Rect section;       
 
-	Module* observer;        // Observer 
+	Module* observer;        
 };

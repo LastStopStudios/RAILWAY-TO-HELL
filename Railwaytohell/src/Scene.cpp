@@ -28,6 +28,7 @@ Scene::Scene() : Module()
 {
 	name = "scene";
 	currentState = SceneState::INTRO_SCREEN;
+	previousState = SceneState::INTRO_SCREEN;  
 }
 
 // Destructor
@@ -182,6 +183,10 @@ bool Scene::Start()
 	settingsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Settings_Background.png");
 	creditsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Credits_Background.png");
 	pauseTexture = Engine::GetInstance().textures->Load("Assets/Textures/Pause_Background.png");
+	controlsTexture1 = Engine::GetInstance().textures->Load("Assets/Textures/controls1.png");
+	controlsTexture2 = Engine::GetInstance().textures->Load("Assets/Textures/controls2.png");
+	controlsTexture3 = Engine::GetInstance().textures->Load("Assets/Textures/controls3.png");
+	settingsPauseMenu = Engine::GetInstance().textures->Load("Assets/Textures/Settings_PauseMenu.png");
 
 	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
@@ -205,9 +210,10 @@ bool Scene::Start()
 // Button
 	SDL_Rect NewGamePos = { 580, 350, 120,20 };
 	SDL_Rect ContinuePos = { 580, 400, 120,20 };
-	SDL_Rect SettingsPos = { 580, 450, 120,20 };
-	SDL_Rect CreditsPos = { 580, 500, 120,20 };
-	SDL_Rect ExitGamePos = { 580, 550, 120,20 };
+	SDL_Rect ControlsMainMenuPos = { 580, 450, 120,20 };
+	SDL_Rect SettingsPos = { 580, 500, 120,20 };
+	SDL_Rect CreditsPos = { 580, 550, 120,20 };
+	SDL_Rect ExitGamePos = { 580, 600, 120,20 };
 
 	NewGameNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGameNormal.png");
 	NewGameFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/NewGameFocused.png");
@@ -234,6 +240,31 @@ bool Scene::Start()
 	ExitPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitPressed.png");
 	ExitOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
 
+	// Pause Menu Buttons
+
+	ResumeNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeNormal.png");
+	ResumeFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeFocused.png");
+	ResumePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumePressed.png");
+	ResumeOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeNormal.png");
+
+	ControlsNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsNormal.png");
+	ControlsFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsFocused.png");
+	ControlsPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsPressed.png");
+	ControlsOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsNormal.png");
+
+	BackToTitleNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleNormal.png");
+	BackToTitleFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleFocused.png");
+	BackToTitlePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitlePressed.png");
+	BackToTitleOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleNormal.png");
+
+	FullScreenNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+	FullScreenFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
+	FullScreenPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
+	FullScreenOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
+
+	sliderBase = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SliderBase.png");
+	sliderHandle = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SliderHandle.png");
+
 	// Create the menu buttons
 	NewGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, " ", NewGamePos, this);
 	NewGame->SetTextures(NewGameNormal, NewGameFocused, NewGamePressed, NewGameDOff);
@@ -241,6 +272,9 @@ bool Scene::Start()
 	Continue = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, " ", ContinuePos, this);
 	Continue->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
 	Continue->SetState(GuiControlState::OFF);
+
+	ControlsMainMenu = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 13, " ", ControlsMainMenuPos, this);
+	ControlsMainMenu->SetTextures(ControlsNormal, ControlsFocused, ControlsPressed, ControlsOff);
 
 	Settings = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, " ", SettingsPos, this);
 	Settings->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
@@ -251,22 +285,36 @@ bool Scene::Start()
 	ExitGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, " ", ExitGamePos, this);
 	ExitGame->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
 
-	// Create the pause menu buttons
-	ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 350, 120,20 }, this);
-	ResumeGame->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
-	ResumeGame->SetState(GuiControlState::DISABLED);
+	// Fullscreen Checkbox
+	fullscreenState = Engine::GetInstance().window->IsFullscreen();
 
-	BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 400, 120,20 }, this);
-	BackToTitle->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
-	BackToTitle->SetState(GuiControlState::DISABLED);
+	SDL_Rect fullscreenPos = { 520, 400, 40, 40 };
+	FullScreenCheckbox = (CheckBox*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, " ", fullscreenPos, this);
+	FullScreenCheckbox->SetTextures(FullScreenNormal, FullScreenPressed);
+	FullScreenCheckbox->SetState(GuiControlState::DISABLED);
 
-	SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 450, 120,20 }, this);
-	SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
-	SettingsPause->SetState(GuiControlState::DISABLED);
 
-	ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 500, 120,20 }, this);
-	ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
-	ExitGamePause->SetState(GuiControlState::DISABLED);
+	// Music Slider
+	SDL_Rect musicSliderPos = { 580, 270, 200, 10 }; 
+	musicSlider = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, " ", musicSliderPos, this, { 0, 128 });// min=0, max=128
+
+	musicSlider->SetTextures(sliderBase, sliderHandle);
+	musicSlider->SetHandleSize(20, 20); // Handle size
+	int currentVolume = Engine::GetInstance().audio->GetMusicVolume();
+	musicSlider->SetValue(currentVolume);
+	Engine::GetInstance().audio->SetMusicVolume(currentVolume);
+	musicSlider->UpdateHandlePosition();
+	musicSlider->SetState(GuiControlState::DISABLED);
+
+	// SFX Slider
+	SDL_Rect sfxSliderPos = { 580, 310, 200, 10 };
+	fxSlider = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, " ", sfxSliderPos, this, { 0, 128 });// min=0, max=128
+	fxSlider->SetTextures(sliderBase, sliderHandle);
+	fxSlider->SetHandleSize(20, 20);
+	fxSlider->SetValue(Engine::GetInstance().audio->GetFxVolume()); 
+	fxSlider->UpdateHandlePosition();
+	fxSlider->SetState(GuiControlState::DISABLED);
+
 
 	//Draw player
 	dibujar = false;
@@ -283,17 +331,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	if (currentState == SceneState::GAMEPLAY) {
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-			pauseMenuOn = !pauseMenuOn;
-			if (pauseMenuOn) {
-				EnablePauseButtons();
-			}
-			else {
-				DisablePauseButtons();
-			}
-		}
-	}
 	switch (currentState)
 	{
 	case SceneState::INTRO_SCREEN:
@@ -336,22 +373,37 @@ bool Scene::Update(float dt)
 		}
 		dibujar = true;
 		break;
+	case SceneState::CONTROLS_MENU:
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(previousState);
+		}
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+			currentControlsPage--;
+			if (currentControlsPage < 0) currentControlsPage = 2;
+		}
+		else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+			currentControlsPage++;
+			if (currentControlsPage > 2) currentControlsPage = 0;
+		}
+
+		DrawCurrentScene();
+		break;
 	case SceneState::SETTINGS_MENU:
-			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-				SetCurrentState(SceneState::INTRO_SCREEN);
-			}
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(previousState);
+		}
+		DrawCurrentScene();
 
-			DrawCurrentScene();
-
-			break;
+		break;
 	case SceneState::CREDITS_MENU:
-			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
-				SetCurrentState(SceneState::INTRO_SCREEN);
-			}
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(SceneState::INTRO_SCREEN);
+		}
 
-			DrawCurrentScene();
+		DrawCurrentScene();
 
-			break;
+		break;
 	case SceneState::EXIT_MENU:
 		break;
 	case SceneState::BACKTOTITTLE_MENU:
@@ -377,6 +429,10 @@ bool Scene::Update(float dt)
 		}
 		break;
 	case SceneState::GAMEPLAY:
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(SceneState::PAUSE_MENU);
+		}
 
 		if (!pauseMenuOn) {
 			if (currentMusic != "caronte") {
@@ -417,7 +473,14 @@ bool Scene::Update(float dt)
 		}*/
 
 		break;
+	case SceneState::PAUSE_MENU:
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+			SetCurrentState(SceneState::GAMEPLAY);
+		}
+		DrawCurrentScene();
+		break;
 	}
+
 
 	return true;
 }
@@ -683,6 +746,14 @@ bool Scene::CleanUp()
 				enemyNode.attribute("death").set_value(0);
 				enemyNode.attribute("savedDeath").set_value(0);
 			}
+		}
+	}
+
+	pugi::xml_node windowNode = loadFile.child("config").child("window");
+	if (windowNode) {
+		pugi::xml_node fullscreenNode = windowNode.child("fullscreen_window");
+		if (fullscreenNode) {
+			fullscreenNode.attribute("value").set_value(false);
 		}
 	}
 
@@ -982,8 +1053,13 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		DisableMenuButtons();
 		break;
 	case 4: // Settings
+		previousState = currentState;
+
 		currentState = SceneState::SETTINGS_MENU;
+
 		DisableMenuButtons();
+		EnableFullscreenButton();
+		EnableSettingsControls();
 		break;
 	case 5: // Credits
 		currentState = SceneState::CREDITS_MENU;
@@ -994,7 +1070,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		break;
 	case 7: // ResumeGame 
 		pauseMenuOn = false;
-		DisablePauseButtons();
+		SetCurrentState(SceneState::GAMEPLAY);
 		break;
 	case 8: // BackToTitle 
 		SetCurrentState(SceneState::INTRO_SCREEN);
@@ -1002,13 +1078,52 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		DisablePauseButtons();
 		break;
 	case 9: // SettingsPause 
+		previousState = currentState;
 		currentState = SceneState::SETTINGS_MENU;
 		DisablePauseButtons();
+		EnableFullscreenButtonPauseMenu();
+		EnableSettingsControlsPauseMenu();
 		break;
 	case 10: // ExitGamePause
 		exitRequested = true;
 		break;
+	case 11: // FullScreen
+		fullscreenState = !fullscreenState;
+
+		Engine::GetInstance().window->ToggleFullscreen();
+		//EnableFullscreenButton();
+		//EnableFullscreenButtonPauseMenu();
+		break;
+	case 12: // ControlsPauseMenu
+		previousState = currentState;
+		currentState = SceneState::CONTROLS_MENU;
+		DisablePauseButtons();
+		break;
+	case 13: // ControlsMainMenu
+		previousState = currentState;
+		currentState = SceneState::CONTROLS_MENU;
+		DisableMenuButtons();
+		break;
+	case 14: {// Music slider
+		int volume = control->GetValue();
+		Engine::GetInstance().audio->SetMusicVolume(volume);
+
+		// Sincronize the music slider in both menus
+		if (musicSlider) musicSlider->SetValue(volume);
+		if (musicSliderPauseMenu) musicSliderPauseMenu->SetValue(volume);
+		break;
 	}
+	case 15: { // FX slider
+		int volume = control->GetValue();
+		Engine::GetInstance().audio->SetGlobalFxVolume(volume);
+
+		// Sincronize the fx slider in both menus
+		if (fxSlider) fxSlider->SetValue(volume);
+		if (fxSliderPauseMenu) fxSliderPauseMenu->SetValue(volume);
+		break;
+	}
+	}
+
 	return true;
 }
 
@@ -1019,10 +1134,130 @@ SceneState Scene::GetCurrentState() const
 
 void Scene::SetCurrentState(SceneState state)
 {
-	if (state == SceneState::INTRO_SCREEN) {
+	if (currentState == state) return;
+
+	previousState = currentState;  
+
+	if (previousState == SceneState::SETTINGS_MENU && state == SceneState::INTRO_SCREEN) {
+		DisableFullscreenButton();
+		DisableSettingsControls();
+	}
+	else if (previousState == SceneState::SETTINGS_MENU && state == SceneState::PAUSE_MENU) {
+		DisableFullscreenButtonPauseMenu();
+		DisableSettingsControlsPauseMenu();
+	}
+	else if (previousState == SceneState::PAUSE_MENU) {
+		DisablePauseButtons();
+	}
+	else if (previousState == SceneState::INTRO_SCREEN) {
+		DisableMenuButtons();
+	}
+
+	currentState = state;  
+
+	if (state == SceneState::SETTINGS_MENU) {
+		int currentMusicVol = Engine::GetInstance().audio->GetMusicVolume();
+		int currentFxVol = Engine::GetInstance().audio->GetFxVolume();
+
+		if (musicSlider) {
+			musicSlider->SetValue(currentMusicVol);
+			musicSlider->UpdateHandlePosition();
+		}
+		if (fxSlider) {
+			fxSlider->SetValue(currentFxVol);
+			fxSlider->UpdateHandlePosition();
+		}
+
+		if (musicSliderPauseMenu) {
+			musicSliderPauseMenu->SetValue(currentMusicVol);
+			musicSliderPauseMenu->UpdateHandlePosition();
+		}
+		if (fxSliderPauseMenu) {
+			fxSliderPauseMenu->SetValue(currentFxVol);
+			fxSliderPauseMenu->UpdateHandlePosition();
+		}
+	}
+
+	if (state == SceneState::SETTINGS_MENU && previousState == SceneState::INTRO_SCREEN) {
+		EnableFullscreenButton();
+		EnableSettingsControls();
+	}
+	else if (state == SceneState::SETTINGS_MENU && previousState == SceneState::PAUSE_MENU) {
+		EnableFullscreenButtonPauseMenu();
+		EnableSettingsControlsPauseMenu();
+	}
+	else if (state == SceneState::INTRO_SCREEN) {
 		EnableMenuButtons();
 	}
-	currentState = state;
+	else if (state == SceneState::PAUSE_MENU) {
+		CreatePauseMenu();
+	}
+}
+
+void Scene::EnableSettingsControls()
+{
+	EnableFullscreenButton();
+	if (musicSlider) musicSlider->SetState(GuiControlState::NORMAL);
+	if (fxSlider) fxSlider->SetState(GuiControlState::NORMAL);
+}
+
+void Scene::DisableSettingsControls()
+{
+	DisableFullscreenButton();
+	if (musicSlider) musicSlider->SetState(GuiControlState::DISABLED);
+	if (fxSlider) fxSlider->SetState(GuiControlState::DISABLED);
+}
+
+void Scene::CreateFullscreenButton()
+{
+	if (!fullscreenButtonsCreated) {
+
+		fullscreenButtonsCreated = true;
+	}
+}
+
+void Scene::EnableFullscreenButton()
+{
+	if (FullScreenCheckbox) {
+		FullScreenCheckbox->SetChecked(fullscreenState);
+		//FullScreenCheckbox->SetState(GuiControlState::NORMAL);
+	}
+}
+
+void Scene::DisableFullscreenButton()
+{
+	if (FullScreenCheckbox) {
+		FullScreenCheckbox->SetState(GuiControlState::DISABLED);
+	}
+}
+
+void Scene::EnableSettingsControlsPauseMenu()
+{
+	EnableFullscreenButtonPauseMenu();
+	if (musicSliderPauseMenu) musicSliderPauseMenu->SetState(GuiControlState::NORMAL);
+	if (fxSliderPauseMenu) fxSliderPauseMenu->SetState(GuiControlState::NORMAL);
+}
+
+void Scene::DisableSettingsControlsPauseMenu()
+{
+	DisableFullscreenButtonPauseMenu();
+	if (musicSliderPauseMenu) musicSliderPauseMenu->SetState(GuiControlState::DISABLED);
+	if (fxSliderPauseMenu) fxSliderPauseMenu->SetState(GuiControlState::DISABLED);
+}
+
+void Scene::EnableFullscreenButtonPauseMenu()
+{
+	if (FullScreenCheckboxPauseMenu) {
+		FullScreenCheckboxPauseMenu->SetChecked(fullscreenState);
+		//FullScreenCheckbox->SetState(GuiControlState::NORMAL);
+	}
+}
+
+void Scene::DisableFullscreenButtonPauseMenu()
+{
+	if (FullScreenCheckboxPauseMenu) {
+		FullScreenCheckboxPauseMenu->SetState(GuiControlState::DISABLED);
+	}
 }
 
 void Scene::DrawCurrentScene()
@@ -1032,20 +1267,24 @@ void Scene::DrawCurrentScene()
 	case SceneState::INTRO_SCREEN:
 		if (introScreenTexture != nullptr)
 		{
-			Engine::GetInstance().render->DrawTexture(introScreenTexture, -50, 0);
+			Engine::GetInstance().render->DrawTexture(introScreenTexture, -50, 0, nullptr, 0.0f);
 		}
 		break;
 	case SceneState::SETTINGS_MENU:
-		if (settingsTexture != nullptr)
+		if (settingsTexture != nullptr && previousState == SceneState::INTRO_SCREEN)
 		{
-			Engine::GetInstance().render->DrawTexture(settingsTexture, -50, 0);
+			Engine::GetInstance().render->DrawTexture(settingsTexture, -50, 0, nullptr, 0.0f);
+		}
+		else if (settingsPauseMenu != nullptr && previousState == SceneState::PAUSE_MENU)
+		{
+			Engine::GetInstance().render->DrawTexture(settingsPauseMenu, -40, 0, nullptr, 0.0f);
 		}
 		break;
 	case SceneState::CREDITS_MENU:
 		if (creditsTexture != nullptr)
 		{
-			//Engine::GetInstance().render->DrawTexture(creditsTexture, -50, 0);
 			Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Textures/GUI/CREDITS.mp4");
+			//Engine::GetInstance().render->DrawTexture(creditsTexture, -50, 0, nullptr, 0.0f);
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
@@ -1055,19 +1294,95 @@ void Scene::DrawCurrentScene()
 		}
 		break;
 	case SceneState::GAMEPLAY:
-		if (pauseMenuOn) {
-			if (pauseTexture != nullptr) {
-				Engine::GetInstance().render->DrawTexture(pauseTexture, 0, 0);
-			}
+		break;
+	case SceneState::PAUSE_MENU:
+		if (pauseTexture != nullptr) {
+			Engine::GetInstance().render->DrawTexture(pauseTexture, -40, 0, nullptr, 0.0f);
+		}
+		break;
+	case SceneState::CONTROLS_MENU:
+		SDL_Texture* currentTexture = nullptr;
+		switch (currentControlsPage) {
+		case 0: 
+			currentTexture = controlsTexture1; 
+			break;
+		case 1: 
+			currentTexture = controlsTexture2; 
+			break;
+		case 2: 
+			currentTexture = controlsTexture3; 
+			break;
+		}
+
+		if (currentTexture != nullptr) {
+			Engine::GetInstance().render->DrawTexture(currentTexture, -40, 0, nullptr, 0.0f);
 		}
 		break;
 	}
 
 }
 
+void Scene::CreatePauseMenu() {
+	if (!pauseButtonsCreated) {
+		// Create the pause menu buttons
+		ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 280, 120,20 }, this);
+		ResumeGame->SetTextures(ResumeNormal, ResumeFocused, ResumePressed, ResumeOff);
+		ResumeGame->SetState(GuiControlState::DISABLED);
+
+		BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 330, 120,20 }, this);
+		BackToTitle->SetTextures(BackToTitleNormal, BackToTitleFocused, BackToTitlePressed, BackToTitleOff);
+		BackToTitle->SetState(GuiControlState::DISABLED);
+
+		ControlsPauseMenu = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, " ", { 580, 380, 120,20 }, this);
+		ControlsPauseMenu->SetTextures(ControlsNormal, ControlsFocused, ControlsPressed, ControlsOff);
+		ControlsPauseMenu->SetState(GuiControlState::DISABLED);
+
+		SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 430, 120,20 }, this);
+		SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
+		SettingsPause->SetState(GuiControlState::DISABLED);
+
+		ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 480, 120,20 }, this);
+		ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+		ExitGamePause->SetState(GuiControlState::DISABLED);
+
+		// Fullscreen Checkbox
+		fullscreenState = Engine::GetInstance().window->IsFullscreen();
+
+		SDL_Rect fullscreenPos = { 520, 400, 40, 40 };
+		FullScreenCheckboxPauseMenu = (CheckBox*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, " ", fullscreenPos, this);
+		FullScreenCheckboxPauseMenu->SetTextures(FullScreenNormal, FullScreenPressed);
+		FullScreenCheckboxPauseMenu->SetState(GuiControlState::DISABLED);
+
+		// Music Slider
+		SDL_Rect musicSliderPos = { 580, 270, 200, 10 };
+		musicSliderPauseMenu = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, " ", musicSliderPos, this, { 0, 128 });// min=0, max=128
+
+		musicSliderPauseMenu->SetTextures(sliderBase, sliderHandle);
+		musicSliderPauseMenu->SetHandleSize(20, 20); // Handle size
+		int currentMusicVol = Engine::GetInstance().audio->GetMusicVolume();
+		musicSliderPauseMenu->SetValue(currentMusicVol);
+		musicSliderPauseMenu->UpdateHandlePosition();
+		musicSliderPauseMenu->SetState(GuiControlState::DISABLED);
+
+		// SFX Slider
+		SDL_Rect sfxSliderPos = { 580, 310, 200, 10 };
+		fxSliderPauseMenu = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, " ", sfxSliderPos, this, { 0, 128 });// min=0, max=128
+		fxSliderPauseMenu->SetTextures(sliderBase, sliderHandle);
+		fxSliderPauseMenu->SetHandleSize(20, 20);
+		fxSliderPauseMenu->SetValue(Engine::GetInstance().audio->GetFxVolume());
+		fxSliderPauseMenu->UpdateHandlePosition();
+		fxSliderPauseMenu->SetState(GuiControlState::DISABLED);
+
+		pauseButtonsCreated = true;
+
+	}
+	EnablePauseButtons();
+
+}
 void Scene::DisableMenuButtons() {
 	if (NewGame) NewGame->SetState(GuiControlState::DISABLED);
 	if (Continue) Continue->SetState(GuiControlState::DISABLED);
+	if (ControlsMainMenu) ControlsMainMenu->SetState(GuiControlState::DISABLED);
 	if (Settings) Settings->SetState(GuiControlState::DISABLED);
 	if (Credits) Credits->SetState(GuiControlState::DISABLED);
 	if (ExitGame) ExitGame->SetState(GuiControlState::DISABLED);
@@ -1083,6 +1398,7 @@ void Scene::EnableMenuButtons() {
 			Continue->SetState(GuiControlState::OFF);
 		}
 	}
+	if (ControlsMainMenu) ControlsMainMenu->SetState(GuiControlState::NORMAL);
 	if (Settings) Settings->SetState(GuiControlState::NORMAL);
 	if (Credits) Credits->SetState(GuiControlState::NORMAL);
 	if (ExitGame) ExitGame->SetState(GuiControlState::NORMAL);
@@ -1091,6 +1407,7 @@ void Scene::EnableMenuButtons() {
 void Scene::DisablePauseButtons() {
 	if (ResumeGame) ResumeGame->SetState(GuiControlState::DISABLED);
 	if (BackToTitle) BackToTitle->SetState(GuiControlState::DISABLED);
+	if (ControlsPauseMenu) ControlsPauseMenu->SetState(GuiControlState::DISABLED);
 	if (SettingsPause) SettingsPause->SetState(GuiControlState::DISABLED);
 	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::DISABLED);
 }
@@ -1098,6 +1415,7 @@ void Scene::DisablePauseButtons() {
 void Scene::EnablePauseButtons() {
 	if (ResumeGame) ResumeGame->SetState(GuiControlState::NORMAL);
 	if (BackToTitle) BackToTitle->SetState(GuiControlState::NORMAL);
+	if (ControlsPauseMenu) ControlsPauseMenu->SetState(GuiControlState::NORMAL);
 	if (SettingsPause) SettingsPause->SetState(GuiControlState::NORMAL);
 	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::NORMAL);
 }

@@ -115,12 +115,12 @@ void UI::LoadTUi()
 	//PopUps
 	Ball = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load ball keyboard PopUp texture
 	Ball2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load ball Controller PopUp texture
-	Dash = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Dash keyboard PopUp texture
-	Dash2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Dash Controller PopUp texture
-	DJump = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Double jump keyboard PopUp texture
-	DJump2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Double jump Controller PopUp texture
-	Whip = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_teclat.png"); //Load Whip keyboard PopUp texture
-	Whip2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/ball_xboxt.png"); //Load Whip Controller PopUp texture
+	Dash = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/dash_teclat.png"); //Load Dash keyboard PopUp texture
+	Dash2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/dash_xbox.png"); //Load Dash Controller PopUp texture
+	DJump = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/doublejump_teclat.png"); //Load Double jump keyboard PopUp texture
+	DJump2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/doublejump_xbox.png"); //Load Double jump Controller PopUp texture
+	Whip = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/whip_teclat.png"); //Load Whip keyboard PopUp texture
+	Whip2 = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/whip_xbox.png"); //Load Whip Controller PopUp texture
 	Puzzle = Engine::GetInstance().textures->Load("Assets/Textures/PopUps/puzzle.png"); //Load Puzzle complete PopUp texture
 }
 

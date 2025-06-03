@@ -130,6 +130,12 @@
     <ClCompile Include="src\Spears.cpp">
       <Filter>SourceFilles\Game\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="src\CheckBox.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlSlider.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -272,6 +278,12 @@
     </ClInclude>
     <ClInclude Include="src\Spears.h">
       <Filter>SourceFilles\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlSlider.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CheckBox.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -149,6 +149,7 @@
     <ClCompile Include="src\Boss.cpp" />
     <ClCompile Include="src\Bufon.cpp" />
     <ClCompile Include="src\Caronte.cpp" />
+    <ClCompile Include="src\CheckBox.cpp" />
     <ClCompile Include="src\Checkpoints.cpp" />
     <ClCompile Include="src\Devil.cpp" />
     <ClCompile Include="src\DialogoM.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\Estatua.cpp" />
     <ClCompile Include="src\Explosivo.cpp" />
     <ClCompile Include="src\GlobalSettings.cpp" />
+    <ClCompile Include="src\GuiControlSlider.cpp" />
     <ClCompile Include="src\Levers.cpp" />
     <ClCompile Include="src\Mapa.cpp" />
     <ClCompile Include="src\MosaicLevers.cpp" />
@@ -196,6 +198,7 @@
     <ClInclude Include="src\Boss.h" />
     <ClInclude Include="src\Bufon.h" />
     <ClInclude Include="src\Caronte.h" />
+    <ClInclude Include="src\CheckBox.h" />
     <ClInclude Include="src\Checkpoints.h" />
     <ClInclude Include="src\Devil.h" />
     <ClInclude Include="src\DialogoM.h" />
@@ -204,6 +207,7 @@
     <ClInclude Include="src\Estatua.h" />
     <ClInclude Include="src\Explosivo.h" />
     <ClInclude Include="src\GlobalSettings.h" />
+    <ClInclude Include="src\GuiControlSlider.h" />
     <ClInclude Include="src\Levers.h" />
     <ClInclude Include="src\Mapa.h" />
     <ClInclude Include="src\MosaicLevers.h" />
