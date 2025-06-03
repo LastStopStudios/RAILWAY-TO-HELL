@@ -536,15 +536,27 @@ bool Scene::PostUpdate()
 }
 
 void Scene::EntrarBoss() { BossBattle = true;
-
 if (BossBattle) {
-	Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/boss.ogg", 3.0f);
-	Engine::GetInstance().audio.get()->SetMusicVolume(2);
+	if (isBufonFight) {
+		Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Bufon.ogg", 10.0f);
+		
+	}
+	else if (isNomaFight ) {
+		Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Noma.ogg", 10.0f);
+		
+	}
+	else if (isDevilFight)
+	{
+		Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Devil.ogg", 10.0f);
+
+	}
+}
 }
 
-}
+void Scene::SalirBoss() { BossBattle = false;
 
-void Scene::SalirBoss() { BossBattle = false;}
+Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 10.0f);
+}
 
 // Called before quitting
 bool Scene::CleanUp()

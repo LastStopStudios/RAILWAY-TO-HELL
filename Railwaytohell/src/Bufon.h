@@ -165,6 +165,6 @@ private:
 	// Throw
 
 	bool hasFiredProjectile = false;
-	
+
 };
 
