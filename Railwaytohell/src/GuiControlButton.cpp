@@ -120,23 +120,23 @@ bool GuiControlButton::PostUpdate()
 			{
 			case GuiControlState::OFF:
 				if (offTex)
-					Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y);
+					Engine::GetInstance().render->DrawTextureForButtons(offTex, bounds.x, bounds.y, nullptr, 0.0f);	
 				break;
 			case GuiControlState::NORMAL:
 				if (normalTex)
-					Engine::GetInstance().render->DrawTextureForButtons(normalTex, bounds.x, bounds.y);
+					Engine::GetInstance().render->DrawTextureForButtons(normalTex, bounds.x, bounds.y, nullptr, 0.0f);
 				break;
 			case GuiControlState::FOCUSED:
 				if (focusedTex)
-					Engine::GetInstance().render->DrawTextureForButtons(focusedTex, bounds.x, bounds.y);
+					Engine::GetInstance().render->DrawTextureForButtons(focusedTex, bounds.x, bounds.y, nullptr, 0.0f);
 				break;
 			case GuiControlState::PRESSED:
 				if (pressedTex)
-					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
+					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y, nullptr, 0.0f);
 				break;
 			case GuiControlState::ON:
 				if (pressedTex)
-					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y);
+					Engine::GetInstance().render->DrawTextureForButtons(pressedTex, bounds.x, bounds.y, nullptr, 0.0f);
 				break;
 			}
 

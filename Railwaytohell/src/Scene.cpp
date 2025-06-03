@@ -168,6 +168,9 @@ bool Scene::Start()
 	settingsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Settings_Background.png");
 	creditsTexture = Engine::GetInstance().textures->Load("Assets/Textures/Credits_Background.png");
 	pauseTexture = Engine::GetInstance().textures->Load("Assets/Textures/Pause_Background.png");
+	controlsTexture1 = Engine::GetInstance().textures->Load("Assets/Textures/controls1.png");
+	controlsTexture2 = Engine::GetInstance().textures->Load("Assets/Textures/controls2.png");
+	controlsTexture3 = Engine::GetInstance().textures->Load("Assets/Textures/controls3.png");
 
 	//Call the function to load the map. 
 	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
@@ -219,6 +222,23 @@ bool Scene::Start()
 	ExitFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitFocused.png");
 	ExitPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitPressed.png");
 	ExitOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/ExitNormal.png");
+
+	// Pause Menu Buttons
+
+	ResumeNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeNormal.png");
+	ResumeFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeFocused.png");
+	ResumePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumePressed.png");
+	ResumeOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ResumeNormal.png");
+
+	ControlsNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsNormal.png");
+	ControlsFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsFocused.png");
+	ControlsPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsPressed.png");
+	ControlsOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/ControlsNormal.png");
+
+	BackToTitleNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleNormal.png");
+	BackToTitleFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleFocused.png");
+	BackToTitlePressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitlePressed.png");
+	BackToTitleOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/PauseMenu/BackToTitleNormal.png");
 
 	FullScreenNormal = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
 	FullScreenFocused = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
@@ -274,6 +294,7 @@ bool Scene::Start()
 	fxSlider->SetValue(Engine::GetInstance().audio->GetFxVolume()); 
 	fxSlider->UpdateHandlePosition();
 	fxSlider->SetState(GuiControlState::DISABLED);
+
 
 	//Draw player
 	dibujar = false;
@@ -1122,6 +1143,11 @@ void Scene::DrawCurrentScene()
 			Engine::GetInstance().render->DrawTexture(pauseTexture, 0, 0);
 		}
 		break;
+	case SceneState::CONTROLS_MENU:
+		if (controlsTexture1 != nullptr) {
+			Engine::GetInstance().render->DrawTexture(controlsTexture1, 0, 0);
+		}
+		break;
 	}
 
 }
@@ -1130,18 +1156,22 @@ void Scene::CreatePauseMenu() {
 	if (!pauseButtonsCreated) {
 		// Create the pause menu buttons
 		ResumeGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, " ", { 580, 350, 120,20 }, this);
-		ResumeGame->SetTextures(ContinueNormal, ContinueFocused, ContinuePressed, ContinueOff);
+		ResumeGame->SetTextures(ResumeNormal, ResumeFocused, ResumePressed, ResumeOff);
 		ResumeGame->SetState(GuiControlState::DISABLED);
 
 		BackToTitle = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, " ", { 580, 400, 120,20 }, this);
-		BackToTitle->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
+		BackToTitle->SetTextures(BackToTitleNormal, BackToTitleFocused, BackToTitlePressed, BackToTitleOff);
 		BackToTitle->SetState(GuiControlState::DISABLED);
 
-		SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 450, 120,20 }, this);
+		Controls = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, " ", { 580, 450, 120,20 }, this);
+		Controls->SetTextures(ControlsNormal, ControlsFocused, ControlsPressed, ControlsOff);
+		Controls->SetState(GuiControlState::DISABLED);
+
+		SettingsPause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, " ", { 580, 500, 120,20 }, this);
 		SettingsPause->SetTextures(SettingsNormal, SettingsFocused, SettingsPressed, SettingsOff);
 		SettingsPause->SetState(GuiControlState::DISABLED);
 
-		ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 500, 120,20 }, this);
+		ExitGamePause = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, " ", { 580, 550, 120,20 }, this);
 		ExitGamePause->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
 		ExitGamePause->SetState(GuiControlState::DISABLED);
 		pauseButtonsCreated = true;
@@ -1174,6 +1204,7 @@ void Scene::EnableMenuButtons() {
 void Scene::DisablePauseButtons() {
 	if (ResumeGame) ResumeGame->SetState(GuiControlState::DISABLED);
 	if (BackToTitle) BackToTitle->SetState(GuiControlState::DISABLED);
+	if (Controls) Controls->SetState(GuiControlState::DISABLED);
 	if (SettingsPause) SettingsPause->SetState(GuiControlState::DISABLED);
 	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::DISABLED);
 }
@@ -1181,6 +1212,7 @@ void Scene::DisablePauseButtons() {
 void Scene::EnablePauseButtons() {
 	if (ResumeGame) ResumeGame->SetState(GuiControlState::NORMAL);
 	if (BackToTitle) BackToTitle->SetState(GuiControlState::NORMAL);
+	if (Controls) Controls->SetState(GuiControlState::NORMAL);
 	if (SettingsPause) SettingsPause->SetState(GuiControlState::NORMAL);
 	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::NORMAL);
 }

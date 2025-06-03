@@ -267,7 +267,8 @@ bool Player::Update(float dt)
     }
 
     if (Engine::GetInstance().scene->IsPaused()) {
-        return true; 
+		//DrawPlayer(); 
+        return true;
     }
 
     if (Engine::GetInstance().scene->IsSkippingFirstInput()) {

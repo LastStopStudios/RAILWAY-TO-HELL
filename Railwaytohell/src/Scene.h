@@ -34,7 +34,8 @@ enum class SceneState
 	SETTINGS_MENU,
 	CREDITS_MENU,
 	EXIT_MENU,
-	BACKTOTITTLE_MENU
+	BACKTOTITTLE_MENU,
+	CONTROLS_MENU
 };
 
 class Scene : public Module
@@ -169,6 +170,9 @@ public:
 	SDL_Texture* settingsTexture = nullptr;
 	SDL_Texture* creditsTexture = nullptr;
 	SDL_Texture* pauseTexture = nullptr;
+	SDL_Texture* controlsTexture1 = nullptr;
+	SDL_Texture* controlsTexture2 = nullptr;
+	SDL_Texture* controlsTexture3 = nullptr;
 
 	float introTimeElapsed;
 	//boss fight camera
@@ -218,6 +222,7 @@ private:
 	//Pause Menu Buttons
 	GuiControlButton* ResumeGame;
 	GuiControlButton* BackToTitle;
+	GuiControlButton* Controls;
 	GuiControlButton* SettingsPause;
 	GuiControlButton* ExitGamePause;
 
@@ -263,6 +268,21 @@ private:
 	SDL_Texture* ExitFocused = nullptr;
 	SDL_Texture* ExitPressed = nullptr;
 	SDL_Texture* ExitOff = nullptr;
+
+	SDL_Texture* ResumeNormal = nullptr;
+	SDL_Texture* ResumeFocused = nullptr;
+	SDL_Texture* ResumePressed = nullptr;
+	SDL_Texture* ResumeOff = nullptr;
+
+	SDL_Texture* BackToTitleNormal = nullptr;
+	SDL_Texture* BackToTitleFocused = nullptr;
+	SDL_Texture* BackToTitlePressed = nullptr;
+	SDL_Texture* BackToTitleOff = nullptr;
+
+	SDL_Texture* ControlsNormal = nullptr;
+	SDL_Texture* ControlsFocused = nullptr;
+	SDL_Texture* ControlsPressed = nullptr;
+	SDL_Texture* ControlsOff = nullptr;
 
 	SDL_Rect NewGamePos = { 520, 300, 120,20 };
 	SDL_Rect ContinuePos = { 520, 350, 120,20 };
