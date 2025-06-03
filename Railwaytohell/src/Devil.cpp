@@ -1077,7 +1077,13 @@ void Devil::RenderSprite() {
         offsetX = -320;
         offsetY = -240;
     }
-
+    Engine::GetInstance().render.get()->DrawTexture(
+        texture,
+        (int)position.getX() + offsetX,
+        (int)position.getY() + offsetY,
+        &frame,
+        1.0f, 0.0, INT_MAX, INT_MAX, flip
+    );
 
 }
 
