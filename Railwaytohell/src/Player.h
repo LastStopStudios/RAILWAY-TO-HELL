@@ -75,6 +75,7 @@ public:
 	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	{"IE1L2BOSS2",5,1400,1550,true,true},// Elevator first floor SECOND boss
 	{"BOSS2IE1L2",5,1140,575,true,false},// Elevator second floor SECOND boss
+	{"FBOSS",12,300,1594,true,false},// Sensor tp to Final Boss sala
 	};
 	//elevator control
 	bool TocandoAs = false;
