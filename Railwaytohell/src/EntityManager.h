@@ -61,6 +61,8 @@ public:
 	bool BBuffon = true;
 	//Estatua
 	bool estatua2;
+	//Recuerdos
+	bool Rec1 = false, Rec2 = false, Rec3 = false, Rec4 = false, Rec5 = false, Rec6 = false, Rec7 = false, Rec8 = false;
 private:
 	bool isPendingToDelente = false;
 

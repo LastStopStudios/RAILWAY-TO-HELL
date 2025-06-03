@@ -2018,29 +2018,37 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Id = physB->ID; //ID from Item
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
                     Engine::GetInstance().mapa.get()->remember1 = true;
-                }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
+                    Engine::GetInstance().entityManager->Rec1 = true;
+               }
+               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
                     Engine::GetInstance().mapa.get()->remember2 = true;
-                }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
+                    Engine::GetInstance().entityManager->Rec2 = true;
+               }
+               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
                     Engine::GetInstance().mapa.get()->remember3 = true;
-                }
+                    Engine::GetInstance().entityManager->Rec3 = true;
+               }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 6) {
                     Engine::GetInstance().mapa.get()->remember4 = true;
+                    Engine::GetInstance().entityManager->Rec4 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 8) {
                     if (Id == "1") {
                         Engine::GetInstance().mapa.get()->remember5 = true;
+                        Engine::GetInstance().entityManager->Rec5 = true;
                     }
                     if (Id == "2") {
                         Engine::GetInstance().mapa.get()->remember6 = true;
+                        Engine::GetInstance().entityManager->Rec6 = true;
                     }                    
                 } 
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 10) {
                     Engine::GetInstance().mapa.get()->remember7 = true;
+                    Engine::GetInstance().entityManager->Rec7 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
                     Engine::GetInstance().mapa.get()->remember8 = true;
+                    Engine::GetInstance().entityManager->Rec8 = true;
                 }
                 
             }
