@@ -291,11 +291,8 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
     // Create new attacks only if not already attacking
     else if (!isTailAttacking && !jumpAttackActive) {
         // Close range tail attack
-        if (distanceToPlayer <= TAIL_ATTACK_DISTANCE && canAttack) {
-            if (!tailAttackArea && currentAnimation->GetCurrentFrameIndex() == 5) {
-                CreateTailAttack();
-            }
-            
+        if (distanceToPlayer <= TAIL_ATTACK_DISTANCE && canAttack) { 
+          CreateTailAttack();
         }
         // Medium range jump attack
         else if (distanceToPlayer <= JUMP_ATTACK_DISTANCE && distanceToPlayer > TAIL_ATTACK_DISTANCE && canAttack) {
@@ -305,6 +302,7 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
         else {
             currentAnimation = &idle2;
             pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+
         }
     }
 }
