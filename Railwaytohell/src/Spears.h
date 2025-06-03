@@ -58,7 +58,7 @@ private:
 
 
 private:
-
+    void CreatePhysicsBody();
     SDL_Texture* texture;
 
     const char* texturePath;

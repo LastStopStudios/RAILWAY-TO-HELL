@@ -60,8 +60,8 @@ bool Spears::Start() {
         return false;
     }
 
-    // Crear cuerpo físico 
-    pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW / 2, texH, bodyType::DYNAMIC);
+    // Crear cuerpo físico según la dirección
+    CreatePhysicsBody();
 
     if (pbody == nullptr) {
         LOG("ERROR: Failed to create physics body for spear");
@@ -82,6 +82,59 @@ bool Spears::Start() {
     LOG("Spear initialized successfully at position: (%f, %f)", position.getX(), position.getY());
     return true;
 }
+
+void Spears::CreatePhysicsBody() {
+    int bodyWidth, bodyHeight;
+    bool isSensor = false;
+
+    // Ajustar dimensiones del colisionador según la dirección
+    switch (spearDirection) {
+    case SpearDirection::VERTICAL_DOWN:
+        // Para movimiento vertical, la lanza es más alta que ancha
+        bodyWidth = texW / 3;  // Más estrecha horizontalmente
+        bodyHeight = texH + 200;     // Mantiene altura completa
+        isSensor = false; // Colisión física normal
+        break;
+    case SpearDirection::HORIZONTAL_LEFT:
+    case SpearDirection::HORIZONTAL_RIGHT:
+    default:
+        // Para movimiento horizontal, la lanza es más ancha que alta
+        bodyWidth = texW + 200;      // Mantiene ancho completo
+        bodyHeight = texH / 3; // Más baja verticalmente
+        isSensor = true; // Crear como sensor
+        break;
+    }
+
+    // Crear el cuerpo físico directamente como sensor si es necesario
+    if (isSensor) {
+        pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
+            (int)position.getX() + texW / 2,
+            (int)position.getY() + texH / 2,
+            bodyWidth / 2,
+            bodyHeight / 2,
+            bodyType::DYNAMIC
+        );
+    }
+    else {
+        pbody = Engine::GetInstance().physics.get()->CreateRectangle(
+            (int)position.getX() + texW / 2,
+            (int)position.getY() + texH / 2,
+            bodyWidth / 2,
+            bodyHeight / 2,
+            bodyType::DYNAMIC
+        );
+    }
+
+    if (pbody != nullptr) {
+        LOG("Physics body created successfully for spear at (%f, %f) - Sensor: %s",
+            position.getX(), position.getY(), isSensor ? "true" : "false");
+    }
+    else {
+        LOG("ERROR: Failed to create physics body for spear");
+    }
+}
+
+
 bool Spears::Update(float dt)
 {
     // Verificar que la textura y animación estén válidas antes de renderizar
@@ -98,12 +151,16 @@ bool Spears::Update(float dt)
     // Si está desapareciendo, no aplicar movimiento
     if (isDisappearing) {
         if (currentAnimation->HasFinished()) {
-            Engine::GetInstance().entityManager.get()->DestroyEntity(this);
+            // Limpiar el listener antes de marcar para eliminación
+            if (pbody != nullptr) {
+                pbody->listener = nullptr;
+            }
+            pendingToDelete = true;
             return false;
         }
     }
     else {
-        // Aplicar movimiento según la dirección configurada
+        // Aplicar movimiento segúnl?a dirección configurada
         b2Vec2 velocity(0, 0);
 
         switch (spearDirection) {
@@ -118,31 +175,45 @@ bool Spears::Update(float dt)
             break;
         }
 
-        if (pbody != nullptr && pbody->body != nullptr) {
-            pbody->body->SetLinearVelocity(velocity);
+        // Verificar que el cuerpo físico sea válido antes de aplicar velocidad
+        if (pbody != nullptr && pbody->body != nullptr && !pendingToDelete && !isDisappearing) {
+            try {
+                pbody->body->SetLinearVelocity(velocity);
+            }
+            catch (...) {
+                LOG("Warning: Exception setting spear velocity");
+            }
         }
     }
 
     // Actualizar posición solo si pbody es válido
-    if (pbody != nullptr && pbody->body != nullptr) {
-        b2Transform pbodyPos = pbody->body->GetTransform();
-        position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-        position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+    if (pbody != nullptr && pbody->body != nullptr && !pendingToDelete && !isDisappearing) {
+        try {
+            b2Transform pbodyPos = pbody->body->GetTransform();
+            position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texW / 2);
+            position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+        }
+        catch (...) {
+            LOG("Warning: Exception updating spear position from physics body");
+        }
     }
 
-    // Configurar flip según dirección
+    // Configurar flip y rotación según dirección
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     double angle = 0.0;
 
     switch (spearDirection) {
     case SpearDirection::HORIZONTAL_LEFT:
         flip = SDL_FLIP_HORIZONTAL;
+        angle = -90.0;  // Rotar 90° para orientación horizontal
         break;
     case SpearDirection::HORIZONTAL_RIGHT:
-        // Sin flip
+        flip = SDL_FLIP_NONE;
+        angle = 90.0;  // Rotar 90° para orientación horizontal
         break;
     case SpearDirection::VERTICAL_DOWN:
-        angle = 90.0;
+        flip = SDL_FLIP_NONE;
+        angle = 180.0;  // Rotar 180° para que mire hacia abajo
         break;
     }
 
@@ -176,19 +247,39 @@ bool Spears::Update(float dt)
 
     return true;
 }
+
 void Spears::startDisappearAnimation() {
-    pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+    if (pbody != nullptr && pbody->body != nullptr && !pendingToDelete) {
+        try {
+            pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+        }
+        catch (...) {
+            LOG("Warning: Exception stopping spear movement in disappear animation");
+        }
+    }
+
     currentAnimation = &disappear;
     currentAnimation->Reset();
     isDisappearing = true;
 }
 
-bool Spears::CleanUp()
-{
-    Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+bool Spears::CleanUp() {
+    LOG("Cleaning up spear");
+
+    // Clear the listener first to prevent callbacks during deletion
+    if (pbody != nullptr) {
+        pbody->listener = nullptr;
+
+        // Delete the physics body
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+        pbody = nullptr;
+    }
+
+    // Mark as pending deletion 
+    pendingToDelete = true;
+
     return true;
 }
-
 void Spears::OnCollision(PhysBody* physA, PhysBody* physB) {
     switch (physB->ctype)
     {
@@ -254,20 +345,81 @@ void Spears::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 }
 
 void Spears::SetPosition(Vector2D pos) {
-    pos.setX(pos.getX() + texW / 2);
-    pos.setY(pos.getY() + texH / 2);
-    b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
-    pbody->body->SetTransform(bodyPos, 0);
+
+    position = pos;
+
+    // Solo actualizar el cuerpo físico si existe
+    if (pbody != nullptr && pbody->body != nullptr) {
+        pos.setX(pos.getX() + texW / 2);
+        pos.setY(pos.getY() + texH / 2);
+        b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
+        pbody->body->SetTransform(bodyPos, 0);
+    }
 }
 
 Vector2D Spears::GetPosition() {
-    b2Vec2 bodyPos = pbody->body->GetTransform().p;
-    Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
-    return pos;
+    // First check if the object is marked for deletion or disappearing
+    if (pendingToDelete || isDisappearing) {
+        return position; // Return cached logical position
+    }
+
+    //  body validation
+    if (pbody != nullptr && pbody->body != nullptr) {
+        try {
+            b2Body* body = pbody->body;
+
+            // Check if the body's world is still valid
+            b2World* world = body->GetWorld();
+            if (world == nullptr) {
+                LOG("Warning: Physics body world is null, using logical position");
+                return position;
+            }
+
+            // Get the transform safely
+            b2Transform bodyTransform = body->GetTransform();
+            b2Vec2 bodyPos = bodyTransform.p;
+
+            // Update our cached position before returning
+            position.setX(METERS_TO_PIXELS(bodyPos.x) - texW / 2);
+            position.setY(METERS_TO_PIXELS(bodyPos.y) - texH / 2);
+
+            return Vector2D(METERS_TO_PIXELS(bodyPos.x) - texW / 2,
+                METERS_TO_PIXELS(bodyPos.y) - texH / 2);
+        }
+        catch (const std::exception& e) {
+            LOG("Exception in GetPosition(): %s - Using logical position", e.what());
+            return position;
+        }
+        catch (...) {
+            LOG("Unknown exception in GetPosition() - Using logical position");
+            return position;
+        }
+    }
+
+    // If no valid physics body, return logical position
+    return position;
 }
 
 void Spears::SetDirection(SpearDirection direction) {
     spearDirection = direction;
+
+    // Si ya existe un cuerpo físico, recrearlo con las nuevas dimensiones
+    if (pbody != nullptr) {
+        LOG("Recreating physics body for direction change");
+        Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
+        pbody = nullptr;  
+
+        CreatePhysicsBody();
+
+        if (pbody != nullptr) {
+            pbody->ctype = ColliderType::SPEAR;
+            pbody->listener = this;
+
+            if (parameters && !parameters.attribute("gravity").as_bool()) {
+                pbody->body->SetGravityScale(0);
+            }
+        }
+    }
 }
 
 void Spears::SetOriginPosition(Vector2D origin) {

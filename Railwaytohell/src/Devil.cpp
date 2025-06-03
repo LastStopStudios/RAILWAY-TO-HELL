@@ -333,6 +333,7 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
         if (currentSpearCooldown <= 0) {
             canAttack = true;
             currentSpearCooldown = 0.0f;
+            LOG("Spear attack cooldown finished, can attack again");
         }
     }
 
@@ -340,33 +341,42 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
     if (isSpearAttacking) {
         UpdateSpearAttacks(dt);
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
-        return; 
+        return;
     }
 
     // Only create new attack if not currently attacking and cooldown is ready
     if (canAttack && !isSpearAttacking) {
+        // Mejorar la selección aleatoria
+        srand(time(NULL)); // Asegurar mejor aleatoriedad
         int attackChoice = rand() % 2; // 0 = vertical, 1 = horizontal
 
+        LOG("Selecting attack type: %s", attackChoice == 0 ? "VERTICAL" : "HORIZONTAL");
+
         if (attackChoice == 0) {
+            LOG("Creating VERTICAL spear attack");
             CreateVerticalSpearAttack();
         }
         else {
+            LOG("Creating HORIZONTAL spear attack");
             CreateHorizontalSpearAttack();
         }
 
         // Set cooldown immediately after creating attack
         canAttack = false;
-        currentSpearCooldown = spearAttackCooldown; 
+        currentSpearCooldown = spearAttackCooldown;
+        LOG("Attack created, cooldown set to: %.2f", spearAttackCooldown);
     }
     else {
-        // Idle state
+        // Idle state - asegurar que la animación se mantenga
         if (currentAnimation != &idle3) {
             currentAnimation = &idle3;
             currentAnimation->Reset();
+            LOG("Setting idle3 animation");
         }
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
     }
 }
+
 void Devil::CreateVerticalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = true;
@@ -385,13 +395,14 @@ void Devil::CreateVerticalSpearAttack() {
         if (spear) {
             spear->SetParameters(spearTemplateNode);
 
-            if (spear->Awake() && spear->Start()) {
-                float offsetX = (i - numSpears / 2) * 80.0f + ((rand() % 40) - 20);
-                float spearX = playerPos.getX() + offsetX;
-                float spearY = playerPos.getY() - 600;
+            spear->SetDirection(SpearDirection::VERTICAL_DOWN);
 
-                spear->SetDirection(SpearDirection::VERTICAL_DOWN);
-                spear->SetPosition(Vector2D(spearX, spearY));
+            float offsetX = (i - numSpears / 2) * 80.0f + ((rand() % 40) - 20);
+            float spearX = playerPos.getX() + offsetX;
+            float spearY = playerPos.getY() - 600;
+            spear->SetOriginPosition(Vector2D(spearX, spearY));
+
+            if (spear->Awake() && spear->Start()) {
                 activeSpears.push_back(spear);
             }
             else {
@@ -413,7 +424,7 @@ void Devil::CreateHorizontalSpearAttack() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    int numSpears = 3 + (rand() % 2); // Spawn between 3 and 4 spears
+    int numSpears = 2 + (rand() % 2); // Spawn between 2 and 3 spears
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
@@ -421,23 +432,26 @@ void Devil::CreateHorizontalSpearAttack() {
         if (spear) {
             spear->SetParameters(spearTemplateNode);
 
+            // Usar la altura del Devil como base, con pequeña variación aleatoria
+            float baseY = currentPos.getY() + 50; // Ajustar según el sprite del Devil
+            float spearY = baseY + (i * 80.0f) - (numSpears * 40.0f) + ((rand() % 60) - 30);
+            float spearX;
+            SpearDirection direction;
+
+            // Alternate spears: even indexes come from left, odd from right
+            if (i % 2 == 0) {
+                spearX = currentPos.getX() - 800;
+                direction = SpearDirection::HORIZONTAL_RIGHT;
+            }
+            else {
+                spearX = currentPos.getX() + 800;
+                direction = SpearDirection::HORIZONTAL_LEFT;
+            }
+
+            spear->SetDirection(direction);
+            spear->SetOriginPosition(Vector2D(spearX, spearY));
+
             if (spear->Awake() && spear->Start()) {
-                float spearY = playerPos.getY() + (i - numSpears / 2) * 60.0f;
-                float spearX;
-                SpearDirection direction;
-
-                // Alternate spears: even indexes come from left, odd from right
-                if (i % 2 == 0) {
-                    spearX = currentPos.getX() - 800;
-                    direction = SpearDirection::HORIZONTAL_RIGHT;
-                }
-                else {
-                    spearX = currentPos.getX() + 800;
-                    direction = SpearDirection::HORIZONTAL_LEFT;
-                }
-
-                spear->SetDirection(direction);
-                spear->SetOriginPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
             }
             else {
@@ -503,13 +517,6 @@ void Devil::UpdateSpearAttacks(float dt) {
 }
 
 void Devil::CleanupSpears() {
-    // Mark all remaining spears for deletion
-    for (Spears* spear : activeSpears) {
-        if (spear && !spear->pendingToDelete) {
-            spear->pendingToDelete = true;
-        }
-    }
-
     activeSpears.clear();
 }
 
