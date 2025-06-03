@@ -57,6 +57,7 @@ private:
     void UpdateJumpAttackArea();
     void ResizeCollisionForPhase2();
     void ResizeCollisionForPhase3(); 
+    bool waitingToLaunchSpears = false;
 
     // Entity identification
     std::string enemyID;

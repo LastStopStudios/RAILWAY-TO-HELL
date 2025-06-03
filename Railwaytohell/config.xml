@@ -4473,7 +4473,7 @@
 	</scene11>
 	<scene12>
 		<map path="Assets/Maps/" name="FBOSS.tmx" />
-		<visibility accessed="false" />
+		<visibility accessed="true" />
 		<entities>
 			<player x="920" y="1956" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4724,7 +4724,15 @@
 							<frame x="2880" y="3712" w="480" h="480" />
 							<frame x="3360" y="3712" w="480" h="480" />
 							<frame x="3840" y="3712" w="480" h="480" />
+							<frame x="4320" y="3712" w="480" h="480" />
 						</attackV>
+						<death loop="false" speed="0.1">
+							<frame x="0" y="4192" w="480" h="480" />
+							<frame x="480" y="4192" w="480" h="480" />
+							<frame x="960" y="4192" w="480" h="480" />
+							<frame x="1440" y="4192" w="480" h="480" />
+							<frame x="1920" y="4192" w="480" h="480" />
+						</death>
 					</animations>
 				</enemy>
 			</enemies>

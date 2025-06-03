@@ -327,54 +327,76 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
-    // Update spear attack cooldown
-    if (!canAttack && !isSpearAttacking) {
+    // Update cooldown si no se está atacando ni esperando lanzar lanzas
+    if (!canAttack && !isSpearAttacking && !waitingToLaunchSpears) {
         currentSpearCooldown -= dt;
         if (currentSpearCooldown <= 0) {
             canAttack = true;
             currentSpearCooldown = 0.0f;
-            LOG("Spear attack cooldown finished, can attack again");
+            LOG("Cooldown terminado, puede atacar de nuevo");
         }
     }
 
-    // Handle active spear attacks
+    // Esperando que termine la animación para lanzar lanzas
+    if (waitingToLaunchSpears) {
+        currentAnimation->Update();
+
+        if (currentAnimation->HasFinished()) {
+            if (isVerticalSpearAttack) {
+                CreateVerticalSpearAttack();  // Aquí realmente se lanzan
+            }
+            else if (isHorizontalSpearAttack) {
+                CreateHorizontalSpearAttack();
+            }
+
+            waitingToLaunchSpears = false;
+            isSpearAttacking = true;
+        }
+
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+        return;
+    }
+
+    // Actualizando lanzas activas
     if (isSpearAttacking) {
         UpdateSpearAttacks(dt);
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
         return;
     }
 
-    // Only create new attack if not currently attacking and cooldown is ready
-    if (canAttack && !isSpearAttacking) {
-        // Mejorar la selección aleatoria
-        srand(time(NULL)); // Asegurar mejor aleatoriedad
-        int attackChoice = rand() % 2; // 0 = vertical, 1 = horizontal
-
-        LOG("Selecting attack type: %s", attackChoice == 0 ? "VERTICAL" : "HORIZONTAL");
+    // Elegir ataque
+    if (canAttack && !waitingToLaunchSpears) {
+        srand(time(NULL));
+        int attackChoice = rand() % 2;
 
         if (attackChoice == 0) {
-            LOG("Creating VERTICAL spear attack");
-            CreateVerticalSpearAttack();
+            currentAnimation = &attackV;
+            isVerticalSpearAttack = true;
+            isHorizontalSpearAttack = false;
         }
         else {
-            LOG("Creating HORIZONTAL spear attack");
-            CreateHorizontalSpearAttack();
+            currentAnimation = &attackH;
+            isVerticalSpearAttack = false;
+            isHorizontalSpearAttack = true;
         }
 
-        // Set cooldown immediately after creating attack
+        currentAnimation->Reset();
+        waitingToLaunchSpears = true;
         canAttack = false;
         currentSpearCooldown = spearAttackCooldown;
-        LOG("Attack created, cooldown set to: %.2f", spearAttackCooldown);
-    }
-    else {
-        // Idle state - asegurar que la animación se mantenga
-        if (currentAnimation != &idle3) {
-            currentAnimation = &idle3;
-            currentAnimation->Reset();
-            LOG("Setting idle3 animation");
-        }
+        LOG("Elegido ataque %s, esperando fin de animación", attackChoice == 0 ? "VERTICAL" : "HORIZONTAL");
+
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+        return;
     }
+
+    // Idle por defecto
+    if (currentAnimation != &idle3) {
+        currentAnimation = &idle3;
+        currentAnimation->Reset();
+        LOG("Seteando animación idle3");
+    }
+    pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
 }
 
 void Devil::CreateVerticalSpearAttack() {
