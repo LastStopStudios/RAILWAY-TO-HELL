@@ -313,7 +313,9 @@ void Spears::OnCollision(PhysBody* physA, PhysBody* physB) {
         
         // Solo contar colisiones con plataformas
         if (physB->ctype == ColliderType::PLATFORM) {
-            startDisappearAnimation();
+            if (veces == 2) {
+                startDisappearAnimation();
+            }
         }
         return; 
     }
@@ -368,6 +370,7 @@ void Spears::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
     {
     case ColliderType::PLATFORM:
         LOG("Spear End Collision PLATFORM");
+        veces++;
         break;
     case ColliderType::ITEM:
         LOG("Spear End Collision ITEM");

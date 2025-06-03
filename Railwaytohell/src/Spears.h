@@ -71,6 +71,9 @@ private:
     float maxLifeTime;
     bool useLifeTimer;
 
+    //Destroy Spear
+    int veces = 1;
+
     Animation* currentAnimation = nullptr;
     Animation falling;        // Animación de 1 frame cuando está cayendo/tirándose
     Animation disappear;      // Animación de desaparecer
