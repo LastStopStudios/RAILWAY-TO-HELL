@@ -102,18 +102,14 @@ bool Mapa::PostUpdate()
 
 bool Mapa::CleanUp()
 {
-	if (fondo != nullptr) {
-		Engine::GetInstance().textures->UnLoad(fondo);//Unload text background
-		fondo = nullptr;
-	}
 	if (mapa != nullptr) {
 		Engine::GetInstance().textures->UnLoad(mapa);//Unload text background
 		mapa = nullptr;
 	}
-	if (pj != nullptr) {
+/*	if (pj != nullptr) {
 		Engine::GetInstance().textures->UnLoad(pj);//Unload text background
 		pj = nullptr;
-	}
+	}*/
 	if (MNegro != nullptr) {
 		Engine::GetInstance().textures->UnLoad(MNegro);//Unload text background
 		MNegro = nullptr;
@@ -154,10 +150,6 @@ bool Mapa::CleanUp()
 	if (MNegro10 != nullptr) {
 		Engine::GetInstance().textures->UnLoad(MNegro10);//Unload text background
 		MNegro10 = nullptr;
-	}
-	if (MNegro11 != nullptr) {
-		Engine::GetInstance().textures->UnLoad(MNegro11);//Unload text background
-		MNegro11 = nullptr;
 	}
 	if (MNegro12 != nullptr) {
 		Engine::GetInstance().textures->UnLoad(MNegro12);//Unload text background
@@ -204,13 +196,11 @@ void Mapa::ShowMap() {
 	//SDL_Rect dstRect2 = { posx,posy, 40, 40 }; //Position and scale character icon
 	
 
-	SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);//render map background
 	SDL_RenderCopy(Engine::GetInstance().render->renderer, mapa, nullptr, &dstRect);//render map
 	//SDL_RenderCopy(Engine::GetInstance().render->renderer, pj, nullptr, &dstRect2);//render character icon
 	for (const auto& negro : negro)// Iterate through all the maps
 	{
 		if (!negro.visible) {
-			//SDL_Rect dstRect3 = { negro.px, negro.py, negro.tmx, negro.tmy }; //Position and scale of the black texture to covern unknown zones of the map
 			switch (negro.num) {
 			case 1: // Scene 
 				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro9, nullptr, &dstRect);//render black rectangle do more to cover the map 
@@ -229,11 +219,9 @@ void Mapa::ShowMap() {
 				break;
 			case 6: // Scene 6
 				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro6, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro10, nullptr, &dstRect);//render black rectangle do more to cover the map 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro11, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				break;
 			case 7: // Scene 
-				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro12, nullptr, &dstRect);//render black rectangle do more to cover the map 
+				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro10, nullptr, &dstRect);//render black rectangle do more to cover the map 
 				break;
 			case 8: // Scene 
 				SDL_RenderCopy(Engine::GetInstance().render->renderer, MNegro7, nullptr, &dstRect);//render black rectangle do more to cover the map 
@@ -306,67 +294,56 @@ void Mapa::LoadMap(){
 	CoverXML(); //needs fixing
 
 	//Textures to load
-	fondo = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Background.png "); //Load texture for map background
-	mapa = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Mapa.png"); //Load texture for map
-	//cobertura = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Cobertura.png"); //Load black texture to cover unknow parts of the map
-	MNegro = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black.png"); //Load black texture to cover unknow parts of the map
-	MNegro2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black2.png"); //Load black texture to cover unknow parts of the map
-	MNegro3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black3.png"); //Load black texture to cover unknow parts of the map
-	MNegro4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black4.png"); //Load black texture to cover unknow parts of the map
-	MNegro5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black5.png"); //Load black texture to cover unknow parts of the map
-	MNegro6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black6.png"); //Load black texture to cover unknow parts of the map
-	MNegro7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black7.png"); //Load black texture to cover unknow parts of the map
-	MNegro8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black8.png"); //Load black texture to cover unknow parts of the map
-	MNegro9 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black9.png"); //Load black texture to cover unknow parts of the map
-	MNegro10 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black10.png"); //Load black texture to cover unknow parts of the map
-	MNegro11 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black11.png"); //Load black texture to cover unknow parts of the map
-	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Black12.png"); //Load black texture to cover unknow parts of the map ;
+	mapa = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Base.png"); //Load texture for map
+	MNegro = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L2_P4.png"); //Load black texture to cover unknow parts of the map
+	MNegro2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L1_P4.png"); //Load black texture to cover unknow parts of the map
+	MNegro3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L2_P2.png"); //Load black texture to cover unknow parts of the map
+	MNegro4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L1_P2.png"); //Load black texture to cover unknow parts of the map
+	MNegro5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L2_P3.png"); //Load black texture to cover unknow parts of the map
+	MNegro6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_Central.png"); //Load black texture to cover unknow parts of the map
+	MNegro7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L2_P1.png"); //Load black texture to cover unknow parts of the map
+	MNegro8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L1_P3.png"); //Load black texture to cover unknow parts of the map
+	MNegro9 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_L1_P1.png"); //Load black texture to cover unknow parts of the map
+	MNegro10 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_Connection_A.png"); //Load black texture to cover unknow parts of the map
+	MNegro12 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Map_Connection_B.png"); //Load black texture to cover unknow parts of the map ;
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 
 
-	Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 1
-	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 2
-	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 3
-	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 4
-	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 5
-	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 6
-	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 7
-	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/UI/Bar_Protagonist_Health_Heart_Full.png"); //Load Remember 8
+	Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_01.png"); //Load Remember 1
+	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_03.png"); //Load Remember 2
+	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_06.png"); //Load Remember 3
+	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_07.png"); //Load Remember 4
+	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 5
+	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_04.png"); //Load Remember 6
+	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 7
+	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_08.png"); //Load Remember 8
 }
 
 void Mapa ::Remember() {
-	SDL_Rect dstRectR1 = { 100,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR2 = { 140,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR3 = { 180,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR4 = { 220,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR5 = { 260,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR6 = { 300,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR7 = { 340,posy, 40, 40 }; //Position and scale character icon
-	SDL_Rect dstRectR8 = { 380,posy, 40, 40 }; //Position and scale character icon
-	
+	SDL_Rect dstRect = { 0, 0, w, h }; //Position and scale of background and map texture	
 	if (remember1) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo1, nullptr, &dstRectR1);//render remember 1 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo1, nullptr, &dstRect);//render remember 1 texture
 	}
 	if (remember2) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo2, nullptr, &dstRectR2);//render remember 2 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo2, nullptr, &dstRect);//render remember 2 texture
 	}
 	if (remember3) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo3, nullptr, &dstRectR3);//render remember 3 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo3, nullptr, &dstRect);//render remember 3 texture
 	}
 	if (remember4) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo4, nullptr, &dstRectR4);//render remember 4 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo4, nullptr, &dstRect);//render remember 4 texture
 	}
 	if (remember5) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo5, nullptr, &dstRectR5);//render remember 5 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo5, nullptr, &dstRect);//render remember 5 texture
 	}
 	if (remember6) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo6, nullptr, &dstRectR6);//render remember 6 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo6, nullptr, &dstRect);//render remember 6 texture
 	}
 	if (remember7) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo7, nullptr, &dstRectR7);//render remember 7 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo7, nullptr, &dstRect);//render remember 7 texture
 	}
 	if (remember8) {
-		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo8, nullptr, &dstRectR8);//render remember 8 texture
+		SDL_RenderCopy(Engine::GetInstance().render->renderer, Recuerdo8, nullptr, &dstRect);//render remember 8 texture
 	}
 }
 

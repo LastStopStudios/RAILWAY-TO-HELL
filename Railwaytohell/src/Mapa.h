@@ -118,9 +118,8 @@ public:
 
 private:
 	//Textures
-	SDL_Texture* fondo = nullptr;//background texture
 	SDL_Texture* mapa = nullptr;//Map texture
-	SDL_Texture* pj = nullptr;//Map texture
+	//SDL_Texture* pj = nullptr;//Map texture
 	SDL_Texture* MNegro = nullptr;//Black texture
 	SDL_Texture* MNegro2 = nullptr;//Black texture
 	SDL_Texture* MNegro3 = nullptr;//Black texture
@@ -147,7 +146,6 @@ private:
 	SDL_Texture* Recuerdo6 = nullptr;// Remember 6 texture 
 	SDL_Texture* Recuerdo7 = nullptr;// Remember 7 texture 
 	SDL_Texture* Recuerdo8 = nullptr;// Remember 8 texture 
-	SDL_Texture* VRecuerdo = nullptr;// Remember Hole texture 
 
 	float  posy = 40;// icon player position
 	int w, h, i = 1;//renders size
