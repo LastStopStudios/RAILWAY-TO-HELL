@@ -292,7 +292,10 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
     else if (!isTailAttacking && !jumpAttackActive) {
         // Close range tail attack
         if (distanceToPlayer <= TAIL_ATTACK_DISTANCE && canAttack) {
-            CreateTailAttack();
+            if (!tailAttackArea && currentAnimation->GetCurrentFrameIndex() == 5) {
+                CreateTailAttack();
+            }
+            
         }
         // Medium range jump attack
         else if (distanceToPlayer <= JUMP_ATTACK_DISTANCE && distanceToPlayer > TAIL_ATTACK_DISTANCE && canAttack) {
@@ -564,14 +567,14 @@ void Devil::CreateTailAttack() {
 
     // Create tail attack area
     int tailX = position.getX() + texW / 2;
-    int tailY = position.getY() + texH / 2;
+    int tailY = position.getY() + 110;
 
     // Adjust position based on direction
-    tailX += isLookingLeft ? -40 : 40;
+    tailX += isLookingLeft ? -90 : 90;
 
     tailAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         tailX, tailY,
-        texW + 60, texH + 30,
+        texW + 60, texH +5,
         bodyType::KINEMATIC
     );
 
@@ -581,10 +584,12 @@ void Devil::CreateTailAttack() {
 }
 
 void Devil::UpdateTailAttackArea() {
-    if (tailAttackArea && isTailAttacking) {
+
+    if (tailAttackArea && isTailAttacking){
+         
         int tailX = position.getX() + texW / 2;
-        int tailY = position.getY() + texH / 2;
-        tailX += isLookingLeft ? -40 : 40;
+        int tailY = position.getY() + 110;
+        tailX += isLookingLeft ? -90 : 90;
         tailAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(tailX), PIXEL_TO_METERS(tailY)), 0);
     }
 }
@@ -594,8 +599,8 @@ void Devil::UpdateJumpAttackArea() {
 
     jumpAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         currentPos.getX(),
-        currentPos.getY(),
-        texW + 50, texH + 50,
+        currentPos.getY() + 85,
+        texW + 100, texH ,
         bodyType::KINEMATIC
     );
 
