@@ -46,13 +46,28 @@ public:
 	void StopAllFx();
 
 	void SetMusicVolume(int volume) {
-		if (!active || music == NULL)
-			return;
+		if (!active || music == NULL) return;
 
+		if (volume < 0) {
+			volume = 0;
+		}
+		else if (volume > MIX_MAX_VOLUME) {
+			volume = MIX_MAX_VOLUME;
+		}
+		musicVolume = volume;
 		Mix_VolumeMusic(volume);
 	}
 
+	int GetMusicVolume() const { return musicVolume; }
+	int GetFxVolume() const { return fxVolume; }
+
+	void SetGlobalFxVolume(int volume);
+
 private:
+
+	int musicVolume = MIX_MAX_VOLUME; 
+	int fxVolume = MIX_MAX_VOLUME;
+	int globalFxVolume = MIX_MAX_VOLUME;
 
 	_Mix_Music* music;
 	std::list<Mix_Chunk*> fx;

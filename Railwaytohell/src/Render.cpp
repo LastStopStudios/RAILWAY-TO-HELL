@@ -247,16 +247,16 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
     SDL_Rect rec;
     if (use_camera)
     {
-        rec.x = (int)(camera.x + rect.x * textureMultiplier);
-        rec.y = (int)(camera.y + rect.y * textureMultiplier);
+        rec.x = (int)(camera.x + rect.x );
+        rec.y = (int)(camera.y + rect.y );
     }
     else
     {
-        rec.x = (int)(rect.x * textureMultiplier);
-        rec.y = (int)(rect.y * textureMultiplier);
+        rec.x = (int)(rect.x );
+        rec.y = (int)(rect.y );
     }
-    rec.w = (int)(rect.w * textureMultiplier);
-    rec.h = (int)(rect.h * textureMultiplier);
+    rec.w = (int)(rect.w );
+    rec.h = (int)(rect.h );
 
     int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 

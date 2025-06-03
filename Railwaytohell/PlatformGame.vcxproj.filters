@@ -127,6 +127,12 @@
     <ClCompile Include="src\GlobalSettings.cpp">
       <Filter>SourceFilles\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\CheckBox.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlSlider.cpp">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -266,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="src\GlobalSettings.h">
       <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlSlider.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CheckBox.h">
+      <Filter>SourceFilles\Engine\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

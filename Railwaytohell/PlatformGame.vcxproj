@@ -158,6 +158,7 @@
     <ClCompile Include="src\Estatua.cpp" />
     <ClCompile Include="src\Explosivo.cpp" />
     <ClCompile Include="src\GlobalSettings.cpp" />
+    <ClCompile Include="src\GuiControlSlider.cpp" />
     <ClCompile Include="src\Levers.cpp" />
     <ClCompile Include="src\Mapa.cpp" />
     <ClCompile Include="src\MosaicLevers.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="src\Estatua.h" />
     <ClInclude Include="src\Explosivo.h" />
     <ClInclude Include="src\GlobalSettings.h" />
+    <ClInclude Include="src\GuiControlSlider.h" />
     <ClInclude Include="src\Levers.h" />
     <ClInclude Include="src\Mapa.h" />
     <ClInclude Include="src\MosaicLevers.h" />

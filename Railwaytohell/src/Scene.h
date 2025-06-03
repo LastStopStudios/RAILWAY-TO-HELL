@@ -21,6 +21,7 @@
 #include "MosaicPuzzle.h"
 #include "Checkpoints.h"
 #include "CheckBox.h"
+#include "GuiControlSlider.h"
 #include "Devil.h"
 
 struct SDL_Texture;
@@ -105,6 +106,9 @@ public:
 
 	void EnableFullscreenButton();
 	void DisableFullscreenButton();
+
+	void EnableSettingsControls();
+	void DisableSettingsControls();
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;
@@ -220,6 +224,9 @@ private:
 	//Extra buttons
 	CheckBox* FullScreenCheckbox = nullptr;
 	bool fullscreenButtonsCreated = false;
+
+	GuiControlSlider* musicSlider = nullptr;
+	GuiControlSlider* fxSlider = nullptr;
 
 	SDL_Texture* FullScreenNormal = nullptr;
 	SDL_Texture* FullScreenFocused = nullptr;

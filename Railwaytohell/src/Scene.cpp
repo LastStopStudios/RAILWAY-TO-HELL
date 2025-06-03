@@ -225,6 +225,9 @@ bool Scene::Start()
 	FullScreenPressed = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Tick.png");
 	FullScreenOff = Engine::GetInstance().textures->Load("Assets/Textures/GUI/Box.png");
 
+	SDL_Texture* sliderBase = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SliderBase.png");
+	SDL_Texture* sliderHandle = Engine::GetInstance().textures->Load("Assets/Textures/GUI/SliderHandle.png");
+
 	// Create the menu buttons
 	NewGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, " ", NewGamePos, this);
 	NewGame->SetTextures(NewGameNormal, NewGameFocused, NewGamePressed, NewGameDOff);
@@ -242,13 +245,35 @@ bool Scene::Start()
 	ExitGame = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, " ", ExitGamePos, this);
 	ExitGame->SetTextures(ExitNormal, ExitFocused, ExitPressed, ExitOff);
 
-
+	// Fullscreen Checkbox
 	fullscreenState = Engine::GetInstance().window->IsFullscreen();
 
 	SDL_Rect fullscreenPos = { 630, 350, 40, 40 };
 	FullScreenCheckbox = (CheckBox*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, " ", fullscreenPos, this);
 	FullScreenCheckbox->SetTextures(FullScreenNormal, FullScreenPressed);
 	FullScreenCheckbox->SetState(GuiControlState::DISABLED);
+
+
+	// Music Slider
+	SDL_Rect musicSliderPos = { 600, 400, 200, 10 }; 
+	musicSlider = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, " ", musicSliderPos, this, { 0, 128 });// min=0, max=128
+
+	musicSlider->SetTextures(sliderBase, sliderHandle);
+	musicSlider->SetHandleSize(20, 20); // Handle size
+	int currentVolume = Engine::GetInstance().audio->GetMusicVolume();
+	musicSlider->SetValue(currentVolume);
+	Engine::GetInstance().audio->SetMusicVolume(currentVolume);
+	musicSlider->UpdateHandlePosition();
+	musicSlider->SetState(GuiControlState::DISABLED);
+
+	// SFX Slider
+	SDL_Rect sfxSliderPos = { 600, 450, 200, 10 };
+	fxSlider = (GuiControlSlider*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, " ", sfxSliderPos, this, { 0, 128 });// min=0, max=128
+	fxSlider->SetTextures(sliderBase, sliderHandle);
+	fxSlider->SetHandleSize(20, 20);
+	fxSlider->SetValue(Engine::GetInstance().audio->GetFxVolume()); 
+	fxSlider->UpdateHandlePosition();
+	fxSlider->SetState(GuiControlState::DISABLED);
 
 	//Draw player
 	dibujar = false;
@@ -951,6 +976,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		currentState = SceneState::SETTINGS_MENU;
 		DisableMenuButtons();
 		EnableFullscreenButton();
+		EnableSettingsControls();
 		break;
 	case 5: // Credits
 		currentState = SceneState::CREDITS_MENU;
@@ -980,7 +1006,12 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 
 		Engine::GetInstance().window->ToggleFullscreen();
 		EnableFullscreenButton();
-
+		break;
+	case 14: // Music slider
+		Engine::GetInstance().audio->SetMusicVolume(musicSlider->GetValue());
+		break;
+	case 15: // FX slider
+		Engine::GetInstance().audio->SetGlobalFxVolume(fxSlider->GetValue());
 		break;
 	}
 
@@ -996,9 +1027,11 @@ void Scene::SetCurrentState(SceneState state)
 {
 	if (state == SceneState::SETTINGS_MENU) {
 		EnableFullscreenButton();
+		EnableSettingsControls();
 	}
 	else if (currentState == SceneState::SETTINGS_MENU && state != SceneState::SETTINGS_MENU) {
 		DisableFullscreenButton();
+		DisableSettingsControls();
 	}
 	if (state == SceneState::INTRO_SCREEN) {
 		EnableMenuButtons();
@@ -1015,6 +1048,20 @@ void Scene::SetCurrentState(SceneState state)
 
 
 	currentState = state;
+}
+
+void Scene::EnableSettingsControls()
+{
+	EnableFullscreenButton();
+	if (musicSlider) musicSlider->SetState(GuiControlState::NORMAL);
+	if (fxSlider) fxSlider->SetState(GuiControlState::NORMAL);
+}
+
+void Scene::DisableSettingsControls()
+{
+	DisableFullscreenButton();
+	if (musicSlider) musicSlider->SetState(GuiControlState::DISABLED);
+	if (fxSlider) fxSlider->SetState(GuiControlState::DISABLED);
 }
 
 void Scene::CreateFullscreenButton()

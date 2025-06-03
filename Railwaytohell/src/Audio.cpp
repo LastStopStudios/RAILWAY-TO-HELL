@@ -22,6 +22,9 @@ bool Audio::Awake()
 	bool ret = true;
 	SDL_Init(0);
 
+	musicVolume = MIX_MAX_VOLUME;
+	fxVolume = MIX_MAX_VOLUME;
+
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
 		LOG("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -216,6 +219,23 @@ void Audio::StopAllFx()
 		if (i != AMBIENT_CHANNEL && Mix_Playing(i))
 		{
 			Mix_HaltChannel(i);
+		}
+	}
+}
+
+void Audio::SetGlobalFxVolume(int volume) {
+	if (!active) return;
+
+	globalFxVolume = volume;
+
+	for (auto& fxItem : fx) {
+		Mix_VolumeChunk(fxItem, volume);
+	}
+
+	int channels = Mix_AllocateChannels(-1);
+	for (int i = 0; i < channels; ++i) {
+		if (Mix_Playing(i)) {
+			Mix_Volume(i, volume);
 		}
 	}
 }
