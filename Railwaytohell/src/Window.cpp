@@ -87,3 +87,47 @@ int Window::GetScale() const
 {
 	return scale;
 }
+
+bool Window::IsFullscreen() const {
+	return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN) != 0;
+}
+
+void Window::ToggleFullscreen()
+{
+	const char* filePath = "config.xml";
+
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file(filePath);
+
+
+	pugi::xml_node windowNode = doc.child("config").child("window");
+	pugi::xml_node fullscreenNode = windowNode.child("fullscreen_window");
+
+	bool isFullscreen = (std::string(fullscreenNode.attribute("value").value()) == "true");
+	static int originalWidth = 0, originalHeight = 0, originalPosX = 0, originalPosY = 0;
+
+	if (isFullscreen)
+	{
+		fullscreenNode.attribute("value").set_value("false");
+		SDL_SetWindowFullscreen(Engine::GetInstance().window->window, 0);
+
+		if (originalWidth > 0 && originalHeight > 0)
+		{
+			SDL_SetWindowSize(Engine::GetInstance().window->window, originalWidth, originalHeight);
+			SDL_SetWindowPosition(Engine::GetInstance().window->window, originalPosX, originalPosY);
+		}
+	}
+	else
+	{
+		SDL_GetWindowSize(Engine::GetInstance().window->window, &originalWidth, &originalHeight);
+		SDL_GetWindowPosition(Engine::GetInstance().window->window, &originalPosX, &originalPosY);
+
+		fullscreenNode.attribute("value").set_value("true");
+		SDL_SetWindowFullscreen(Engine::GetInstance().window->window, SDL_WINDOW_FULLSCREEN);
+	}
+
+	if (!doc.save_file(filePath))
+	{
+		LOG("Error al guardar los cambios en el archivo XML.");
+	}
+}

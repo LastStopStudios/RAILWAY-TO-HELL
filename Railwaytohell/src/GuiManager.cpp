@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "Textures.h"
 
+#include "CheckBox.h"
+#include "GuiControlSlider.h"
 #include "GuiControlButton.h"
 #include "Audio.h"
 
@@ -28,7 +30,14 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	case GuiControlType::BUTTON:
 		guiControl = new GuiControlButton(id, bounds, text);
 		break;
+	case GuiControlType::CHECKBOX:
+		guiControl = new CheckBox(id, bounds, text);
+		break;
+	case GuiControlType::SLIDER:
+		guiControl = new GuiControlSlider(id, bounds, text, sliderBounds.x, sliderBounds.y);
+		break;
 	}
+
 
 	//Set the observer
 	guiControl->observer = observer;
@@ -52,6 +61,16 @@ bool GuiManager::Update(float dt)
 		control->Update(dt);
 	}
 
+	return true;
+}
+
+bool GuiManager::PostUpdate()
+{
+	// Draw all the controls
+	for (const auto& control : guiControlsList)
+	{
+		control->PostUpdate();
+	}
 	return true;
 }
 

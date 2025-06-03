@@ -5,7 +5,7 @@
 		<maxFrameDuration value="16" />
 	</engine>
 	<render>
-		<vsync value="false" />
+		<vsync value="true" />
 	</render>
 	<window>
 		<resolution width="1280" height="768" scale="1" />

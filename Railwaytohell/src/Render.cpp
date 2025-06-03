@@ -190,6 +190,47 @@ bool Render::DrawTextureForButtons(SDL_Texture* texture, int x, int y, const SDL
     return ret;
 }
 
+bool Render::DrawTextureForCheckBox(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY, SDL_RendererFlip flip) const
+{
+    bool ret = true;
+
+    SDL_Rect rect;
+
+    rect.x = (int)(camera.x * speed) + (int)(x - 2);
+    rect.y = (int)(camera.y * speed) + (int)(y );
+
+    if (section != NULL)
+    {
+        rect.w = section->w;
+        rect.h = section->h;
+    }
+    else
+    {
+        SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+    }
+
+    rect.w = (int)(rect.w);
+    rect.h = (int)(rect.h);
+
+    SDL_Point* p = NULL;
+    SDL_Point pivot;
+
+    if (pivotX != INT_MAX && pivotY != INT_MAX)
+    {
+        pivot.x = (int)(pivotX);
+        pivot.y = (int)(pivotY);
+        p = &pivot;
+    }
+
+    if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+    {
+        LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+        ret = false;
+    }
+
+    return ret;
+}
+
 bool Render::DrawTextureWithFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY, SDL_RendererFlip flip) const
 {
     return DrawTexture(texture, x, y, section, speed, angle, pivotX, pivotY, flip);
@@ -206,16 +247,16 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
     SDL_Rect rec;
     if (use_camera)
     {
-        rec.x = (int)(camera.x + rect.x * textureMultiplier);
-        rec.y = (int)(camera.y + rect.y * textureMultiplier);
+        rec.x = (int)(camera.x + rect.x );
+        rec.y = (int)(camera.y + rect.y );
     }
     else
     {
-        rec.x = (int)(rect.x * textureMultiplier);
-        rec.y = (int)(rect.y * textureMultiplier);
+        rec.x = (int)(rect.x );
+        rec.y = (int)(rect.y );
     }
-    rec.w = (int)(rect.w * textureMultiplier);
-    rec.h = (int)(rect.h * textureMultiplier);
+    rec.w = (int)(rect.w );
+    rec.h = (int)(rect.h );
 
     int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 

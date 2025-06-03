@@ -15,6 +15,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	bool PostUpdate();
+
 	void SetTextures(SDL_Texture* normal, SDL_Texture* focused, SDL_Texture* pressed, SDL_Texture* off);
 	void SetState(GuiControlState newState) {
 		state = newState;
@@ -25,6 +27,7 @@ private:
 	SDL_Texture* normalTex = nullptr;
 	SDL_Texture* focusedTex = nullptr;
 	SDL_Texture* pressedTex = nullptr;
+	SDL_Texture* OnTex = nullptr; 
 	SDL_Texture* offTex = nullptr;
 
 	int OnfocussedFx, OnPressedFx, OnReleasedFx; // Sound effects for button states
