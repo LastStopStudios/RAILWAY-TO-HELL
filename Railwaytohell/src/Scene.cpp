@@ -645,6 +645,9 @@ bool Scene::CleanUp()
 		}
 		else if (i == 10) { sceneNode = loadFile.child("config").child("scene11"); /*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
 		}
+		else if (i == 11) {
+			sceneNode = loadFile.child("config").child("scene12"); /*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
 
 		//checkpoints
 		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
