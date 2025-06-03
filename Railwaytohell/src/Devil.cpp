@@ -336,7 +336,7 @@ void Devil::CreateJumpAttack() {
     // Si hay una transformación pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
     if (pendingTransformation) {
         targetLandingPos = Vector2D(1200, currentPos.getY());
-        targetPlayerX = 1200;
+        targetPlayerX = 1315;
     }
     else {
         // Comportamiento normal: saltar hacia el jugador
@@ -565,14 +565,14 @@ void Devil::CreateTailAttack() {
 
     // Create tail attack area
     int tailX = position.getX() + texW / 2;
-    int tailY = position.getY() + 110;
+    int tailY = position.getY() + 140;
 
     // Adjust position based on direction
     tailX += isLookingLeft ? -90 : 90;
 
     tailAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         tailX, tailY,
-        texW + 60, texH +5,
+        texW + 60, 20,
         bodyType::KINEMATIC
     );
 
@@ -586,7 +586,7 @@ void Devil::UpdateTailAttackArea() {
     if (tailAttackArea && isTailAttacking){
          
         int tailX = position.getX() + texW / 2;
-        int tailY = position.getY() + 110;
+        int tailY = position.getY()  + 140;
         tailX += isLookingLeft ? -90 : 90;
         tailAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(tailX), PIXEL_TO_METERS(tailY)), 0);
     }
@@ -749,8 +749,8 @@ void Devil::ResizeCollisionForPhase3() {
         int newHeight = texH + 350;  // Adjust height as needed
 
         pbody = Engine::GetInstance().physics.get()->CreateRectangle(
-            METERS_TO_PIXELS(currentPos.x) + 200,
-            METERS_TO_PIXELS(currentPos.y),
+            METERS_TO_PIXELS(currentPos.x) ,
+            METERS_TO_PIXELS(currentPos.y) - 90,
             newWidth,
             newHeight,
             bodyType::DYNAMIC
@@ -847,10 +847,19 @@ void Devil::RenderSprite() {
     if (currentAnimation == &salto || currentAnimation == &land) {
         offsetY = -425;
     }
-
-    if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation == &attack) {
+    if (currentAnimation == &idle3 ) {
+        offsetX = -130;
+        offsetY = -240;
+        
+    }
+    if (currentAnimation == &transform2 || currentAnimation == &attack) {
         offsetY = -240;
     }
+    if (currentAnimation == &attack) {
+        offsetX = -320;
+        offsetY = -240;
+    }
+
 
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
