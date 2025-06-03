@@ -187,6 +187,10 @@ public:
 	void EntrarBoss();
 	void SalirBoss();
 
+	bool isBufonFight = false;
+	bool isNomaFight = false;
+	bool isDevilFight = false;
+
 private:
 	float targetCameraY = 0.0f;        // Y objetivo de la cámara
 	float currentCameraY = 0.0f;       // Y actual de la cámara (para interpolación)

@@ -166,6 +166,7 @@ bool Boss::Update(float dt)
             pbodyLower->body->SetGravityScale(1.0f);
         }
     }
+  
 
     if (ishurt) {
         if (pbodyUpper != nullptr && pbodyUpper->body != nullptr) {
@@ -258,6 +259,7 @@ bool Boss::Update(float dt)
     Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
     if (!ishurt) {
+       
         if (Engine::GetInstance().entityManager->dialogo == false) {
 
             // Get current velocity of upper body
@@ -271,7 +273,7 @@ bool Boss::Update(float dt)
 
             // Limit movement towards the player only if within X tiles
             float patrolDistance = 7.0f; // Set the maximum distance for the enemy to chase the player 
-
+            Engine::GetInstance().scene->isNomaFight = true;
             if (!canAttack) { // update the attack cooldown
                 currentAttackCooldown -= dt;
                 if (currentAttackCooldown <= 0) {
@@ -1166,7 +1168,10 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
                     // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                      // Engine::GetInstance().audio.get()->PlayFx(deathFx);
+                    Engine::GetInstance().scene->isNomaFight = false;
                     changeMusicBoss = true;
+                  
+                    
                 }
             }
         }
@@ -1197,7 +1202,10 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB) {
                     // Disable gravity on both bodies
                     pbodyUpper->body->SetGravityScale(0.0f);
                     pbodyLower->body->SetGravityScale(0.0f);
+                   
+                    Engine::GetInstance().scene->isNomaFight = false;
                     changeMusicBoss = true;
+                   
                 }
             }
         }

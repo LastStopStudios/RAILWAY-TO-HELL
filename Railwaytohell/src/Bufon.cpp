@@ -207,6 +207,7 @@ bool Bufon::Update(float dt)
     }
 
     if (!ishurt) {
+        Engine::GetInstance().scene-> isBufonFight = true;
         if (currentAnimation == &going_up && !escaping || currentAnimation == &going_down && !escaping) {
             pathfindingTimer += dt;
 
@@ -1158,6 +1159,8 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
                     // Engine::GetInstance().dialogoM->Texto("2");//text after boss death
                      // Engine::GetInstance().audio.get()->PlayFx(deathFx);
                     changeMusicBoss = true;
+                    Engine::GetInstance().scene->isBufonFight = false;
+                  
                 }
             }
         }
@@ -1191,6 +1194,8 @@ void Bufon::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Engine::GetInstance().scene->DesbloquearSensor();//Unblock scene change sensors
 
                     changeMusicBoss = true;
+                    Engine::GetInstance().scene->isBufonFight = false;
+                    Engine::GetInstance().scene->SalirBoss();
                 }
             }
         }
