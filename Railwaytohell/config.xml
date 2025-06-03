@@ -981,7 +981,7 @@
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="Welcome to your last stop. Eternal damnation between seats and forgotten cases in this train with no destiny." />
 			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Caronte.png" TEXT="I shall never let you cross these bars, and in the most improbable case you did... may the darkness guide you and the shadows be your company." />
-			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis?... sis... Is that you? I've been seeing nothing but darkness for far too long, I'm scared, I don't know how I ended up here. I'm at the last stop of a green train line... Come rescue me, so we can get out of this hell. I will guide you." />
+			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis?... sis... Is that you? I've been seeing nothing but darkness for far too long, I'm scared, I don't know how I ended up here. I'm at the last floor of the Central Station... Come rescue me, so we can get out of this hell. I will guide you." />
 			<dialog ID="4" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those pink sneakers you gave me for my birthday? I know it costed you a lot to get them." />
 		</dialogues>
 	</scene>
@@ -2445,7 +2445,7 @@
 		</entities>
 		<dialogues>
 			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get  out of here and see all my friends and I trust we will both go out together." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get out of here and see all my friends and I trust we will both go out together." />
 			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember going through that door, I think that's the way. It seems the door is locked, you have to defeat someone else sister." />
 		</dialogues>
 	</scene6>
