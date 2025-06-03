@@ -1185,6 +1185,11 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 if (live3 <= 0) {
                     LOG("Devil defeated!");
                     isDying = true;
+                    /*En la zona de muerte añadir este if
+                        if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
+                            Aqui la cinematica con todos los recuerdos
+                        }else{La otra}
+                    */
 
                     // Cancel any active attacks
                     if (isAttacking) {
