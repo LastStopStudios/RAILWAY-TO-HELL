@@ -92,7 +92,7 @@ bool Devil::Start() {
 
     pugi::xml_node spearTemplateNode = spearConfigDoc.child("config").child("scene12").child("entities").child("spear");
 
-    this->spearTemplateNode = spearTemplateNode; // Ahora v�lido m�s all� del scope
+    this->spearTemplateNode = spearTemplateNode; 
 
     pathfinding = new Pathfinding();
 
@@ -155,7 +155,7 @@ bool Devil::Update(float dt) {
     float distanceToPlayer = abs(dx);
     isLookingLeft = dx < 0;
 
-    // Phase-based AI behavior
+    // Phase-based 
     switch (currentPhase) {
     case 1:
         HandlePhase1(distanceToPlayer, dx, dt);
@@ -340,7 +340,7 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
     if (isSpearAttacking) {
         UpdateSpearAttacks(dt);
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
-        return; // IMPORTANT: Return here to prevent creating new attacks
+        return; 
     }
 
     // Only create new attack if not currently attacking and cooldown is ready
@@ -356,7 +356,7 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
 
         // Set cooldown immediately after creating attack
         canAttack = false;
-        currentSpearCooldown = spearAttackCooldown; // Make sure this variable is defined
+        currentSpearCooldown = spearAttackCooldown; 
     }
     else {
         // Idle state
@@ -385,7 +385,7 @@ void Devil::CreateVerticalSpearAttack() {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-            // CR�TICO: Establecer par�metros ANTES de Start()
+            
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -393,7 +393,7 @@ void Devil::CreateVerticalSpearAttack() {
                 float spearX = playerPos.getX() + offsetX;
                 float spearY = playerPos.getY() - 600;
 
-                // Configurar despu�s de Start()
+              
                 spear->SetDirection(SpearDirection::VERTICAL_DOWN);
                 spear->SetPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
@@ -407,7 +407,7 @@ void Devil::CreateVerticalSpearAttack() {
     }
 }
 
-// En Devil.cpp - M�todo CreateHorizontalSpearAttack() corregido
+
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = false;
@@ -428,7 +428,7 @@ void Devil::CreateHorizontalSpearAttack() {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-            // CR�TICO: Establecer par�metros ANTES de Start()
+
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -445,7 +445,7 @@ void Devil::CreateHorizontalSpearAttack() {
                     direction = SpearDirection::HORIZONTAL_LEFT;
                 }
 
-                // Configurar despu�s de Start()
+             
                 spear->SetDirection(direction);
                 spear->SetOriginPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
@@ -1070,10 +1070,10 @@ void Devil::RenderSprite() {
         offsetY = -240;
         
     }
-    if (currentAnimation == &transform2 || currentAnimation == &attack) {
+    if (currentAnimation == &transform2 || currentAnimation == &attackH || currentAnimation == &attackV) {
         offsetY = -240;
     }
-    if (currentAnimation == &attack) {
+    if (currentAnimation == &attackH || currentAnimation == &attackV) {
         offsetX = -320;
         offsetY = -240;
     }

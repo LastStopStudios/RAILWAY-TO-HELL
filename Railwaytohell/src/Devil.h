@@ -108,7 +108,7 @@ private:
     bool isVerticalSpearAttack = false;
     bool isHorizontalSpearAttack = false;
     float currentSpearCooldown = 0.0f;
-    float spearAttackCooldown = 3.0f; // 3 seconds between attacks
+    float spearAttackCooldown = 30000.0f; // 3 seconds between attacks
     std::vector<Spears*> activeSpears;
 
     // Method declarations
