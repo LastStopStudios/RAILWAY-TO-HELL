@@ -5,6 +5,8 @@
 #include "Pathfinding.h"
 #include "DialogoM.h"
 #include "UI.h"
+#include "Spears.h"
+#include "Engine.h"
 
 struct SDL_Texture;
 
@@ -85,7 +87,7 @@ private:
 
     // Animation system
     Animation* currentAnimation = nullptr;
-    Animation idle, walk, punch, defeat, transform, idle2, salto, land, colatazo, transform2, idle3, attack;
+    Animation idle, walk, punch, defeat, transform, idle2, salto, land, colatazo, transform2, idle3, attackH, attackV ;
 
     // Physics bodies
     PhysBody* pbody;
@@ -93,6 +95,7 @@ private:
     PhysBody* jumpAttackArea;
 
     Pathfinding* pathfinding;
+    Spears* spears;
 
     // Combat system
     int currentPhase = 1;
@@ -100,6 +103,21 @@ private:
     bool canAttack = true;
     float attackCooldown = 100.0f;
     float currentAttackCooldown = 0.0f;
+
+    bool isSpearAttacking = false;
+    bool isVerticalSpearAttack = false;
+    bool isHorizontalSpearAttack = false;
+    float currentSpearCooldown = 0.0f;
+    float spearAttackCooldown = 3.0f; // 3 seconds between attacks
+    std::vector<Spears*> activeSpears;
+
+    // Method declarations
+    void CreateVerticalSpearAttack();
+    void CreateHorizontalSpearAttack();
+    void UpdateSpearAttacks(float dt);
+    void CleanupSpears();
+    pugi::xml_node spearTemplateNode;
+    pugi::xml_document spearConfigDoc;
 
     // Jump attack system
     bool isJumping = false;

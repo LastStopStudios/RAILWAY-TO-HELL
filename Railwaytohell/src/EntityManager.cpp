@@ -22,6 +22,7 @@
 #include "MosaicPuzzle.h"
 #include "Estatua.h"
 #include "Devil.h"
+#include "Spears.h"
 
 EntityManager::EntityManager() : Module()
 {
@@ -123,6 +124,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::PROJECTILE:
 		entity = new Projectiles();
+		break;
+	case EntityType::SPEAR:
+		entity = new Spears();
 		break;
 	case EntityType::MOSAIC_PIECE:
 		entity = new MosaicPiece();

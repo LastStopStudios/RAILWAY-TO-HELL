@@ -269,7 +269,7 @@ bool DialogoM::CleanUp()
 
 	if (fondo != nullptr) {
 		Engine::GetInstance().textures->UnLoad(fondo);//Unload text background
-		fondo = nullptr;
+		//fondo = nullptr;
 	}
 	return true;
 }

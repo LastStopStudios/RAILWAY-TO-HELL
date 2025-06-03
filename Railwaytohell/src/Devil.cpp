@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "EntityManager.h"
 #include "GlobalSettings.h"
+#include "Spears.h"
 
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
@@ -58,7 +59,8 @@ bool Devil::Start() {
     colatazo.LoadAnimations(parameters.child("animations").child("colatazo"));
     transform2.LoadAnimations(parameters.child("animations").child("transform2"));
     idle3.LoadAnimations(parameters.child("animations").child("idle3"));
-    attack.LoadAnimations(parameters.child("animations").child("attack"));
+    attackH.LoadAnimations(parameters.child("animations").child("attackH"));
+    attackV.LoadAnimations(parameters.child("animations").child("attackV"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -74,6 +76,23 @@ bool Devil::Start() {
 
     pbody->ctype = ColliderType::DEVIL;
     pbody->body->SetGravityScale(10.0f);
+
+    pugi::xml_document configDoc;
+    if (!configDoc.load_file("config.xml")) {
+        LOG("ERROR: Could not load config.xml");
+        return false;
+    }
+
+    
+
+    if (!spearConfigDoc.load_file("config.xml")) {
+        LOG("ERROR: Could not load config.xml");
+        return false;
+    }
+
+    pugi::xml_node spearTemplateNode = spearConfigDoc.child("config").child("scene12").child("entities").child("spear");
+
+    this->spearTemplateNode = spearTemplateNode; // Ahora válido más allá del scope
 
     pathfinding = new Pathfinding();
 
@@ -307,15 +326,214 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
-
-    if (currentAnimation != &idle3) {
-        currentAnimation = &idle3;
-        currentAnimation->Reset();
+    // Update spear attack cooldown
+    if (!canAttack && !isSpearAttacking) {
+        currentSpearCooldown -= dt;
+        if (currentSpearCooldown <= 0) {
+            canAttack = true;
+            currentSpearCooldown = 0.0f;
+        }
     }
 
-    pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+    // Handle active spear attacks
+    if (isSpearAttacking) {
+        UpdateSpearAttacks(dt);
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+        return; // IMPORTANT: Return here to prevent creating new attacks
+    }
+
+    // Only create new attack if not currently attacking and cooldown is ready
+    if (canAttack && !isSpearAttacking) {
+        int attackChoice = rand() % 2; // 0 = vertical, 1 = horizontal
+
+        if (attackChoice == 0) {
+            CreateVerticalSpearAttack();
+        }
+        else {
+            CreateHorizontalSpearAttack();
+        }
+
+        // Set cooldown immediately after creating attack
+        canAttack = false;
+        currentSpearCooldown = spearAttackCooldown; // Make sure this variable is defined
+    }
+    else {
+        // Idle state
+        if (currentAnimation != &idle3) {
+            currentAnimation = &idle3;
+            currentAnimation->Reset();
+        }
+        pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+    }
+}
+void Devil::CreateVerticalSpearAttack() {
+    isSpearAttacking = true;
+    isVerticalSpearAttack = true;
+    isHorizontalSpearAttack = false;
+    canAttack = false;
+
+    currentAnimation = &attackV;
+    currentAnimation->Reset();
+
+    LOG("Devil starting vertical spear attack!");
+
+    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    int numSpears = 5 + (rand() % 3);
+
+    for (int i = 0; i < numSpears; i++) {
+        Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
+
+        if (spear) {
+            // CRÍTICO: Establecer parámetros ANTES de Start()
+            spear->SetParameters(spearTemplateNode);
+
+            if (spear->Awake() && spear->Start()) {
+                float offsetX = (i - numSpears / 2) * 80.0f + ((rand() % 40) - 20);
+                float spearX = playerPos.getX() + offsetX;
+                float spearY = playerPos.getY() - 600;
+
+                // Configurar después de Start()
+                spear->SetDirection(SpearDirection::VERTICAL_DOWN);
+                spear->SetPosition(Vector2D(spearX, spearY));
+                activeSpears.push_back(spear);
+                LOG("Created vertical spear at position (%.2f, %.2f)", spearX, spearY);
+            }
+            else {
+                LOG("ERROR: Failed to initialize vertical spear, destroying entity");
+                Engine::GetInstance().entityManager.get()->DestroyEntity(spear);
+            }
+        }
+    }
 }
 
+// En Devil.cpp - Método CreateHorizontalSpearAttack() corregido
+void Devil::CreateHorizontalSpearAttack() {
+    isSpearAttacking = true;
+    isVerticalSpearAttack = false;
+    isHorizontalSpearAttack = true;
+    canAttack = false;
+
+    currentAnimation = &attackH;
+    currentAnimation->Reset();
+
+    LOG("Devil starting horizontal spear attack!");
+
+    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+    Vector2D currentPos = GetPosition();
+
+    int numSpears = 3 + (rand() % 2);
+
+    for (int i = 0; i < numSpears; i++) {
+        Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
+
+        if (spear) {
+            // CRÍTICO: Establecer parámetros ANTES de Start()
+            spear->SetParameters(spearTemplateNode);
+
+            if (spear->Awake() && spear->Start()) {
+                float spearY = playerPos.getY() + (i - numSpears / 2) * 60.0f;
+                float spearX;
+                SpearDirection direction;
+
+                if (i % 2 == 0) {
+                    spearX = currentPos.getX() - 800;
+                    direction = SpearDirection::HORIZONTAL_RIGHT;
+                }
+                else {
+                    spearX = currentPos.getX() + 800;
+                    direction = SpearDirection::HORIZONTAL_LEFT;
+                }
+
+                // Configurar después de Start()
+                spear->SetDirection(direction);
+                spear->SetOriginPosition(Vector2D(spearX, spearY));
+                activeSpears.push_back(spear);
+                LOG("Created horizontal spear at position (%.2f, %.2f) moving %s",
+                    spearX, spearY, (direction == SpearDirection::HORIZONTAL_RIGHT) ? "right" : "left");
+            }
+            else {
+                LOG("ERROR: Failed to initialize horizontal spear, destroying entity");
+                Engine::GetInstance().entityManager.get()->DestroyEntity(spear);
+            }
+        }
+    }
+}
+
+void Devil::UpdateSpearAttacks(float dt) {
+    // Update Devil's attack animation
+    currentAnimation->Update();
+
+    // Update all active spears and remove destroyed ones
+    for (auto it = activeSpears.begin(); it != activeSpears.end();) {
+        Spears* spear = *it;
+
+        // Verificar si la lanza aún existe antes de actualizarla
+        if (spear != nullptr) {
+            // Update spear
+            bool spearStillActive = spear->Update(dt);
+
+            // Check if spear should be removed
+            Vector2D spearPos = spear->GetPosition();
+            bool shouldRemove = false;
+
+            // Check if spear is disappearing
+            if (spear->isDisappearing) {
+                shouldRemove = true;
+            }
+            // Check bounds
+            else if (isVerticalSpearAttack) {
+                // Remove vertical spears if they go too far down
+                if (spearPos.getY() > initY + 400) {
+                    shouldRemove = true;
+                }
+            }
+            else if (isHorizontalSpearAttack) {
+                // Remove horizontal spears if they go off-screen
+                if (spearPos.getX() < -300 || spearPos.getX() > 2200) {
+                    shouldRemove = true;
+                }
+            }
+
+            if (shouldRemove || !spearStillActive) {
+                it = activeSpears.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+        else {
+            // Remove null spears
+            it = activeSpears.erase(it);
+        }
+    }
+
+    // Check if attack should end
+    bool animationFinished = currentAnimation->HasFinished();
+    bool allSpearsGone = activeSpears.empty();
+
+    // End attack when animation finishes AND most spears are gone (or after timeout)
+    static float attackTimeout = 0.0f;
+    attackTimeout += dt;
+
+    if ((animationFinished && allSpearsGone) || attackTimeout > 5.0f) {
+        // Reset attack state
+        isSpearAttacking = false;
+        isVerticalSpearAttack = false;
+        isHorizontalSpearAttack = false;
+        currentSpearCooldown = spearAttackCooldown;
+        attackTimeout = 0.0f;
+
+        // Return to idle
+        currentAnimation = &idle3;
+        currentAnimation->Reset();
+
+        LOG("Spear attack finished, returning to idle");
+    }
+}
+void Devil::CleanupSpears() {
+    // Clear the active spears list - EntityManager will handle cleanup
+    activeSpears.clear();
+}
 void Devil::CreateJumpAttack() {
     jumpAttackActive = true;
     jumpPreparation = true;
@@ -845,17 +1063,28 @@ void Devil::RenderSprite() {
         offsetY = -425;
     }
 
-    if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation == &attack) {
+    if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation) {
         offsetY = -240;
     }
+    if (currentPhase == 1 || currentPhase == 2) {
+        Engine::GetInstance().render.get()->DrawTexture(
+            texture,
+            (int)position.getX() + offsetX,
+            (int)position.getY() + offsetY,
+            &frame,
+            1.0f, 0.0, INT_MAX, INT_MAX, flip
+        );
+    }
+    else {
+        Engine::GetInstance().render.get()->DrawTexture(
+            texture,
+            (int)position.getX() + offsetX,
+            (int)position.getY() + offsetY,
+            &frame,
+            1.0f, 0.0, INT_MAX, INT_MAX, flip
+        );
+    }
 
-    Engine::GetInstance().render.get()->DrawTexture(
-        texture,
-        (int)position.getX() + offsetX,
-        (int)position.getY() + offsetY,
-        &frame,
-        1.0f, 0.0, INT_MAX, INT_MAX, flip
-    );
 }
 
 void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
@@ -1067,6 +1296,7 @@ bool Devil::CleanUp() {
         delete pathfinding;
         pathfinding = nullptr;
     }
+    CleanupSpears();
     Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
     return true;
 }

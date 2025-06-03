@@ -22,6 +22,7 @@
 #include "MosaicPuzzle.h"
 #include "Checkpoints.h"
 #include "Devil.h"
+#include "Spears.h"
 
 struct SDL_Texture;
 enum class SceneState
@@ -119,6 +120,7 @@ public:
 	std::vector<Item*> itemList;
 	std::vector<Caronte*> caronteList;
 	std::vector<Doors*> doorList;
+	std::vector<Spears*> spearsList;
 	std::vector<Levers*> leverList;
 	std::vector<Elevators*> elevatorList;
 	std::vector<Estatua*> estatuaList;
@@ -145,6 +147,7 @@ public:
 	std::vector<MosaicPuzzle*>& GetMosaicPuzzleList() { return mosaicPuzzleList; }
 	std::vector<Checkpoints*>& GetCheckpointsList() { return checkpointList; }
 	std::vector<Devil*>& GetDevilList() { return devilList; }
+	std::vector<Spears*>& GetSpearsList() { return spearsList; }
 
 	//Avoid player jumping
 	bool IsSkippingFirstInput() const { return skipFirstInput; }

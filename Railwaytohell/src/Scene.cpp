@@ -22,6 +22,7 @@
 #include "Ffmpeg.h"
 #include "GlobalSettings.h"
 #include "Devil.h"
+#include "Spears.h" 
 
 Scene::Scene() : Module()
 {
@@ -89,6 +90,12 @@ bool Scene::Awake()
 		if (type == "big")	bigProjectileConfigNode = projectileNode;
 		if (type == "normal") normalProjectileConfigNode = projectileNode;
 		
+	}
+	for (pugi::xml_node spearNode = configParameters.child("entities").child("spear"); spearNode; spearNode = spearNode.next_sibling("spear"))
+	{
+		Spears* spear = (Spears*)Engine::GetInstance().entityManager->CreateEntity(EntityType::SPEAR);
+		spear->SetParameters(spearNode);
+		spearsList.push_back(spear);
 	}
 
 	for (pugi::xml_node doorNode = configParameters.child("entities").child("doors").child("door"); doorNode; doorNode = doorNode.next_sibling("door"))

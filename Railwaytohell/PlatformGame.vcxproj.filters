@@ -127,6 +127,9 @@
     <ClCompile Include="src\GlobalSettings.cpp">
       <Filter>SourceFilles\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Spears.cpp">
+      <Filter>SourceFilles\Game\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="src\GlobalSettings.h">
       <Filter>SourceFilles\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spears.h">
+      <Filter>SourceFilles\Game\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

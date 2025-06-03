@@ -23,6 +23,7 @@ enum class EntityType
 	CHECKPOINT,
 	ESTATUA,
 	DEVIL,
+	SPEAR,
 	UNKNOWN
 };
 

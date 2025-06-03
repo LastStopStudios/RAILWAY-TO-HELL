@@ -163,6 +163,7 @@
     <ClCompile Include="src\MosaicPiece.cpp" />
     <ClCompile Include="src\MosaicPuzzle.cpp" />
     <ClCompile Include="src\Projectiles.cpp" />
+    <ClCompile Include="src\Spears.cpp" />
     <ClCompile Include="src\Terrestre.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="src\MosaicPiece.h" />
     <ClInclude Include="src\MosaicPuzzle.h" />
     <ClInclude Include="src\Projectiles.h" />
+    <ClInclude Include="src\Spears.h" />
     <ClInclude Include="src\Terrestre.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
