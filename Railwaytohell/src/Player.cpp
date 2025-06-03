@@ -2165,6 +2165,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         }
         break;
 
+    case ColliderType::DEVIL_JUMP_ATTACK2:
+        break;
+
+    case ColliderType::DEVIL_TAIL_ATTACK:
+        break;
+
+    case ColliderType::SPEAR:
+        break;
+
     case ColliderType::PROJECTILE:
 
         if (Engine::GetInstance().entityManager->BBuffon) {//Stop the bullets from hurting the player when the boss is dead
