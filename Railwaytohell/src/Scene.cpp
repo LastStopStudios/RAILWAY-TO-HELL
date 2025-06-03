@@ -358,7 +358,7 @@ bool Scene::Update(float dt)
 		SetCurrentState(SceneState::INTRO_SCREEN);
 		break;
 	case SceneState::TEXT_SCREEN:
-		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/test3.mp4");
+		Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Escena1.mp4");
 
 		SetCurrentState(SceneState::GAMEPLAY);
 		// Original keyboard input

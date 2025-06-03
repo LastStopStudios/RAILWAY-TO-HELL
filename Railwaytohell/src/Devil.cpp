@@ -1282,6 +1282,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
 }
+
 void Devil::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 }
 
