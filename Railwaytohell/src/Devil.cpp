@@ -92,7 +92,7 @@ bool Devil::Start() {
 
     pugi::xml_node spearTemplateNode = spearConfigDoc.child("config").child("scene12").child("entities").child("spear");
 
-    this->spearTemplateNode = spearTemplateNode; // Ahora válido más allá del scope
+    this->spearTemplateNode = spearTemplateNode; // Ahora vï¿½lido mï¿½s allï¿½ del scope
 
     pathfinding = new Pathfinding();
 
@@ -310,8 +310,8 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
     // Create new attacks only if not already attacking
     else if (!isTailAttacking && !jumpAttackActive) {
         // Close range tail attack
-        if (distanceToPlayer <= TAIL_ATTACK_DISTANCE && canAttack) {
-            CreateTailAttack();
+        if (distanceToPlayer <= TAIL_ATTACK_DISTANCE && canAttack) { 
+          CreateTailAttack();
         }
         // Medium range jump attack
         else if (distanceToPlayer <= JUMP_ATTACK_DISTANCE && distanceToPlayer > TAIL_ATTACK_DISTANCE && canAttack) {
@@ -321,6 +321,7 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
         else {
             currentAnimation = &idle2;
             pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
+
         }
     }
 }
@@ -384,7 +385,7 @@ void Devil::CreateVerticalSpearAttack() {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-            // CRÍTICO: Establecer parámetros ANTES de Start()
+            // CRï¿½TICO: Establecer parï¿½metros ANTES de Start()
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -392,7 +393,7 @@ void Devil::CreateVerticalSpearAttack() {
                 float spearX = playerPos.getX() + offsetX;
                 float spearY = playerPos.getY() - 600;
 
-                // Configurar después de Start()
+                // Configurar despuï¿½s de Start()
                 spear->SetDirection(SpearDirection::VERTICAL_DOWN);
                 spear->SetPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
@@ -406,7 +407,7 @@ void Devil::CreateVerticalSpearAttack() {
     }
 }
 
-// En Devil.cpp - Método CreateHorizontalSpearAttack() corregido
+// En Devil.cpp - Mï¿½todo CreateHorizontalSpearAttack() corregido
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = false;
@@ -427,7 +428,7 @@ void Devil::CreateHorizontalSpearAttack() {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
 
         if (spear) {
-            // CRÍTICO: Establecer parámetros ANTES de Start()
+            // CRï¿½TICO: Establecer parï¿½metros ANTES de Start()
             spear->SetParameters(spearTemplateNode);
 
             if (spear->Awake() && spear->Start()) {
@@ -444,7 +445,7 @@ void Devil::CreateHorizontalSpearAttack() {
                     direction = SpearDirection::HORIZONTAL_LEFT;
                 }
 
-                // Configurar después de Start()
+                // Configurar despuï¿½s de Start()
                 spear->SetDirection(direction);
                 spear->SetOriginPosition(Vector2D(spearX, spearY));
                 activeSpears.push_back(spear);
@@ -467,7 +468,7 @@ void Devil::UpdateSpearAttacks(float dt) {
     for (auto it = activeSpears.begin(); it != activeSpears.end();) {
         Spears* spear = *it;
 
-        // Verificar si la lanza aún existe antes de actualizarla
+        // Verificar si la lanza aï¿½n existe antes de actualizarla
         if (spear != nullptr) {
             // Update spear
             bool spearStillActive = spear->Update(dt);
@@ -550,10 +551,10 @@ void Devil::CreateJumpAttack() {
     Vector2D currentPos = GetPosition();
     jumpStartPos = currentPos;
 
-    // Si hay una transformación pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
+    // Si hay una transformaciï¿½n pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
     if (pendingTransformation) {
         targetLandingPos = Vector2D(1200, currentPos.getY());
-        targetPlayerX = 1200;
+        targetPlayerX = 1315;
     }
     else {
         // Comportamiento normal: saltar hacia el jugador
@@ -613,7 +614,7 @@ void Devil::UpdateJumpAttack(float dt) {
 
             pbody->body->SetGravityScale(1.0f);
 
-            // Si había una transformación pendiente, activarla ahora
+            // Si habï¿½a una transformaciï¿½n pendiente, activarla ahora
             if (pendingTransformation) {
                 isTransforming = true;
                 pendingTransformation = false;
@@ -782,14 +783,14 @@ void Devil::CreateTailAttack() {
 
     // Create tail attack area
     int tailX = position.getX() + texW / 2;
-    int tailY = position.getY() + texH / 2;
+    int tailY = position.getY() + 140;
 
     // Adjust position based on direction
-    tailX += isLookingLeft ? -40 : 40;
+    tailX += isLookingLeft ? -90 : 90;
 
     tailAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         tailX, tailY,
-        texW + 60, texH + 30,
+        texW + 60, 20,
         bodyType::KINEMATIC
     );
 
@@ -799,10 +800,12 @@ void Devil::CreateTailAttack() {
 }
 
 void Devil::UpdateTailAttackArea() {
-    if (tailAttackArea && isTailAttacking) {
+
+    if (tailAttackArea && isTailAttacking){
+         
         int tailX = position.getX() + texW / 2;
-        int tailY = position.getY() + texH / 2;
-        tailX += isLookingLeft ? -40 : 40;
+        int tailY = position.getY()  + 140;
+        tailX += isLookingLeft ? -90 : 90;
         tailAttackArea->body->SetTransform(b2Vec2(PIXEL_TO_METERS(tailX), PIXEL_TO_METERS(tailY)), 0);
     }
 }
@@ -812,8 +815,8 @@ void Devil::UpdateJumpAttackArea() {
 
     jumpAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         currentPos.getX(),
-        currentPos.getY(),
-        texW + 50, texH + 50,
+        currentPos.getY() + 85,
+        texW + 100, texH ,
         bodyType::KINEMATIC
     );
 
@@ -864,7 +867,7 @@ void Devil::HandleTransformation(float dt) {
             }
         }
         else if (currentPhase == 2) {
-            // Para transformación 2->3, hacer zoom gradual
+            // Para transformaciï¿½n 2->3, hacer zoom gradual
             LOG("Phase 2->3 transformation: Applying gradual zoom");
 
             // Initialize zoom if not started
@@ -964,8 +967,8 @@ void Devil::ResizeCollisionForPhase3() {
         int newHeight = texH + 350;  // Adjust height as needed
 
         pbody = Engine::GetInstance().physics.get()->CreateRectangle(
-            METERS_TO_PIXELS(currentPos.x) + 200,
-            METERS_TO_PIXELS(currentPos.y),
+            METERS_TO_PIXELS(currentPos.x) ,
+            METERS_TO_PIXELS(currentPos.y) - 90,
             newWidth,
             newHeight,
             bodyType::DYNAMIC
@@ -1062,28 +1065,19 @@ void Devil::RenderSprite() {
     if (currentAnimation == &salto || currentAnimation == &land) {
         offsetY = -425;
     }
-
-    if (currentAnimation == &transform2 || currentAnimation == &idle3 || currentAnimation) {
+    if (currentAnimation == &idle3 ) {
+        offsetX = -130;
+        offsetY = -240;
+        
+    }
+    if (currentAnimation == &transform2 || currentAnimation == &attack) {
         offsetY = -240;
     }
-    if (currentPhase == 1 || currentPhase == 2) {
-        Engine::GetInstance().render.get()->DrawTexture(
-            texture,
-            (int)position.getX() + offsetX,
-            (int)position.getY() + offsetY,
-            &frame,
-            1.0f, 0.0, INT_MAX, INT_MAX, flip
-        );
+    if (currentAnimation == &attack) {
+        offsetX = -320;
+        offsetY = -240;
     }
-    else {
-        Engine::GetInstance().render.get()->DrawTexture(
-            texture,
-            (int)position.getX() + offsetX,
-            (int)position.getY() + offsetY,
-            &frame,
-            1.0f, 0.0, INT_MAX, INT_MAX, flip
-        );
-    }
+
 
 }
 
@@ -1139,7 +1133,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
                 live2--;
                 if (live2 <= 0) {
-                    // Establecer la transformación como pendiente ANTES de crear el salto
+                    // Establecer la transformaciï¿½n como pendiente ANTES de crear el salto
                     pendingTransformation = true;
 
                     // Cancel any active attacks
@@ -1161,7 +1155,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                         colatazo.Reset();
                     }
 
-                    // Crear el salto hacia x=1200 (el salto detectará pendingTransformation)
+                    // Crear el salto hacia x=1200 (el salto detectarï¿½ pendingTransformation)
                     if (!jumpAttackActive) {
                         CreateJumpAttack();
                     }
