@@ -1569,7 +1569,7 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="Anger" death="0" savedDeath="0" x="1950" y="1648" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss" ref="noma">
+				<enemy name="Anger" death="0" savedDeath="0" x="2045" y="1648" w="96" h="128" texture="Assets/Textures/bosses/Noma.png" gravity="true" type="boss" ref="noma">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="96" h="128" />
@@ -4760,7 +4760,7 @@
 			</spear>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Devil.png" TEXT="Congratulations, you made my job easy. You think that voice was your sister? How naive. Your emotions blinded you and brought you to me. I am Satan. Every word you heard was mine. Your sister is here, but freeing her will not be easy. Defeating my allies made me stronger. I am about to be crowned  the ultimate fallen angel. I hope you enjoyed your punishment in my labyrinth... but you have reached your final stop. Prepare to die. " />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Devil.png" TEXT="Congratulations, you made my job easy. You think that voice was your sister? How naive. Your emotions blinded you and brought you to me. I am Satan. Every word you heard was mine. Your sister is here, but freeing her will not be easy. Defeating my allies made me stronger. I am about to be          crowned  the ultimate fallen angel. I hope you enjoyed your punishment in my labyrinth... but you have reached your final stop. Prepare to die. " />
 		</dialogues>
 	</scene12>
 </config>
