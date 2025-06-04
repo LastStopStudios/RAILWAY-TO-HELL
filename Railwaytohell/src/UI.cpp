@@ -95,6 +95,42 @@ bool UI::CleanUp()
 		Engine::GetInstance().textures->UnLoad(vidapl2);//Unload text background
 		vidapl2 = nullptr;
 	}
+	if (Ball != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Ball);//Unload text background
+		Ball = nullptr;
+	}
+	if (Ball2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Ball2);//Unload text background
+		Ball2 = nullptr;
+	}
+	if (Dash != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Dash);//Unload text background
+		Dash = nullptr;
+	}
+	if (Dash2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Dash2);//Unload text background
+		Dash2 = nullptr;
+	}
+	if (DJump != nullptr) {
+		Engine::GetInstance().textures->UnLoad(DJump);//Unload text background
+		DJump = nullptr;
+	}
+	if (DJump2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(DJump2);//Unload text background
+		DJump2 = nullptr;
+	}
+	if (Whip != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Whip);//Unload text background
+		Whip = nullptr;
+	}
+	if (Whip2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Whip2);//Unload text background
+		Whip2 = nullptr;
+	}
+	if (Puzzle != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Puzzle);//Unload text background
+		Puzzle = nullptr;
+	}
 	return true;
 }
 

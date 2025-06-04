@@ -337,8 +337,12 @@ bool Player::Update(float dt)
             Engine::GetInstance().ui->figth = false;
             Engine::GetInstance().ui->figth2 = false;
             Engine::GetInstance().ui->figth3 = false;
+            Engine::GetInstance().ui->fase3 = false;
+            Engine::GetInstance().ui->fase3 = false;
+            GlobalSettings::GetInstance().SetTextureMultiplier(1.5);
             Engine::GetInstance().scene->SalirBoss();
             Engine::GetInstance().scene->DesbloquearSensor();
+            Engine::GetInstance().dialogoM->bossFightReady = false;
             HandleSceneSwitching();
             hasDied = false;
 			return true;

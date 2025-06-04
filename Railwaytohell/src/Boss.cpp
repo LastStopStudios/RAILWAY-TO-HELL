@@ -244,7 +244,8 @@ bool Boss::Update(float dt)
         //UI Lives
         Engine::GetInstance().ui->figth = false;
 
-
+        //reset boss figth bool
+        Engine::GetInstance().dialogoM->bossFightReady = false;
         // When dying, don't process any other logic
         return true;
     }
