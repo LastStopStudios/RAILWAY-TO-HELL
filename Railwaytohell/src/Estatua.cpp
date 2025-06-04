@@ -10,7 +10,14 @@
 
 Estatua::Estatua() : Entity(EntityType::ESTATUA)
 {
+	SDL_Texture* texture;
+	const char* texturePath;
+	int texW, texH;
+	pugi::xml_node parameters;
+	Animation* currentAnimation = nullptr;
+	Animation idle, activated;
 
+	PhysBody* pbody;
 }
 
 Estatua::~Estatua() {}
@@ -65,8 +72,6 @@ bool Estatua::Update(float dt){
 		currentAnimation = &activated;
 	}
 
-	
-
 	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY(), &currentAnimation->GetCurrentFrame());
 
 	currentAnimation->Update();
@@ -75,7 +80,9 @@ bool Estatua::Update(float dt){
 }
 
 void Estatua::OnCollision(PhysBody* physA, PhysBody* physB) {
-
+	if (pbody == nullptr || !active) {
+		return;
+	}
 }
 
 void Estatua::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
@@ -84,6 +91,13 @@ void Estatua::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
 
 bool Estatua::CleanUp()
 {
+	if (pbody != nullptr) {
+		// Remover el listener antes de destruir
+		pbody->listener = nullptr;
+
+		Engine::GetInstance().physics->DeletePhysBody(pbody);
+		pbody = nullptr;
+	}
 
 	return true;
 }
