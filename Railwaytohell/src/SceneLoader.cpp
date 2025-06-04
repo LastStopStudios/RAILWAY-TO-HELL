@@ -121,10 +121,11 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
             Engine::GetInstance().scene->GetVoladorList().push_back(volador); 
         }
 
-        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+        if (deathValue == 0 && deathXMLValue == 0 ) {
             if (type == "boss" && ref == "bufon") {
                 Bufon* bufon = (Bufon*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BUFON);
                 bufon->SetParameters(enemyNode);
+                bufon->SetAliveInXML();
                 Engine::GetInstance().scene->GetBufonList().push_back(bufon);
             }
         }
@@ -135,7 +136,7 @@ void SceneLoader::LoadEnemiesItems(pugi::xml_node sceneNode, int scene) {
                 Engine::GetInstance().scene->GetDevilList().push_back(devil);
             }
         }
-        if (deathValue == 0 && deathXMLValue == 0 || deathValue == 1 && deathXMLValue == 0) {
+        if (deathValue == 0 && deathXMLValue == 0) {
             if (type == "boss" && ref == "noma") {
                 Boss* boss = (Boss*)Engine::GetInstance().entityManager->CreateEntity(EntityType::BOSS);
                 boss->SetParameters(enemyNode);
