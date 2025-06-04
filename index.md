@@ -298,33 +298,7 @@
       </ul>
     </div>
 
-     
-    <!-- Controls -->
-    <div class="pixel-section">
-      <h2 class="section-title">CONTROLES</h2>
-      <div class="row">
-        <div class="col-md-6">
-          <h3 class="pixel-text" style="color: var(--hell-light);">CONTROLLER</h3>
-          <ul class="pixel-list">
-            <li><strong>Left Stick move:</strong> left/right</li>
-            <li><strong>X/A:</strong> Jump</li>
-            <li><strong>R1/RB:</strong> Dash</li>
-            <li><strong>Square/X:</strong>Melee Atack</li>
-            <li><strong>R2 / RT:</strong> Use whip</li>
-            <li><strong>L2 / LT:</strong> Throw Balls</li>
-           <li><strong>Circle / B:</strong> Use Key (Doors and Interactions), close dialogues and use checkpoints</li>
-           <li><strong>Triangle / Y_</strong> Map</li>
-          </ul>
-        </div>
-        <div class="col-md-6">
-          <h3 class="pixel-text" style="color: var(--hell-light);">KEYBOARD</h3>
-          <ul class="pixel-list">
-            <li><strong>A/D:</strong> left/right</li>
-            <li><strong>ESPACIO:</strong> Jump</li>
-            <li><strong>SHIFT:</strong> Dash</li>
-            <li><strong>J:</strong> Melee Atack</li>
-          </ul>
-    </div>
+
     
     <!-- Team -->
     <div class="pixel-section">
@@ -357,6 +331,38 @@
       </div>
     </div>
     
+  
+    <!-- Controls -->
+    <div class="pixel-section">
+      <h2 class="section-title">CONTROLES</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <h3 class="pixel-text" style="color: var(--hell-light);">CONTROLLER</h3>
+          <ul class="pixel-list">
+            <li><strong>Left Stick move:</strong> left/right</li>
+            <li><strong>X/A:</strong> Jump</li>
+            <li><strong>R1/RB:</strong> Dash</li>
+            <li><strong>Square/X:</strong>Melee Atack</li>
+            <li><strong>R2 / RT:</strong> Use whip</li>
+            <li><strong>L2 / LT:</strong> Throw Balls</li>
+           <li><strong>Circle / B:</strong> Use Key (Doors and Interactions), close dialogues and use checkpoints</li>
+           <li><strong>Triangle / Y_</strong> Map</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h3 class="pixel-text" style="color: var(--hell-light);">KEYBOARD</h3>
+          <ul class="pixel-list">
+            <li><strong>A/D:</strong> left/right</li>
+            <li><strong>SPACE:</strong> Jump</li>
+            <li><strong>SHIFT:</strong> Dash</li>
+            <li><strong>J:</strong> Melee Atack</li>
+            <li><strong>K:</strong> Use Whip</li>
+            <li><strong>L:</strong> Throw Balls</li>
+            <li><strong>E:</strong> Use Key (Doors and Interactions), close dialogues and use checkpoints</li>
+            <li><strong>M:</strong> Map</li>
+          </ul>
+    </div>
+
     <!-- Gallery -->
     <div class="pixel-section">
       <h2 class="section-title">GALERÍA</h2>
