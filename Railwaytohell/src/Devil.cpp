@@ -118,97 +118,101 @@ bool Devil::Update(float dt) {
             pbody->body->SetGravityScale(1.0f);
         }
     }
-
-    // Update UI health display
-    if (Engine::GetInstance().ui->figth3 == true) {
-        //UI Lives
-        if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
-        if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
-        if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
-    }
-
-    //Handle Dead
-    if (isDying) {
-        // Asegurar que no haya movimiento durante la muerte
-        if (pbody != nullptr ) {
-            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-            pbody->body->SetGravityScale(1.0f);
+    bool bossFightActive = Engine::GetInstance().dialogoM->bossFightReady;
+    if(bossFightActive){
+        // Update UI health display
+        if (Engine::GetInstance().ui->figth3 == true) {
+            //UI Lives
+            if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
+            if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
+            if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
         }
 
-        currentAnimation->Update();
+        //Handle Dead
+        if (isDying) {
+            // Asegurar que no haya movimiento durante la muerte
+            if (pbody != nullptr) {
+                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+                pbody->body->SetGravityScale(1.0f);
+            }
 
-        if (currentAnimation->HasFinished()) {
-            Engine::GetInstance().scene->morido = true;
+            currentAnimation->Update();
+
+            if (currentAnimation->HasFinished()) {
+                Engine::GetInstance().scene->morido = true;
+            }
+            // Draw the death animation
+            SDL_Rect frame = currentAnimation->GetCurrentFrame();
+            RenderSprite();
+            //UI Lives
+            Engine::GetInstance().ui->figth3 = false;
+
+
+
+            return true;
         }
-        // Draw the death animation
-        SDL_Rect frame = currentAnimation->GetCurrentFrame();
-        RenderSprite();
-        //UI Lives
-        Engine::GetInstance().ui->figth3 = false;
 
-       
+        // Handle transformation state
+        if (isTransforming) {
+            HandleTransformation(dt);
+            UpdatePosition();
+            RenderSprite();
+            return true; // Salir temprano durante transformación
+        }
 
-        return true;
-    }
+        // Handle jump attack mechanics
+        if (jumpAttackActive) {
+            UpdateJumpAttack(dt);
+            UpdatePosition();
+            RenderSprite();
+            if (shadowVisible) {
+                RenderShadow();
+            }
+            currentAnimation->Update();
+            return true;
+        }
 
-    // Handle transformation state
-    if (isTransforming) {
-        HandleTransformation(dt);
-        UpdatePosition();
-        RenderSprite();
-        return true; // Salir temprano durante transformación
-    }
+        // Get player and enemy positions
+        enemyPos = GetPosition();
+        Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+        Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
+        Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
 
-    // Handle jump attack mechanics
-    if (jumpAttackActive) {
-        UpdateJumpAttack(dt);
+        float dx = playerTilePos.getX() - enemyTilePos.getX();
+        float distanceToPlayer = abs(dx);
+        isLookingLeft = dx < 0;
+
+        // Phase-based 
+        switch (currentPhase) {
+        case 1:
+            HandlePhase1(distanceToPlayer, dx, dt);
+            break;
+        case 2:
+            HandlePhase2(distanceToPlayer, dx, dt);
+            break;
+        case 3:
+            HandlePhase3(distanceToPlayer, dx, dt);
+            break;
+        default:
+            LOG("Error: Invalid phase %d", currentPhase);
+            break;
+        }
+
         UpdatePosition();
         RenderSprite();
         if (shadowVisible) {
             RenderShadow();
         }
         currentAnimation->Update();
-        return true;
+
+        // Debug pathfinding
+        if (isChasing && !pathfinding->pathTiles.empty()) {
+            pathfinding->DrawPath();
+        }
     }
-
-    // Get player and enemy positions
-    enemyPos = GetPosition();
-    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
-    Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
-
-    float dx = playerTilePos.getX() - enemyTilePos.getX();
-    float distanceToPlayer = abs(dx);
-    isLookingLeft = dx < 0;
-
-    // Phase-based 
-    switch (currentPhase) {
-    case 1:
-        HandlePhase1(distanceToPlayer, dx, dt);
-        break;
-    case 2:
-        HandlePhase2(distanceToPlayer, dx, dt);
-        break;
-    case 3:
-        HandlePhase3(distanceToPlayer, dx, dt);
-        break;
-    default:
-        LOG("Error: Invalid phase %d", currentPhase);
-        break;
-    }
-
     UpdatePosition();
     RenderSprite();
-    if (shadowVisible) {
-        RenderShadow();
-    }
     currentAnimation->Update();
-
-    // Debug pathfinding
-    if (isChasing && !pathfinding->pathTiles.empty()) {
-        pathfinding->DrawPath();
-    }
-
     return true;
 }
 

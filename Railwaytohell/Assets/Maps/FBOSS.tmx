@@ -21708,8 +21708,8 @@
   </data>
  </layer>
  <objectgroup id="32" name="Giro" visible="0"/>
- <objectgroup id="27" name="Dialogos" visible="0">
-  <object id="394" x="832" y="1184" width="32" height="704">
+ <objectgroup id="27" name="Dialogos">
+  <object id="394" x="737" y="1184" width="32" height="704">
    <properties>
     <property name="ID" value="1"/>
    </properties>
