@@ -1090,7 +1090,7 @@ void Devil::CreatePunchAttack() {
 
         punchAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             punchX, punchY,
-            30, 30,
+            50, 30,
             bodyType::KINEMATIC
         );
 
