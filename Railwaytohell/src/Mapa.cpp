@@ -313,7 +313,7 @@ void Mapa::LoadMap(){
 	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_03.png"); //Load Remember 2
 	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_06.png"); //Load Remember 3
 	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_07.png"); //Load Remember 4
-	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 5
+	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_02.png"); //Load Remember 5
 	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_04.png"); //Load Remember 6
 	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 7
 	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_08.png"); //Load Remember 8

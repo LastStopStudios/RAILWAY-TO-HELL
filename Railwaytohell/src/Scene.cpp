@@ -22,7 +22,8 @@
 #include "Ffmpeg.h"
 #include "GlobalSettings.h"
 #include "Devil.h"
-#include "Spears.h" 
+#include "Spears.h"
+#include "Mapa.h"
 
 Scene::Scene() : Module()
 {
@@ -475,12 +476,14 @@ bool Scene::Update(float dt)
 		enemyList[0]->ResetPath();
 		}*/
 		if (morido == true) {
-			if (Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8) {
+			if (Engine::GetInstance().mapa.get()->remember1 && Engine::GetInstance().mapa.get()->remember2 && Engine::GetInstance().mapa.get()->remember3 && Engine::GetInstance().mapa.get()->remember4 && Engine::GetInstance().mapa.get()->remember5 && Engine::GetInstance().mapa.get()->remember6 && Engine::GetInstance().mapa.get()->remember7 && Engine::GetInstance().mapa.get()->remember8) {
 				Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Final2.mp4");
+				GlobalSettings::GetInstance().SetTextureMultiplier(1.5);
 				Engine::GetInstance().scene->SetCurrentState(SceneState::INTRO_SCREEN);
 			}
 			else {
 				Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Final1.mp4");
+				GlobalSettings::GetInstance().SetTextureMultiplier(1.5);
 				Engine::GetInstance().scene->SetCurrentState(SceneState::INTRO_SCREEN);
 			}
 			morido = false;
