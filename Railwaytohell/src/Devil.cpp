@@ -874,9 +874,8 @@ void Devil::HandleTransformation(float dt) {
     if (pbody && pbody->body) {
         pbody->body->SetLinearVelocity(b2Vec2(0, 0));
         pbody->body->SetAngularVelocity(0);
-        pbody->body->SetGravityScale(0.0f); // Sin gravedad durante transformación
+        pbody->body->SetGravityScale(0.0f);
 
-        // Hacer el cuerpo kinematic para que no pueda ser empujado
         if (pbody->body->GetType() != b2_kinematicBody) {
             pbody->body->SetType(b2_kinematicBody);
         }
@@ -903,19 +902,18 @@ void Devil::HandleTransformation(float dt) {
             // Para transformación 2->3, hacer zoom gradual
             LOG("Phase 2->3 transformation: Applying gradual zoom");
 
-            // Initialize zoom if not started
             if (!zooming) {
                 zooming = true;
-                zoom = GlobalSettings::GetInstance().GetTextureMultiplier(); // Get current zoom level
+                zoom = GlobalSettings::GetInstance().GetTextureMultiplier();
                 LOG("Starting zoom from: %.2f", zoom);
             }
 
             if (zooming) {
-                zoom -= 0.01f; // velocidad del zoom
+                zoom -= 0.01f;
                 if (zoom <= 1.0f) {
                     zoom = 1.0f;
                     zooming = false;
-                    transformStep = 1; // Only move to next step when zoom is complete
+                    transformStep = 1;
                     LOG("Zoom completed, moving to transform step 1");
                 }
                 GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
@@ -987,11 +985,11 @@ void Devil::HandleTransformation(float dt) {
         transformTimer = 0.0f;
         transformationStarted = false;
         Hiteado = false;
-
         zooming = false;
         break;
     }
 }
+
 void Devil::ResizeCollisionForPhase3() {
     if (pbody) {
         // Store current position
@@ -1030,7 +1028,7 @@ void Devil::ResizeCollisionForPhase2() {
 
         pbody = Engine::GetInstance().physics.get()->CreateCircle(
             METERS_TO_PIXELS(currentPos.x),
-            METERS_TO_PIXELS(currentPos.y),
+            METERS_TO_PIXELS(currentPos.y) - 90,
             newWidth / 2 - 3,
             bodyType::DYNAMIC
         );
@@ -1106,7 +1104,6 @@ void Devil::RenderSprite() {
     if (currentAnimation == &idle3 ) {
         offsetX = -130;
         offsetY = -240;
-        
     }
     if (currentAnimation == &transform2 || currentAnimation == &attackH || currentAnimation == &attackV) {
         offsetY = -240;
