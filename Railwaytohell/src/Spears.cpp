@@ -374,7 +374,7 @@ bool Spears::CleanUp() {
     // Limpiar sombra si existe
     if (hasShadow) {
         hasShadow = false;
-        shadowTexture = nullptr; // No necesitamos liberar la textura, el engine se encarga
+        shadowTexture = nullptr; 
     }
 
     // Mark as pending deletion 
