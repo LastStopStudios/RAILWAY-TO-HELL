@@ -147,13 +147,17 @@ private:
 
 	float fallingTimer = 0.0f;
 	bool isTransitioningToFalling = false;
-
+	float fallStuckTimer = 0.0f;
+	float fallStuckThreshold = 1500.0f; // segundos que puede caer antes de forzar idle
 	//Scene change
 	bool NeedSceneChange = false;
 	bool Fade;
 	bool BossCam;
 	int sceneToLoad = -1;
 	float Playerx, Playery;
+
+	float jumpFallTimeout = 5000.0f; // segundos permitidos en salto/caída
+	float jumpFallTimer = 0.0f;
 
 	bool changeMusicCaronte = false;
 

@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "SDL2/SDL_ttf.h"
-
+#include <map>
 
 struct SDL_Texture;
 
@@ -73,6 +73,9 @@ private:
 	int width, height;
 	int posx, posy;
 	int texty, textx;
+
+	std::map<std::string, SDL_Texture*> backgroundCache; // Cache de fondos
+	std::string currentBackgroundPath; // Ruta actual del fondo
 
 
 };

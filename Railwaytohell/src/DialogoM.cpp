@@ -16,8 +16,24 @@
 DialogoM::DialogoM() : Module()
 {
 	name = "dialogoM";
+	textTexture = nullptr;
+	fondo = nullptr;
+	textIndex = 0;
+	textTimer = 0.0f;
+	textSpeed = 0.05f;
+	textMaxheigth = 300;
+	textMaxWidth = 380;
+	showText = false;
+	Tim = true;
+	Skip = true;
+	Siguiente = true;
+	currentText = "";
+	alltext = "";
+	displayText = "";
+	lastDialogID = "";
+	bossFightReady = false;
+	currentBackgroundPath = "";
 }
-
 //Destructor
 DialogoM::~DialogoM()
 {
@@ -50,34 +66,33 @@ bool DialogoM::Update(float dt) {
 	return true;
 }
 
-// Called each loop iteration
 bool DialogoM::PostUpdate()
 {
-	if (showText && textTexture != nullptr) {
-	
-		Engine::GetInstance().window.get()->GetWindowSize(w, h);//Screen size
-		//background size
+	if (showText && textTexture != nullptr && fondo != nullptr) {
+		// Verificar que la textura de fondo sigue siendo válida
+		if (currentBackgroundPath.empty() || backgroundCache.find(currentBackgroundPath) == backgroundCache.end()) {
+			LOG("ERROR: Background texture cache corrupted");
+			return true;
+		}
+
+		Engine::GetInstance().window.get()->GetWindowSize(w, h);
 		width = 800;
 		height = 200;
+		posx = w - 1050;
+		posy = h - 200;
+		texty = posy - 140;
+		textx = posx + 40;
 
-		//Background position
-		posx = w - 1050;//background position with screen size
-		posy = h - 200; //background position with screen size
-
-		//text position
-		texty = posy - 140 ;//text position with background size
-		textx = posx + 40;//text position with background size
-		
-		SDL_Rect dstRect = { posx, posy, width, height }; //Position and scale text background
+		SDL_Rect dstRect = { posx, posy, width, height };
 		SDL_RenderCopy(Engine::GetInstance().render->renderer, fondo, nullptr, &dstRect);
-		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 0.0f, 0.0, INT_MAX, INT_MAX); //Draw the text
+		Engine::GetInstance().render->DrawTexture(textTexture, textx, texty, nullptr, 0.0f, 0.0, INT_MAX, INT_MAX);
 	}
-	
+
 	return true;
 }
 
-
 void DialogoM::Texto(const std::string& Dialogo) {
+
 	showText = !showText; // Toggle text visibility
 	if (showText) {
 		lastDialogID = Dialogo;  // Guardar el ID del diálogo actual
@@ -94,18 +109,22 @@ void DialogoM::Texto(const std::string& Dialogo) {
 
 void DialogoM::ResetText() {
 	textIndex = 0;
+	textTimer = 0.0f;
 	currentText = "";
 	alltext = "";
-	displayText = ""; // full text
+	displayText = "";
 	Skip = true;
 	Tim = true;
 	Siguiente = true;
+
+	// Solo destruir la textura de texto, NO el fondo
 	if (textTexture != nullptr) {
 		SDL_DestroyTexture(textTexture);
-		//textTexture = nullptr;
+		textTexture = nullptr;
 	}
-	showText = false; // Reset text visibility 
-	// No resetear lastDialogID aquí
+
+	showText = false;
+	// NO resetear fondo ni currentBackgroundPath
 }
 
 void DialogoM::GenerateTextTexture()//display text on the screen
@@ -227,7 +246,6 @@ void DialogoM::UpdateTextAnimation(float dt)
 	}
 }
 
-
 void DialogoM::XMLToVariable(const std::string& id) {
 	if (!showText || !displayText.empty()) return;
 
@@ -238,34 +256,65 @@ void DialogoM::XMLToVariable(const std::string& id) {
 		std::cerr << "Error loading XML file: " << result.description() << std::endl;
 		return;
 	}
-	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel(); //bring out the current scene
-	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);//pass the scene from where to get the dialogues
-	pugi::xml_node dialogueNode = loadFile.child("config").child(scene.c_str()).child("dialogues");//load scene dialogs
 
-	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {//scroll through all dialogs
-		if (std::string(dialog.attribute("ID").value()) == id) {//See if the id given and the one in the dialog are the same
-			fondo = Engine::GetInstance().textures->Load(dialog.attribute("Img").value()); //Load texture for text background
-			displayText = dialog.attribute("TEXT").value();//give the text to the variable
+	int currentLvl = Engine::GetInstance().sceneLoader->GetCurrentLevel();
+	scene = (currentLvl == 1) ? "scene" : "scene" + std::to_string(currentLvl);
+	pugi::xml_node dialogueNode = loadFile.child("config").child(scene.c_str()).child("dialogues");
+
+	for (pugi::xml_node dialog = dialogueNode.child("dialog"); dialog; dialog = dialog.next_sibling("dialog")) {
+		if (std::string(dialog.attribute("ID").value()) == id) {
+
+			std::string backgroundPath = dialog.attribute("Img").value();
+
+			// Verificar si ya tenemos esta textura en caché
+			if (backgroundCache.find(backgroundPath) == backgroundCache.end()) {
+				// No está en caché, cargarla
+				SDL_Texture* newTexture = Engine::GetInstance().textures->Load(backgroundPath.c_str());
+				if (newTexture != nullptr) {
+					backgroundCache[backgroundPath] = newTexture;
+					LOG("Loaded new background texture: %s", backgroundPath.c_str());
+				}
+				else {
+					LOG("ERROR: Failed to load background texture: %s", backgroundPath.c_str());
+					return;
+				}
+			}
+
+			// Usar la textura del caché
+			fondo = backgroundCache[backgroundPath];
+			currentBackgroundPath = backgroundPath;
+			displayText = dialog.attribute("TEXT").value();
+
+			LOG("Using background texture: %s", backgroundPath.c_str());
 			return;
 		}
 	}
+
+	LOG("WARNING: Dialog with ID '%s' not found", id.c_str());
 }
 
 // Called before quitting
 
 bool DialogoM::CleanUp()
 {
-	LOG("Freeing scene");
+	LOG("Freeing DialogoM");
 
 	if (textTexture != nullptr)
 	{
 		SDL_DestroyTexture(textTexture);
-		//textTexture = nullptr;
+		textTexture = nullptr;
 	}
 
-	if (fondo != nullptr) {
-		Engine::GetInstance().textures->UnLoad(fondo);//Unload text background
-		//fondo = nullptr;
+	// Limpiar caché de fondos
+	for (auto& pair : backgroundCache) {
+		if (pair.second != nullptr) {
+			Engine::GetInstance().textures->UnLoad(pair.second);
+		}
 	}
+	backgroundCache.clear();
+
+	fondo = nullptr;
+	currentBackgroundPath = "";
+
 	return true;
 }
