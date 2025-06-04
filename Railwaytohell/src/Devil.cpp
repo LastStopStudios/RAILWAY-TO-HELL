@@ -1135,7 +1135,7 @@ void Devil::RenderSprite() {
         offsetX = -130;
         offsetY = -240;
     }
-    if (currentAnimation == &transform2 || currentAnimation == &attackH || currentAnimation == &attackV) {
+    if (currentAnimation == &transform2 || currentAnimation == &attackH || currentAnimation == &attackV || currentAnimation == &death) {
         offsetY = -240;
     }
     if (currentAnimation == &attackH || currentAnimation == &attackV) {

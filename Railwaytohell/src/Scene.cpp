@@ -354,11 +354,11 @@ bool Scene::Update(float dt)
 			DrawCurrentScene();
 		}
 		// Original keyboard input
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-			Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
-			SetCurrentState(SceneState::TEXT_SCREEN);
-			skipFirstInput = true;
-		}
+		//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		//	Engine::GetInstance().sceneLoader->FadeIn(2.5f);// Animation speed (FadeIn)
+		//	SetCurrentState(SceneState::TEXT_SCREEN);
+		//	skipFirstInput = true;
+		//}
 		//Check controller input
 		if (Engine::GetInstance().IsControllerConnected()) {
 			SDL_GameController* controller = Engine::GetInstance().GetGameController();
