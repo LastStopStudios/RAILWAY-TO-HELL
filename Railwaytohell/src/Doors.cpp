@@ -233,7 +233,9 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		if (GetDoorType() == "boss_door") {
 			if (Engine::GetInstance().entityManager->estatua2) {
-				Engine::GetInstance().sceneLoader->LoadScene(12, 643, 1592, false, true);
+				if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+					Engine::GetInstance().sceneLoader->LoadScene(12, 643, 1592, false, true);
+				}
 			}
 		}
 		break;
