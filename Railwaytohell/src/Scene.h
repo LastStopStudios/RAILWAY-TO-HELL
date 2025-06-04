@@ -120,6 +120,8 @@ public:
 
 	void EnableSettingsControlsPauseMenu();
 	void DisableSettingsControlsPauseMenu();
+
+	void NewGameReset();
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;

@@ -66,12 +66,14 @@ bool GuiManager::Update(float dt)
 
 bool GuiManager::PostUpdate()
 {
+	return true;
+}
+
+void GuiManager::DrawOverlay() {
 	// Draw all the controls
-	for (const auto& control : guiControlsList)
-	{
+	for (const auto& control : guiControlsList) {
 		control->PostUpdate();
 	}
-	return true;
 }
 
 bool GuiManager::CleanUp()

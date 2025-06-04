@@ -29,6 +29,9 @@ public:
 	// Additional methods
 	GuiControl* CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Rect sliderBounds = { 0,0,0,0 });
 
+	void DrawOverlay();
+
+
 public:
 
 	std::list<GuiControl*> guiControlsList;

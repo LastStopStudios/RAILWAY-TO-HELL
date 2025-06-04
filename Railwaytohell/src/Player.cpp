@@ -266,8 +266,7 @@ bool Player::Update(float dt)
         return true;
     }
 
-    if (Engine::GetInstance().scene->IsPaused()) {
-		//DrawPlayer(); 
+    if (Engine::GetInstance().scene->IsPaused()) { 
         return true;
     }
 

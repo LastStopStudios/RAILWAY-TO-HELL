@@ -430,8 +430,11 @@ bool Scene::Update(float dt)
 		break;
 	case SceneState::GAMEPLAY:
 
+		pauseMenuOn = false;
+
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 			SetCurrentState(SceneState::PAUSE_MENU);
+			pauseMenuOn = true;
 		}
 
 		if (!pauseMenuOn) {
@@ -1046,6 +1049,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 	case 2: // NewGame
 		currentState = SceneState::TEXT_SCREEN;
 		hasStartedGame = true;
+		NewGameReset();
 		DisableMenuButtons();
 		break;
 	case 3: // Continue
@@ -1418,4 +1422,104 @@ void Scene::EnablePauseButtons() {
 	if (ControlsPauseMenu) ControlsPauseMenu->SetState(GuiControlState::NORMAL);
 	if (SettingsPause) SettingsPause->SetState(GuiControlState::NORMAL);
 	if (ExitGamePause) ExitGamePause->SetState(GuiControlState::NORMAL);
+}
+
+void Scene::NewGameReset() {
+	player->ResetToInitPosition();
+
+	pugi::xml_document loadFile;
+	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+
+	// Reset lastCheckpointScene to 1 if it's not already 1
+	pugi::xml_node gamestateNode = loadFile.child("config").child("gamestate");
+	pugi::xml_node lastCheckpointNode = gamestateNode.child("lastCheckpointScene").child("scene");
+
+	int currentValue = lastCheckpointNode.attribute("value").as_int();
+	if (currentValue != 1) {
+		lastCheckpointNode.attribute("value").set_value(1);
+	}
+	pugi::xml_node sceneNode;
+	int maxScenes = 12;
+	for (int i = 0; i < maxScenes; ++i) {
+		if (i == 0) { sceneNode = loadFile.child("config").child("scene"); }
+		else if (i == 1) {
+			sceneNode = loadFile.child("config").child("scene2");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 2) {
+			sceneNode = loadFile.child("config").child("scene3");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 3) {
+			sceneNode = loadFile.child("config").child("scene4");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 4) {
+			sceneNode = loadFile.child("config").child("scene5");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 5) {
+			sceneNode = loadFile.child("config").child("scene6");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 6) {
+			sceneNode = loadFile.child("config").child("scene7");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 7) {
+			sceneNode = loadFile.child("config").child("scene8");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 8) {
+			sceneNode = loadFile.child("config").child("scene9");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 9) {
+			sceneNode = loadFile.child("config").child("scene10");/*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 10) {
+			sceneNode = loadFile.child("config").child("scene11"); /*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+		else if (i == 11) {
+			sceneNode = loadFile.child("config").child("scene12"); /*visibility map*/sceneNode.child("visibility").attribute("accessed").set_value(false);
+		}
+
+		//checkpoints
+		pugi::xml_node checkpointsNode = sceneNode.child("entities").child("checkpoints");
+
+		for (pugi::xml_node checkpointNode : checkpointsNode.children("checkpoint")) {
+			checkpointNode.attribute("pendingToChangeAnim").set_value(false);
+			checkpointNode.attribute("activated").set_value(false);
+		}
+
+		//item
+		pugi::xml_node itemsNode = sceneNode.child("entities").child("items");
+
+		for (pugi::xml_node itemNode : itemsNode.children("item")) {
+			std::string name = itemNode.attribute("name").as_string();
+			if (name == "Whip") {
+				itemNode.attribute("created").set_value(false);
+			}
+			itemNode.attribute("death").set_value(0);
+			itemNode.attribute("savedDeath").set_value(0);
+		}
+
+		//enemies
+		pugi::xml_node enemiesNode = sceneNode.child("entities").child("enemies");
+
+		for (pugi::xml_node enemyNode : enemiesNode.children("enemy")) {
+			std::string type = enemyNode.attribute("type").as_string();
+			if (type == "boss") {
+				if (i == 2) {
+					enemyNode.attribute("x").set_value(2045);
+					enemyNode.attribute("y").set_value(1648);
+				}
+
+				enemyNode.attribute("death").set_value(0);
+				enemyNode.attribute("savedDeath").set_value(0);
+			}
+		}
+	}
+
+	pugi::xml_node windowNode = loadFile.child("config").child("window");
+	if (windowNode) {
+		pugi::xml_node fullscreenNode = windowNode.child("fullscreen_window");
+		if (fullscreenNode) {
+			fullscreenNode.attribute("value").set_value(false);
+		}
+	}
+
+	loadFile.save_file("config.xml");
 }

@@ -313,6 +313,7 @@ bool Engine::PostUpdate()
             break;
         }
     }
+    render->StartOverlay();
 
     return result;
 }

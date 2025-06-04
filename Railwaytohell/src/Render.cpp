@@ -3,6 +3,8 @@
 #include "Render.h"
 #include "Log.h"
 #include "GlobalSettings.h"
+#include "Scene.h"
+#include "GuiManager.h"
 
 #define VSYNC true
 
@@ -76,8 +78,23 @@ bool Render::Update(float dt)
 bool Render::PostUpdate()
 {
     SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+    if (overlayActive) {
+        DrawOverlay();
+        overlayActive = false;
+    }
     SDL_RenderPresent(renderer);
     return true;
+}
+
+void Render::StartOverlay() {
+    overlayActive = true;
+}
+
+void Render::DrawOverlay() {
+
+    Engine::GetInstance().scene->DrawCurrentScene();
+    Engine::GetInstance().guiManager->DrawOverlay();
+
 }
 
 bool Render::CleanUp()

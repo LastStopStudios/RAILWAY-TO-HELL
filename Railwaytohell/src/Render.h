@@ -31,6 +31,9 @@ public:
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
 
+	void StartOverlay();
+	void DrawOverlay();
+
 	// Drawing
 	bool DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 	bool DrawTextureForButtons(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
@@ -56,4 +59,8 @@ public:
 	SDL_Rect viewport;
 	SDL_Color background;
 	TTF_Font* font;
+
+private:
+	bool overlayActive = false;
+
 };
