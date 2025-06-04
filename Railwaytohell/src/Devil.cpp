@@ -677,6 +677,10 @@ void Devil::UpdateJumpAttack(float dt) {
                 jumpAttackArea = nullptr;
             }
         }
+        Vector2D NcurrentPos = GetPosition();
+        if (NcurrentPos.getY() > 1760) {
+            position.setY(1619);
+        }
         return;
     }
 

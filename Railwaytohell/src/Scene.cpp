@@ -1301,14 +1301,9 @@ void Scene::DrawCurrentScene()
 		if (creditsTexture != nullptr)
 		{
 			Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Textures/GUI/CREDITS.mp4");
-			//Engine::GetInstance().render->DrawTexture(creditsTexture, -50, 0, nullptr, 0.0f);
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
-		//if (introTextoTexture != nullptr)
-		//{
-		//	Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
-		//}
 		break;
 	case SceneState::GAMEPLAY:
 		break;
