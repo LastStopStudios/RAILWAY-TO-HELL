@@ -535,7 +535,7 @@ bool Scene::PostUpdate()
 
 						// Clamp camera position within boss area bounds
 						float leftLimitBase = -boss.leftBoundary;
-						float rightLimitBase = -boss.rightBoundary;
+						float rightLimitBase = -boss.rightBoundary + 424;
 
 						if (desiredCameraBaseX > leftLimitBase) {
 							desiredCameraBaseX = leftLimitBase;

@@ -276,7 +276,7 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
-    const float TAIL_ATTACK_DISTANCE = 8.0f;
+    const float TAIL_ATTACK_DISTANCE = 6.5f;
     const float JUMP_ATTACK_DISTANCE = 100.0f;
 
     // Update attack cooldown
@@ -420,7 +420,7 @@ void Devil::CreateVerticalSpearAttack() {
             // Mayor separación entre lanzas (más esparcidas)
             float offsetX = (i - numSpears / 2) * 200.0f + ((rand() % 60) - 30); // Antes era 80.0f y ±20
             float spearX = playerPos.getX() + offsetX;
-            float spearY = playerPos.getY() - 2200;
+            float spearY = playerPos.getY() - 2000;
             spear->SetOriginPosition(Vector2D(spearX, spearY));
 
             if (spear->Awake() && spear->Start()) {
@@ -433,7 +433,6 @@ void Devil::CreateVerticalSpearAttack() {
     }
 }
 
-// Función ajustada para el ataque horizontal de lanzas
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = false;
@@ -446,13 +445,14 @@ void Devil::CreateHorizontalSpearAttack() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    // Solo 2 lanzas horizontales (una por cada altura)
-    int numSpears = 2;
+    // Ahora 3 lanzas horizontales (una por cada altura)
+    int numSpears = 3;
 
-    // Alturas fijas para las lanzas horizontales
-    float heights[2] = {
+    // Alturas para las 3 lanzas horizontales
+    float heights[3] = {
+        currentPos.getY() - 250,  // Altura alta del Devil (nueva)
         currentPos.getY() - 40,  // Altura media del Devil
-        currentPos.getY() + 30  // Altura baja del Devil
+        currentPos.getY() + 30   // Altura baja del Devil
     };
 
     for (int i = 0; i < numSpears; i++) {
@@ -466,12 +466,16 @@ void Devil::CreateHorizontalSpearAttack() {
             float spearX;
             SpearDirection direction;
 
-            // Alternar direcciones: primera desde la izquierda, segunda desde la derecha
-            if (i == 0) {
+            // Direcciones aleatorias: desde izquierda o derecha
+            bool fromLeft = (rand() % 2) == 0; // 50% probabilidad cada lado
+
+            if (fromLeft) {
+                // Lanza desde la izquierda
                 spearX = currentPos.getX() - 1100;
                 direction = SpearDirection::HORIZONTAL_RIGHT;
             }
             else {
+                // Lanza desde la derecha
                 spearX = currentPos.getX() + 600;
                 direction = SpearDirection::HORIZONTAL_LEFT;
             }
@@ -563,7 +567,7 @@ void Devil::CreateJumpAttack() {
     Vector2D currentPos = GetPosition();
     jumpStartPos = currentPos;
 
-    // Si hay una transformaci�n pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
+    // Si hay una transformación pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
     if (pendingTransformation) {
         targetLandingPos = Vector2D(1200, currentPos.getY());
         targetPlayerX = 1315;
@@ -574,10 +578,6 @@ void Devil::CreateJumpAttack() {
         targetLandingPos = playerPos;
         targetPlayerX = playerPos.getX();
     }
-
-    // Shadow shows where attack will land
-    shadowPosition = targetLandingPos;
-    shadowVisible = true;
 
     // Start with jump animation for preparation
     currentAnimation = &salto;
@@ -604,13 +604,17 @@ void Devil::UpdateJumpAttack(float dt) {
         if (currentAnimation->GetCurrentFrameIndex() >= 6) {
             jumpPreparation = false;
             isJumping = true;
+
+            // show the shadow when preparation ends
+            shadowPosition = targetLandingPos;
+            shadowVisible = true;
+
             pbody->body->SetLinearVelocity(b2Vec2(0.0f, -40.0f));
             pbody->body->SetGravityScale(1.0f);
         }
         return;
     }
 
-    // Landing completion phase
     if (landingComplete) {
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         currentAnimation->Update();
@@ -618,7 +622,7 @@ void Devil::UpdateJumpAttack(float dt) {
         if (currentAnimation->HasFinished()) {
             jumpAttackActive = false;
             landingComplete = false;
-            shadowVisible = false;
+            // shadowVisible = false;  
             fallAnimationLocked = false;
             jumpAnimationLocked = false;
             hasReachedMaxHeight = false;
@@ -626,7 +630,7 @@ void Devil::UpdateJumpAttack(float dt) {
 
             pbody->body->SetGravityScale(1.0f);
 
-            // Si hab�a una transformaci�n pendiente, activarla ahora
+            // Si había una transformación pendiente, activarla ahora
             if (pendingTransformation) {
                 isTransforming = true;
                 pendingTransformation = false;
@@ -755,6 +759,12 @@ void Devil::UpdateJumpAttack(float dt) {
             UpdateJumpAttackArea();
         }
 
+        // DESTROY SHADOW IMMEDIATELY WHEN HITTING GROUND - BEFORE RECOVERY ANIMATION
+        if (shadowVisible) {
+            shadowVisible = false;
+            LOG("Shadow destroyed on ground impact - before recovery animation");
+        }
+
         // Start landing completion
         if (!landingComplete) {
             landingComplete = true;
@@ -802,7 +812,7 @@ void Devil::CreateTailAttack() {
 
     tailAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         tailX, tailY,
-        texW + 60, 20,
+        texW + 120, 20,
         bodyType::KINEMATIC
     );
 

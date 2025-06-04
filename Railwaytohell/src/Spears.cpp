@@ -18,8 +18,8 @@ Spears::Spears() : Entity(EntityType::SPEAR)
     maxPlatformCollisions = 2;  // Se borra en la segunda colision
 
     // Velocidades diferentes para cada dirección
-    horizontalSpeed = 500.0f;  // Velocidad para lanzas horizontales
-    verticalSpeed = 900.0f;    // Velocidad para lanzas verticales (más rápida)
+    horizontalSpeed = 600.0f;  // Velocidad para lanzas horizontales
+    verticalSpeed = 1500.0f;    // Velocidad para lanzas verticales (más rápida)
     moveSpeed = 600.0f;        // Velocidad por defecto
 
     // Inicializar variables de sombra
@@ -141,7 +141,7 @@ void Spears::CreatePhysicsBody() {
     switch (spearDirection) {
     case SpearDirection::VERTICAL_DOWN:
         // Para movimiento vertical, la lanza es más alta que ancha
-        bodyWidth = texW / 3;  // Más estrecha horizontalmente
+        bodyWidth = texW;  // Más estrecha horizontalmente
         bodyHeight = texH + 200;     // Mantiene altura completa
         isSensor = false; // Colisión física normal
         break;
@@ -150,7 +150,7 @@ void Spears::CreatePhysicsBody() {
     default:
         // Para movimiento horizontal, la lanza es más ancha que alta
         bodyWidth = texW + 200;      // Mantiene ancho completo
-        bodyHeight = texH / 3; // Más baja verticalmente
+        bodyHeight = texH / 4; // Más baja verticalmente
         isSensor = true; // Crear como sensor
         break;
     }
