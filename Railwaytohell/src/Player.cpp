@@ -936,7 +936,7 @@ void Player::HandleSceneSwitching() {
     }
     //Go to Scene 10, Left Electric tunnel, VERY CLOSE TO THE DOOR OF THE CONNECTOR
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_T) == KEY_DOWN && currentLvl != 10 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(10, 4620, 2570, false, false);
+        Engine::GetInstance().sceneLoader->LoadScene(10, 7085, 2000, false, false);
     }
     //Go to Scene 11
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Y) == KEY_DOWN && currentLvl != 11 ) {

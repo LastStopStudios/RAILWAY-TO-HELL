@@ -3827,7 +3827,7 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me if I ever got lost, you'd find me. Even in hell. I've been trying to leave you a trail. I don't know if you can see it... but I'm still trying" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Don't blame yourself for what happened. I just wanted to go with you, just once, to meet your friends. What happened wasn't your fault. I didn't hear the train coming. Since then, I don't remember anything else... Everything went dark, and I woke up here.  " />
 		</dialogues>
 	</scene10>
 	<scene11>
