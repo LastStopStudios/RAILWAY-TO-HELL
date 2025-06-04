@@ -119,8 +119,7 @@ void Spears::SetupShadow() {
 
     if (shadowTexture != nullptr) {
         hasShadow = true;
-        // Calcular la altura del suelo - esto podría necesitar ajuste según tu implementación
-        // Por ahora uso un valor estimado, pero deberías calcularlo según tu mapa/nivel
+
         shadowGroundY = FindGroundLevel();
         LOG("Shadow created for vertical spear at ground level: %f", shadowGroundY);
     }
