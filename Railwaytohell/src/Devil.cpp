@@ -1261,58 +1261,269 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLAYER_WHIP_ATTACK:
+        LOG("Golpeado");
+        LOG("Hiteado %s", Hiteado ? "true" : "false");
         if (!Hiteado && !isTransforming) {
-            Hiteado = true;
-            lives--;
+            Hiteado = true; // Set hit flag immediately
 
-            // Update phase-specific lives
-            if (currentPhase == 1) { live1--; }
-            else if (currentPhase == 2) { live2--; }
-            else if (currentPhase == 3) { live3--; }
+            // Handle hits based on current phase
+            if (currentPhase == 1) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
+                live1--;
+                if (live1 <= 0) {
+                    isTransforming = true;
 
-            LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
-
-            // Cancel tail attack if active
-            if (isTailAttacking) {
-                isTailAttacking = false;
-                if (tailAttackArea) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
-                    tailAttackArea = nullptr;
-                }
-                colatazo.Reset();
-            }
-
-            if (lives > 0) {
-                isTransforming = true;
-
-                // Cancel current attacks
-                if (isAttacking) {
-                    isAttacking = false;
-                    if (punchAttackArea) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                        punchAttackArea = nullptr;
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                        punch.Reset();
                     }
+
+                    // Cancel jump attack if active
+                    if (jumpAttackActive) {
+                        jumpAttackActive = false;
+                        isJumping = false;
+                        isLanding = false;
+                        shadowVisible = false;
+                        if (jumpAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                            jumpAttackArea = nullptr;
+                        }
+                        pbody->body->SetGravityScale(1.0f);
+                    }
+
+                    LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                }
+                else {
+                    Hiteado = false;
+                }
+            }
+            else if (currentPhase == 2) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
+                live2--;
+                if (live2 <= 0) {
+                    // Establecer la transformaci�n como pendiente ANTES de crear el salto
+                    pendingTransformation = true;
+
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                    }
+
+                    // Cancel tail attack if active
+                    if (isTailAttacking) {
+                        isTailAttacking = false;
+                        if (tailAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                            tailAttackArea = nullptr;
+                        }
+                        colatazo.Reset();
+                    }
+
+                    // Crear el salto hacia x=1200 (el salto detectar� pendingTransformation)
+                    if (!jumpAttackActive) {
+                        CreateJumpAttack();
+                    }
+
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                    LOG("Devil starting jump to x=1200 before transformation to Phase %d!", currentPhase + 1);
+                }
+                else {
+                    Hiteado = false;
+                }
+            }
+            else if (currentPhase == 3) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
+                live3--;
+                if (live3 <= 0) {
+                    LOG("Devil defeated!");
+                    isDying = true;
+                    /*En la zona de muerte añadir este if
+                        if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
+                            Aqui la cinematica con todos los recuerdos
+                        }else{La otra}
+                    */
+
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                    }
+
+                    // Cancel tail attack if active
+                    if (isTailAttacking) {
+                        isTailAttacking = false;
+                        if (tailAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                            tailAttackArea = nullptr;
+                        }
+                        colatazo.Reset();
+                    }
+
+                    // Cancel jump attack if active
+                    if (jumpAttackActive) {
+                        jumpAttackActive = false;
+                        isJumping = false;
+                        isLanding = false;
+                        shadowVisible = false;
+                        if (jumpAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                            jumpAttackArea = nullptr;
+                        }
+                        pbody->body->SetGravityScale(1.0f);
+                    }
+
                     pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
                 }
-
-                // Cancel jump attack if active
-                if (jumpAttackActive) {
-                    jumpAttackActive = false;
-                    isJumping = false;
-                    isLanding = false;
-                    shadowVisible = false;
-                    if (jumpAttackArea) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                        jumpAttackArea = nullptr;
-                    }
-                    pbody->body->SetGravityScale(1.0f);
+                else {
+                    Hiteado = false;
                 }
-            }
-            else {
-                isDying = true;
             }
         }
         break;
+        case ColliderType::PROJECTILE:
+            LOG("Golpeado");
+            LOG("Hiteado %s", Hiteado ? "true" : "false");
+            if (!Hiteado && !isTransforming) {
+                Hiteado = true; // Set hit flag immediately
+
+                // Handle hits based on current phase
+                if (currentPhase == 1) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
+                    live1--;
+                    if (live1 <= 0) {
+                        isTransforming = true;
+
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                            punch.Reset();
+                        }
+
+                        // Cancel jump attack if active
+                        if (jumpAttackActive) {
+                            jumpAttackActive = false;
+                            isJumping = false;
+                            isLanding = false;
+                            shadowVisible = false;
+                            if (jumpAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                jumpAttackArea = nullptr;
+                            }
+                            pbody->body->SetGravityScale(1.0f);
+                        }
+
+                        LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+                else if (currentPhase == 2) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
+                    live2--;
+                    if (live2 <= 0) {
+                        // Establecer la transformaci�n como pendiente ANTES de crear el salto
+                        pendingTransformation = true;
+
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                        }
+
+                        // Cancel tail attack if active
+                        if (isTailAttacking) {
+                            isTailAttacking = false;
+                            if (tailAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                                tailAttackArea = nullptr;
+                            }
+                            colatazo.Reset();
+                        }
+
+                        // Crear el salto hacia x=1200 (el salto detectar� pendingTransformation)
+                        if (!jumpAttackActive) {
+                            CreateJumpAttack();
+                        }
+
+                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                        LOG("Devil starting jump to x=1200 before transformation to Phase %d!", currentPhase + 1);
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+                else if (currentPhase == 3) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
+                    live3--;
+                    if (live3 <= 0) {
+                        LOG("Devil defeated!");
+                        isDying = true;
+                        /*En la zona de muerte añadir este if
+                            if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
+                                Aqui la cinematica con todos los recuerdos
+                            }else{La otra}
+                        */
+
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                        }
+
+                        // Cancel tail attack if active
+                        if (isTailAttacking) {
+                            isTailAttacking = false;
+                            if (tailAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                                tailAttackArea = nullptr;
+                            }
+                            colatazo.Reset();
+                        }
+
+                        // Cancel jump attack if active
+                        if (jumpAttackActive) {
+                            jumpAttackActive = false;
+                            isJumping = false;
+                            isLanding = false;
+                            shadowVisible = false;
+                            if (jumpAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                jumpAttackArea = nullptr;
+                            }
+                            pbody->body->SetGravityScale(1.0f);
+                        }
+
+                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+            }
+            break;
     }
 }
 
