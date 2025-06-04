@@ -2381,6 +2381,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                     Fade = escena.fade;
                     BossCam = escena.CamaraBoss;
                     NeedSceneChange = true;;
+                    Engine::GetInstance().audio->PlayMusic("Assets/Audio/Music/Devil.ogg");
                 }
             }
         }
@@ -2510,7 +2511,6 @@ void Player::OnCollisionEnd(PhysBody* physA, PhysBody* physB) {
         }
         return;
     }
-
 
     switch (physB->ctype) {
     case ColliderType::PLATFORM:
