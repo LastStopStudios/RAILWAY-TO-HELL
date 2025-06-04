@@ -186,7 +186,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item">
+				<item name="Ball" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -2444,8 +2444,8 @@
 			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get out of here and see all my friends and I trust we will both go out together." />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, we were playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, I trust we will both go out together and see all my friends." />
 			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember going through that door, I think that's the way. It seems the door is locked, you have to defeat someone else sister." />
 		</dialogues>
 	</scene6>
