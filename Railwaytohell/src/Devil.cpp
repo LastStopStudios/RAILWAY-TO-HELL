@@ -16,10 +16,10 @@
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
     currentPhase = 1;
-    lives = 3; // 3 lives for 3 phases
-    live1 = 1;//Live for phase 1
-    live2 = 2;//Live for phase 2
-    live3 = 3;//live for phase 3
+    lives = 2; // 3 lives for 3 phases
+    live1 = 3;//Live for phase 1
+    live2 = 6;//Live for phase 2
+    live3 = 8;//live for phase 3
 }
 
 Devil::~Devil() {
@@ -1296,7 +1296,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             // Handle hits based on current phase
             if (currentPhase == 1) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
-                live1--;
+                live1 = live1 - 2;
                 if (live1 <= 0) {
                     isTransforming = true;
 
@@ -1331,7 +1331,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             else if (currentPhase == 2) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
-                live2--;
+                live2 = live2 - 2;
                 if (live2 <= 0) {
                     // Establecer la transformaci�n como pendiente ANTES de crear el salto
                     pendingTransformation = true;
@@ -1369,7 +1369,7 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             else if (currentPhase == 3) {
                 LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
-                live3--;
+                live3 = live3 - 2;
                 if (live3 <= 0) {
                     LOG("Devil defeated!");
                     isDying = true;
@@ -1587,9 +1587,9 @@ Vector2D Devil::GetPosition() {
 
 void Devil::ResetLives() {
     lives = 3;
-    live1 = 1;//Live for phase 1
-    live2 = 2;//Live for phase 2
-    live3 = 3;//live for phase 3
+    live1 = 3;//Live for phase 1
+    live2 = 6;//Live for phase 2
+    live3 = 8;//live for phase 3
     currentPhase = 1;
     currentAnimation = &idle;
     isDying = false;

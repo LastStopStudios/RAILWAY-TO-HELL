@@ -1305,10 +1305,10 @@ void Scene::DrawCurrentScene()
 		}
 		break;
 	case SceneState::TEXT_SCREEN:
-		if (introTextoTexture != nullptr)
-		{
-			Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
-		}
+		//if (introTextoTexture != nullptr)
+		//{
+		//	Engine::GetInstance().render->DrawTexture(introTextoTexture, 0, 0);
+		//}
 		break;
 	case SceneState::GAMEPLAY:
 		break;
