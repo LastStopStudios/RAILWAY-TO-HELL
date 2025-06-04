@@ -243,8 +243,10 @@ bool Player::Start() {
     whipAttackHitbox = nullptr;
 
     // For testing, temporarily enable whip attack
-    WhipAttack = false;
+    //WhipAttack = true;
 	//Dash = true;
+	//BallAttack = true;
+	//doubleJump = true;
     //facingRight = true;
  
     //Ice Movement

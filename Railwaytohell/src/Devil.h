@@ -157,5 +157,5 @@ private:
 
     // Lives system
     int lives = 3;
-    int live1 = 1, live2 = 6, live3 = 7;
+    int live1 = 3, live2 = 6, live3 = 8;
 };
