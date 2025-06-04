@@ -410,7 +410,24 @@ bool Player::Update(float dt)
 
     // Handle pickup animation
     HandlePickup(dt);
-
+    if (isFalling) {
+        fallStuckTimer += dt;
+        if (fallStuckTimer >= fallStuckThreshold) {
+            LOG("Forzando salida de caída por tiempo excesivo");
+            isFalling = false;
+            isJumping = false;
+            isRecovering = false;
+            jumpCount = 0;
+            canDoubleJump = false;
+            currentAnimation = &idle;
+            texture = idleTexture;
+            idle.Reset();
+            fallStuckTimer = 0.0f;
+        }
+    }
+    else {
+        fallStuckTimer = 0.0f; // Reset si no está cayendo
+    }
     // Handle animations depending on state
     if (isJumping && !isPreparingJump) {
         // Check vertical velocity to determine if falling
@@ -796,6 +813,25 @@ void Player::HandleJump(float dt) {
             isTransitioningToFalling = true;  // Mark that we're in transition
             falling.Reset();
         }
+    }
+
+    if ((isJumping || isFalling) && !isRecovering) {
+        jumpFallTimer += dt;
+
+        if (jumpFallTimer >= jumpFallTimeout) {
+            isJumping = false;
+            isFalling = false;
+            isRecovering = false;
+            jumpCount = 0;
+            canDoubleJump = false;
+            jumpFallTimer = 0.0f;
+            currentAnimation = &idle;
+            texture = idleTexture;
+            idle.Reset();
+        }
+    }
+    else {
+        jumpFallTimer = 0.0f; // Reset si no está en el aire
     }
    
     if (isFalling) {
