@@ -38,7 +38,7 @@ bool EntityManager::Awake()
 {
 	LOG("Loading Entity Manager");
 	bool ret = true;
-
+	estatua2 = false;
 	//Iterates over the entities and calls the Awake
 	for(const auto entity : entities)
 	{

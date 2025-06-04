@@ -68,9 +68,6 @@ bool Doors::Start() {
 	else if (GetDoorType() == "puzzle_door") {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
-	else if (GetDoorType() == "boss_door") {
-		pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
-	}
 	else {
 		pbody = Engine::GetInstance().physics.get()->CreateRectangle((int)position.getX() + texH / 2, (int)position.getY() + texH / 2, texW, texH, bodyType::KINEMATIC);
 	}
@@ -229,14 +226,6 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		if (activated.HasFinished()) {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
-		}
-
-		if (GetDoorType() == "boss_door") {
-			if (Engine::GetInstance().entityManager->estatua2) {
-				if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
-					Engine::GetInstance().sceneLoader->LoadScene(12, 643, 1592, false, true);
-				}
-			}
 		}
 		break;
 

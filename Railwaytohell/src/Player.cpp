@@ -2253,14 +2253,26 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     }
     case ColliderType::SENSOR:
-        NeedSceneChange = true;
         for (const auto& escena : escenas) { // Iterate through all scenes
-            if (escena.escena == physB->sensorID) { // Check where the player needs to go
-                sceneToLoad = escena.id;
-                Playerx = escena.x;
-                Playery = escena.y; // Set the destination map and player position
-                Fade = escena.fade;
-                BossCam = escena.CamaraBoss;
+            if (escena.escena == physB->sensorID && physB->sensorID != "FBOSS") { // Check where the player needs to go
+                LOG("--------------ESTATUAS %d --------------", Engine::GetInstance().entityManager->estatua2);
+                LOG("--------------ID %s --------------", physB->sensorID.c_str());
+                    sceneToLoad = escena.id;
+                    Playerx = escena.x;
+                    Playery = escena.y; // Set the destination map and player position
+                    Fade = escena.fade;
+                    BossCam = escena.CamaraBoss; 
+                    NeedSceneChange = true;
+            }else if (physB->sensorID == "FBOSS") {
+                LOG("------------PUERTA BOSS------------");
+                if (Engine::GetInstance().entityManager->estatua2 == true) {
+                    sceneToLoad = escena.id;
+                    Playerx = escena.x;
+                    Playery = escena.y; // Set the destination map and player position
+                    Fade = escena.fade;
+                    BossCam = escena.CamaraBoss;
+                    NeedSceneChange = true;;
+                }
             }
         }
         break;
