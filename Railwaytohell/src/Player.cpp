@@ -950,7 +950,7 @@ void Player::HandleSceneSwitching() {
         SetPosition(debugPos);
     }
     if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_I) == KEY_DOWN && currentLvl != 12 ) {
-        Engine::GetInstance().sceneLoader->LoadScene(12, 643, 1592, false, true);
+        Engine::GetInstance().sceneLoader->LoadScene(12, 300, 1594, false, true);
     }
     static float zoom = 1.5f;
     static bool zooming = false;

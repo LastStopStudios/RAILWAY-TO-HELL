@@ -11,6 +11,7 @@
 #include "EntityManager.h"
 #include "GlobalSettings.h"
 #include "Spears.h"
+#include "Ffmpeg.h"
 
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
@@ -61,6 +62,7 @@ bool Devil::Start() {
     idle3.LoadAnimations(parameters.child("animations").child("idle3"));
     attackH.LoadAnimations(parameters.child("animations").child("attackH"));
     attackV.LoadAnimations(parameters.child("animations").child("attackV"));
+    death.LoadAnimations(parameters.child("animations").child("death"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -123,6 +125,30 @@ bool Devil::Update(float dt) {
         if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
         if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
         if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
+    }
+
+    //Handle Dead
+    if (isDying) {
+        // Asegurar que no haya movimiento durante la muerte
+        if (pbody != nullptr ) {
+            pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+            pbody->body->SetGravityScale(1.0f);
+        }
+
+        currentAnimation->Update();
+
+        if (currentAnimation->HasFinished()) {
+            Engine::GetInstance().scene->morido = true;
+        }
+        // Draw the death animation
+        SDL_Rect frame = currentAnimation->GetCurrentFrame();
+        RenderSprite();
+        //UI Lives
+        Engine::GetInstance().ui->figth3 = false;
+
+       
+
+        return true;
     }
 
     // Handle transformation state
@@ -1213,11 +1239,8 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 if (live3 <= 0) {
                     LOG("Devil defeated!");
                     isDying = true;
-                    /*En la zona de muerte añadir este if
-                        if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
-                            Aqui la cinematica con todos los recuerdos
-                        }else{La otra}
-                    */
+                    currentAnimation = &death;
+                    currentAnimation->Reset();
 
                     // Cancel any active attacks
                     if (isAttacking) {
@@ -1346,11 +1369,8 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 if (live3 <= 0) {
                     LOG("Devil defeated!");
                     isDying = true;
-                    /*En la zona de muerte añadir este if
-                        if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
-                            Aqui la cinematica con todos los recuerdos
-                        }else{La otra}
-                    */
+                    currentAnimation = &death;
+                    currentAnimation->Reset();
 
                     // Cancel any active attacks
                     if (isAttacking) {
@@ -1478,12 +1498,9 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                     if (live3 <= 0) {
                         LOG("Devil defeated!");
                         isDying = true;
-                        /*En la zona de muerte añadir este if
-                            if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
-                                Aqui la cinematica con todos los recuerdos
-                            }else{La otra}
-                        */
-
+                        currentAnimation = &death;
+                        currentAnimation->Reset();
+                       
                         // Cancel any active attacks
                         if (isAttacking) {
                             isAttacking = false;
