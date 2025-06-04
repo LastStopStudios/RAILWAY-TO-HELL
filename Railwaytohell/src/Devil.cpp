@@ -11,6 +11,7 @@
 #include "EntityManager.h"
 #include "GlobalSettings.h"
 #include "Spears.h"
+#include "Ffmpeg.h"
 
 Devil::Devil() : Entity(EntityType::DEVIL)
 {
@@ -61,6 +62,7 @@ bool Devil::Start() {
     idle3.LoadAnimations(parameters.child("animations").child("idle3"));
     attackH.LoadAnimations(parameters.child("animations").child("attackH"));
     attackV.LoadAnimations(parameters.child("animations").child("attackV"));
+    death.LoadAnimations(parameters.child("animations").child("death"));
     currentAnimation = &idle;
 
     moveSpeed = 2.0f;
@@ -111,78 +113,106 @@ bool Devil::Update(float dt) {
         return true;
     }
     else {
-        if (pbody && pbody->body) {
+        // Solo restaurar la gravedad si NO está transformándose
+        if (pbody && pbody->body && !isTransforming) {
             pbody->body->SetGravityScale(1.0f);
         }
     }
+    bool bossFightActive = Engine::GetInstance().dialogoM->bossFightReady;
+    if(bossFightActive){
+        // Update UI health display
+        if (Engine::GetInstance().ui->figth3 == true) {
+            //UI Lives
+            if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
+            if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
+            if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
+        }
 
-    // Update UI health display
-    if (Engine::GetInstance().ui->figth3 == true) {
-        //UI Lives
-        if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
-        if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
-        if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
+        //Handle Dead
+        if (isDying) {
+            // Asegurar que no haya movimiento durante la muerte
+            if (pbody != nullptr) {
+                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+                pbody->body->SetGravityScale(1.0f);
+            }
 
-    }
+            currentAnimation->Update();
 
-    // Handle transformation state
-    if (isTransforming) {
-        HandleTransformation(dt);
-        UpdatePosition();
-        RenderSprite();
-        return true;
-    }
+            if (currentAnimation->HasFinished()) {
+                Engine::GetInstance().scene->morido = true;
+            }
+            // Draw the death animation
+            SDL_Rect frame = currentAnimation->GetCurrentFrame();
+            RenderSprite();
+            //UI Lives
+            Engine::GetInstance().ui->figth3 = false;
 
-    // Handle jump attack mechanics
-    if (jumpAttackActive) {
-        UpdateJumpAttack(dt);
+
+
+            return true;
+        }
+
+        // Handle transformation state
+        if (isTransforming) {
+            HandleTransformation(dt);
+            UpdatePosition();
+            RenderSprite();
+            return true; // Salir temprano durante transformación
+        }
+
+        // Handle jump attack mechanics
+        if (jumpAttackActive) {
+            UpdateJumpAttack(dt);
+            UpdatePosition();
+            RenderSprite();
+            if (shadowVisible) {
+                RenderShadow();
+            }
+            currentAnimation->Update();
+            return true;
+        }
+
+        // Get player and enemy positions
+        enemyPos = GetPosition();
+        Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
+        Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
+        Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
+
+        float dx = playerTilePos.getX() - enemyTilePos.getX();
+        float distanceToPlayer = abs(dx);
+        isLookingLeft = dx < 0;
+
+        // Phase-based 
+        switch (currentPhase) {
+        case 1:
+            HandlePhase1(distanceToPlayer, dx, dt);
+            break;
+        case 2:
+            HandlePhase2(distanceToPlayer, dx, dt);
+            break;
+        case 3:
+            HandlePhase3(distanceToPlayer, dx, dt);
+            break;
+        default:
+            LOG("Error: Invalid phase %d", currentPhase);
+            break;
+        }
+
         UpdatePosition();
         RenderSprite();
         if (shadowVisible) {
             RenderShadow();
         }
         currentAnimation->Update();
-        return true;
+
+        // Debug pathfinding
+        if (isChasing && !pathfinding->pathTiles.empty()) {
+            pathfinding->DrawPath();
+        }
     }
-
-    // Get player and enemy positions
-    enemyPos = GetPosition();
-    Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    Vector2D enemyTilePos = Engine::GetInstance().map.get()->WorldToMap(enemyPos.getX(), enemyPos.getY());
-    Vector2D playerTilePos = Engine::GetInstance().map.get()->WorldToMap(playerPos.getX(), playerPos.getY());
-
-    float dx = playerTilePos.getX() - enemyTilePos.getX();
-    float distanceToPlayer = abs(dx);
-    isLookingLeft = dx < 0;
-
-    // Phase-based 
-    switch (currentPhase) {
-    case 1:
-        HandlePhase1(distanceToPlayer, dx, dt);
-        break;
-    case 2:
-        HandlePhase2(distanceToPlayer, dx, dt);
-        break;
-    case 3:
-        HandlePhase3(distanceToPlayer, dx, dt);
-        break;
-    default:
-        LOG("Error: Invalid phase %d", currentPhase);
-        break;
-    }
-
     UpdatePosition();
     RenderSprite();
-    if (shadowVisible) {
-        RenderShadow();
-    }
     currentAnimation->Update();
-
-    // Debug pathfinding
-    if (isChasing && !pathfinding->pathTiles.empty()) {
-        pathfinding->DrawPath();
-    }
-
     return true;
 }
 
@@ -276,7 +306,7 @@ void Devil::HandlePhase1(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
-    const float TAIL_ATTACK_DISTANCE = 8.0f;
+    const float TAIL_ATTACK_DISTANCE = 6.5f;
     const float JUMP_ATTACK_DISTANCE = 100.0f;
 
     // Update attack cooldown
@@ -420,7 +450,7 @@ void Devil::CreateVerticalSpearAttack() {
             // Mayor separación entre lanzas (más esparcidas)
             float offsetX = (i - numSpears / 2) * 200.0f + ((rand() % 60) - 30); // Antes era 80.0f y ±20
             float spearX = playerPos.getX() + offsetX;
-            float spearY = playerPos.getY() - 2200;
+            float spearY = playerPos.getY() - 2000;
             spear->SetOriginPosition(Vector2D(spearX, spearY));
 
             if (spear->Awake() && spear->Start()) {
@@ -433,7 +463,6 @@ void Devil::CreateVerticalSpearAttack() {
     }
 }
 
-// Función ajustada para el ataque horizontal de lanzas
 void Devil::CreateHorizontalSpearAttack() {
     isSpearAttacking = true;
     isVerticalSpearAttack = false;
@@ -446,13 +475,14 @@ void Devil::CreateHorizontalSpearAttack() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    // Solo 2 lanzas horizontales (una por cada altura)
-    int numSpears = 2;
+    // Ahora 3 lanzas horizontales (una por cada altura)
+    int numSpears = 3;
 
-    // Alturas fijas para las lanzas horizontales
-    float heights[2] = {
+    // Alturas para las 3 lanzas horizontales
+    float heights[3] = {
+        currentPos.getY() - 250,  // Altura alta del Devil (nueva)
         currentPos.getY() - 40,  // Altura media del Devil
-        currentPos.getY() + 30  // Altura baja del Devil
+        currentPos.getY() + 30   // Altura baja del Devil
     };
 
     for (int i = 0; i < numSpears; i++) {
@@ -466,12 +496,16 @@ void Devil::CreateHorizontalSpearAttack() {
             float spearX;
             SpearDirection direction;
 
-            // Alternar direcciones: primera desde la izquierda, segunda desde la derecha
-            if (i == 0) {
+            // Direcciones aleatorias: desde izquierda o derecha
+            bool fromLeft = (rand() % 2) == 0; // 50% probabilidad cada lado
+
+            if (fromLeft) {
+                // Lanza desde la izquierda
                 spearX = currentPos.getX() - 1100;
                 direction = SpearDirection::HORIZONTAL_RIGHT;
             }
             else {
+                // Lanza desde la derecha
                 spearX = currentPos.getX() + 600;
                 direction = SpearDirection::HORIZONTAL_LEFT;
             }
@@ -563,7 +597,7 @@ void Devil::CreateJumpAttack() {
     Vector2D currentPos = GetPosition();
     jumpStartPos = currentPos;
 
-    // Si hay una transformaci�n pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
+    // Si hay una transformación pendiente (para la transf 2-3), saltar a x=1200 (valor ajustable)
     if (pendingTransformation) {
         targetLandingPos = Vector2D(1200, currentPos.getY());
         targetPlayerX = 1315;
@@ -574,10 +608,6 @@ void Devil::CreateJumpAttack() {
         targetLandingPos = playerPos;
         targetPlayerX = playerPos.getX();
     }
-
-    // Shadow shows where attack will land
-    shadowPosition = targetLandingPos;
-    shadowVisible = true;
 
     // Start with jump animation for preparation
     currentAnimation = &salto;
@@ -604,13 +634,17 @@ void Devil::UpdateJumpAttack(float dt) {
         if (currentAnimation->GetCurrentFrameIndex() >= 6) {
             jumpPreparation = false;
             isJumping = true;
+
+            // show the shadow when preparation ends
+            shadowPosition = targetLandingPos;
+            shadowVisible = true;
+
             pbody->body->SetLinearVelocity(b2Vec2(0.0f, -40.0f));
             pbody->body->SetGravityScale(1.0f);
         }
         return;
     }
 
-    // Landing completion phase
     if (landingComplete) {
         pbody->body->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
         currentAnimation->Update();
@@ -618,7 +652,7 @@ void Devil::UpdateJumpAttack(float dt) {
         if (currentAnimation->HasFinished()) {
             jumpAttackActive = false;
             landingComplete = false;
-            shadowVisible = false;
+            // shadowVisible = false;  
             fallAnimationLocked = false;
             jumpAnimationLocked = false;
             hasReachedMaxHeight = false;
@@ -626,7 +660,7 @@ void Devil::UpdateJumpAttack(float dt) {
 
             pbody->body->SetGravityScale(1.0f);
 
-            // Si hab�a una transformaci�n pendiente, activarla ahora
+            // Si había una transformación pendiente, activarla ahora
             if (pendingTransformation) {
                 isTransforming = true;
                 pendingTransformation = false;
@@ -755,6 +789,12 @@ void Devil::UpdateJumpAttack(float dt) {
             UpdateJumpAttackArea();
         }
 
+        // DESTROY SHADOW IMMEDIATELY WHEN HITTING GROUND - BEFORE RECOVERY ANIMATION
+        if (shadowVisible) {
+            shadowVisible = false;
+            LOG("Shadow destroyed on ground impact - before recovery animation");
+        }
+
         // Start landing completion
         if (!landingComplete) {
             landingComplete = true;
@@ -802,7 +842,7 @@ void Devil::CreateTailAttack() {
 
     tailAttackArea = Engine::GetInstance().physics.get()->CreateRectangleSensor(
         tailX, tailY,
-        texW + 60, 20,
+        texW + 120, 20,
         bodyType::KINEMATIC
     );
 
@@ -860,6 +900,17 @@ void Devil::ResetPath() {
 }
 
 void Devil::HandleTransformation(float dt) {
+    // Hacer el boss inmóvil durante la transformación
+    if (pbody && pbody->body) {
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+        pbody->body->SetAngularVelocity(0);
+        pbody->body->SetGravityScale(0.0f);
+
+        if (pbody->body->GetType() != b2_kinematicBody) {
+            pbody->body->SetType(b2_kinematicBody);
+        }
+    }
+
     switch (transformStep) {
     case 0:
         if (currentPhase == 1) {
@@ -869,7 +920,6 @@ void Devil::HandleTransformation(float dt) {
                 LOG("Starting defeat animation for Phase 1->2 transformation");
             }
 
-            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
             currentAnimation->Update();
 
             if (currentAnimation->HasFinished()) {
@@ -879,22 +929,21 @@ void Devil::HandleTransformation(float dt) {
             }
         }
         else if (currentPhase == 2) {
-            // Para transformaci�n 2->3, hacer zoom gradual
+            // Para transformación 2->3, hacer zoom gradual
             LOG("Phase 2->3 transformation: Applying gradual zoom");
 
-            // Initialize zoom if not started
             if (!zooming) {
                 zooming = true;
-                zoom = GlobalSettings::GetInstance().GetTextureMultiplier(); // Get current zoom level
+                zoom = GlobalSettings::GetInstance().GetTextureMultiplier();
                 LOG("Starting zoom from: %.2f", zoom);
             }
 
             if (zooming) {
-                zoom -= 0.01f; // velocidad del zoom
+                zoom -= 0.01f;
                 if (zoom <= 1.0f) {
                     zoom = 1.0f;
                     zooming = false;
-                    transformStep = 1; // Only move to next step when zoom is complete
+                    transformStep = 1;
                     LOG("Zoom completed, moving to transform step 1");
                 }
                 GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
@@ -943,6 +992,12 @@ void Devil::HandleTransformation(float dt) {
         currentPhase++;
         isTransforming = false;
 
+        // AÑADIR: Restaurar el tipo de cuerpo a dinámico al finalizar transformación
+        if (pbody && pbody->body) {
+            pbody->body->SetType(b2_dynamicBody);
+            pbody->body->SetGravityScale(1.0f); // Restaurar gravedad
+        }
+
         if (currentPhase == 2) {
             currentAnimation = &idle2;
             Engine::GetInstance().ui->fase1 = false;
@@ -960,7 +1015,6 @@ void Devil::HandleTransformation(float dt) {
         transformTimer = 0.0f;
         transformationStarted = false;
         Hiteado = false;
-
         zooming = false;
         break;
     }
@@ -1004,7 +1058,7 @@ void Devil::ResizeCollisionForPhase2() {
 
         pbody = Engine::GetInstance().physics.get()->CreateCircle(
             METERS_TO_PIXELS(currentPos.x),
-            METERS_TO_PIXELS(currentPos.y),
+            METERS_TO_PIXELS(currentPos.y) - 90,
             newWidth / 2 - 3,
             bodyType::DYNAMIC
         );
@@ -1080,7 +1134,6 @@ void Devil::RenderSprite() {
     if (currentAnimation == &idle3 ) {
         offsetX = -130;
         offsetY = -240;
-        
     }
     if (currentAnimation == &transform2 || currentAnimation == &attackH || currentAnimation == &attackV) {
         offsetY = -240;
@@ -1190,11 +1243,8 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 if (live3 <= 0) {
                     LOG("Devil defeated!");
                     isDying = true;
-                    /*En la zona de muerte añadir este if
-                        if( Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8){
-                            Aqui la cinematica con todos los recuerdos
-                        }else{La otra}
-                    */
+                    currentAnimation = &death;
+                    currentAnimation->Reset();
 
                     // Cancel any active attacks
                     if (isAttacking) {
@@ -1238,58 +1288,263 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::PLAYER_WHIP_ATTACK:
+        LOG("Golpeado");
+        LOG("Hiteado %s", Hiteado ? "true" : "false");
         if (!Hiteado && !isTransforming) {
-            Hiteado = true;
-            lives--;
+            Hiteado = true; // Set hit flag immediately
 
-            // Update phase-specific lives
-            if (currentPhase == 1) { live1--; }
-            else if (currentPhase == 2) { live2--; }
-            else if (currentPhase == 3) { live3--; }
+            // Handle hits based on current phase
+            if (currentPhase == 1) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
+                live1--;
+                if (live1 <= 0) {
+                    isTransforming = true;
 
-            LOG("Devil hit! Lives remaining: %d, Current Phase: %d", lives, currentPhase);
-
-            // Cancel tail attack if active
-            if (isTailAttacking) {
-                isTailAttacking = false;
-                if (tailAttackArea) {
-                    Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
-                    tailAttackArea = nullptr;
-                }
-                colatazo.Reset();
-            }
-
-            if (lives > 0) {
-                isTransforming = true;
-
-                // Cancel current attacks
-                if (isAttacking) {
-                    isAttacking = false;
-                    if (punchAttackArea) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
-                        punchAttackArea = nullptr;
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                        punch.Reset();
                     }
+
+                    // Cancel jump attack if active
+                    if (jumpAttackActive) {
+                        jumpAttackActive = false;
+                        isJumping = false;
+                        isLanding = false;
+                        shadowVisible = false;
+                        if (jumpAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                            jumpAttackArea = nullptr;
+                        }
+                        pbody->body->SetGravityScale(1.0f);
+                    }
+
+                    LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                }
+                else {
+                    Hiteado = false;
+                }
+            }
+            else if (currentPhase == 2) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
+                live2--;
+                if (live2 <= 0) {
+                    // Establecer la transformaci�n como pendiente ANTES de crear el salto
+                    pendingTransformation = true;
+
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                    }
+
+                    // Cancel tail attack if active
+                    if (isTailAttacking) {
+                        isTailAttacking = false;
+                        if (tailAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                            tailAttackArea = nullptr;
+                        }
+                        colatazo.Reset();
+                    }
+
+                    // Crear el salto hacia x=1200 (el salto detectar� pendingTransformation)
+                    if (!jumpAttackActive) {
+                        CreateJumpAttack();
+                    }
+
+                    pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                    LOG("Devil starting jump to x=1200 before transformation to Phase %d!", currentPhase + 1);
+                }
+                else {
+                    Hiteado = false;
+                }
+            }
+            else if (currentPhase == 3) {
+                LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
+                live3--;
+                if (live3 <= 0) {
+                    LOG("Devil defeated!");
+                    isDying = true;
+                    currentAnimation = &death;
+                    currentAnimation->Reset();
+
+                    // Cancel any active attacks
+                    if (isAttacking) {
+                        isAttacking = false;
+                        if (punchAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                            punchAttackArea = nullptr;
+                        }
+                    }
+
+                    // Cancel tail attack if active
+                    if (isTailAttacking) {
+                        isTailAttacking = false;
+                        if (tailAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                            tailAttackArea = nullptr;
+                        }
+                        colatazo.Reset();
+                    }
+
+                    // Cancel jump attack if active
+                    if (jumpAttackActive) {
+                        jumpAttackActive = false;
+                        isJumping = false;
+                        isLanding = false;
+                        shadowVisible = false;
+                        if (jumpAttackArea) {
+                            Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                            jumpAttackArea = nullptr;
+                        }
+                        pbody->body->SetGravityScale(1.0f);
+                    }
+
                     pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
                 }
-
-                // Cancel jump attack if active
-                if (jumpAttackActive) {
-                    jumpAttackActive = false;
-                    isJumping = false;
-                    isLanding = false;
-                    shadowVisible = false;
-                    if (jumpAttackArea) {
-                        Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
-                        jumpAttackArea = nullptr;
-                    }
-                    pbody->body->SetGravityScale(1.0f);
+                else {
+                    Hiteado = false;
                 }
-            }
-            else {
-                isDying = true;
             }
         }
         break;
+        case ColliderType::PROJECTILE:
+            LOG("Golpeado");
+            LOG("Hiteado %s", Hiteado ? "true" : "false");
+            if (!Hiteado && !isTransforming) {
+                Hiteado = true; // Set hit flag immediately
+
+                // Handle hits based on current phase
+                if (currentPhase == 1) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live1, currentPhase);
+                    live1--;
+                    if (live1 <= 0) {
+                        isTransforming = true;
+
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                            punch.Reset();
+                        }
+
+                        // Cancel jump attack if active
+                        if (jumpAttackActive) {
+                            jumpAttackActive = false;
+                            isJumping = false;
+                            isLanding = false;
+                            shadowVisible = false;
+                            if (jumpAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                jumpAttackArea = nullptr;
+                            }
+                            pbody->body->SetGravityScale(1.0f);
+                        }
+
+                        LOG("Devil starting transformation to Phase %d!", currentPhase + 1);
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+                else if (currentPhase == 2) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live2, currentPhase);
+                    live2--;
+                    if (live2 <= 0) {
+                        // Establecer la transformaci�n como pendiente ANTES de crear el salto
+                        pendingTransformation = true;
+
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                        }
+
+                        // Cancel tail attack if active
+                        if (isTailAttacking) {
+                            isTailAttacking = false;
+                            if (tailAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                                tailAttackArea = nullptr;
+                            }
+                            colatazo.Reset();
+                        }
+
+                        // Crear el salto hacia x=1200 (el salto detectar� pendingTransformation)
+                        if (!jumpAttackActive) {
+                            CreateJumpAttack();
+                        }
+
+                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                        LOG("Devil starting jump to x=1200 before transformation to Phase %d!", currentPhase + 1);
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+                else if (currentPhase == 3) {
+                    LOG("Devil hit! Lives remaining: %d, Current Phase: %d", live3, currentPhase);
+                    live3--;
+                    if (live3 <= 0) {
+                        LOG("Devil defeated!");
+                        isDying = true;
+                        currentAnimation = &death;
+                        currentAnimation->Reset();
+                       
+                        // Cancel any active attacks
+                        if (isAttacking) {
+                            isAttacking = false;
+                            if (punchAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(punchAttackArea);
+                                punchAttackArea = nullptr;
+                            }
+                        }
+
+                        // Cancel tail attack if active
+                        if (isTailAttacking) {
+                            isTailAttacking = false;
+                            if (tailAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(tailAttackArea);
+                                tailAttackArea = nullptr;
+                            }
+                            colatazo.Reset();
+                        }
+
+                        // Cancel jump attack if active
+                        if (jumpAttackActive) {
+                            jumpAttackActive = false;
+                            isJumping = false;
+                            isLanding = false;
+                            shadowVisible = false;
+                            if (jumpAttackArea) {
+                                Engine::GetInstance().physics.get()->DeletePhysBody(jumpAttackArea);
+                                jumpAttackArea = nullptr;
+                            }
+                            pbody->body->SetGravityScale(1.0f);
+                        }
+
+                        pbody->body->SetLinearVelocity(b2Vec2(0.0f, pbody->body->GetLinearVelocity().y));
+                    }
+                    else {
+                        Hiteado = false;
+                    }
+                }
+            }
+            break;
     }
 }
 

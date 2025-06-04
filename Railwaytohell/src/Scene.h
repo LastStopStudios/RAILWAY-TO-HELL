@@ -125,7 +125,8 @@ public:
 public:
 	//Open puzzle doors
 	bool OpenDoor = false;
-
+	//fin juego
+	bool morido = false;
 	// Get tilePosDebug value
 	std::string GetTilePosDebug() {
 		return tilePosDebug;

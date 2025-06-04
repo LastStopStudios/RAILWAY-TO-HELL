@@ -75,7 +75,7 @@ public:
 	{"BOSS1DE2L1",3,2624,704,true,false},// Elevator second floor first boss
 	{"IE1L2BOSS2",5,1400,1550,true,true},// Elevator first floor SECOND boss
 	{"BOSS2IE1L2",5,1140,575,true,false},// Elevator second floor SECOND boss
-	{"FBOSS",12,300,1594,true,false},// Sensor tp to Final Boss sala
+	{"FBOSS",12,300,1594,true,true},// Sensor tp to Final Boss sala
 	};
 	//elevator control
 	bool TocandoAs = false;
@@ -147,13 +147,17 @@ private:
 
 	float fallingTimer = 0.0f;
 	bool isTransitioningToFalling = false;
-
+	float fallStuckTimer = 0.0f;
+	float fallStuckThreshold = 1500.0f; // segundos que puede caer antes de forzar idle
 	//Scene change
 	bool NeedSceneChange = false;
 	bool Fade;
 	bool BossCam;
 	int sceneToLoad = -1;
 	float Playerx, Playery;
+
+	float jumpFallTimeout = 5000.0f; // segundos permitidos en salto/caída
+	float jumpFallTimer = 0.0f;
 
 	bool changeMusicCaronte = false;
 

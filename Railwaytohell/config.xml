@@ -186,7 +186,7 @@
 						</idle>
 					</animations>
 				</item>
-				<item name="Ball" death="0" savedDeath="0" x="3077" y="2088" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item">
+				<item name="Ball" death="0" savedDeath="0" x="0" y="0" w="32" h="32" texture="Assets/Textures/Items/Item_bolas_Asmodeo.png" gravity="false" ID="2" ref="ball_item">
 					<animations>
 						<idle loop="true" speed="0.1">
 							<frame x="0" y="0" w="32" h="32" />
@@ -1327,7 +1327,7 @@
 				</animations>
 			</player>
 			<checkpoints>
-				<checkpoint name="checkpoint3" x="1175" y="680" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="3">
+				<checkpoint name="checkpoint3" x="1175" y="688" w="80" h="128" texture="Assets/Textures/checkpoint/checkpoint.png" gravity="false" activated="false" scene="3">
 					<animations>
 						<idle loop="false" speed="0.2">
 							<frame x="0" y="112" w="80" h="112" />
@@ -2444,8 +2444,8 @@
 			</items>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with my mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, I remember our house before coming to Barcelona, I was playing with the snow until suddenly everything went dark and they caught me. Follow the coldest line" />
-			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, but now I want to get out of here and see all my friends and I trust we will both go out together." />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Sis, I think you are at the central station. It reminded me of one of those where we got off with mum when we went to the centre. Then I remember going through a tunnel and suddenly seeing the snow, we were playing with the snow until suddenly everything  went dark and they caught me. Follow the coldest line." />
+			<dialog ID="2" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Remember those afternoons when you used to pick me up from school and we would go to the park near my school, at first it was hard to find friends when we first arrived, I trust we will both go out together and see all my friends." />
 			<dialog ID="3" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember going through that door, I think that's the way. It seems the door is locked, you have to defeat someone else sister." />
 		</dialogues>
 	</scene6>
@@ -3549,33 +3549,6 @@
 						</hurt>
 					</animations>
 				</enemy>
-				<enemy name="HellBat1" x="7246" y="2063" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
-					<animations>
-						<idle loop="true" speed="0.15">
-							<frame x="0" y="0" w="64" h="64" />
-							<frame x="64" y="0" w="64" h="64" />
-							<frame x="128" y="0" w="64" h="64" />
-							<frame x="192" y="0" w="64" h="64" />
-							<frame x="256" y="0" w="64" h="64" />
-						</idle>
-						<hurt loop="false" speed="0.05">
-							<frame x="0" y="64" w="64" h="64" />
-						</hurt>
-						<die loop="false" speed="0.15">
-							<frame x="0" y="129" w="64" h="64" />
-							<frame x="64" y="129" w="64" h="64" />
-							<frame x="128" y="129" w="64" h="64" />
-							<frame x="192" y="129" w="64" h="64" />
-							<frame x="256" y="129" w="64" h="64" />
-							<frame x="320" y="129" w="64" h="64" />
-							<frame x="384" y="129" w="64" h="64" />
-							<frame x="448" y="129" w="64" h="64" />
-							<frame x="512" y="129" w="64" h="64" />
-							<frame x="567" y="129" w="64" h="64" />
-							<frame x="640" y="129" w="64" h="64" />
-						</die>
-					</animations>
-				</enemy>
 				<enemy name="HellBat1" x="8520" y="2454" w="32" h="32" texture="Assets/Textures/enemy/HellBat.png" gravity="false" type="volador">
 					<animations>
 						<idle loop="true" speed="0.15">
@@ -3827,7 +3800,7 @@
 			</enemies>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="I remember when you told me if I ever got lost, you'd find me. Even in hell. I've been trying to leave you a trail. I don't know if you can see it... but I'm still trying" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Alia.png" TEXT="Don't blame yourself for what happened. I just wanted to go with you, just once, to meet your friends. What happened wasn't your fault. I didn't hear the train coming. Since then, I don't remember anything else... Everything went dark, and I woke up here.  " />
 		</dialogues>
 	</scene10>
 	<scene11>
@@ -4593,6 +4566,12 @@
 							<frame x="192" y="64" w="64" h="64" />
 							<frame x="256" y="64" w="64" h="64" />
 							<frame x="320" y="64" w="64" h="64" />
+							<frame x="384" y="64" w="64" h="64" />
+							<frame x="448" y="64" w="64" h="64" />
+							<frame x="512" y="64" w="64" h="64" />
+							<frame x="576" y="64" w="64" h="64" />
+							<frame x="640" y="64" w="64" h="64" />
+							<frame x="704" y="64" w="64" h="64" />
 						</walk>
 						<punch loop="false" speed="0.15">
 							<frame x="0" y="128" w="64" h="64" />
@@ -4754,7 +4733,7 @@
 			</spear>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Nadia.png" TEXT="Vampiro Esisten" />
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Devil.png" TEXT="Congratulations, you made my job easy. You think that voice was your sister? How naive. Your emotions blinded you and brought you to me. I am Satan. Every word you heard was mine. Your sister is here, but freeing her will not be easy. Defeating my allies made me stronger. I am about to be          crowned  the ultimate fallen angel. I hope you enjoyed your punishment in my labyrinth... but you have reached your final stop. Prepare to die. " />
 		</dialogues>
 	</scene12>
 </config>

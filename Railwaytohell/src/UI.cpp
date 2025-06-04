@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Log.h"
+#include "DialogoM.h"
 
 
 UI::UI() : Module()
@@ -93,6 +94,42 @@ bool UI::CleanUp()
 	if (vidapl2 != nullptr) {
 		Engine::GetInstance().textures->UnLoad(vidapl2);//Unload text background
 		vidapl2 = nullptr;
+	}
+	if (Ball != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Ball);//Unload text background
+		Ball = nullptr;
+	}
+	if (Ball2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Ball2);//Unload text background
+		Ball2 = nullptr;
+	}
+	if (Dash != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Dash);//Unload text background
+		Dash = nullptr;
+	}
+	if (Dash2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Dash2);//Unload text background
+		Dash2 = nullptr;
+	}
+	if (DJump != nullptr) {
+		Engine::GetInstance().textures->UnLoad(DJump);//Unload text background
+		DJump = nullptr;
+	}
+	if (DJump2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(DJump2);//Unload text background
+		DJump2 = nullptr;
+	}
+	if (Whip != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Whip);//Unload text background
+		Whip = nullptr;
+	}
+	if (Whip2 != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Whip2);//Unload text background
+		Whip2 = nullptr;
+	}
+	if (Puzzle != nullptr) {
+		Engine::GetInstance().textures->UnLoad(Puzzle);//Unload text background
+		Puzzle = nullptr;
 	}
 	return true;
 }
@@ -187,12 +224,18 @@ void UI::PopUps() {
 			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
 				Engine::GetInstance().entityManager->DialogoOff();
 				PopeadaTime = false;
+				if (item == 4) {
+					Engine::GetInstance().dialogoM->Texto("2"); // Call the corresponding dialogue line
+				}
 			}
 		}
 		// keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 			Engine::GetInstance().entityManager->DialogoOff();
 			PopeadaTime = false;
+			if (item == 4) {
+				Engine::GetInstance().dialogoM->Texto("2"); // Call the corresponding dialogue line
+			}
 		}
 	}
 

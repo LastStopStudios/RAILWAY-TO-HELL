@@ -88,7 +88,7 @@ private:
 
     // Animation system
     Animation* currentAnimation = nullptr;
-    Animation idle, walk, punch, defeat, transform, idle2, salto, land, colatazo, transform2, idle3, attackH, attackV ;
+    Animation idle, walk, punch, defeat, transform, idle2, salto, land, colatazo, transform2, idle3, attackH, attackV, death;
 
     // Physics bodies
     PhysBody* pbody;

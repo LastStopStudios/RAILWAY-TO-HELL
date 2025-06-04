@@ -40,7 +40,7 @@ bool Scene::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
-
+	morido = false;
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->SetParameters(configParameters.child("entities").child("player"));
@@ -474,7 +474,17 @@ bool Scene::Update(float dt)
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
 		enemyList[0]->ResetPath();
 		}*/
-
+		if (morido == true) {
+			if (Engine::GetInstance().entityManager->Rec1 && Engine::GetInstance().entityManager->Rec2 && Engine::GetInstance().entityManager->Rec3 && Engine::GetInstance().entityManager->Rec4 && Engine::GetInstance().entityManager->Rec5 && Engine::GetInstance().entityManager->Rec6 && Engine::GetInstance().entityManager->Rec7 && Engine::GetInstance().entityManager->Rec8) {
+				Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Final2.mp4");
+				Engine::GetInstance().scene->SetCurrentState(SceneState::INTRO_SCREEN);
+			}
+			else {
+				Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Final1.mp4");
+				Engine::GetInstance().scene->SetCurrentState(SceneState::INTRO_SCREEN);
+			}
+			morido = false;
+		}
 		break;
 	case SceneState::PAUSE_MENU:
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
@@ -538,7 +548,7 @@ bool Scene::PostUpdate()
 
 						// Clamp camera position within boss area bounds
 						float leftLimitBase = -boss.leftBoundary;
-						float rightLimitBase = -boss.rightBoundary;
+						float rightLimitBase = -boss.rightBoundary + 424;
 
 						if (desiredCameraBaseX > leftLimitBase) {
 							desiredCameraBaseX = leftLimitBase;

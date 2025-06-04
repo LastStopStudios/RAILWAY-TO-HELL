@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include "SceneLoader.h"
 
 Doors::Doors() : Entity(EntityType::DOORS)
 {
@@ -169,7 +170,7 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype) {
 	case ColliderType::PLATFORM:
 		break;
-	case ColliderType::PLAYER: {
+	case ColliderType::PLAYER: 
 		
 		if (GetDoorType() == "whip boss door") {
 			// Original keyboard input
@@ -227,7 +228,7 @@ void Doors::OnCollision(PhysBody* physA, PhysBody* physB) {
 			Engine::GetInstance().entityManager.get()->DestroyEntity(this);
 		}
 		break;
-	}
+
 	case ColliderType::UNKNOWN:
 		break;
 	}
