@@ -111,7 +111,8 @@ bool Devil::Update(float dt) {
         return true;
     }
     else {
-        if (pbody && pbody->body) {
+        // Solo restaurar la gravedad si NO está transformándose
+        if (pbody && pbody->body && !isTransforming) {
             pbody->body->SetGravityScale(1.0f);
         }
     }
@@ -122,7 +123,6 @@ bool Devil::Update(float dt) {
         if (currentPhase == 1) { Engine::GetInstance().ui->vidab3 = live1;/*UI lives boss phase 1 */ }
         if (currentPhase == 2) { Engine::GetInstance().ui->vidab3 = live2; /*UI lives boss phase 2 */ }
         if (currentPhase == 3) { Engine::GetInstance().ui->vidab3 = live3; /*UI lives boss phase 3 */ }
-
     }
 
     // Handle transformation state
@@ -130,7 +130,7 @@ bool Devil::Update(float dt) {
         HandleTransformation(dt);
         UpdatePosition();
         RenderSprite();
-        return true;
+        return true; // Salir temprano durante transformación
     }
 
     // Handle jump attack mechanics
@@ -870,6 +870,18 @@ void Devil::ResetPath() {
 }
 
 void Devil::HandleTransformation(float dt) {
+    // Hacer el boss inmóvil durante la transformación
+    if (pbody && pbody->body) {
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+        pbody->body->SetAngularVelocity(0);
+        pbody->body->SetGravityScale(0.0f); // Sin gravedad durante transformación
+
+        // Hacer el cuerpo kinematic para que no pueda ser empujado
+        if (pbody->body->GetType() != b2_kinematicBody) {
+            pbody->body->SetType(b2_kinematicBody);
+        }
+    }
+
     switch (transformStep) {
     case 0:
         if (currentPhase == 1) {
@@ -879,7 +891,6 @@ void Devil::HandleTransformation(float dt) {
                 LOG("Starting defeat animation for Phase 1->2 transformation");
             }
 
-            pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
             currentAnimation->Update();
 
             if (currentAnimation->HasFinished()) {
@@ -889,7 +900,7 @@ void Devil::HandleTransformation(float dt) {
             }
         }
         else if (currentPhase == 2) {
-            // Para transformaci�n 2->3, hacer zoom gradual
+            // Para transformación 2->3, hacer zoom gradual
             LOG("Phase 2->3 transformation: Applying gradual zoom");
 
             // Initialize zoom if not started
@@ -953,6 +964,12 @@ void Devil::HandleTransformation(float dt) {
         currentPhase++;
         isTransforming = false;
 
+        // AÑADIR: Restaurar el tipo de cuerpo a dinámico al finalizar transformación
+        if (pbody && pbody->body) {
+            pbody->body->SetType(b2_dynamicBody);
+            pbody->body->SetGravityScale(1.0f); // Restaurar gravedad
+        }
+
         if (currentPhase == 2) {
             currentAnimation = &idle2;
             Engine::GetInstance().ui->fase1 = false;
@@ -975,7 +992,6 @@ void Devil::HandleTransformation(float dt) {
         break;
     }
 }
-
 void Devil::ResizeCollisionForPhase3() {
     if (pbody) {
         // Store current position
