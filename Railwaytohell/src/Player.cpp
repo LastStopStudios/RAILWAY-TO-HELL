@@ -970,7 +970,16 @@ void Player::HandleSceneSwitching() {
         }
         GlobalSettings::GetInstance().SetTextureMultiplier(zoom);
     }
-
+    if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_U) == KEY_DOWN) {
+        Engine::GetInstance().mapa->remember1 = true;
+        Engine::GetInstance().mapa->remember2 = true;
+        Engine::GetInstance().mapa->remember3 = true;
+        Engine::GetInstance().mapa->remember4 = true;
+        Engine::GetInstance().mapa->remember5 = true;
+        Engine::GetInstance().mapa->remember6 = true;
+        Engine::GetInstance().mapa->remember7 = true;
+        Engine::GetInstance().mapa->remember8 = true;
+    }
     //Debug Mode:
         if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {//Open Puzzle Doors
             Engine::GetInstance().scene->SetOpenDoors();
@@ -1246,8 +1255,6 @@ void Player::UpdateMeleeAttack(float dt) {
 
     // Initiate melee attack only when not dashing, whip attacking, or already attacking
     if (attackButtonPressed && canAttack && !isAttacking && !isWhipAttacking && !isDashing && !isHurt) {
-
-        LOG("Golpisa");
 
         Engine::GetInstance().audio.get()->PlayFx(punchFX);
 
@@ -2057,37 +2064,29 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                 Id = physB->ID; //ID from Item
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
                     Engine::GetInstance().mapa.get()->remember1 = true;
-                    Engine::GetInstance().entityManager->Rec1 = true;
                }
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
                     Engine::GetInstance().mapa.get()->remember2 = true;
-                    Engine::GetInstance().entityManager->Rec2 = true;
                }
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
                     Engine::GetInstance().mapa.get()->remember3 = true;
-                    Engine::GetInstance().entityManager->Rec3 = true;
                }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 6) {
                     Engine::GetInstance().mapa.get()->remember4 = true;
-                    Engine::GetInstance().entityManager->Rec4 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 8) {
                     if (Id == "1") {
                         Engine::GetInstance().mapa.get()->remember5 = true;
-                        Engine::GetInstance().entityManager->Rec5 = true;
                     }
                     if (Id == "2") {
                         Engine::GetInstance().mapa.get()->remember6 = true;
-                        Engine::GetInstance().entityManager->Rec6 = true;
                     }                    
                 } 
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 10) {
                     Engine::GetInstance().mapa.get()->remember7 = true;
-                    Engine::GetInstance().entityManager->Rec7 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
                     Engine::GetInstance().mapa.get()->remember8 = true;
-                    Engine::GetInstance().entityManager->Rec8 = true;
                 }
                 
             }
