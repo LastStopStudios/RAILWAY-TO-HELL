@@ -53,8 +53,6 @@ void MosaicPuzzle::RotatePiece(int pieceId)
         // Check if the puzzle is solved after rotation
         if (IsSolved() && !solved) {
             OnPuzzleSolved();
-            Engine::GetInstance().ui->item = 5;
-            Engine::GetInstance().ui->PopeadaTime = true;
         }
     }
 }
@@ -65,7 +63,6 @@ bool MosaicPuzzle::IsSolved() const
     if (pieces.empty()) {
         return false;
     }
-
     // Check if all pieces are in their correct rotation
     for (auto piece : pieces) {
         if (!piece->IsCorrectRotation()) {
@@ -101,7 +98,8 @@ void MosaicPuzzle::OnPuzzleSolved()
     Engine::GetInstance().scene->SetOpenDoors();
     solved = true;
     LOG("Mosaic puzzle solved!");
-
+    Engine::GetInstance().ui->item = 5;
+    Engine::GetInstance().ui->PopeadaTime = true;
     // Play solve sound effect if valid
     if (solveFxId > 0) {
         Engine::GetInstance().audio.get()->PlayFx(solveFxId);
