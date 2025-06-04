@@ -4446,7 +4446,7 @@
 	</scene11>
 	<scene12>
 		<map path="Assets/Maps/" name="FBOSS.tmx" />
-		<visibility accessed="false" />
+		<visibility accessed="true" />
 		<entities>
 			<player x="920" y="1956" w="64" h="96" texture="Assets/Textures/player/Characters.png" gravity="true">
 				<animations>
@@ -4573,7 +4573,7 @@
 							<frame x="640" y="64" w="64" h="64" />
 							<frame x="704" y="64" w="64" h="64" />
 						</walk>
-						<punch loop="false" speed="0.15">
+						<punch loop="false" speed="0.1">
 							<frame x="0" y="128" w="64" h="64" />
 							<frame x="64" y="128" w="64" h="64" />
 							<frame x="128" y="128" w="64" h="64" />
@@ -4641,7 +4641,7 @@
 							<frame x="1440" y="1408" w="288" h="576" />
 							<frame x="1728" y="1408" w="288" h="576" />
 						</land>
-						<colatazo loop="false" speed="0.15">
+						<colatazo loop="false" speed="0.1">
 							<frame x="0" y="1984" w="288" h="288" />
 							<frame x="288" y="1984" w="288" h="288" />
 							<frame x="576" y="1984" w="288" h="288" />
