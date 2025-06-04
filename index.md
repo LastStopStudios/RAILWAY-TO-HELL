@@ -2,7 +2,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Railway to Hell | LastStop Studios</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen&display=swap" rel="stylesheet">
   <style>
@@ -178,6 +177,7 @@
     .role-card {
       background-color: rgba(138, 3, 3, 0.3);
       border: 3px solid var(--hell-main);
+      text-align: center;
       padding: 15px;
       margin-bottom: 20px;
       transition: all 0.3s ease;
@@ -249,7 +249,7 @@
     <div class="pixel-section">
       <h2 class="section-title">TRAILER</h2>
       <div class="ratio ratio-16x9">
-        <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/XoiOOiuH8iI?si=nFL8c7w3wPt1rraX&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
       <p class="pixel-text text-center mt-3">"Death is not the last stop"</p>
     </div>
@@ -299,63 +299,75 @@
     </div>
 
 
-    
  <!-- Team -->
 <div class="pixel-section">
-  <h2 class="section-title">TEAM</h2>
-  
+  <h2 class="section-title"> LAST STOP STUDIOS TEAM</h2>
+  <p> LAST STOP STUDIOS was born in february 2025 as part of a collaborative university project, bringing together 16 passionate students with a shared goal, to create a unique, dark and immersive metroidvania atmospheric gaming experience. </p>
+
   <!-- Primera fila -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="role-card">
+        <h3 class="role-name">ANA ALCARAZ</h3>
+        <p class="pixel-text">Development Lead</p>
+        <p class="pixel-text">Gameplay Developer</p>
+        <p class="pixel-text">Engine Developer</p>
+        <p class="pixel-text">Technical Artist</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="role-card">
+        <h3 class="role-name">JAUME BENEJAM</h3>
+        <p class="pixel-text">Art Lead</p>
+        <p class="pixel-text">Narrative Design</p>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">Sprite Artist</p>
+        <p class="pixel-text">Animatics</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="role-card">
+        <h3 class="role-name">PABLO SANJOSE</h3>
+        <p class="pixel-text">Lead Game Design</p>
+        <p class="pixel-text">Level Design</p>
+        <p class="pixel-text">Narrative Design</p>
+        <p class="pixel-text">Technical Artist</p>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Segunda fila -->
+   
   <div class="row">
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">ANA ALCARAZ</h3>
-        <p class="pixel-text">PROGRAMADOR PRINCIPAL</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="role-card">
-        <h3 class="role-name">JAUME BENEJAM</h3>
-        <p class="pixel-text">Diseñador de Juego</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="role-card">
-        <h3 class="role-name">NOA CABEZA</h3>
-        <p class="pixel-text">Directora de Arte</p>
+        <h3 class="role-name">VICTOR GONZALEZ</h3>
+        <p class="pixel-text">Gameplay Developer</p>
+        <p class="pixel-text">Engine Developer</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
         <h3 class="role-name">LAIA CANALETA</h3>
-        <p class="pixel-text">Diseñador de Niveles</p>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Segunda fila -->
-  <div class="row">
-    <div class="col-md-3">
-      <div class="role-card">
-        <h3 class="role-name">JÚLIA CORNEJO</h3>
-        <p class="pixel-text">Directora de Arte</p>
+        <p class="pixel-text">Narrative Design</p>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">Animatics</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">VÍCTOR GONZÁLEZ</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">JAVIER VIDA</h3>
+        <p class="pixel-text">Narrative Design</p>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">Sprite Artist</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">ABRIL HERNÁDEZ</h3>
-        <p class="pixel-text">Directora de Arte</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="role-card">
-        <h3 class="role-name">HAOSHENG LI</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">ABRIL HERNANDEZ</h3>
+        <p class="pixel-text">Level Design</p>
+        <p class="pixel-text">Background Artist</p>
+        <p class="pixel-text">Animatics</p>
       </div>
     </div>
   </div>
@@ -364,26 +376,31 @@
   <div class="row">
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">SAÜC PELLEJERO</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">HAOSHENG LI</h3>
+        <p class="pixel-text">Gameplay Developer</p>
+        <p class="pixel-text">Engine Developer</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">BEL PERANAU</h3>
-        <p class="pixel-text">Directora de Arte</p>
+        <h3 class="role-name">BEL PERARNAU</h3>
+        <p class="pixel-text">Background Artist</p>
+        <p class="pixel-text">UI Artist</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">CLAUDIA RUIZ</h3>
-        <p class="pixel-text">Directora de Arte</p>
+        <h3 class="role-name">MARTINA SARRIAS</h3>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">Sprite Artist</p>
+        <p class="pixel-text">Animatics</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">FELIPE SANCHEZ</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">SAUC PELLEJERO</h3>
+        <p class="pixel-text">Level Design</p>
+        <p class="pixel-text">Narrative Design</p>
       </div>
     </div>
   </div>
@@ -392,24 +409,40 @@
   <div class="row">
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">PABLO SANJOSE</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">CLAUDIA RUIZ</h3>
+        <p class="pixel-text">Gameplay Developer</p>
+        <p class="pixel-text">Technical Artist</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">MARTINA SARRIAS</h3>
-        <p class="pixel-text">Directora de Arte</p>
+        <h3 class="role-name">FELIPE SANCHEZ</h3>
+        <p class="pixel-text">Narrative Design</p>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">UI Artist</p>
       </div>
     </div>
     <div class="col-md-3">
       <div class="role-card">
-        <h3 class="role-name">JAVIER VIDA</h3>
-        <p class="pixel-text">Director de Arte</p>
+        <h3 class="role-name">NOA CABEZA</h3>
+        <p class="pixel-text">Concept Artist</p>
+        <p class="pixel-text">Background Artist</p>
+        <p class="pixel-text">Animatics</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="role-card">
+        <h3 class="role-name">JULIA CORNEJO</h3>
+        <p class="pixel-text">Sprite Artist</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="role-card">
+        <h3 class="role-name">MARC GARCIA</h3>
+        <p class="pixel-text">UI Artist</p>
       </div>
     </div>
   </div>
-</div>
 
 <!-- CHARACTERS Section -->
 <div class="pixel-section">
@@ -523,7 +556,7 @@
           </ul>
     </div>
 
-    <!-- Gallery -->
+<!-- Gallery -->
     <div class="pixel-section">
       <h2 class="section-title">GALERÍA</h2>
       <div class="row">
@@ -539,17 +572,29 @@
       </div>
     </div>
 
-    
+<!-- Thanks -->
+  <div class="pixel-section">
+      <h2 class="section-title">ACKNOWLEDGEMENTS</h2>
+
+        <!-- Primera fila -->
+  <div class="row">
+    <div class="col-md-14">
+      <div class="role-card">
+        <h3 class="role-name">ALBERT FERRER</h3>
+        <p class="pixel-text">Our talented friend and composer - for giving Railway to Hell its soul through your music</p>
+      </div>
+    </div>
+  </div>
+
     <!-- Links -->
-    <div class="pixel-section text-center">
+  <div class="pixel-section text-center">
       <h2 class="section-title">Links</h2>
-      <a href="#" class="pixel-btn">GITHUB</a>
-      <a href="#" class="pixel-btn">KIT DE PRENSA</a>
-      <a href="#" class="pixel-btn">BLOG DEL DESARROLLO</a>
+      <a href="https://github.com/LastStopStudios/RAILWAY-TO-HELL/tree/main" class="pixel-btn" target="_blank">GITHUB</a>
+      <a href="https://github.com/LastStopStudios/RAILWAY-TO-HELL/releases" class="pixel-btn" target="_blank">LAST RELEASE</a>
     </div>
     
-    <!-- Footer -->
-    <div class="pixel-footer">
+  <!-- Footer -->
+  <div class="pixel-footer">
       <p>© 2025 RAILWAY TO HELL - LAST STOP STUDIOS</p>
       <p>"DEATH IS NOT THE LAST STOP"</p>
     </div>
@@ -558,3 +603,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+    
