@@ -4760,7 +4760,7 @@
 			</spear>
 		</entities>
 		<dialogues>
-			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Devil.png" TEXT="Congratulations, you've made my job quite easy, young one. Or did you really think that sweet voice guiding you was your dear sister? Oh, how naive, poor thing. Your emotions blinded you, and you chose to follow them. And look where that's brought you - to a dark abyss where only you and I remain. Allow me to introduce myself, in case you still don't know me. I am Satan. Every time you thought your sweet sister was speaking... it was me. Yes, your sister is here, trapped - but freeing her won't be easy. By defeating all my underworld companions, I've grown far more powerful. I am now closer than ever to fulfilling my long-desired dream, to conquer Hell and crown myself the one and only, unrivalled fallen angel. I hope you've enjoyed your punishment, wandering through my chaotic railway system... but I'm afraid your final stop has arrived. It's time to head into a tunnel of complete darkness - where your memories and thoughts will dissolve into the deepest shadow, and where the light shall forget your name. Prepare to die. "/>
+			<dialog ID="1" Img="Assets/Textures/Dialog/Fondo_Devil.png" TEXT="Congratulations, you made my job easy. You think that voice was your sister? How naive. Your emotions blinded you and brought you to me. I am Satan. Every word you heard was mine. Your sister is here, but freeing her will not be easy. Defeating my allies made me stronger. I am about to be crowned  the ultimate fallen angel. I hope you enjoyed your punishment in my labyrinth... but you have reached your final stop. Prepare to die. " />
 		</dialogues>
 	</scene12>
 </config>
