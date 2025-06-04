@@ -222,10 +222,6 @@ void DialogoM::UpdateTextAnimation(float dt)
 			Engine::GetInstance().ui->fase1 = true;//Put live boss UI from Phase 2 in screen
 			Engine::GetInstance().ui->figth3 = true;//show boss2 health
 		}
-		if (lastDialogID == "2" && Engine::GetInstance().sceneLoader->GetCurrentLevel() == 3) {//UPop Up Whip
-			Engine::GetInstance().ui->item = 4;//pickUp whip
-			Engine::GetInstance().ui->PopeadaTime = true;
-		}
 
 		ResetText();  // Reset the text system
 	}

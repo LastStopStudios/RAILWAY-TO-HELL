@@ -2009,9 +2009,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Whip") {
                 WhipAttack = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
-                NeedDialogue = true; //activate dialog when touching item, in the xml put the id of the dialog to be activated
-                Id = physB->ID; //ID from Item
-
+                Engine::GetInstance().ui->item = 4;//pickUp whip
+                itempop = true;
             }
             if (item && item->GetItemType() == "Remember1") {
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
@@ -2175,12 +2174,84 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
 
     case ColliderType::DEVIL_JUMP_ATTACK2:
+        if (!godMode) {
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
+                demopunch = true;
+                //freezeWhileHurting = true;
+
+                // Cancel any ongoing attack
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
+                }
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
+                }
+            }
+        }
         break;
 
     case ColliderType::DEVIL_TAIL_ATTACK:
+        if (!godMode) {
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
+                demopunch = true;
+                //freezeWhileHurting = true;
+
+                // Cancel any ongoing attack
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
+                }
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
+                }
+            }
+        }
         break;
 
     case ColliderType::SPEAR:
+        if (!godMode) {
+            if (!isHurt && !hasHurtStarted && lives > 0 && !isDying) {
+                isHurtDelayed = true;
+                currentHurtDelay = 0.0f;
+                demopunch = true;
+                //freezeWhileHurting = true;
+
+                // Cancel any ongoing attack
+                if (isAttacking) {
+                    isAttacking = false;
+                    if (attackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(attackHitbox);
+                        attackHitbox = nullptr;
+                    }
+                }
+                if (isWhipAttacking) {
+                    isWhipAttacking = false;
+                    if (whipAttackHitbox) {
+                        Engine::GetInstance().physics.get()->DeletePhysBody(whipAttackHitbox);
+                        whipAttackHitbox = nullptr;
+                    }
+                }
+            }
+        }
         break;
 
     case ColliderType::PROJECTILE:
@@ -2255,8 +2326,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::SENSOR:
         for (const auto& escena : escenas) { // Iterate through all scenes
             if (escena.escena == physB->sensorID && physB->sensorID != "FBOSS") { // Check where the player needs to go
-                LOG("--------------ESTATUAS %d --------------", Engine::GetInstance().entityManager->estatua2);
-                LOG("--------------ID %s --------------", physB->sensorID.c_str());
                     sceneToLoad = escena.id;
                     Playerx = escena.x;
                     Playery = escena.y; // Set the destination map and player position

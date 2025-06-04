@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Log.h"
+#include "DialogoM.h"
 
 
 UI::UI() : Module()
@@ -187,12 +188,18 @@ void UI::PopUps() {
 			if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN) {
 				Engine::GetInstance().entityManager->DialogoOff();
 				PopeadaTime = false;
+				if (item == 4) {
+					Engine::GetInstance().dialogoM->Texto("2"); // Call the corresponding dialogue line
+				}
 			}
 		}
 		// keyboard input
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 			Engine::GetInstance().entityManager->DialogoOff();
 			PopeadaTime = false;
+			if (item == 4) {
+				Engine::GetInstance().dialogoM->Texto("2"); // Call the corresponding dialogue line
+			}
 		}
 	}
 
