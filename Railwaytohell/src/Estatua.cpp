@@ -35,7 +35,7 @@ bool Estatua::Start() {
 
 	currentAnimation = &idle;
 
-	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH , (int)position.getY() + texH / 2, 20, 20, bodyType::KINEMATIC);
+	pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor((int)position.getX() + texH, (int)position.getY() + texH, texW / 2, texH, bodyType::KINEMATIC);
 
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ESTATUAS;
