@@ -411,6 +411,167 @@
   </div>
 </div>
 
+<!-- CHARACTERS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">CHARACTERS</h2>
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Nadia</h3>
+  <p class="pixel-text">
+    The main character of the game. A strong, smart and short-tempered woman who has been raised on the streets, part of a gang and a role model to her younger sister, who has recently passed away due to Nadia’s mistakes. Now, dead, she founds herself being unfairly judged by the overlords of hell, who as a punishment won’t let her see her sister, a fatal mistake, because Nadia will travel through all hell for her sister, and she won’t doubt to defeat anyone who stands in her way, be a rat or the lords of hell themselves.
+  </p>
+  <img src="assets/nadia.png" class="img-fluid pixel-img" alt="Nadia">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Alia</h3>
+  <p class="pixel-text">
+    Nadia’s little sister. Alia looks up to her older sister, treasuring any activity they get to do together as a memory to remember. She has been lost and trapped in hell since the accident where she lost her life, but with the arrival of her sister, memories which had been taken from her have started to come back, and her stay in hell is not going to be long.
+  </p>
+  <img src="assets/alia.png" class="img-fluid pixel-img" alt="Alia">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Caronte</h3>
+  <p class="pixel-text">
+    Caronte serves as the first face Nadia meets in hell, her jailer, keeper of the keys. Caronte is charged with keeping Nadia on a Wagon for all eternity, but no-one would have guessed she was such a menace, at least not poor Caronte.
+  </p>
+  <img src="assets/caronte.png" class="img-fluid pixel-img" alt="Caronte">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Bosses</h3>
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Noma</h4>
+  <p class="pixel-text">
+    Noma, demon lord representing wrath and leader of the electrical underground line. She carries a copper whip which she uses as a weapon and has control over electricity. As demon of wrath, she doesn’t have much patience and shows an explosive temperament. She will be the first of the overlords to face Nadia on her rescue mission.
+  </p>
+  <img src="assets/noma.png" class="img-fluid pixel-img" alt="Noma">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Asmodeus</h4>
+  <p class="pixel-text">
+    Asmodeus, demon lord representing lust and leader of the icy line. He’s a professional clown, proving his abilities in ice skating and juggling. He is fast to devalue the other demon lords, talking at their backs, since he thinks of himself as the only competent one. And, although being the demon of lust, he only finds enjoyment in the beauty of ice.
+  </p>
+  <img src="assets/asmodeus.png" class="img-fluid pixel-img" alt="Asmodeus">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Belfegor</h4>
+  <p class="pixel-text">
+    Belfegor, demon lord representing sloth and leader of the poisonous underground line. He is a demon made of smoke and one to truly enjoy the pleasures of privileges from being a demon lord. He will prove to be the embodiment of sloth when Nadia starts killing demons and lords, because he is not going to be showing his face.
+  </p>
+  <img src="assets/belfegor.png" class="img-fluid pixel-img" alt="Belfegor">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Satanas</h4>
+  <p class="pixel-text">
+    Satanas is the missing fourth demon lord of hell. The most powerful of the lords and the embodiment of envy. He has a lust for power, and he seeks the fall of the other lords in order to be the one and only lord of hell. And now, with the arrival of Nadia, he may have just found the way to achieve his goal.
+  </p>
+  <img src="assets/satanas.png" class="img-fluid pixel-img" alt="Satanas">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Enemies</h3>
+  <p class="pixel-text">
+    Hell’s tunnels are filled with various creatures who, under the orders of the demon lords, are looking to kill Nadia. Rats, bats, spiders and even bombs, all will try to keep Nadia from escaping the grasp of hell.
+  </p>
+  <img src="assets/enemies.png" class="img-fluid pixel-img" alt="Enemies">
+</div>
+
+<!-- ITEMS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">ITEMS</h2>
+  <p class="pixel-text">
+    While exploring hell, Nadia will find various items and collectibles that will help her in achieving her goal of escaping hell and rescuing Alia. Some of these items are going to be power-ups that will bestow powerful abilities upon our protagonist, allowing her to jump midair or to dash faster than humanly possible. Others are going to be obtainable only by defeating the demon lords, these being the powerful weapons used by them like the copper whip, able to activate electrical doors, and the ice juggling balls, able to be used as projectiles to defeat enemies from afar. And finally, there are the collectibles, which are shown by Alia’s treasured memories lost throughout hell.
+  </p>
+  <img src="assets/items.png" class="img-fluid pixel-img" alt="Items">
+</div>
+
+<!-- MAPS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">MAPS</h2>
+  <p class="pixel-text">
+    Hell has been completely remodeled to look like the most suffer inducing place in the world, the train. And its layout is now that of an underground, each demon lord having control of a line which represents their powers, resulting in the existence of the electrical line and the icy line. Each of them has their own tunnels where enemies roam and stations which hold powerful abilities or the demon lords themselves. And all lines are connected to the Central Station, Satanas’ creation and the only way out of hell.
+  </p>
+  <img src="assets/maps.png" class="img-fluid pixel-img" alt="Maps">
+</div>
+
+<!-- DECISIONS AND ENDINGS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">DECISIONS AND ENDINGS</h2>
+  <p class="pixel-text">
+    Due to being a metroidvania game, freedom of exploration is a huge part of the genre. And Railway To Hell isn’t an exception, thanks to the underground layout, the player has complete freedom in how to explore the tunnels and surpass the obstacles that may be on their path, which may affect in how each player experiences the game. Also, there are two different endings depending on the choices made by the player during their playthrough, which will vary depending on if they have collected all of Alia’s memories or not.
+  </p>
+</div>
+<!-- CHARACTERS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">CHARACTERS</h2>
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Nadia</h3>
+  <p class="pixel-text">
+    The main character of the game. A strong, smart and short-tempered woman who has been raised on the streets, part of a gang and a role model to her younger sister, who has recently passed away due to Nadia’s mistakes. Now, dead, she founds herself being unfairly judged by the overlords of hell, who as a punishment won’t let her see her sister, a fatal mistake, because Nadia will travel through all hell for her sister, and she won’t doubt to defeat anyone who stands in her way, be a rat or the lords of hell themselves.
+  </p>
+  <img src="assets/nadia.png" class="img-fluid pixel-img" alt="Nadia">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Alia</h3>
+  <p class="pixel-text">
+    Nadia’s little sister. Alia looks up to her older sister, treasuring any activity they get to do together as a memory to remember. She has been lost and trapped in hell since the accident where she lost her life, but with the arrival of her sister, memories which had been taken from her have started to come back, and her stay in hell is not going to be long.
+  </p>
+  <img src="assets/alia.png" class="img-fluid pixel-img" alt="Alia">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Caronte</h3>
+  <p class="pixel-text">
+    Caronte serves as the first face Nadia meets in hell, her jailer, keeper of the keys. Caronte is charged with keeping Nadia on a Wagon for all eternity, but no-one would have guessed she was such a menace, at least not poor Caronte.
+  </p>
+  <img src="assets/caronte.png" class="img-fluid pixel-img" alt="Caronte">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Bosses</h3>
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Noma</h4>
+  <p class="pixel-text">
+    Noma, demon lord representing wrath and leader of the electrical underground line. She carries a copper whip which she uses as a weapon and has control over electricity. As demon of wrath, she doesn’t have much patience and shows an explosive temperament. She will be the first of the overlords to face Nadia on her rescue mission.
+  </p>
+  <img src="assets/noma.png" class="img-fluid pixel-img" alt="Noma">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Asmodeus</h4>
+  <p class="pixel-text">
+    Asmodeus, demon lord representing lust and leader of the icy line. He’s a professional clown, proving his abilities in ice skating and juggling. He is fast to devalue the other demon lords, talking at their backs, since he thinks of himself as the only competent one. And, although being the demon of lust, he only finds enjoyment in the beauty of ice.
+  </p>
+  <img src="assets/asmodeus.png" class="img-fluid pixel-img" alt="Asmodeus">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Belfegor</h4>
+  <p class="pixel-text">
+    Belfegor, demon lord representing sloth and leader of the poisonous underground line. He is a demon made of smoke and one to truly enjoy the pleasures of privileges from being a demon lord. He will prove to be the embodiment of sloth when Nadia starts killing demons and lords, because he is not going to be showing his face.
+  </p>
+  <img src="assets/belfegor.png" class="img-fluid pixel-img" alt="Belfegor">
+
+  <h4 class="pixel-text" style="color: var(--hell-accent);">Satanas</h4>
+  <p class="pixel-text">
+    Satanas is the missing fourth demon lord of hell. The most powerful of the lords and the embodiment of envy. He has a lust for power, and he seeks the fall of the other lords in order to be the one and only lord of hell. And now, with the arrival of Nadia, he may have just found the way to achieve his goal.
+  </p>
+  <img src="assets/satanas.png" class="img-fluid pixel-img" alt="Satanas">
+
+  <h3 class="pixel-text" style="color: var(--hell-accent);">Enemies</h3>
+  <p class="pixel-text">
+    Hell’s tunnels are filled with various creatures who, under the orders of the demon lords, are looking to kill Nadia. Rats, bats, spiders and even bombs, all will try to keep Nadia from escaping the grasp of hell.
+  </p>
+  <img src="assets/enemies.png" class="img-fluid pixel-img" alt="Enemies">
+</div>
+
+<!-- ITEMS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">ITEMS</h2>
+  <p class="pixel-text">
+    While exploring hell, Nadia will find various items and collectibles that will help her in achieving her goal of escaping hell and rescuing Alia. Some of these items are going to be power-ups that will bestow powerful abilities upon our protagonist, allowing her to jump midair or to dash faster than humanly possible. Others are going to be obtainable only by defeating the demon lords, these being the powerful weapons used by them like the copper whip, able to activate electrical doors, and the ice juggling balls, able to be used as projectiles to defeat enemies from afar. And finally, there are the collectibles, which are shown by Alia’s treasured memories lost throughout hell.
+  </p>
+  <img src="assets/items.png" class="img-fluid pixel-img" alt="Items">
+</div>
+
+<!-- MAPS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">MAPS</h2>
+  <p class="pixel-text">
+    Hell has been completely remodeled to look like the most suffer inducing place in the world, the train. And its layout is now that of an underground, each demon lord having control of a line which represents their powers, resulting in the existence of the electrical line and the icy line. Each of them has their own tunnels where enemies roam and stations which hold powerful abilities or the demon lords themselves. And all lines are connected to the Central Station, Satanas’ creation and the only way out of hell.
+  </p>
+  <img src="assets/maps.png" class="img-fluid pixel-img" alt="Maps">
+</div>
+
+<!-- DECISIONS AND ENDINGS Section -->
+<div class="pixel-section">
+  <h2 class="section-title">DECISIONS AND ENDINGS</h2>
+  <p class="pixel-text">
+    Due to being a metroidvania game, freedom of exploration is a huge part of the genre. And Railway To Hell isn’t an exception, thanks to the underground layout, the player has complete freedom in how to explore the tunnels and surpass the obstacles that may be on their path, which may affect in how each player experiences the game. Also, there are two different endings depending on the choices made by the player during their playthrough, which will vary depending on if they have collected all of Alia’s memories or not.
+  </p>
+</div>
+
     <!-- Controls -->
     <div class="pixel-section">
       <h2 class="section-title">CONTROLES</h2>
