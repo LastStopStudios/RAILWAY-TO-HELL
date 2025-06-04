@@ -1437,6 +1437,9 @@ void Scene::EnablePauseButtons() {
 void Scene::NewGameReset() {
 	player->ResetToInitPosition();
 
+	// Reset the player position to the initial position
+	Engine::GetInstance().sceneLoader->LoadScene(1, 2877, 2048, false, false);
+
 	pugi::xml_document loadFile;
 	pugi::xml_parse_result result = loadFile.load_file("config.xml");
 
