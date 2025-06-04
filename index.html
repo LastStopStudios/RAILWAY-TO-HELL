@@ -221,6 +221,15 @@
       pointer-events: none;
       z-index: 1000;
     }
+
+    .equal-height {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .equal-height .role-card {
+      flex: 1;
+    }
     
     @media (max-width: 768px) {
       .game-title {
@@ -284,7 +293,7 @@
     <div class="pixel-section">
       <h2 class="section-title">ART STYLE</h2>
       <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-12">
                   <img src="imagenes/arte.jpg" class="img-fluid pixel-img" alt="Concept2">
               </div>
        </div>
@@ -306,7 +315,7 @@
 
   <!-- Primera fila -->
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 equal-height">
       <div class="role-card">
         <h3 class="role-name">ANA ALCARAZ</h3>
         <p class="pixel-text">Development Lead</p>
@@ -315,7 +324,7 @@
         <p class="pixel-text">Technical Artist</p>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 equal-height">
       <div class="role-card">
         <h3 class="role-name">JAUME BENEJAM</h3>
         <p class="pixel-text">Art Lead</p>
@@ -325,7 +334,7 @@
         <p class="pixel-text">Animatics</p>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 equal-height">
       <div class="role-card">
         <h3 class="role-name">PABLO SANJOSE</h3>
         <p class="pixel-text">Lead Game Design</p>
@@ -339,14 +348,14 @@
   <!-- Segunda fila -->
    
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">VICTOR GONZALEZ</h3>
         <p class="pixel-text">Gameplay Developer</p>
         <p class="pixel-text">Engine Developer</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">LAIA CANALETA</h3>
         <p class="pixel-text">Narrative Design</p>
@@ -354,7 +363,7 @@
         <p class="pixel-text">Animatics</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">JAVIER VIDA</h3>
         <p class="pixel-text">Narrative Design</p>
@@ -362,7 +371,7 @@
         <p class="pixel-text">Sprite Artist</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">ABRIL HERNANDEZ</h3>
         <p class="pixel-text">Level Design</p>
@@ -374,21 +383,21 @@
   
   <!-- Tercera fila -->
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">HAOSHENG LI</h3>
         <p class="pixel-text">Gameplay Developer</p>
         <p class="pixel-text">Engine Developer</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">BEL PERARNAU</h3>
         <p class="pixel-text">Background Artist</p>
         <p class="pixel-text">UI Artist</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">MARTINA SARRIAS</h3>
         <p class="pixel-text">Concept Artist</p>
@@ -396,7 +405,7 @@
         <p class="pixel-text">Animatics</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">SAUC PELLEJERO</h3>
         <p class="pixel-text">Level Design</p>
@@ -407,14 +416,14 @@
   
   <!-- Cuarta fila -->
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">CLAUDIA RUIZ</h3>
         <p class="pixel-text">Gameplay Developer</p>
         <p class="pixel-text">Technical Artist</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">FELIPE SANCHEZ</h3>
         <p class="pixel-text">Narrative Design</p>
@@ -422,7 +431,7 @@
         <p class="pixel-text">UI Artist</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">NOA CABEZA</h3>
         <p class="pixel-text">Concept Artist</p>
@@ -430,13 +439,13 @@
         <p class="pixel-text">Animatics</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">JULIA CORNEJO</h3>
         <p class="pixel-text">Sprite Artist</p>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 equal-height">
       <div class="role-card">
         <h3 class="role-name">MARC GARCIA</h3>
         <p class="pixel-text">UI Artist</p>
@@ -448,56 +457,88 @@
 <!-- CHARACTERS Section -->
 <div class="pixel-section">
   <h2 class="section-title">CHARACTERS</h2>
+<!-- Nadia -->
+<div style="display: flex; align-items: center; gap: 20px;">
+  <img src="imagenes/nadia.jpg" class="img-fluid pixel-img" alt="Nadia" style="max-width: 200px;">
+  <div>
+    <h3 class="pixel-text" style="color: var(--hell-accent);">Nadia</h3>
+    <p class="pixel-text">
+      The main character of the game. A strong, smart and short-tempered woman who has been raised on the streets, part of a gang and a role model to her younger sister, who has recently passed away due to Nadia's mistakes. Now, dead, she founds herself being unfairly judged by the overlords of hell, who as a punishment won't let her see her sister, a fatal mistake, because Nadia will travel through all hell for her sister, and she won't doubt to defeat anyone who stands in her way, be a rat or the lords of hell themselves.
+    </p>
+  </div>
+</div>
+<!-- Alia -->
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+  <img src="imagenes/alia.jpg" class="img-fluid pixel-img" alt="Alia" style="max-width: 200px;">
+  <div>
+    <h3 class="pixel-text" style="color: var(--hell-accent);">Alia</h3>
+    <p class="pixel-text">
+      Nadia’s little sister. Alia looks up to her older sister, treasuring any activity they get to do together as a memory to remember. She has been lost and trapped in hell since the accident where she lost her life, but with the arrival of her sister, memories which had been taken from her have started to come back, and her stay in hell is not going to be long.
+    </p>
+  </div>
+</div>
 
-  <h3 class="pixel-text" style="color: var(--hell-accent);">Nadia</h3>
-  <p class="pixel-text">
-    The main character of the game. A strong, smart and short-tempered woman who has been raised on the streets, part of a gang and a role model to her younger sister, who has recently passed away due to Nadia’s mistakes. Now, dead, she founds herself being unfairly judged by the overlords of hell, who as a punishment won’t let her see her sister, a fatal mistake, because Nadia will travel through all hell for her sister, and she won’t doubt to defeat anyone who stands in her way, be a rat or the lords of hell themselves.
-  </p>
-  <img src="imagenes/nadia.jpg" class="img-fluid pixel-img" alt="Nadia">
+<!-- Caronte -->
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+  <img src="imagenes/caronte.jpg" class="img-fluid pixel-img" alt="Caronte" style="max-width: 200px;">
+  <div>
+    <h3 class="pixel-text" style="color: var(--hell-accent);">Caronte</h3>
+    <p class="pixel-text">
+      Caronte serves as the first face Nadia meets in hell, her jailer, keeper of the keys. Caronte is charged with keeping Nadia on a Wagon for all eternity, but no-one would have guessed she was such a menace, at least not poor Caronte.
+    </p>
+  </div>
+</div>
 
-  <h3 class="pixel-text" style="color: var(--hell-accent);">Alia</h3>
-  <p class="pixel-text">
-    Nadia’s little sister. Alia looks up to her older sister, treasuring any activity they get to do together as a memory to remember. She has been lost and trapped in hell since the accident where she lost her life, but with the arrival of her sister, memories which had been taken from her have started to come back, and her stay in hell is not going to be long.
-  </p>
-  <img src="imagenes/alia.jpg" class="img-fluid pixel-img" alt="Alia">
+<!-- Bosses -->
+<h3 class="pixel-text" style="color: var(--hell-accent); margin-bottom: 20px;">Bosses</h3>
 
-  <h3 class="pixel-text" style="color: var(--hell-accent);">Caronte</h3>
-  <p class="pixel-text">
-    Caronte serves as the first face Nadia meets in hell, her jailer, keeper of the keys. Caronte is charged with keeping Nadia on a Wagon for all eternity, but no-one would have guessed she was such a menace, at least not poor Caronte.
-  </p>
-  <img src="imagenes/caronte.jpg" class="img-fluid pixel-img" alt="Caronte">
+<!-- Noma -->
+<div  style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+  <img src="imagenes/noma.jpg" class="img-fluid pixel-img" alt="Noma" style="max-width: 200px;">
+  <div>
+    <h4 class="pixel-text" style="color: var(--hell-accent);">Noma</h4>
+    <p class="pixel-text">
+      Noma, demon lord representing wrath and leader of the electrical underground line. She carries a copper whip which she uses as a weapon and has control over electricity. As demon of wrath, she doesn't have much patience and shows an explosive temperament. She will be the first of the overlords to face Nadia on her rescue mission.
+    </p>
+  </div>
+</div>
 
-  <h3 class="pixel-text" style="color: var(--hell-accent);">Bosses</h3>
+<!-- Asmodeus -->
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+  <img src="imagenes/asmodeus.jpg" class="img-fluid pixel-img" alt="Asmodeus" style="max-width: 200px;">
+  <div>
+    <h4 class="pixel-text" style="color: var(--hell-accent);">Asmodeus</h4>
+    <p class="pixel-text">
+      Asmodeus, demon lord representing lust and leader of the icy line. He's a professional clown, proving his abilities in ice skating and juggling. He is fast to devalue the other demon lords, talking at their backs, since he thinks of himself as the only competent one. And, although being the demon of lust, he only finds enjoyment in the beauty of ice.
+    </p>
+  </div>
+</div>
 
-  <h4 class="pixel-text" style="color: var(--hell-accent);">Noma</h4>
-  <p class="pixel-text">
-    Noma, demon lord representing wrath and leader of the electrical underground line. She carries a copper whip which she uses as a weapon and has control over electricity. As demon of wrath, she doesn’t have much patience and shows an explosive temperament. She will be the first of the overlords to face Nadia on her rescue mission.
-  </p>
-  <img src="imagenes/noma.jpg" class="img-fluid pixel-img" alt="Noma">
-
-  <h4 class="pixel-text" style="color: var(--hell-accent);">Asmodeus</h4>
-  <p class="pixel-text">
-    Asmodeus, demon lord representing lust and leader of the icy line. He’s a professional clown, proving his abilities in ice skating and juggling. He is fast to devalue the other demon lords, talking at their backs, since he thinks of himself as the only competent one. And, although being the demon of lust, he only finds enjoyment in the beauty of ice.
-  </p>
-  <img src="imagenes/asmodeus.jpg" class="img-fluid pixel-img" alt="Asmodeus">
-
+<!-- Belfegor (sin imagen) -->
+<div style="margin-bottom: 30px;">
   <h4 class="pixel-text" style="color: var(--hell-accent);">Belfegor</h4>
   <p class="pixel-text">
     Belfegor, demon lord representing sloth and leader of the poisonous underground line. He is a demon made of smoke and one to truly enjoy the pleasures of privileges from being a demon lord. He will prove to be the embodiment of sloth when Nadia starts killing demons and lords, because he is not going to be showing his face.
   </p>
-
-  <h4 class="pixel-text" style="color: var(--hell-accent);">Leviatan</h4>
-  <p class="pixel-text">
-    Leviatan is the missing fourth demon lord of hell. The most powerful of the lords and the embodiment of envy. He has a lust for power, and he seeks the fall of the other lords in order to be the one and only lord of hell. And now, with the arrival of Nadia, he may have just found the way to achieve his goal.
-  </p>
-  <img src="imagenes/mini_satanas.jpg" class="img-fluid pixel-img" alt="miniSatanas">
-<img src="imagenes/satanas.jpg" class="img-fluid pixel-img" alt="Satanas">
-
-  <h3 class="pixel-text" style="color: var(--hell-accent);">Enemies</h3>
-  <p class="pixel-text">
-    Hell’s tunnels are filled with various creatures who, under the orders of the demon lords, are looking to kill Nadia. Rats, bats, spiders and even bombs, all will try to keep Nadia from escaping the grasp of hell.
-  </p>
 </div>
+
+<!-- Leviatan -->
+<div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+  <img src="imagenes/mini_satanas.jpg" class="img-fluid pixel-img" alt="miniSatanas" style="max-width: 200px;">
+  <div>
+    <h4 class="pixel-text" style="color: var(--hell-accent);">Leviatan</h4>
+    <p class="pixel-text">
+      Leviatan is the missing fourth demon lord of hell. The most powerful of the lords and the embodiment of envy. He has a lust for power, and he seeks the fall of the other lords in order to be the one and only lord of hell. And now, with the arrival of Nadia, he may have just found the way to achieve his goal.
+    </p>
+  </div>
+    <img src="imagenes/satanas.jpg" class="img-fluid pixel-img" alt="Satanas" style="max-width: 300px;">
+</div>
+
+<!-- Enemies -->
+<h3 class="pixel-text" style="color: var(--hell-accent); margin-bottom: 20px;">Enemies</h3>
+<p class="pixel-text" style="margin-bottom: 30px;">
+  Hell's tunnels are filled with various creatures who, under the orders of the demon lords, are looking to kill Nadia. Rats, bats, spiders and even bombs, all will try to keep Nadia from escaping the grasp of hell.
+</p>
 
 <!-- ITEMS Section -->
 <div class="pixel-section">
@@ -558,34 +599,31 @@
 </div>
 
 <!-- Gallery -->
-      <div class="pixel-section">
+<div class="pixel-section">
   <h2 class="section-title">GALERY</h2>
-</div>
-    <div class="pixel-section">
-      <h2 class="section-title">SCREENSHOTS OF THE GAME</h2>
       <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/inicio.jpg" class="img-fluid pixel-img" alt="Concept2">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/imagen.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 2">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/recuerdos.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/nomaboss.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/sala2.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/cap2.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/cap1.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
               <img src="imagenes/cap3.jpg" class="img-fluid pixel-img" alt="Captura de pantalla 3">
           </div>
       </div>
