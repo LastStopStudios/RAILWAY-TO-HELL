@@ -342,9 +342,9 @@ bool Scene::Update(float dt)
 
 		if (!introMusicPlaying) {
 
-			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Intro.ogg", 1.0f);
+			Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Devil.ogg", 1.0f);
 			Engine::GetInstance().audio.get()->SetMusicVolume(2);
-			Engine::GetInstance().sceneLoader->FadeOut(2.5f, false);// Animation speed (FadeOut)
+			//Engine::GetInstance().sceneLoader->FadeOut(2.5f, false);// Animation speed (FadeOut)
 
 			introMusicPlaying = true;
 			textMusicPlaying = false;
@@ -1062,11 +1062,13 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 	case 2: // NewGame
 		currentState = SceneState::TEXT_SCREEN;
 		hasStartedGame = true;
+		musicOn = false;
 		NewGameReset();
 		DisableMenuButtons();
 		break;
 	case 3: // Continue
 		currentState = SceneState::GAMEPLAY;
+		Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
 		DisableMenuButtons();
 		break;
 	case 4: // Settings
@@ -1091,6 +1093,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)//when you press the button
 		break;
 	case 8: // BackToTitle 
 		SetCurrentState(SceneState::INTRO_SCREEN);
+		introMusicPlaying = false;
 		pauseMenuOn = false;
 		DisablePauseButtons();
 		break;
