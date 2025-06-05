@@ -345,6 +345,9 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
         }
         // Medium range jump attack
         else if (distanceToPlayer <= JUMP_ATTACK_DISTANCE && distanceToPlayer > TAIL_ATTACK_DISTANCE && canAttack) {
+            int x, y;
+            pbody->GetPosition(x, y);
+            LOG("Devil position: x=%d, y=%d", x, y);
             CreateJumpAttack();
         }
         // Idle state
@@ -780,7 +783,7 @@ void Devil::UpdateJumpAttack(float dt) {
     }
 
     // Check for landing
-    if (hasReachedPeak && currentPos.getY() >= jumpStartPos.getY() - 10) {
+    if (hasReachedPeak && currentPos.getY() >= jumpStartPos.getY() - 18) {
         // Position correction if needed
         if (currentPos.getY() > jumpStartPos.getY()) {
             b2Vec2 correctedPos = pbody->body->GetPosition();
