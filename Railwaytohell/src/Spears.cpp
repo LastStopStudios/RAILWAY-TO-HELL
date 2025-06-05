@@ -12,17 +12,17 @@
 Spears::Spears() : Entity(EntityType::SPEAR)
 {
     lifeTimer = 0.0f;
-    maxLifeTime = 3000.0f;  // 4 segundos
+    maxLifeTime = 3000.0f;  // 4 seconds
     useLifeTimer = false;
     platformCollisionCount = 0;
-    maxPlatformCollisions = 2;  // Se borra en la segunda colision
+	maxPlatformCollisions = 2;  // Delete in the second collision
 
-    // Velocidades diferentes para cada dirección
-    horizontalSpeed = 600.0f;  // Velocidad para lanzas horizontales
-    verticalSpeed = 1500.0f;    // Velocidad para lanzas verticales (más rápida)
-    moveSpeed = 600.0f;        // Velocidad por defecto
+	// Diferent speeds for horizontal and vertical spears
+    horizontalSpeed = 600.0f;  
+    verticalSpeed = 1500.0f;   
+    moveSpeed = 600.0f;        // normal speed
 
-    // Inicializar variables de sombra
+	// Initialize shadow properties
     shadowTexture = nullptr;
     hasShadow = false;
     shadowGroundY = 0.0f;
@@ -42,7 +42,7 @@ bool Spears::Start() {
 
     texture = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 
-    // Si no hay posición personalizada, usar la del XML
+	// If theres no cutom coordinates, use the default ones
     if (!hasCustomOrigin) {
         position.setX(parameters.attribute("x").as_int());
         position.setY(parameters.attribute("y").as_int());
@@ -54,7 +54,7 @@ bool Spears::Start() {
     texW = parameters.attribute("w").as_int();
     texH = parameters.attribute("h").as_int();
 
-    // Cargar animaciones 
+	// Load animations
     pugi::xml_node fallingNode = parameters.child("animations").child("falling");
     pugi::xml_node disappearNode = parameters.child("animations").child("disappear");
 
@@ -68,13 +68,11 @@ bool Spears::Start() {
 
     currentAnimation = &falling;
 
-    // Verificar que la animación se haya cargado correctamente
     if (currentAnimation == nullptr) {
         LOG("ERROR: Failed to set current animation for spear");
         return false;
     }
 
-    // Crear cuerpo físico según la dirección
     CreatePhysicsBody();
 
     if (pbody == nullptr) {
@@ -82,16 +80,13 @@ bool Spears::Start() {
         return false;
     }
 
-    // Configurar tipo de colisionador
     pbody->ctype = ColliderType::SPEAR;
     pbody->listener = this;
 
-    // Configurar gravedad si es necesario
     if (!parameters.attribute("gravity").as_bool()) {
         pbody->body->SetGravityScale(0);
     }
 
-    // Configurar velocidades específicas según la dirección
     switch (spearDirection) {
     case SpearDirection::HORIZONTAL_LEFT:
     case SpearDirection::HORIZONTAL_RIGHT:
@@ -99,38 +94,33 @@ bool Spears::Start() {
         useLifeTimer = true;
         lifeTimer = 0.0f;
         platformCollisionCount = 0;
-        LOG("Horizontal spear configured with speed: %f", moveSpeed);
         break;
     case SpearDirection::VERTICAL_DOWN:
         moveSpeed = verticalSpeed;
         SetupShadow();
-        LOG("Vertical spear configured with speed: %f", moveSpeed);
         break;
     }
 
-    LOG("Spear initialized successfully at position: (%f, %f) with speed: %f",
         position.getX(), position.getY(), moveSpeed);
     return true;
 }
 
 void Spears::SetupShadow() {
-    // Cargar textura de sombra para lanzas verticales
+	// Load the shadow texture for vertical spears
     shadowTexture = Engine::GetInstance().textures.get()->Load("Assets/Textures/bosses/SpearShadow.png");
 
     if (shadowTexture != nullptr) {
         hasShadow = true;
 
         shadowGroundY = FindGroundLevel();
-        LOG("Shadow created for vertical spear at ground level: %f", shadowGroundY);
     }
     else {
-        LOG("WARNING: Could not load shadow texture for vertical spear");
         hasShadow = false;
     }
 }
 
 float Spears::FindGroundLevel() {
-    return position.getY() + 2110.0f; // Asumiendo que el suelo está 600 pixels abajo
+    return position.getY() + 2110.0f; 
 }
 
 void Spears::CreatePhysicsBody() {
@@ -178,7 +168,6 @@ void Spears::CreatePhysicsBody() {
     }
 
     if (pbody != nullptr) {
-        LOG("Physics body created successfully for spear at (%f, %f) - Sensor: %s",
             position.getX(), position.getY(), isSensor ? "true" : "false");
     }
     else {
@@ -203,7 +192,6 @@ bool Spears::Update(float dt)
     if (useLifeTimer && !isDisappearing) {
         lifeTimer += dt;
         if (lifeTimer >= maxLifeTime) {
-            LOG("Horizontal spear life timer expired, starting disappear animation");
             startDisappearAnimation();
         }
     }
@@ -318,22 +306,22 @@ void Spears::RenderShadow() {
         return;
     }
 
-    // Calcular la posición X de la sombra (misma X que la lanza)
+	// Calcula the spear's shadow position based on its current position
     float shadowX = position.getX();
 
-    // La sombra siempre está en el nivel del suelo
-    float shadowY = shadowGroundY - 32; // Ajustar según el tamaño de tu textura de sombra
+    // Shadow Y is always at the ground level
+    float shadowY = shadowGroundY - 32; 
 
-    // Renderizar la sombra con menor opacidad
+	// Render shadow with less opacity
     Engine::GetInstance().render.get()->DrawTexture(
         shadowTexture,
         (int)shadowX + 10,
         (int)shadowY,
-        nullptr, // Usar toda la textura
-        1.0f,    // Escala normal
-        0.0,     // Sin rotación
-        128,     // Opacidad reducida (0-255)
-        128,     // Opacidad reducida
+        nullptr, 
+        1.0f,    
+        0.0,     
+        128,    
+        128,    
         SDL_FLIP_NONE
     );
 }
@@ -352,10 +340,9 @@ void Spears::startDisappearAnimation() {
     currentAnimation->Reset();
     isDisappearing = true;
 
-    // Eliminar la sombra cuando la lanza comience a desaparecer
+	// Delete shadow when the spear starts disappearing
     if (hasShadow) {
         hasShadow = false;
-        LOG("Shadow removed for disappearing spear");
     }
 }
 
@@ -371,7 +358,7 @@ bool Spears::CleanUp() {
         pbody = nullptr;
     }
 
-    // Limpiar sombra si existe
+	// Clear shadow texture if it exists
     if (hasShadow) {
         hasShadow = false;
         shadowTexture = nullptr; 
@@ -385,10 +372,9 @@ bool Spears::CleanUp() {
 
 void Spears::OnCollision(PhysBody* physA, PhysBody* physB) {
     if (isSensorBody) {
-        // Lógica especial para lanzas horizontales (sensores)
+        // Horizontal spears logic
         LOG("Spear sensor detected collision with %d", physB->ctype);
 
-        // Solo contar colisiones con plataformas
         if (physB->ctype == ColliderType::PLATFORM) {
             if (veces == 2) {
                 startDisappearAnimation();
@@ -397,12 +383,12 @@ void Spears::OnCollision(PhysBody* physA, PhysBody* physB) {
         return;
     }
 
-    // Lógica original para lanzas verticales
+	// Vertical spears logic
     switch (physB->ctype)
     {
     case ColliderType::PLATFORM:
         LOG("Spear Collision PLATFORM");
-        // Eliminar sombra al tocar el suelo
+		// Delete shadow when hitting the ground
         if (hasShadow && spearDirection == SpearDirection::VERTICAL_DOWN) {
             hasShadow = false;
             LOG("Shadow removed - spear hit ground");
@@ -474,7 +460,6 @@ void Spears::OnCollisionEnd(PhysBody* physA, PhysBody* physB)
 void Spears::SetPosition(Vector2D pos) {
     position = pos;
 
-    // Solo actualizar el cuerpo físico si existe
     if (pbody != nullptr && pbody->body != nullptr) {
         pos.setX(pos.getX() + texW / 2);
         pos.setY(pos.getY() + texH / 2);
@@ -529,32 +514,32 @@ Vector2D Spears::GetPosition() {
 void Spears::SetDirection(SpearDirection direction) {
     spearDirection = direction;
 
-    // Configurar velocidad y timer según la nueva dirección
+    // Set speed and timer according to the new direction
     if (direction == SpearDirection::HORIZONTAL_LEFT ||
         direction == SpearDirection::HORIZONTAL_RIGHT) {
-        moveSpeed = horizontalSpeed;  // Usar velocidad horizontal
+        moveSpeed = horizontalSpeed;  // Use horizontal speed
         useLifeTimer = true;
         lifeTimer = 0.0f;
         platformCollisionCount = 0;
 
-        // Eliminar sombra para lanzas horizontales
+        // Remove shadow for horizontal spears
         if (hasShadow) {
             hasShadow = false;
         }
         LOG("Direction changed to horizontal, speed set to: %f", moveSpeed);
     }
     else if (direction == SpearDirection::VERTICAL_DOWN) {
-        moveSpeed = verticalSpeed;     // Usar velocidad vertical
+        moveSpeed = verticalSpeed;     // Use vertical speed
         useLifeTimer = false;
         lifeTimer = 0.0f;
         platformCollisionCount = 0;
 
-        // Configurar sombra para lanzas verticales
+        // Set up shadow for vertical spears
         SetupShadow();
         LOG("Direction changed to vertical, speed set to: %f", moveSpeed);
     }
 
-    // Si ya existe un cuerpo físico, recrearlo con las nuevas dimensiones
+    // If a physics body already exists, recreate it with the new dimensions
     if (pbody != nullptr) {
         LOG("Recreating physics body for direction change");
         Engine::GetInstance().physics.get()->DeletePhysBody(pbody);
@@ -573,29 +558,28 @@ void Spears::SetDirection(SpearDirection direction) {
     }
 }
 
+
 void Spears::SetOriginPosition(Vector2D origin) {
     originPosition = origin;
     hasCustomOrigin = true;
     position = origin;
 }
 
-// Métodos adicionales para configurar velocidades dinámicamente
+// Additional methods to configure speeds dynamically
 void Spears::SetHorizontalSpeed(float speed) {
     horizontalSpeed = speed;
-    // Si la lanza actual es horizontal, actualizar moveSpeed inmediatamente
+    // If the current spear is horizontal, update moveSpeed immediately
     if (spearDirection == SpearDirection::HORIZONTAL_LEFT ||
         spearDirection == SpearDirection::HORIZONTAL_RIGHT) {
         moveSpeed = horizontalSpeed;
-        LOG("Horizontal speed updated to: %f", horizontalSpeed);
     }
 }
 
 void Spears::SetVerticalSpeed(float speed) {
     verticalSpeed = speed;
-    // Si la lanza actual es vertical, actualizar moveSpeed inmediatamente
+    // If the current spear is vertical, update moveSpeed immediately
     if (spearDirection == SpearDirection::VERTICAL_DOWN) {
         moveSpeed = verticalSpeed;
-        LOG("Vertical speed updated to: %f", verticalSpeed);
     }
 }
 
