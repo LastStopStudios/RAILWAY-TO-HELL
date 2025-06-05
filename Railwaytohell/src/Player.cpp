@@ -2067,28 +2067,28 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 1) {
                     Engine::GetInstance().mapa.get()->remember1 = true;
                }
-               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 3) {
-                    Engine::GetInstance().mapa.get()->remember2 = true;
+               if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 2) {
+                    Engine::GetInstance().mapa.get()->remember5 = true;
                }
                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 4) {
-                    Engine::GetInstance().mapa.get()->remember3 = true;
+                    Engine::GetInstance().mapa.get()->remember8 = true;
                }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 6) {
-                    Engine::GetInstance().mapa.get()->remember4 = true;
+                    Engine::GetInstance().mapa.get()->remember3 = true;
                 }
-                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 8) {
+                if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 7) {
                     if (Id == "1") {
-                        Engine::GetInstance().mapa.get()->remember5 = true;
+                        Engine::GetInstance().mapa.get()->remember6 = true;
                     }
                     if (Id == "2") {
-                        Engine::GetInstance().mapa.get()->remember6 = true;
+                        Engine::GetInstance().mapa.get()->remember7 = true;
                     }                    
                 } 
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 10) {
-                    Engine::GetInstance().mapa.get()->remember7 = true;
+                    Engine::GetInstance().mapa.get()->remember4 = true;
                 }
                 if (Engine::GetInstance().sceneLoader.get()->GetCurrentLevel() == 11) {
-                    Engine::GetInstance().mapa.get()->remember8 = true;
+                    Engine::GetInstance().mapa.get()->remember2 = true;
                 }
                 
             }

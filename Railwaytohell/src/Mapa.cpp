@@ -309,14 +309,14 @@ void Mapa::LoadMap(){
 	//pj = Engine::GetInstance().textures->Load("Assets/Textures/mapa/pj2.png"); //Load texture for character
 
 
-	Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_01.png"); //Load Remember 1
-	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_03.png"); //Load Remember 2
-	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_06.png"); //Load Remember 3
-	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_07.png"); //Load Remember 4
-	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_02.png"); //Load Remember 5
-	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_04.png"); //Load Remember 6
-	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 7
-	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_08.png"); //Load Remember 8
+	Recuerdo1 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_01.png"); //Load Remember 1 Shoes
+	Recuerdo3 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_03.png"); //Load Remember 2 Ticket Show
+	Recuerdo6 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_06.png"); //Load Remember 3 Park
+	Recuerdo7 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_07.png"); //Load Remember 4 Train railway
+	Recuerdo2 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_02.png"); //Load Remember 5 Puzzle
+	Recuerdo4 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_04.png"); //Load Remember 6 Ice Cream
+	Recuerdo5 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_05.png"); //Load Remember 7 Snowman
+	Recuerdo8 = Engine::GetInstance().textures->Load("Assets/Textures/mapa/Menu_Inventory_Remembrance_08.png"); //Load Remember 8 Music
 }
 
 void Mapa ::Remember() {
