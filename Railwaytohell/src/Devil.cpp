@@ -624,6 +624,20 @@ void Devil::UpdateJumpAttack(float dt) {
     Vector2D currentPos = GetPosition();
     b2Vec2 currentVelocity = pbody->body->GetLinearVelocity();
 
+    if (currentPos.getY() > 1706) {
+        Vector2D safePosition = Vector2D(currentPos.getX(), 1619);
+        SetPosition(safePosition);
+
+        b2Vec2 correctedPos = b2Vec2(PIXEL_TO_METERS(safePosition.getX() + texW / 2), PIXEL_TO_METERS(safePosition.getY() + texH / 2));
+        pbody->body->SetTransform(correctedPos, 0);
+        pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+
+        landingComplete = true;
+        isJumping = false;
+        startFalling = false;
+        currentPos = safePosition;  
+    }
+
     // Update shadow position
     if (shadowVisible) {
         shadowPosition.setX(currentPos.getX() - 80);
