@@ -783,7 +783,7 @@ void Devil::UpdateJumpAttack(float dt) {
     }
 
     // Check for landing
-    if (hasReachedPeak && currentPos.getY() >= jumpStartPos.getY() - 15) {
+    if (hasReachedPeak && currentPos.getY() >= jumpStartPos.getY() - 20) {
         // Position correction if needed
         if (currentPos.getY() > jumpStartPos.getY()) {
             b2Vec2 correctedPos = pbody->body->GetPosition();
