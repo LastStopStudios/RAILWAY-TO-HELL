@@ -24,9 +24,6 @@
       line-height: 1.6;
       padding: 0;
       margin: 0;
-      image-rendering: pixelated;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: crisp-edges;
     }
     
     .pixel-container {
@@ -143,7 +140,6 @@
     }
     
     .pixel-img {
-      image-rendering: pixelated;
       border: 4px solid var(--hell-main);
       margin-bottom: 20px;
       transition: all 0.3s ease;
@@ -207,21 +203,6 @@
       border-top: 4px solid var(--hell-accent);
     }
     
-    /* Efecto de pixelado */
-    .pixel-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-      background-size: 4px 4px;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
     .equal-height {
       display: flex;
       flex-direction: column;
@@ -586,6 +567,12 @@
         <div class="col-md-3 gif-container">
             <img src="imagenes/whip.jpg" class="img-fluid pixel-img" alt="whip">
         </div>
+	<div class="col-md-3 gif-container">
+            <img src="imagenes/bolas.jpg" class="img-fluid pixel-img" alt="bolas">
+        </div>
+	<div class="col-md-3 gif-container">
+            <img src="imagenes/doble.jpg" class="img-fluid pixel-img" alt="doble">
+        </div>
     </div>
 <div>
 
@@ -741,6 +728,27 @@
         </div>
         <div class="col-md-4 gif-container">
             <img src="imagenes/personaje.gif" class="img-fluid pixel-img" alt="Nadia" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/hellbat.gif" class="img-fluid pixel-img" alt="Hellbat" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/rata.gif" class="img-fluid pixel-img" alt="Rata" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/asmodeus.gif" class="img-fluid pixel-img" alt="Asmodeus" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/whip.gif" class="img-fluid pixel-img" alt="Whip" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/llave.gif" class="img-fluid pixel-img" alt="Llave" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/recuerdo.gif" class="img-fluid pixel-img" alt="Recuerdo" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/bolas.gif" class="img-fluid pixel-img" alt="Bolas" loading="lazy">
         </div>
     </div>
 </div>
