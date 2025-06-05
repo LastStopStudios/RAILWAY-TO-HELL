@@ -21709,7 +21709,7 @@
  </layer>
  <objectgroup id="32" name="Giro" visible="0"/>
  <objectgroup id="40" name="Boss">
-  <object id="399" x="193.123" y="1848.14" width="1288.98" height="76.3509"/>
+  <object id="399" x="39.123" y="1874.14" width="1866.98" height="50.3509"/>
  </objectgroup>
  <objectgroup id="27" name="Dialogos" visible="0">
   <object id="394" x="737" y="1184" width="32" height="704">
@@ -21718,12 +21718,9 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="12" name="Colisiones" visible="0">
+ <objectgroup id="12" name="Colisiones">
   <object id="373" x="192" y="1120" width="42" height="640"/>
   <object id="374" x="1414" y="1120" width="58" height="640"/>
-  <object id="392" x="192" y="1760" width="1280" height="160"/>
-  <object id="395" x="198" y="1756" width="1270" height="158"/>
-  <object id="396" x="196" y="1790" width="1274" height="118"/>
-  <object id="397" x="190" y="1784" width="1268" height="116"/>
+  <object id="392" x="192" y="1760" width="1280" height="90"/>
  </objectgroup>
 </map>

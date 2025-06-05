@@ -1553,6 +1553,10 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
             }
             break;
              case ColliderType::BOSSFLOOR:
+                 if (pbody && pbody->body) {
+                     pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(822), PIXEL_TO_METERS(1538)), pbody->body->GetAngle());
+                     LOG("Boss teleported to position (822, 1538)");
+                 }
                  break;
     }
 }
