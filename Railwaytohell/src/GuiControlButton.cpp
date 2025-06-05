@@ -35,6 +35,10 @@ bool GuiControlButton::Start()
 	OnfocussedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-focussed.wav");
 	OnPressedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-pressed.wav");
 	OnReleasedFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-focussed.wav"); 
+	Engine::GetInstance().audio.get()->SetFxVolume(OnfocussedFx, 2);
+	Engine::GetInstance().audio.get()->SetFxVolume(OnPressedFx, 2);
+	Engine::GetInstance().audio.get()->SetFxVolume(OnReleasedFx, 2);
+
 	return true;
 }
 

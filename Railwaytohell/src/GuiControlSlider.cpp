@@ -28,6 +28,8 @@ GuiControlSlider::~GuiControlSlider()
 bool GuiControlSlider::Start()
 {
     clickFx = Engine::GetInstance().audio->LoadFx("Assets/Audio/Fx/button-pressed.wav");
+    Engine::GetInstance().audio.get()->SetFxVolume(clickFx, 2);
+
     return true;
 }
 
