@@ -230,7 +230,23 @@
     .equal-height .role-card {
       flex: 1;
     }
-    
+
+    .gif-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 20px;
+    }
+
+    .gif-container img {
+    width: 100%;
+    height: auto;
+    max-width: 200px; /* Tamaño máximo para todos los GIFs */
+    object-fit: contain; /* Evita distorsiones */
+    image-rendering: pixelated; /* Mantiene el estilo pixelado */
+    }
+
     @media (max-width: 768px) {
       .game-title {
         font-size: 2rem;
@@ -242,6 +258,10 @@
       
       .section-title {
         font-size: 1.2rem;
+      }
+
+      .gif-container img {
+        max-width: 150px;
       }
     }
   </style>
@@ -549,11 +569,8 @@
   <p class="pixel-text">
     While exploring hell, Nadia will find various items and collectibles that will help her in achieving her goal of escaping hell and rescuing Alia. Some of these items are going to be power-ups that will bestow powerful abilities upon our protagonist, allowing her to jump midair or to dash faster than humanly possible. Others are going to be obtainable only by defeating the demon lords, these being the powerful weapons used by them like the copper whip, able to activate electrical doors, and the ice juggling balls, able to be used as projectiles to defeat enemies from afar. And finally, there are the collectibles, which are shown by Alia’s treasured memories lost throughout hell.
   </p>
-</div>
 <img src="imagenes/key.jpg" class="img-fluid pixel-img" alt="key" style="max-width: 300px;">
-</div>
 <img src="imagenes/memory.jpg" class="img-fluid pixel-img" alt="memory" style="max-width: 300px;">
-</div>
 <img src="imagenes/whip.jpg" class="img-fluid pixel-img" alt="whip" style="max-width: 300px;">
 </div>
 
@@ -689,25 +706,28 @@
     </div>
   </div>
 
-  <div class="pixel-section">
-  <h2 class="section-title">GIFS</h2>
-  <div class="row">
-      <div class="col-md-4">
-          <img src="imagenes/arana.GIF" class="img-fluid pixel-img" alt="Animación de combate" loading="lazy">
-      </div>
-      <div class="col-md-4">
-          <img src="imagenes/paloma.GIF" class="img-fluid pixel-img" alt="Animación de combate" loading="lazy">
-      </div>
-      <div class="col-md-4">
-          <img src="imagenes/idlemini.gif" class="img-fluid pixel-img" alt="Animación de combate" loading="lazy">
-      </div>
-      <div class="col-md-4">
-          <img src="imagenes/carontegif.gif" class="img-fluid pixel-img" alt="Animación de combate" loading="lazy">
-      </div>
-      <div class="col-md-4">
-          <img src="imagenes/noma.gif" class="img-fluid pixel-img" alt="Animación de combate" loading="lazy">
-      </div>
-  </div>
+<div class="pixel-section">
+    <h2 class="section-title">GIFS</h2>
+    <div class="row">
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/arana.GIF" class="img-fluid pixel-img" alt="Spider" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/paloma.GIF" class="img-fluid pixel-img" alt="Pigeon" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/idlemini.gif" class="img-fluid pixel-img" alt="Final Boss" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/carontegif.gif" class="img-fluid pixel-img" alt="Caronte" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/noma.gif" class="img-fluid pixel-img" alt="Noma" loading="lazy">
+        </div>
+        <div class="col-md-4 gif-container">
+            <img src="imagenes/personaje.gif" class="img-fluid pixel-img" alt="Nadia" loading="lazy">
+        </div>
+    </div>
 </div>
 
 <!-- Thanks -->
