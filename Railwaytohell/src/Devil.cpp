@@ -1127,7 +1127,6 @@ void Devil::RenderSprite() {
     if (currentPhase == 3) {
         if (isLookingLeft) offsetX = -150;
     }
-
     if (currentAnimation == &idle2) {
         offsetY = -137;
     }
@@ -1143,8 +1142,9 @@ void Devil::RenderSprite() {
         offsetY = -240;
     }
     if (currentAnimation == &attackH || currentAnimation == &attackV) {
-        offsetX = -320;
+        if (isLookingLeft)offsetX = -320;
         offsetY = -240;
+        if (!isLookingLeft)offsetX = -110;
     }
     Engine::GetInstance().render.get()->DrawTexture(
         texture,
