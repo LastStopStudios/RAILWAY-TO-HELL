@@ -101,7 +101,7 @@ bool Spears::Start() {
         break;
     }
 
-        position.getX(), position.getY(), moveSpeed);
+        position.getX(), (position.getY(), moveSpeed);
     return true;
 }
 
@@ -168,7 +168,7 @@ void Spears::CreatePhysicsBody() {
     }
 
     if (pbody != nullptr) {
-            position.getX(), position.getY(), isSensor ? "true" : "false");
+            position.getX(), (position.getY(), isSensor ? "true" : "false");
     }
     else {
         LOG("ERROR: Failed to create physics body for spear");
