@@ -338,6 +338,7 @@ private:
 
 	std::vector<int> fx;
 	std::vector<int> music;
+	bool musicOn = false;
 	
 public:
 	void AddToMusic(int soundID) { music.push_back(soundID); }
