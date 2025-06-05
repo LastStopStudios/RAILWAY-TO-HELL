@@ -1552,6 +1552,8 @@ void Devil::OnCollision(PhysBody* physA, PhysBody* physB) {
                 }
             }
             break;
+             case ColliderType::BOSSFLOOR:
+                 break;
     }
 }
 
