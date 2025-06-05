@@ -24,9 +24,6 @@
       line-height: 1.6;
       padding: 0;
       margin: 0;
-      image-rendering: pixelated;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: crisp-edges;
     }
     
     .pixel-container {
@@ -143,7 +140,6 @@
     }
     
     .pixel-img {
-      image-rendering: pixelated;
       border: 4px solid var(--hell-main);
       margin-bottom: 20px;
       transition: all 0.3s ease;
@@ -207,21 +203,6 @@
       border-top: 4px solid var(--hell-accent);
     }
     
-    /* Efecto de pixelado */
-    .pixel-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
-      background-size: 4px 4px;
-      pointer-events: none;
-      z-index: 1000;
-    }
-
     .equal-height {
       display: flex;
       flex-direction: column;
@@ -280,7 +261,7 @@
     <div class="pixel-section">
       <h2 class="section-title">TRAILER</h2>
       <div class="ratio ratio-4x3">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/XoiOOiuH8iI?si=nFL8c7w3wPt1rraX&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/J-ttC8Gt458?si=mQIu9oAUrz2mN6ds" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
       <p class="pixel-text text-center mt-3">"Death is not the last stop"</p>
     </div>
