@@ -229,7 +229,8 @@ bool Map::Load(std::string path, std::string fileName)
             {"Ascensores", 4},
             {"Giro", 5},
             {"Ice", 6},
-            {"Abyss", 7}
+            {"Abyss", 7},
+            {"Boss", 8}
         };
 
         float x = 0.0f, y = 0.0f, width = 0.0f, height = 0.0f;
@@ -291,6 +292,10 @@ bool Map::Load(std::string path, std::string fileName)
                 case 7:
                     rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
                     rect->ctype = ColliderType::ABYSS;
+                    break;
+                case 8:
+                    rect = Engine::GetInstance().physics.get()->CreateRectangleSensor(x + width / 2, y + height / 2, width, height, STATIC);
+                    rect->ctype = ColliderType::BOSSFLOOR;
                     break;
                 default:
                     rect = Engine::GetInstance().physics.get()->CreateRectangle(x + width / 2, y + height / 2, width, height, STATIC);
