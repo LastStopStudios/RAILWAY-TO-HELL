@@ -35,10 +35,10 @@ public:
 
     Vector2D GetPosition();
 
-    // Configurar dirección de lanzamiento
+    // Set launch direction
     void SetDirection(SpearDirection direction);
 
-    // Configurar posición de origen personalizada
+    // Set custom origin position
     void SetOriginPosition(Vector2D origin);
 
     void OnCollision(PhysBody* physA, PhysBody* physB);
@@ -75,8 +75,8 @@ private:
     bool isSensorBody = false;
     const char* texturePath;
 
-    float horizontalSpeed;  // Velocidad para lanzas horizontales
-    float verticalSpeed;    // Velocidad para lanzas verticales
+    float horizontalSpeed;  // Speed for horizontal spears
+    float verticalSpeed;    // Speed for vertical spears
 
     int platformCollisionCount;
     int maxPlatformCollisions;
@@ -90,8 +90,8 @@ private:
     int veces = 1;
 
     Animation* currentAnimation = nullptr;
-    Animation falling;        // Animación de 1 frame cuando está cayendo/tirándose
-    Animation disappear;      // Animación de desaparecer
+    Animation falling;        // 1 frame animation when falling / jumping
+    Animation disappear;      // Disappearing animation
 
     pugi::xml_node parameters;
     PhysBody* pbody;
