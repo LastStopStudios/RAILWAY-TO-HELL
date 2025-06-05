@@ -439,9 +439,9 @@ bool Scene::Update(float dt)
 		}
 
 		if (!pauseMenuOn) {
-			if (currentMusic != "caronte") {
-				Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/caronte.ogg", 1.0f);
-				currentMusic = "caronte";
+			if (!musicOn) {
+				Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
+				musicOn = true;
 			}
 			for (auto puzzle : mosaicPuzzleList) {
 				puzzle->Update(dt);
