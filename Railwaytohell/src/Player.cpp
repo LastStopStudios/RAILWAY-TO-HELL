@@ -111,8 +111,8 @@ bool Player::Start() {
     b2Fixture* fixtureLower = pbodyLower->body->GetFixtureList();
 
     if (fixtureUpper && fixtureLower) {
-        // Reducir la fricción para evitar quedarse pegado a las paredes
-        fixtureUpper->SetFriction(0.005f);  // Valor bajo para evitar adherencia a paredes
+        // Reduce friction to prevent sticking to walls
+        fixtureUpper->SetFriction(0.005f);  // Low value to prevent adhesion to walls
         fixtureLower->SetFriction(0.005f);
     }
     // Initialize audio effect

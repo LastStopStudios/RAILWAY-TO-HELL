@@ -130,7 +130,7 @@ bool Devil::Update(float dt) {
 
         //Handle Dead
         if (isDying) {
-            // Asegurar que no haya movimiento durante la muerte
+            // Ensure that there is no movement during death
             if (pbody != nullptr) {
                 pbody->body->SetLinearVelocity(b2Vec2(0, 0));
                 pbody->body->SetGravityScale(1.0f);
@@ -357,7 +357,7 @@ void Devil::HandlePhase2(float distanceToPlayer, float dx, float dt) {
 }
 
 void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
-    // Update cooldown si no se está atacando ni esperando lanzar lanzas
+    // Update cooldown if it's not attacking or waiting to throw spears
     if (!canAttack && !isSpearAttacking && !waitingToLaunchSpears) {
         currentSpearCooldown -= dt;
         if (currentSpearCooldown <= 0) {
@@ -367,13 +367,13 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
         }
     }
 
-    // Esperando que termine la animación para lanzar lanzas
+    // Waiting for the animation to finish in order to throw spears
     if (waitingToLaunchSpears) {
         currentAnimation->Update();
 
         if (currentAnimation->HasFinished()) {
             if (isVerticalSpearAttack) {
-                CreateVerticalSpearAttack();  // Aquí realmente se lanzan
+                CreateVerticalSpearAttack();  // This is where spears really take off.
             }
             else if (isHorizontalSpearAttack) {
                 CreateHorizontalSpearAttack();
@@ -387,14 +387,14 @@ void Devil::HandlePhase3(float distanceToPlayer, float dx, float dt) {
         return;
     }
 
-    // Actualizando lanzas activas
+    // Updating active spears
     if (isSpearAttacking) {
         UpdateSpearAttacks(dt);
         pbody->body->SetLinearVelocity(b2Vec2(0, pbody->body->GetLinearVelocity().y));
         return;
     }
 
-    // Elegir ataque
+    // Choose attack
     if (canAttack && !waitingToLaunchSpears) {
         srand(time(NULL));
         int attackChoice = rand() % 2;
@@ -438,7 +438,7 @@ void Devil::CreateVerticalSpearAttack() {
     currentAnimation->Reset();
 
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
-    int numSpears = 4 + (rand() % 2); // Spawn entre 3-4 lanzas (antes era 5-7)
+    int numSpears = 4 + (rand() % 2); // Spawn between 3-4 spears (before there where 5-7)
 
     for (int i = 0; i < numSpears; i++) {
         Spears* spear = (Spears*)Engine::GetInstance().entityManager.get()->CreateEntity(EntityType::SPEAR);
@@ -447,7 +447,7 @@ void Devil::CreateVerticalSpearAttack() {
             spear->SetParameters(spearTemplateNode);
             spear->SetDirection(SpearDirection::VERTICAL_DOWN);
 
-            // Mayor separación entre lanzas (más esparcidas)
+            // Greater separation between spears(more scattered)
             float offsetX = (i - numSpears / 2) * 200.0f + ((rand() % 60) - 30); // Antes era 80.0f y ±20
             float spearX = playerPos.getX() + offsetX;
             float spearY = playerPos.getY() - 2000;
@@ -475,7 +475,7 @@ void Devil::CreateHorizontalSpearAttack() {
     Vector2D playerPos = Engine::GetInstance().scene.get()->GetPlayerPosition();
     Vector2D currentPos = GetPosition();
 
-    // Ahora 3 lanzas horizontales (una por cada altura)
+    // Now 3 horizontal spears(one for each height)
     int numSpears = 3;
 
     // Alturas para las 3 lanzas horizontales
@@ -491,13 +491,13 @@ void Devil::CreateHorizontalSpearAttack() {
         if (spear) {
             spear->SetParameters(spearTemplateNode);
 
-            // Usar las alturas predefinidas
+            // Use predefined heights
             float spearY = heights[i];
             float spearX;
             SpearDirection direction;
 
-            // Direcciones aleatorias: desde izquierda o derecha
-            bool fromLeft = (rand() % 2) == 0; // 50% probabilidad cada lado
+            // Random firection, either left or right
+            bool fromLeft = (rand() % 2) == 0; // 50% change each site
 
             if (fromLeft) {
                 // Lanza desde la izquierda

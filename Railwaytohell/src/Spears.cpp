@@ -130,32 +130,32 @@ void Spears::SetupShadow() {
 }
 
 float Spears::FindGroundLevel() {
-    return position.getY() + 2320.0f; // Asumiendo que el suelo está 600 pixels abajo
+    return position.getY() + 2110.0f; // Asumiendo que el suelo está 600 pixels abajo
 }
 
 void Spears::CreatePhysicsBody() {
     int bodyWidth, bodyHeight;
     bool isSensor = false;
 
-    // Ajustar dimensiones del colisionador según la dirección
+    // Adjust collision dimensions according to direction
     switch (spearDirection) {
     case SpearDirection::VERTICAL_DOWN:
-        // Para movimiento vertical, la lanza es más alta que ancha
-        bodyWidth = texW;  // Más estrecha horizontalmente
-        bodyHeight = texH + 200;     // Mantiene altura completa
-        isSensor = false; // Colisión física normal
+        // For vertical movement, the spear is taller than it is wide.
+        bodyWidth = texW;  // Narrower horizontally
+        bodyHeight = texH + 200; // Maintains full height
+        isSensor = false; // Normal physical collision
         break;
     case SpearDirection::HORIZONTAL_LEFT:
     case SpearDirection::HORIZONTAL_RIGHT:
     default:
-        // Para movimiento horizontal, la lanza es más ancha que alta
-        bodyWidth = texW + 200;      // Mantiene ancho completo
-        bodyHeight = texH / 4; // Más baja verticalmente
-        isSensor = true; // Crear como sensor
+        // For horizontal movement, the spear is wider than it is tall.
+        bodyWidth = texW + 200;      // Maintains full width
+        bodyHeight = texH / 4; // Lower vertically
+        isSensor = true; // Create as a sensor
         break;
     }
 
-    // Crear el cuerpo físico directamente como sensor si es necesario
+    //Create the physical body directly as a sensor if necessary.
     if (isSensor) {
         pbody = Engine::GetInstance().physics.get()->CreateRectangleSensor(
             (int)position.getX() + texW / 2,
@@ -188,7 +188,7 @@ void Spears::CreatePhysicsBody() {
 
 bool Spears::Update(float dt)
 {
-    // Verificar que la textura y animación estén válidas antes de renderizar
+    //Verify that the texture and animation are valid before rendering.
     if (texture == nullptr) {
         LOG("ERROR: Spear texture is null!");
         return false;
@@ -199,7 +199,7 @@ bool Spears::Update(float dt)
         return false;
     }
 
-    // Verificar timer de vida para lanzas horizontales
+    //Check life timer for horizontal lances
     if (useLifeTimer && !isDisappearing) {
         lifeTimer += dt;
         if (lifeTimer >= maxLifeTime) {
@@ -208,10 +208,10 @@ bool Spears::Update(float dt)
         }
     }
 
-    // Si está desapareciendo, no aplicar movimiento
+    // If it is disappearing, do not apply movement.
     if (isDisappearing) {
         if (currentAnimation->HasFinished()) {
-            // Limpiar el listener antes de marcar para eliminación
+            // Clear the listener before marking for deletion
             if (pbody != nullptr) {
                 pbody->listener = nullptr;
             }
@@ -220,22 +220,22 @@ bool Spears::Update(float dt)
         }
     }
     else {
-        // Aplicar movimiento según la dirección configurada usando moveSpeed
+        // Apply movement according to the configured direction using moveSpeed
         b2Vec2 velocity(0, 0);
 
         switch (spearDirection) {
         case SpearDirection::HORIZONTAL_LEFT:
-            velocity.x = PIXEL_TO_METERS(-moveSpeed); // Usa horizontalSpeed
+            velocity.x = PIXEL_TO_METERS(-moveSpeed); // Use horizontalSpeed
             break;
         case SpearDirection::HORIZONTAL_RIGHT:
-            velocity.x = PIXEL_TO_METERS(moveSpeed);  // Usa horizontalSpeed
+            velocity.x = PIXEL_TO_METERS(moveSpeed);  // Use horizontalSpeed
             break;
         case SpearDirection::VERTICAL_DOWN:
-            velocity.y = PIXEL_TO_METERS(moveSpeed);  // Usa verticalSpeed
+            velocity.y = PIXEL_TO_METERS(moveSpeed);  // Use verticalSpeed
             break;
         }
 
-        // Verificar que el cuerpo físico sea válido antes de aplicar velocidad
+        // Verify that the physical body is valid before applying speed
         if (pbody != nullptr && pbody->body != nullptr && !pendingToDelete && !isDisappearing) {
             try {
                 pbody->body->SetLinearVelocity(velocity);
@@ -246,7 +246,7 @@ bool Spears::Update(float dt)
         }
     }
 
-    // Actualizar posición solo si pbody es válido
+    // Update position only if pbody is valid
     if (pbody != nullptr && pbody->body != nullptr && !pendingToDelete && !isDisappearing) {
         try {
             b2Transform pbodyPos = pbody->body->GetTransform();
@@ -258,34 +258,34 @@ bool Spears::Update(float dt)
         }
     }
 
-    // Renderizar sombra si es una lanza vertical y tiene sombra
+    // Render shadow if it is a vertical spear and has a shadow
     if (hasShadow && spearDirection == SpearDirection::VERTICAL_DOWN && shadowTexture != nullptr && !isDisappearing) {
         RenderShadow();
     }
 
-    // Configurar flip y rotación según dirección
+    // Configure flip and rotation according to direction
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     double angle = 0.0;
 
     switch (spearDirection) {
     case SpearDirection::HORIZONTAL_LEFT:
         flip = SDL_FLIP_HORIZONTAL;
-        angle = -90.0;  // Rotar 90° para orientación horizontal
+        angle = -90.0;  // Rotate 90° for horizontal orientation
         break;
     case SpearDirection::HORIZONTAL_RIGHT:
         flip = SDL_FLIP_NONE;
-        angle = 90.0;  // Rotar 90° para orientación horizontal
+        angle = 90.0;  // Rotate 90° for horizontal orientation
         break;
     case SpearDirection::VERTICAL_DOWN:
         flip = SDL_FLIP_NONE;
-        angle = 180.0;  // Rotar 180° para que mire hacia abajo
+        angle = 180.0;  // Rotate 180° so that it faces downwards.
         break;
     }
 
-    // Obtener el frame actual y verificar que sea válido
+    // Get the current frame and verify that it is valid
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
 
-    // Verificar que el frame tenga dimensiones válidas
+    // Verify that the frame has valid dimensions.
     if (currentFrame.w <= 0 || currentFrame.h <= 0) {
         LOG("ERROR: Invalid animation frame dimensions: w=%d, h=%d", currentFrame.w, currentFrame.h);
         return false;
