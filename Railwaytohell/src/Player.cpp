@@ -362,10 +362,10 @@ bool Player::Update(float dt)
 
 		// Handle hurt animation
         HandleHurt(dt);  
-        if (changeMusicCaronte) {
-            Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
-            changeMusicCaronte = false;
-        }
+        //if (changeMusicCaronte) {
+        //    Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 0.0f);
+        //    changeMusicCaronte = false;
+        //}
         // Handle attacks only when not dashing
         if (!isDashing && !isPickingUp && !isDying) {
             UpdateMeleeAttack(dt);
@@ -2095,7 +2095,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
             if (item && item->GetItemType() == "Door key") {
                 canOpenDoor = true;
                 Engine::GetInstance().audio.get()->PlayFx(itemFX);
-                changeMusicCaronte = true; 
+                //changeMusicCaronte = true; 
                 //Engine::GetInstance().audio.get()->PlayMusic("Assets/Audio/Music/Background.ogg", 1.0f);
 
             }
