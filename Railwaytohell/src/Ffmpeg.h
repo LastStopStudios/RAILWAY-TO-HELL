@@ -8,6 +8,7 @@
 #include "SDL2/SDL_audio.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_thread.h"
+#include <atomic>
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -85,9 +86,13 @@ public:
 	const Uint32 SKIP_DURATION = 2000; // 2 seconds to complete skip
 	SDL_Texture* skipBarTexture = nullptr;
 	SDL_Rect skipBarRect = { 0, 0, 100, 100 };
+	void CloseCurrentVideo();
+
+	std::atomic<bool> shouldStopRendering;
+	void StopRendering() { shouldStopRendering.store(true); }
 
 private:
 	std::string currentVideoPath;
 	std::string currentAudioPath;
-	void CloseCurrentVideo();
+
 };

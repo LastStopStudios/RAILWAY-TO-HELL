@@ -587,8 +587,12 @@ bool Ffmpeg::AllocImage(AVFrame* image)
 
 void Ffmpeg::RenderCutscene()
 {
-    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
+    if (shouldStopRendering.load()) {
+        return; // Don't render if stop was requested
+    }
 
+    SDL_Renderer* renderer = Engine::GetInstance().render.get()->renderer;
+  
     if (!renderer || !renderTexture) {
         LOG("Invalid renderer or render texture");
         return;
@@ -611,7 +615,7 @@ void Ffmpeg::RenderCutscene()
         RenderSkipBar(progress);
     }
 
-    SDL_RenderPresent(renderer);
+     SDL_RenderPresent(renderer);
 }
 
 bool Ffmpeg::Update(float dt)
