@@ -194,6 +194,11 @@ public:
 	SDL_Texture* sliderBase = nullptr;
 	SDL_Texture* sliderHandle = nullptr;
 
+	float targetCameraX = 0.0f;
+	float currentCameraX = 0.0f;
+	float currentCameraY = 0.0f;
+	const float CAMERA_LERP_SPEED = 0.08f;
+
 	float introTimeElapsed;
 	//boss fight camera
 	bool BossBattle = false;
@@ -222,7 +227,6 @@ public:
 
 private:
 	float targetCameraY = 0.0f;        // Y objetivo de la cámara
-	float currentCameraY = 0.0f;       // Y actual de la cámara (para interpolación)
 	float cameraTransitionSpeed = 5.0f; // Velocidad de transición (ajustable)
 	bool isTransitioning = false;       // Flag para saber si estamos en transición
 

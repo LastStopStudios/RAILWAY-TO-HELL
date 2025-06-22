@@ -516,16 +516,24 @@ bool Scene::PostUpdate()
 
 		// Logical base offsets (not affected by zoom)
 		const int BASE_OFFSET_X = -50;
-		const int BASE_OFFSET_Y = 86;
+		const int BASE_OFFSET_Y = 50;
 
 		if (BossBattle == false) {
 			// Follow player position in world space (normal gameplay - no zoom check)
-			float cameraBaseX = (player->position.getX() * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
-			float cameraBaseY = (player->position.getY() * -1.0f) + (center_y / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_Y;
+			float targetCameraBaseX = (player->position.getX() * -1.0f) + (center_x / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_X;
+			float targetCameraBaseY = (player->position.getY() * -1.0f) + (center_y / GlobalSettings::GetInstance().GetTextureMultiplier()) + BASE_OFFSET_Y;
 
-			// Apply zoom only to the final result
-			Engine::GetInstance().render.get()->camera.x = (int)(cameraBaseX * GlobalSettings::GetInstance().GetTextureMultiplier());
-			Engine::GetInstance().render.get()->camera.y = (int)(cameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier());
+			// Apply zoom to get the target camera positions
+			float targetCameraFinalX = targetCameraBaseX * GlobalSettings::GetInstance().GetTextureMultiplier();
+			float targetCameraFinalY = targetCameraBaseY * GlobalSettings::GetInstance().GetTextureMultiplier();
+
+			// Smooth camera movement using lerp (interpolación lineal)
+			currentCameraX += (targetCameraFinalX - currentCameraX) * CAMERA_LERP_SPEED;
+			currentCameraY += (targetCameraFinalY - currentCameraY) * CAMERA_LERP_SPEED;
+
+			// Apply the smoothed camera position
+			Engine::GetInstance().render.get()->camera.x = (int)currentCameraX;
+			Engine::GetInstance().render.get()->camera.y = (int)currentCameraY;
 		}
 		else {
 			// Boss battle camera behavior - check zoom level
@@ -566,7 +574,7 @@ bool Scene::PostUpdate()
 					else {
 						// Default boss battle camera behavior for zoom 1.5f
 						// Check if it's scene 12 for special Y offset
-						int yOffset = (currentLevel == 12) ? -190 : -115; 
+						int yOffset = (currentLevel == 12) ? -190 : -115;
 
 						// Fixed Y position for boss battles (world space)
 						float cameraBaseY = (-boss.y) + yOffset;
@@ -595,8 +603,6 @@ bool Scene::PostUpdate()
 			}
 		}
 	}
-
-
 
 	if (exitRequested) {
 		ret = false; // Exit the game
