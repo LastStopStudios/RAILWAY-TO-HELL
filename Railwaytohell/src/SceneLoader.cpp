@@ -22,180 +22,40 @@
 #include "Log.h"
 #include "Bufon.h"
 #include "Devil.h"
-#include <mutex>
-#include "Ffmpeg.h"
 
-const char* SceneLoader::LOADING_VIDEO_PATH = "Assets/Videos/loading.mp4";
 SceneLoader::SceneLoader() {
     currentScene = 1;
-    sceneLoadingComplete.store(false);
-    videoPlayer = nullptr;
 }
 
-SceneLoader::~SceneLoader() {
-    if (loadingThread.joinable()) {
-        loadingThread.join();
-    }
-}
-
-void SceneLoader::LoadSceneWithVideo(int level, int x, int y, bool fade, bool bosscam) {
-    LOG("Starting scene loading with video for level %d", level);
-
-    // Resetear el flag de carga completada
-    sceneLoadingComplete.store(false);
-
-    // Iniciar la carga de la escena en un hilo separado
-    loadingThread = std::thread([this, level, x, y, fade, bosscam]() {
-        LoadSceneInBackground(level, x, y, fade, bosscam);
-        });
-
-    // Mientras tanto, reproducir el video de carga en el hilo principal
-    PlayLoadingVideo();
-
-    // Esperar a que termine la carga de la escena
-    if (loadingThread.joinable()) {
-        loadingThread.join();
-    }
-
-    if (fade) {
-        FadeOut(1.0f, false);
-    }
-
-    LOG("Scene loading with video completed for level %d", level);
-}
-
-void SceneLoader::LoadSceneInBackground(int level, int x, int y, bool fade, bool bosscam) {
-    LOG("Starting scene loading for level %d", level);
-
-    Mix_PauseMusic();
-
-    // Configurar cámara
-    if (bosscam == true) {
-        Engine::GetInstance().scene->EntrarBoss();
-        Engine::GetInstance().scene->BloquearSensor();
-    }
-    else if (bosscam == false) {
-        Engine::GetInstance().scene->SalirBoss();
-        Engine::GetInstance().scene->DesbloquearSensor();
-    }
-
-    // Descargar entidades anteriores
-    UnLoadEnemiesItems();
-
-    // Configurar nueva escena
-    SetCurrentScene(level);
-    VisibilityScene(level);
-
-    // Cargar nueva escena
-    DrawScene(level, x, y);
-
-    Mix_ResumeMusic();
-
-    LOG("Scene loading completed for level %d", level);
-
-    // Marcar como completada
-    sceneLoadingComplete.store(true);
-}
-
-void SceneLoader::PlayLoadingVideo() {
-    // Obtener instancia del reproductor de video
-    videoPlayer = Engine::GetInstance().ffmpeg.get();
-
-    if (!videoPlayer) {
-        LOG("Warning: No video player available, using simple loading screen");
-        ShowSimpleLoadingScreen();
-        return;
-    }
-
-    // Cargar el video de carga
-    if (videoPlayer->LoadVideo(LOADING_VIDEO_PATH)) {
-        LOG("Warning: Could not load loading video, using simple loading screen");
-        ShowSimpleLoadingScreen();
-        return;
-    }
-
-    LOG("Playing loading video while scene loads...");
-
-    // Reproducir el video hasta que termine la carga de la escena
-    while (!IsSceneLoadingComplete()) {
-        // Reproducir el siguiente frame del video
-        bool videoEnded = videoPlayer->ConvertPixels(LOADING_VIDEO_PATH);
-
-        // Si el video terminó pero la carga aún no está completa, reiniciar el video
-        if (videoEnded) {
-            LOG("Loading video ended, checking if scene loading is complete...");
-
-            // Verificar si la carga ya terminó
-            if (IsSceneLoadingComplete()) {
-                LOG("Scene loading completed when video ended - stopping playback");
-                break;
-            }
-
-            LOG("Scene still loading, restarting video...");
-
-            // Reiniciar el video (NO cerrar el video player)
-            if (videoPlayer->LoadVideo(LOADING_VIDEO_PATH)) {
-                // No se pudo reiniciar el video, usar pantalla simple
-                LOG("Could not restart video, switching to simple loading screen");
-                ShowSimpleLoadingScreen();
-                break;
-            }
-            // Video reiniciado correctamente, continuar en el bucle
-            continue;
-        }
-
-        // Pequeña pausa para controlar el framerate y permitir que el hilo de carga trabaje
-        SDL_Delay(16); // ~60 FPS
-    }
-
-    // Limpiar el reproductor de video cuando la carga esté completa
-    if (videoPlayer) {
-        // Detener el renderizado del video si existe el método
-
-            videoPlayer->StopRendering();
-        
-
-        // Pequeña pausa para asegurar que cualquier renderizado en progreso termine
-        SDL_Delay(50);
-
-        videoPlayer->CloseCurrentVideo();
-        LOG("Video player closed after scene loading completion");
-    }
-
-    LOG("Loading video stopped - scene loading completed");
-}
-void SceneLoader::ShowSimpleLoadingScreen() {
-    SDL_Renderer* renderer = Engine::GetInstance().render->renderer;
-    LOG("Showing simple loading screen");
-
-    while (!IsSceneLoadingComplete()) {
-        // Procesar eventos para mantener la ventana responsiva
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                break;
-            }
-        }
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-
-        static int dots = 0;
-        static Uint32 lastTime = 0;
-        Uint32 currentTime = SDL_GetTicks();
-
-        if (currentTime - lastTime > 500) {
-            dots = (dots + 1) % 4;
-            lastTime = currentTime;
-        }
-
-        SDL_RenderPresent(renderer);
-        SDL_Delay(16);
-    }
-}
+SceneLoader::~SceneLoader() {}
 
 void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
-    LoadSceneWithVideo(level, x, y, fade, bosscam);
+
+    if(fade== true)
+    { 
+        FadeIn(1.0f);// Animation speed (FadeIn)
+    }
+    //Switch between fixed camera for boss fight to camera following the player
+    if (bosscam == true) {//boss fight
+        Engine::GetInstance().scene->EntrarBoss();//Boss cam
+        Engine::GetInstance().scene->BloquearSensor();//Block scene change sensors to prevent the player from escaping
+    }
+    else if (bosscam == false) {//camera follows player
+        Engine::GetInstance().scene->SalirBoss();//Camera on player
+        /*Line to use to unlock scene change sensors*/
+        Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
+    }
+    
+    /*if (fade == false) {
+        
+    }*/
+    UnLoadEnemiesItems();
+    SetCurrentScene(level);
+    VisibilityScene(level);
+    DrawScene(level, x, y);
+	//if (fade == true) {
+	//	FadeOut(1.0f, true, level, x, y); // Animation speed (FadeOut)
+	//}
 
 }
 
