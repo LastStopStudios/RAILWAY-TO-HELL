@@ -35,7 +35,7 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
 
     if(fade== true)
     { 
-        FadeIn(1.0f);// Animation speed (FadeIn)
+        FadeIn(2.0f);// Animation speed (FadeIn)
     }
     //Switch between fixed camera for boss fight to camera following the player
     if (bosscam == true) {//boss fight
@@ -47,8 +47,8 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
         /*Line to use to unlock scene change sensors*/
         Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
     }
-    std::thread first(&SceneLoader::VideoPrimerPlano, this);
-    std::thread second(&SceneLoader::CargaSegundoPlano, this, level, x, y);
+    std::thread first(&SceneLoader::CargaSegundoPlano, this, level, x, y);
+    std::thread second(&SceneLoader::VideoPrimerPlano, this);
 
     first.join();                // pauses until first finishes
     second.join();               // pauses until second finishes
