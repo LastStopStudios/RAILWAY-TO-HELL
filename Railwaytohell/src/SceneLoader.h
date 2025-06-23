@@ -44,5 +44,7 @@ private:
 	void UnLoadEnemiesItems();	
 	void VisibilityScene(int level);
 	void SetupMosaicPuzzle();
+	void CargaSegundoPlano(int level, int x, int y);
+	void VideoPrimerPlano();
 };
 

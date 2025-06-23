@@ -22,6 +22,8 @@
 #include "Log.h"
 #include "Bufon.h"
 #include "Devil.h"
+#include <thread>
+#include "Ffmpeg.h"
 
 SceneLoader::SceneLoader() {
     currentScene = 1;
@@ -45,18 +47,23 @@ void SceneLoader::LoadScene(int level, int x, int y,bool fade,bool bosscam) {
         /*Line to use to unlock scene change sensors*/
         Engine::GetInstance().scene->DesbloquearSensor();//unlocks sensors scene change
     }
-    
-    /*if (fade == false) {
-        
-    }*/
+    std::thread first(&SceneLoader::VideoPrimerPlano, this);
+    std::thread second(&SceneLoader::CargaSegundoPlano, this, level, x, y);
+
+    first.join();                // pauses until first finishes
+    second.join();               // pauses until second finishes
+
+}
+
+void SceneLoader::VideoPrimerPlano() {
+    Engine::GetInstance().ffmpeg->ConvertPixels("Assets/Videos/Loading.mp4");
+}
+
+void SceneLoader::CargaSegundoPlano(int level, int x, int y) {
     UnLoadEnemiesItems();
     SetCurrentScene(level);
     VisibilityScene(level);
     DrawScene(level, x, y);
-	//if (fade == true) {
-	//	FadeOut(1.0f, true, level, x, y); // Animation speed (FadeOut)
-	//}
-
 }
 
 void SceneLoader::DrawScene(int level, int x, int y) {
